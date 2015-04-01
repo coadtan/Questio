@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_sit_location"
+        android:orderInCategory="101"
+        android:title="fake sit location"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_lib_location"
+        android:orderInCategory="101"
+        android:title="fake library location"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_enter_zone0"
+        android:orderInCategory="101"
+        android:title="fake enter zone0"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_delect_all_data"
+        android:orderInCategory="101"
+        android:title="delete all data"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_qrcode_scan"
+        android:icon="@drawable/ic_action_qrscan"
+        android:orderInCategory="101"
+        android:title="scab qr"
+        app:showAsAction="ifRoom" />
+</menu>

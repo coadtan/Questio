@@ -7,10 +7,13 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.questio.projects.questio.utilities.DatabaseHelper;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+
 /**
  * Created by coad4u4ever on 01-Apr-15.
  */
-public class Place {
+public class Place  implements Serializable {
     private static final String LOG_TAG = Place.class.getSimpleName();
     private int placeId;
     private String placeName;
@@ -23,6 +26,9 @@ public class Place {
     private String placetype;
 
     Context mContext;
+
+    public Place() {
+    }
 
     public Place(Context m) {
         mContext = m;
@@ -132,7 +138,43 @@ public class Place {
         cursor = database.rawQuery(selectQuery, null);
         return cursor;
     }
-
+    public ArrayList<Place> getAllPlaceArrayList() {
+        ArrayList<Place> list = new ArrayList<>();
+        Place po;
+        String selectQuery = "SELECT  * FROM place";
+        DatabaseHelper databaseHelper = new DatabaseHelper(mContext);
+        SQLiteDatabase database = databaseHelper.getWritableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                po = new Place();
+                po.setPlaceId(Integer.parseInt(cursor.getString(0)));
+                po.setPlaceName(cursor.getString(1));
+                po.setPlaceFullName(cursor.getString(2));
+                if(!cursor.getString(3).equalsIgnoreCase("null")){
+                    po.setQrCode(Integer.parseInt(cursor.getString(3)));
+                }
+                if(!cursor.getString(4).equalsIgnoreCase("null")){
+                    po.setSensorId(Integer.parseInt(cursor.getString(4)));
+                }
+                po.setLatitude(Double.parseDouble(cursor.getString(5)));
+                po.setLongitude(Double.parseDouble(cursor.getString(6)));
+                po.setRadius(Double.parseDouble(cursor.getString(7)));
+                po.setPlacetype(cursor.getString(8));
+                list.add(po);
+            } while (cursor.moveToNext());
+        }
+        databaseHelper.close();
+        database.close();
+        return list;
+    }
+    public void delectAllPlace() {
+        DatabaseHelper databaseHelper = new DatabaseHelper(mContext);
+        SQLiteDatabase database = databaseHelper.getWritableDatabase();
+        database.delete("place", null, null);
+        databaseHelper.close();
+        database.close();
+    }
     public  long getPlaceCount() {
         DatabaseHelper databaseHelper = new DatabaseHelper(mContext);
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
