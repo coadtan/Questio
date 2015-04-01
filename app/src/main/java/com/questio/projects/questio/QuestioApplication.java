@@ -30,9 +30,9 @@ public class QuestioApplication extends Application {
         super.onCreate();
         singleton = this;
         Place place = new Place(getApplicationContext());
-        String res = null;
         try {
-            res = new HttpHelper().execute("http://52.74.64.61/api/select_all_place_count.php").get();
+            String res = new HttpHelper().execute("http://52.74.64.61/api/select_all_place_count.php").get();
+
             Log.d(LOG_TAG, "count: " + res);
             long placeServerCount = QuestioHelper.getPlaceCountFromJson(res);
             long placeSQLiteCount = place.getPlaceCount();

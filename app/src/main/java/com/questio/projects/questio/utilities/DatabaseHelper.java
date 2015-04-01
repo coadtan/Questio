@@ -22,8 +22,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " placefullname TEXT," +
                 " qrcode INTEGER," +
                 " sensorid INTEGER," +
-                " latitude REAL," +
-                " longitude REAL," +
+                " latitude TEXT," +
+                " longitude TEXT," +
                 " radius REAL," +
                 " placetype TEXT)";
         database.execSQL(query);

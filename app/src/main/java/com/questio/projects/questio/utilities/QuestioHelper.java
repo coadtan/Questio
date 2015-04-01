@@ -1,5 +1,7 @@
 package com.questio.projects.questio.utilities;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,6 +63,7 @@ public class QuestioHelper {
 //    }
      public static long getPlaceCountFromJson(String response){
          JSONArray arr = null;
+         Log.d(LOG_TAG, "getPlaceCountFromJson: " + response);
          long result = 0;
          try {
              arr = new JSONArray(response);
@@ -68,6 +71,7 @@ public class QuestioHelper {
                  for (int i = 0; i < arr.length(); i++) {
                      JSONObject obj = (JSONObject) arr.get(i);
                      result = Long.parseLong(obj.get("count").toString());
+
                  }
              }
          } catch (JSONException e) {

@@ -27,6 +27,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.questio.projects.questio.R;
@@ -114,7 +115,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
      * Set the custom layout to be inflated for the tab views.
      *
      * @param layoutResId Layout id to be inflated
-     * @param textViewId id of the {@link android.widget.TextView} in the inflated view
+     * @param textViewId  id of the {@link android.widget.TextView} in the inflated view
      */
     public void setCustomTabView(int layoutResId, int textViewId) {
         mTabViewLayoutId = layoutResId;
@@ -170,17 +171,17 @@ public class SlidingTabLayout extends HorizontalScrollView {
         final PagerAdapter adapter = mViewPager.getAdapter();
         final View.OnClickListener tabClickListener = new TabClickListener();
 
-//        Integer[] iconResourceArray = { R.drawable.ic_action_community,
-//                R.drawable.ic_action_searchquest, R.drawable.ic_action_questmap,
-//                R.drawable.ic_action_prize, R.drawable.ic_action_avatar };
+
+        Integer[] iconResourceArray = {R.mipmap.ic_action_ranking, R.mipmap.ic_action_search,
+                R.mipmap.ic_action_quest, R.mipmap.ic_action_hof, R.mipmap.ic_action_avatar};
 
         for (int i = 0; i < adapter.getCount(); i++) {
             View tabView = null;
             tabView = LayoutInflater.from(getContext()).inflate(R.layout.section_tab, mTabStrip,
                     false);
-       //     tabView.setBackgroundColor(Color.BLACK);
-       //     ImageView iconImageView = (ImageView) tabView.findViewById(R.id.tab_layout_icon);
-       //     iconImageView.setImageDrawable(getContext().getResources().getDrawable(iconResourceArray[i]));
+            //     tabView.setBackgroundColor(Color.BLACK);
+            ImageView iconImageView = (ImageView) tabView.findViewById(R.id.tab_layout_icon);
+            iconImageView.setImageDrawable(getContext().getResources().getDrawable(iconResourceArray[i]));
 
             tabView.setOnClickListener(tabClickListener);
 

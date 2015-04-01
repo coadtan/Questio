@@ -194,9 +194,11 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
     }
 
     public void isEnterQuestMap(double currentLat, double currentLng, final Place p) {
+
         float[] results = new float[1];
         Location.distanceBetween(currentLat, currentLng,
                 p.getLatitude(), p.getLongitude(), results);
+
         if (results[0] <= p.getRadius()) {
 
             new AlertDialog.Builder(mContext)
@@ -265,9 +267,8 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_sit_location:
-                currentLat = 13.652623;
-                currentLng = 100.493673;
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLng), 16.0f));
+                currentLat = 13.652621;
+                currentLng = 100.493640;
                 if (!placeListForDistance.isEmpty()) {
                     for (Place po : placeListForDistance) {
                         isEnterQuestMap(currentLat, currentLng, po);
@@ -278,7 +279,6 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
             case R.id.action_lib_location:
                 currentLat = 13.653077;
                 currentLng = 100.493956;
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLng), 16.0f));
                 if (!placeListForDistance.isEmpty()) {
                     for (Place po : placeListForDistance) {
                         isEnterQuestMap(currentLat, currentLng, po);
