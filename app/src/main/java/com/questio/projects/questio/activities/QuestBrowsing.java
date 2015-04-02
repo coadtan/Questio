@@ -3,12 +3,14 @@ package com.questio.projects.questio.activities;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.Spinner;
 
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.adepters.FloorSpinnerAdapter;
 import com.questio.projects.questio.models.Floor;
 import com.questio.projects.questio.models.Place;
+import com.questio.projects.questio.models.Quest;
 
 import java.util.ArrayList;
 
@@ -22,13 +24,20 @@ public class QuestBrowsing extends ActionBarActivity {
     private FloorSpinnerAdapter floorSpinnerAdapter;
     private ArrayList<Floor> floors;
     private Place place;
+    private static final String LOG_TAG = QuestBrowsing.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quest_browsing);
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
-//        place = (Place) getIntent().getSerializableExtra("place");
+        place = (Place) getIntent().getSerializableExtra("place");
+        Log.d(LOG_TAG, Integer.toString(place.getPlaceId()));
+        ArrayList<Quest> quests = Quest.getAllQuestByPlaceId(place.getPlaceId());
+        for(Quest q : quests){
+            Log.d(LOG_TAG, q.toString());
+        }
 //        floors = Floor.getAllFloorByPlaceId(place.getPlaceId());
 //        floorSpinnerAdapter = new FloorSpinnerAdapter(this, R.layout.spinner_item_list, floors);
 //        floorSpinner = (Spinner) findViewById(R.id.quest_browsing_spinner);
