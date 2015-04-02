@@ -266,19 +266,9 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_sit_location:
+            case R.id.action_kmutt_location:
                 currentLat = 13.652621;
                 currentLng = 100.493640;
-                if (!placeListForDistance.isEmpty()) {
-                    for (Place po : placeListForDistance) {
-                        isEnterQuestMap(currentLat, currentLng, po);
-                    }
-                }
-                return true;
-
-            case R.id.action_lib_location:
-                currentLat = 13.653077;
-                currentLng = 100.493956;
                 if (!placeListForDistance.isEmpty()) {
                     for (Place po : placeListForDistance) {
                         isEnterQuestMap(currentLat, currentLng, po);
