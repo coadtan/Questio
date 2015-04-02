@@ -2,14 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_sit_location"
+        android:id="@+id/action_kmutt_location"
         android:orderInCategory="101"
-        android:title="fake sit location"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_lib_location"
-        android:orderInCategory="101"
-        android:title="fake library location"
+        android:title="fake kmutt location"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_enter_zone0"
