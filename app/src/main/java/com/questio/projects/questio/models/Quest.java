@@ -80,10 +80,10 @@ public class Quest {
                 '}';
     }
 
-    public ArrayList<Quest> getAllQuestByPlaceId(int placeId){
+    public static ArrayList<Quest> getAllQuestByPlaceId(int placeId){
         Quest q = null;
         ArrayList<Quest> arr = null;
-        final String URL = "http://52.74.64.61/api/select_all_zone_by_placeid.php?placeid=" + placeId;
+        final String URL = "http://52.74.64.61/api/select_all_quest_by_placeid.php?placeid=" + placeId;
         try {
             String response = new HttpHelper().execute(URL).get();
             JSONArray jsonArray = new JSONArray(response);
