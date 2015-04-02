@@ -38,6 +38,7 @@ public class QuestioApplication extends Application {
             long placeSQLiteCount = place.getPlaceCount();
             Log.d(LOG_TAG, "placeServerCount: " + placeServerCount + " placeSQLiteCount: "+ placeSQLiteCount);
             if(placeServerCount!=placeSQLiteCount){
+                place.delectAllPlace();
                 new PlaceSync(getApplicationContext()).execute("http://52.74.64.61/api/select_all_place.php");
             }
         } catch (InterruptedException | ExecutionException e) {

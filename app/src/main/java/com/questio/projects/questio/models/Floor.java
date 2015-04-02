@@ -75,15 +75,14 @@ public class Floor {
 
     @Override
     public String toString() {
-//        return "Floor{" +
-//                "floorId=" + floorId +
-//                ", placeId=" + placeId +
-//                ", floorName='" + floorName + '\'' +
-//                ", imageUrl='" + imageUrl + '\'' +
-//                ", latitude=" + latitude +
-//                ", longitude=" + longitude +
-//                '}';
-        return floorId +": "+floorName;
+        return "Floor{" +
+                "floorId=" + floorId +
+                ", placeId=" + placeId +
+                ", floorName='" + floorName + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                '}';
     }
 
     public static ArrayList<Floor> getAllFloorByPlaceId(int placeId) {

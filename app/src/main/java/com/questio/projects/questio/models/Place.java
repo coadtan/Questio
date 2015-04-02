@@ -183,4 +183,6 @@ public class Place  implements Serializable {
         database.close();
         return count;
     }
+
+
 }

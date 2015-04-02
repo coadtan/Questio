@@ -189,4 +189,67 @@ public class Zone {
 
         return al;
     }
+
+    public static ArrayList<Zone> getAllZoneByPlaceId(int placeId) {
+        ArrayList<Zone> al = null;
+        Zone zone;
+        final String URL = "http://52.74.64.61/api/select_all_zone_by_placeid.php?placeid=" + placeId;
+        try {
+            String response = new HttpHelper().execute(URL).get();
+            Log.d(LOG_TAG, "response: " + response);
+            JSONArray arr = new JSONArray(response);
+            if (arr.length() != 0) {
+                al = new ArrayList<>();
+                for (int i = 0; i < arr.length(); i++) {
+                    zone = new Zone();
+                    JSONObject obj = (JSONObject) arr.get(i);
+                    String zoneid = obj.get("zoneid").toString();
+                    String floorid = obj.get("floorid").toString();
+                    String zonetypeid = obj.get("zonetypeid").toString();
+                    String zonename = obj.get("zonename").toString();
+                    String zonedetails = obj.get("zonedetails").toString();
+                    String qrcode = obj.get("qrcode").toString();
+                    String sensorid = obj.get("sensorid").toString();
+                    String imageurl = obj.get("imageurl").toString();
+                    String minimapurl = obj.get("minimapurl").toString();
+                    String itemset = obj.get("itemset").toString();
+                    String rewardid = obj.get("rewardid").toString();
+                    zone.setZoneId(Integer.parseInt(zoneid));
+                    zone.setFloorId(Integer.parseInt(floorid));
+                    zone.setZoneTypeId(Integer.parseInt(zonetypeid));
+                    zone.setZoneName(zonename);
+                    if (!zonedetails.equalsIgnoreCase("null")) {
+                        zone.setZoneDetails(zonedetails);
+                    }
+                    if (!qrcode.equalsIgnoreCase("null")) {
+                        zone.setQrCode(Integer.parseInt(qrcode));
+                    }
+                    if (!sensorid.equalsIgnoreCase("null")) {
+                        zone.setSensorId(Integer.parseInt(sensorid));
+
+                    }
+                    if (!imageurl.equalsIgnoreCase("null")) {
+                        zone.setImageUrl(imageurl);
+
+                    }
+                    if (!minimapurl.equalsIgnoreCase("null")) {
+                        zone.setMiniMapUrl(minimapurl);
+                    }
+                    if (!itemset.equalsIgnoreCase("null")) {
+                        zone.setItemSet(itemset);
+                    }
+                    if (!rewardid.equalsIgnoreCase("null")) {
+                        zone.setRewardId(Integer.parseInt(rewardid));
+                    }
+
+                    al.add(zone);
+                }
+
+            }
+        } catch (InterruptedException | ExecutionException | JSONException e) {
+            e.printStackTrace();
+        }
+
+        return al;
+    }
 }
