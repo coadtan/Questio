@@ -3,31 +3,67 @@
     android:id="@+id/cameraContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:background="@color/questio_light_orange"
+    android:orientation="vertical">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/questio_light_orange">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="5dp"
+            android:text="  แสกน QR Code"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+    </FrameLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/questio_orange">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:text="แสกน QR Code ได้เลยครับ"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@android:color/background_dark" />
 
     <FrameLayout
         android:id="@+id/cameraPreview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
+        android:layout_height="300dp"
+        android:layout_gravity="center"
 
+        />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@android:color/holo_orange_dark" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/questio_orange">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:text="QR Code จะถูกสแกนแบบอัตโนมัติเมื่อเราเอากล้องไปอ่านมัน"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+    </FrameLayout>
 
 </LinearLayout>
 
-    <!--
-
-                <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="QUESTIO"
-            android:gravity="center"
-            android:textSize="30sp"/>
-
-    </LinearLayout>
-
-            -->

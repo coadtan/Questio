@@ -20,7 +20,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyD4aHDODbX7CxabLM8Av6Fgmw2GIzhheHQ" />
+            android:value="AIzaSyBCs14O9VYKFPVrmtI7VmbKUQcj1PPXR1g" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -35,10 +35,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.QuestBrowsing"/>
-
+        <activity android:name=".activities.PlaceInfo"/>
         <activity
             android:name=".libraries.zbarscanner.ZBarScannerActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
              />
 
     </application>

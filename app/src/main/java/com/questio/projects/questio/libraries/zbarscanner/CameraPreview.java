@@ -103,6 +103,7 @@ class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
         // to draw.
         try {
             if (mCamera != null) {
+                mCamera.setDisplayOrientation(90);
                 mCamera.setPreviewDisplay(holder);
             }
         } catch (IOException exception) {

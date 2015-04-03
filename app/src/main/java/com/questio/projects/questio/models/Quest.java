@@ -1,5 +1,7 @@
 package com.questio.projects.questio.models;
 
+import android.util.Log;
+
 import com.questio.projects.questio.utilities.HttpHelper;
 
 import org.json.JSONArray;
@@ -13,6 +15,7 @@ import java.util.concurrent.ExecutionException;
  * Created by ning jittima on 2/4/2558.
  */
 public class Quest {
+    private static final String LOG_TAG = Quest.class.getSimpleName();
     private int questId;
     private String questName;
     private String questDetails;
@@ -81,11 +84,12 @@ public class Quest {
     }
 
     public static ArrayList<Quest> getAllQuestByPlaceId(int placeId){
-        Quest q = null;
+        Quest q;
         ArrayList<Quest> arr = null;
         final String URL = "http://52.74.64.61/api/select_all_quest_by_placeid.php?placeid=" + placeId;
         try {
             String response = new HttpHelper().execute(URL).get();
+            Log.d(LOG_TAG,"getAllQuestByPlaceId response:" +response);
             JSONArray jsonArray = new JSONArray(response);
             if(jsonArray.length() != 0){
                 arr = new ArrayList<>();
