@@ -23,6 +23,13 @@ public class Quest {
     private int zoneId;
     private int diffId;
 
+
+
+    public static String getLogTag() {
+        return LOG_TAG;
+    }
+
+    private String zoneName;
     public int getQuestId() {
         return questId;
     }
@@ -71,6 +78,14 @@ public class Quest {
         this.diffId = diffId;
     }
 
+    public String getZoneName() {
+        return zoneName;
+    }
+
+    public void setZoneName(String zoneName) {
+        this.zoneName = zoneName;
+    }
+
     @Override
     public String toString() {
         return "Quest{" +
@@ -109,6 +124,7 @@ public class Quest {
                     q.setQuestTypeId(Integer.parseInt(questtypeid));
                     q.setDiffId(Integer.parseInt(diffid));
                     q.setZoneId(Integer.parseInt(zoneid));
+                    q.setZoneName(getZoneNameByZoneId(Integer.parseInt(zoneid)));
 
                     arr.add(q);
                 }
@@ -117,5 +133,23 @@ public class Quest {
             e.printStackTrace();
         }
         return arr;
+    }
+
+    public static String getZoneNameByZoneId(int zoneId){
+        String zonename = null;
+        final String URL = "http://52.74.64.61/api/select_zonename_by_zoneid.php?zoneid=" + zoneId;
+        try {
+            String response = new HttpHelper().execute(URL).get();
+            Log.d(LOG_TAG,"Response: " + response);
+            JSONArray jsonArray = new JSONArray(response);
+            if(jsonArray.length() != 0){
+                JSONObject jsonObject = (JSONObject)jsonArray.get(0);
+                zonename = jsonObject.get("zonename").toString();
+
+            }
+        } catch (InterruptedException | ExecutionException | JSONException e) {
+            e.printStackTrace();
+        }
+        return zonename;
     }
 }
