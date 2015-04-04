@@ -50,7 +50,7 @@ public class QuestRecycleViewAdapter extends RecyclerView.Adapter<QuestListRowHo
                 break;
         }
 
-        questListRowHolder.quest_list_zoneid.setText("ตำแหน่ง "+ questItem.getZoneName());
+        questListRowHolder.quest_list_zoneid.setText("ตำแหน่ง "+ questItem.getZoneName() + ", " +questItem.getFloorName()+", "+questItem.getBuildingName());
         String diff;
         switch (questItem.getDiffId()){
             case 1 : diff = "ง่ายมาก"; break;

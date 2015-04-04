@@ -22,14 +22,16 @@ public class Quest {
     private int questTypeId;
     private int zoneId;
     private int diffId;
-
+    private String zoneName;
+    private String floorName;
+    private String buildingName;
 
 
     public static String getLogTag() {
         return LOG_TAG;
     }
 
-    private String zoneName;
+
     public int getQuestId() {
         return questId;
     }
@@ -86,22 +88,41 @@ public class Quest {
         this.zoneName = zoneName;
     }
 
+    public String getFloorName() {
+        return floorName;
+    }
+
+    public void setFloorName(String floorName) {
+        this.floorName = floorName;
+    }
+
+    public String getBuildingName() {
+        return buildingName;
+    }
+
+    public void setBuildingName(String buildingName) {
+        this.buildingName = buildingName;
+    }
+
     @Override
     public String toString() {
         return "Quest{" +
-                "questId=" + questId +
-                ", questName='" + questName + '\'' +
-                ", questDetails='" + questDetails + '\'' +
-                ", questTypeId=" + questTypeId +
-                ", zoneId=" + zoneId +
+                "buildingName='" + buildingName + '\'' +
+                ", floorName='" + floorName + '\'' +
+                ", zoneName='" + zoneName + '\'' +
                 ", diffId=" + diffId +
+                ", zoneId=" + zoneId +
+                ", questTypeId=" + questTypeId +
+                ", questDetails='" + questDetails + '\'' +
+                ", questName='" + questName + '\'' +
+                ", questId=" + questId +
                 '}';
     }
 
     public static ArrayList<Quest> getAllQuestByPlaceId(int placeId){
         Quest q;
         ArrayList<Quest> arr = null;
-        final String URL = "http://52.74.64.61/api/select_all_quest_by_placeid.php?placeid=" + placeId;
+        final String URL = "http://52.74.64.61/api/select_all_quest_by_placeid_location_name.php?placeid=" + placeId;
         try {
             String response = new HttpHelper().execute(URL).get();
             Log.d(LOG_TAG,"getAllQuestByPlaceId response:" +response);
@@ -117,15 +138,18 @@ public class Quest {
                     String questtypeid = jsonObject.get("questtypeid").toString();
                     String zoneid = jsonObject.get("zoneid").toString();
                     String diffid = jsonObject.get("diffid").toString();
-
+                    String zonename = jsonObject.get("zonename").toString();
+                    String floorname = jsonObject.get("floorname").toString();
+                    String buildingname = jsonObject.get("buildingname").toString();
                     q.setQuestId(Integer.parseInt(questid));
                     q.setQuestName(questname);
                     q.setQuestDetails(questdetails);
                     q.setQuestTypeId(Integer.parseInt(questtypeid));
                     q.setDiffId(Integer.parseInt(diffid));
                     q.setZoneId(Integer.parseInt(zoneid));
-                    q.setZoneName(getZoneNameByZoneId(Integer.parseInt(zoneid)));
-
+                    q.setZoneName(zonename);
+                    q.setFloorName(floorname);
+                    q.setBuildingName(buildingname);
                     arr.add(q);
                 }
             }
@@ -135,21 +159,4 @@ public class Quest {
         return arr;
     }
 
-    public static String getZoneNameByZoneId(int zoneId){
-        String zonename = null;
-        final String URL = "http://52.74.64.61/api/select_zonename_by_zoneid.php?zoneid=" + zoneId;
-        try {
-            String response = new HttpHelper().execute(URL).get();
-            Log.d(LOG_TAG,"Response: " + response);
-            JSONArray jsonArray = new JSONArray(response);
-            if(jsonArray.length() != 0){
-                JSONObject jsonObject = (JSONObject)jsonArray.get(0);
-                zonename = jsonObject.get("zonename").toString();
-
-            }
-        } catch (InterruptedException | ExecutionException | JSONException e) {
-            e.printStackTrace();
-        }
-        return zonename;
-    }
 }

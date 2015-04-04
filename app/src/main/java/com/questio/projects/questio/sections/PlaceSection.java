@@ -42,6 +42,7 @@ import com.questio.projects.questio.libraries.AndroidGoogleDirectionAndPlaceLibr
 import com.questio.projects.questio.libraries.zbarscanner.ZBarConstants;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarScannerActivity;
 import com.questio.projects.questio.models.Place;
+import com.questio.projects.questio.utilities.QuestioHelper;
 
 import net.sourceforge.zbar.Symbol;
 
@@ -284,6 +285,7 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
                 Intent intent = new Intent(getActivity(), ZBarScannerActivity.class);
                 intent.putExtra(ZBarConstants.SCAN_MODES, new int[]{Symbol.QRCODE});
                 startActivityForResult(intent, 0);
+
                 return true;
 //            case R.id.action_enter_zone0:
 //                Intent intent = new Intent(mContext, QuestZoning.class);
@@ -299,14 +301,16 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(LOG_TAG,"requestCode: "+requestCode);
-        Log.d(LOG_TAG,"Activity.RESULT_OK: "+Activity.RESULT_OK);
+        Log.d(LOG_TAG, "requestCode: " + requestCode);
+        Log.d(LOG_TAG, "Activity.RESULT_OK: " + Activity.RESULT_OK);
         if (resultCode == Activity.RESULT_OK) {
             // Scan result is available by making a call to data.getStringExtra(ZBarConstants.SCAN_RESULT)
             // Type of the scan result is available by making a call to data.getStringExtra(ZBarConstants.SCAN_RESULT_TYPE)
-            Toast.makeText(getActivity(), "Scan Result = " + data.getStringExtra(ZBarConstants.SCAN_RESULT), Toast.LENGTH_SHORT).show();
-            Toast.makeText(getActivity(), "Scan Result Type = " + data.getIntExtra(ZBarConstants.SCAN_RESULT_TYPE, 0), Toast.LENGTH_SHORT).show();
+            //
+            // Toast.makeText(getActivity(), "Scan Result Type = " + data.getIntExtra(ZBarConstants.SCAN_RESULT_TYPE, 0), Toast.LENGTH_SHORT).show();
             // The value of type indicates one of the symbols listed in Advanced Options below.
+            String[] qr = QuestioHelper.getDeQRCode(data.getStringExtra(ZBarConstants.SCAN_RESULT));
+            Log.d(LOG_TAG, qr[0] + qr[1]);
         } else if (resultCode == Activity.RESULT_CANCELED) {
             Toast.makeText(getActivity(), "Camera unavailable", Toast.LENGTH_SHORT).show();
         }

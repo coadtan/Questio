@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Spinner;
 
 import com.questio.projects.questio.R;
@@ -45,6 +46,13 @@ public class QuestBrowsing extends ActionBarActivity {
         setContentView(R.layout.quest_browsing);
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         place = (Place) getIntent().getSerializableExtra("place");
         if(place!=null) {
             Log.d(LOG_TAG, Integer.toString(place.getPlaceId()));
@@ -61,16 +69,6 @@ public class QuestBrowsing extends ActionBarActivity {
             Log.d(LOG_TAG,"place is null sad");
         }
 
-
-
-//        floors = Floor.getAllFloorByPlaceId(place.getPlaceId());
-//        floorSpinnerAdapter = new FloorSpinnerAdapter(this, R.layout.spinner_item_list, floors);
-//        floorSpinner = (Spinner) findViewById(R.id.quest_browsing_spinner);
-//        floorSpinner.setAdapter(floorSpinnerAdapter);
-//        ArrayList<Zone> zones = Zone.getAllZoneByFoorId(1);
-//        ZoneListAdapter adapter = new ZoneListAdapter(this, zones);
-//        ListView listView = (ListView) findViewById(R.id.quest_browsing_zone_list);
-//        listView.setAdapter(adapter);
 
     }
 

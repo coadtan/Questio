@@ -8,12 +8,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.questio.projects.questio.R;
+import com.questio.projects.questio.utilities.QuestioHelper;
 
 import net.sourceforge.zbar.Config;
 import net.sourceforge.zbar.Image;
@@ -23,7 +25,7 @@ import net.sourceforge.zbar.SymbolSet;
 
 public class ZBarScannerActivity extends FragmentActivity implements Camera.PreviewCallback, ZBarConstants {
 
-    private static final String TAG = "ZBarScannerActivity";
+    private static final String LOG_TAG = ZBarScannerActivity.class.getSimpleName();
     private static final int ZBAR_SCANNER_REQUEST = 0;
     private static final int ZBAR_QR_SCANNER_REQUEST = 1;
     private CameraPreview mPreview;
@@ -90,6 +92,8 @@ public class ZBarScannerActivity extends FragmentActivity implements Camera.Prev
             case ZBAR_QR_SCANNER_REQUEST:
                 if (resultCode == RESULT_OK) {
                     Toast.makeText(this, "Scan Result = " + data.getStringExtra(ZBarConstants.SCAN_RESULT), Toast.LENGTH_SHORT).show();
+                    String[] qr = QuestioHelper.getDeQRCode(data.getStringExtra(ZBarConstants.SCAN_RESULT));
+                    Log.d(LOG_TAG, qr[0] + qr[1] );
                 } else if (resultCode == RESULT_CANCELED && data != null) {
                     String error = data.getStringExtra(ZBarConstants.ERROR_INFO);
                     if (!TextUtils.isEmpty(error)) {

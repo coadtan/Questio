@@ -2,9 +2,13 @@ package com.questio.projects.questio.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -16,6 +20,7 @@ import com.questio.projects.questio.models.Place;
 import com.questio.projects.questio.models.PlaceDetail;
 import com.questio.projects.questio.models.PlaceNews;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -90,7 +95,32 @@ public class PlaceInfo extends ActionBarActivity {
         ListView listView = (ListView) findViewById(R.id.place_list_feed);
         listView.setAdapter(adapter);
 
+        new DownloadImageTask(quest_browsing_picture).execute("http://52.74.64.61" + placeDetail.getImageUrl());
         // set value-end
     }
 
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }
 }
