@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Layout for weather forecast list item for future day (not today) -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:layout_margin="5dp"
+    android:background="@drawable/border_list_news">
+
+    <TextView
+        android:id="@+id/newsId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+    <TextView
+        android:id="@+id/news_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="29 Mar 2015 16:00:00"
+        android:textSize="10sp"/>
+
+    <TextView
+        android:id="@+id/news_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hello New PROMOTION!"
+        android:textStyle="bold"
+        android:textSize="24sp"/>
+
+    <TextView
+        android:id="@+id/news_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="สำหรับใครที่อยากกินไอติมฟรีไปรับได้ที่ห้องสวนนํ้าชั้น 1 ค่ะ"
+        android:textSize="15sp"/>
+
+
+</LinearLayout>

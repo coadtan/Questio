@@ -86,6 +86,7 @@ public class QuestBrowsing extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.action_place_details:
                 Intent intentDetail = new Intent(this, PlaceInfo.class);
+                intentDetail.putExtra("place", place);
                 startActivity(intentDetail);
                 return true;
             case R.id.action_qrcode_scan:
