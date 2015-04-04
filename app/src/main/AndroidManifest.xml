@@ -35,7 +35,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.QuestBrowsing"/>
-        <activity android:name=".activities.PlaceInfo"/>
+        <activity android:name=".activities.PlaceInfo"/>'
+        <activity android:name=".activities.QuestAction"/>
         <activity
             android:name=".libraries.zbarscanner.ZBarScannerActivity"
             android:label="@string/app_name"

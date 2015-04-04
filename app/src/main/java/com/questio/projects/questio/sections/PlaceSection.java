@@ -36,6 +36,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.questio.projects.questio.R;
+import com.questio.projects.questio.activities.QuestAction;
 import com.questio.projects.questio.activities.QuestBrowsing;
 import com.questio.projects.questio.adepters.PlaceListAdapter;
 import com.questio.projects.questio.libraries.AndroidGoogleDirectionAndPlaceLibrary.AndroidGoogleDirectionAndPlaceLibrary.GoogleDirection;
@@ -310,7 +311,10 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
             // Toast.makeText(getActivity(), "Scan Result Type = " + data.getIntExtra(ZBarConstants.SCAN_RESULT_TYPE, 0), Toast.LENGTH_SHORT).show();
             // The value of type indicates one of the symbols listed in Advanced Options below.
             String[] qr = QuestioHelper.getDeQRCode(data.getStringExtra(ZBarConstants.SCAN_RESULT));
-            Log.d(LOG_TAG, qr[0] + qr[1]);
+            if(qr[0].equalsIgnoreCase("zone")){
+                Intent intent = new Intent(getActivity(), QuestAction.class);
+                startActivity(intent);
+            }
         } else if (resultCode == Activity.RESULT_CANCELED) {
             Toast.makeText(getActivity(), "Camera unavailable", Toast.LENGTH_SHORT).show();
         }
