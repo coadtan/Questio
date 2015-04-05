@@ -158,5 +158,37 @@ public class Quest {
         }
         return arr;
     }
-
+    public static ArrayList<Quest> getAllQuestByZoneId(int zoneId){
+        Quest q;
+        ArrayList<Quest> arr = null;
+        final String URL = "http://52.74.64.61/api/select_all_quest_by_zoneid.php?zoneid=" + zoneId;
+        try {
+            String response = new HttpHelper().execute(URL).get();
+            Log.d(LOG_TAG,"getAllQuestByZoneId response:" +response);
+            JSONArray jsonArray = new JSONArray(response);
+            if(jsonArray.length() != 0){
+                arr = new ArrayList<>();
+                for(int i = 0; i < jsonArray.length(); i++){
+                    q = new Quest();
+                    JSONObject jsonObject = (JSONObject)jsonArray.get(i);
+                    String questid = jsonObject.get("questid").toString();
+                    String questname = jsonObject.get("questname").toString();
+                    String questdetails = jsonObject.get("questdetails").toString();
+                    String questtypeid = jsonObject.get("questtypeid").toString();
+                    String zoneid = jsonObject.get("zoneid").toString();
+                    String diffid = jsonObject.get("diffid").toString();
+                    q.setQuestId(Integer.parseInt(questid));
+                    q.setQuestName(questname);
+                    q.setQuestDetails(questdetails);
+                    q.setQuestTypeId(Integer.parseInt(questtypeid));
+                    q.setDiffId(Integer.parseInt(diffid));
+                    q.setZoneId(Integer.parseInt(zoneid));
+                    arr.add(q);
+                }
+            }
+        } catch (InterruptedException | ExecutionException | JSONException e) {
+            e.printStackTrace();
+        }
+        return arr;
+    }
 }

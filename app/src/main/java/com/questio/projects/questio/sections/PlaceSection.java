@@ -313,6 +313,7 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
             String[] qr = QuestioHelper.getDeQRCode(data.getStringExtra(ZBarConstants.SCAN_RESULT));
             if(qr[0].equalsIgnoreCase("zone")){
                 Intent intent = new Intent(getActivity(), QuestAction.class);
+                intent.putExtra("qrcode", qr[1]);
                 startActivity(intent);
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {

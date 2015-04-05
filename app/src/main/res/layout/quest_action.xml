@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <include
         android:id="@+id/app_bar"
         layout="@layout/toolbar_layout" />
@@ -11,20 +13,32 @@
         android:layout_height="1dp"
         android:background="@android:color/holo_orange_dark" />
 
-    <FrameLayout
-        android:id="@+id/quest_browsing_top_frame"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/quest_browsing_picture"
+        <FrameLayout
+            android:id="@+id/quest_browsing_top_frame"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_gravity="center_horizontal|top"
-            android:background="@color/black"
-            android:src="@drawable/loading" />
+            android:layout_height="wrap_content">
 
-    </FrameLayout>
+            <ImageView
+                android:id="@+id/quest_browsing_picture"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_gravity="center_horizontal|top"
+                android:background="@color/black"
+                android:src="@drawable/loading" />
+
+            <ImageView
+                android:id="@+id/quest_browsing_minimap"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="end|bottom"
+                android:src="@drawable/loading" />
+
+        </FrameLayout>
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
@@ -35,78 +49,86 @@
         android:id="@+id/zonename"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="SIT KMUTT"
-        android:textSize="20dp"
-        android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:fontFamily="sans-serif-condensed"
         android:gravity="center"
-        android:fontFamily="sans-serif-condensed"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/holo_orange_dark" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Item: "
-            android:fontFamily="sans-serif-condensed"
-            android:layout_marginLeft="6dp"
-            android:textStyle="bold"
-            android:layout_weight="1"/>
-        <TextView
-            android:id="@+id/item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gaia Hammer"
-            android:fontFamily="sans-serif-condensed"
-            android:layout_weight="2"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Rewards: "
-            android:fontFamily="sans-serif-condensed"
-            android:layout_marginLeft="6dp"
-            android:layout_weight="1"
-            android:textStyle="bold"
-            />
-        <TextView
-            android:id="@+id/reward"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="God"
-            android:fontFamily="sans-serif-condensed"
-            android:layout_weight="2"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Type: "
-            android:fontFamily="sans-serif-condensed"
-            android:layout_marginLeft="6dp"
-            android:layout_weight="1"
-            android:textStyle="bold"
-            />
-        <TextView
-            android:id="@+id/zonetype"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Misc."
-            android:fontFamily="sans-serif-condensed"
-            android:layout_weight="2"
-            />
-    </LinearLayout>
+        android:text="SIT KMUTT"
+        android:textSize="20dp" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@android:color/holo_orange_dark" />
 
-    <ListView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"/>
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-condensed"
+            android:text="Item: "
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:fontFamily="sans-serif-condensed"
+            android:text="Gaia Hammer" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-condensed"
+            android:text="Rewards: "
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/reward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:fontFamily="sans-serif-condensed"
+            android:text="God" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-condensed"
+            android:text="Type: "
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/zonetype"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:fontFamily="sans-serif-condensed"
+            android:text="Misc." />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/holo_orange_dark" />
+
+
+    <ListView
+        android:id="@+id/quest_action_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" />
+
+
 </LinearLayout>

@@ -1,66 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/questid"
+        android:visibility="gone"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:background="@color/grey"
+        android:orientation="vertical"
         android:padding="7dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
+
                 <ImageView
                     android:id="@+id/questtype"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_logo_email"/>
+                    android:src="@drawable/ic_logo_email" />
+
                 <ImageView
                     android:id="@+id/difficulty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_logo_www"/>
-                </LinearLayout>
+                    android:src="@drawable/ic_logo_www" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:orientation="vertical"
-                android:layout_weight="4">
+                android:layout_weight="4"
+                android:orientation="vertical">
+
                 <TextView
-                    android:id="@+id/quests"
+                    android:id="@+id/questname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
                     android:text="Quest A"
-                    android:textSize="20dp"
-                    android:fontFamily="sans-serif-condensed"/>
+                    android:textSize="20dp" />
+
                 <TextView
                     android:id="@+id/questdetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
                     android:text="Please follow the step"
-                    android:textSize="16dp"
-                    android:fontFamily="sans-serif-condensed"/>
+                    android:textSize="16dp" />
 
-                </LinearLayout>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/status"
-            android:src="@drawable/ic_action_placedetail"
-            android:layout_gravity="center"
-            android:layout_weight="1"/>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:src="@drawable/ic_action_placedetail" />
         </LinearLayout>
-
 
 
     </LinearLayout>

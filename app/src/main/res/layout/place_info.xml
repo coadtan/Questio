@@ -21,7 +21,7 @@
 
 
             <ImageView
-                android:id="@+id/quest_browsing_picture"
+                android:id="@+id/quest_info_picture"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_gravity="center"

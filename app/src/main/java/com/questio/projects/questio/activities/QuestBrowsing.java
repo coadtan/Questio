@@ -2,8 +2,8 @@ package com.questio.projects.questio.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.adepters.FloorSpinnerAdapter;
 import com.questio.projects.questio.adepters.QuestRecycleViewAdapter;
+import com.questio.projects.questio.fragments.QuestRecycleView;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarConstants;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarScannerActivity;
 import com.questio.projects.questio.models.Floor;
@@ -39,6 +40,15 @@ public class QuestBrowsing extends ActionBarActivity {
     private static final String LOG_TAG = QuestBrowsing.class.getSimpleName();
     private RecyclerView questBrowsingRecyclerView;
     private QuestRecycleViewAdapter adapterRecycleView;
+    private ArrayList<Quest> quests;
+
+    public ArrayList<Quest> getQuests() {
+        return quests;
+    }
+
+    public void setQuests(ArrayList<Quest> quests) {
+        this.quests = quests;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,15 +68,16 @@ public class QuestBrowsing extends ActionBarActivity {
             Log.d(LOG_TAG, Integer.toString(place.getPlaceId()));
             ArrayList<Quest> quests = Quest.getAllQuestByPlaceId(place.getPlaceId());
             if (quests != null) {
-                questBrowsingRecyclerView = (RecyclerView) findViewById(R.id.quest_browsing_recycler_view);
-                questBrowsingRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-                adapterRecycleView = new QuestRecycleViewAdapter(QuestBrowsing.this, quests);
-                questBrowsingRecyclerView.setAdapter(adapterRecycleView);
+                setQuests(quests);
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                QuestRecycleView fragment = new QuestRecycleView();
+                transaction.replace(R.id.quest_browsing_null, fragment);
+                transaction.commit();
             }else{
                 Log.d(LOG_TAG,"quests: is null");
             }
         }else{
-            Log.d(LOG_TAG,"place is null sad");
+            Log.d(LOG_TAG,"place: is null");
         }
 
 

@@ -252,4 +252,80 @@ public class Zone {
 
         return al;
     }
+
+    public static int findZoneIdByQRCode(int qrCode) {
+        int zoneId = 0;
+        final String URL = "http://52.74.64.61/api/select_zoneid_by_qrcode.php?qrcode=" + qrCode;
+        try {
+            String response = new HttpHelper().execute(URL).get();
+            Log.d(LOG_TAG, "response: " + response);
+            JSONArray arr = new JSONArray(response);
+            if (arr.length() != 0) {
+                JSONObject obj = (JSONObject) arr.get(0);
+                zoneId = Integer.parseInt(obj.get("zoneid").toString());
+            }
+        } catch (InterruptedException | ExecutionException | JSONException e) {
+            e.printStackTrace();
+        }
+
+        return zoneId;
+    }
+
+    public static Zone getZoneByZoneId(int id) {
+        Zone zone = null;
+        final String URL = "http://52.74.64.61/api/select_zone_by_zoneid.php?zoneid=" + id;
+        try {
+            String response = new HttpHelper().execute(URL).get();
+            Log.d(LOG_TAG, "response: " + response);
+            JSONArray arr = new JSONArray(response);
+            if (arr.length() != 0) {
+                zone = new Zone();
+                JSONObject obj = (JSONObject) arr.get(0);
+                String zoneid = obj.get("zoneid").toString();
+                String floorid = obj.get("floorid").toString();
+                String zonetypeid = obj.get("zonetypeid").toString();
+                String zonename = obj.get("zonename").toString();
+                String zonedetails = obj.get("zonedetails").toString();
+                String qrcode = obj.get("qrcode").toString();
+                String sensorid = obj.get("sensorid").toString();
+                String imageurl = obj.get("imageurl").toString();
+                String minimapurl = obj.get("minimapurl").toString();
+                String itemset = obj.get("itemset").toString();
+                String rewardid = obj.get("rewardid").toString();
+                zone.setZoneId(Integer.parseInt(zoneid));
+                zone.setFloorId(Integer.parseInt(floorid));
+                zone.setZoneTypeId(Integer.parseInt(zonetypeid));
+                zone.setZoneName(zonename);
+                if (!zonedetails.equalsIgnoreCase("null")) {
+                    zone.setZoneDetails(zonedetails);
+                }
+                if (!qrcode.equalsIgnoreCase("null")) {
+                    zone.setQrCode(Integer.parseInt(qrcode));
+                }
+                if (!sensorid.equalsIgnoreCase("null")) {
+                    zone.setSensorId(Integer.parseInt(sensorid));
+
+                }
+                if (!imageurl.equalsIgnoreCase("null")) {
+                    zone.setImageUrl(imageurl);
+
+                }
+                if (!minimapurl.equalsIgnoreCase("null")) {
+                    zone.setMiniMapUrl(minimapurl);
+                }
+                if (!itemset.equalsIgnoreCase("null")) {
+                    zone.setItemSet(itemset);
+                }
+                if (!rewardid.equalsIgnoreCase("null")) {
+                    zone.setRewardId(Integer.parseInt(rewardid));
+                }
+
+
+            }
+        } catch (InterruptedException | ExecutionException | JSONException e) {
+            e.printStackTrace();
+        }
+
+        return zone;
+    }
 }

@@ -28,7 +28,7 @@ import java.util.ArrayList;
  */
 public class PlaceInfo extends ActionBarActivity {
     Toolbar toolbar;
-    ImageView quest_browsing_picture;
+    ImageView quest_info_picture;
     ImageView place_detail;
     TextView place_name;
     TextView place_fullname;
@@ -44,7 +44,7 @@ public class PlaceInfo extends ActionBarActivity {
         setContentView(R.layout.place_info);
         // init
         toolbar = (Toolbar) findViewById(R.id.app_bar);
-        quest_browsing_picture = (ImageView) findViewById(R.id.quest_browsing_picture);
+        quest_info_picture = (ImageView) findViewById(R.id.quest_info_picture);
         place_detail = (ImageView) findViewById(R.id.place_detail);
         place_name = (TextView) findViewById(R.id.place_name);
         place_fullname = (TextView) findViewById(R.id.place_fullname);
@@ -95,7 +95,7 @@ public class PlaceInfo extends ActionBarActivity {
         ListView listView = (ListView) findViewById(R.id.place_list_feed);
         listView.setAdapter(adapter);
 
-        new DownloadImageTask(quest_browsing_picture).execute("http://52.74.64.61" + placeDetail.getImageUrl());
+        new DownloadImageTask(quest_info_picture).execute("http://52.74.64.61" + placeDetail.getImageUrl());
         // set value-end
     }
 

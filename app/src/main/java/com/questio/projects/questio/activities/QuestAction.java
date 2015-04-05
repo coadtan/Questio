@@ -1,11 +1,24 @@
 package com.questio.projects.questio.activities;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.questio.projects.questio.R;
+import com.questio.projects.questio.adepters.QuestInActionAdapter;
+import com.questio.projects.questio.models.Quest;
+import com.questio.projects.questio.models.Zone;
+
+import java.io.InputStream;
+import java.util.ArrayList;
 
 /**
  * Created by ning jittima on 4/4/2558.
@@ -13,19 +26,94 @@ import com.questio.projects.questio.R;
 public class QuestAction extends ActionBarActivity {
     private static final String LOG_TAG = QuestAction.class.getSimpleName();
     Toolbar toolbar;
+    ArrayList<Quest> quests;
+    ListView quest_action_listview;
+    Zone zone;
+    ImageView quest_browsing_picture;
+    ImageView quest_browsing_minimap;
+    TextView zonename;
+    TextView item;
+    TextView reward;
+    TextView zonetype;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quest_action);
-        toolbar = (Toolbar)findViewById(R.id.app_bar);
+
+        quest_browsing_picture = (ImageView) findViewById(R.id.quest_browsing_picture);
+        quest_browsing_minimap = (ImageView) findViewById(R.id.quest_browsing_minimap);
+        zonename = (TextView) findViewById(R.id.zonename);
+        item = (TextView) findViewById(R.id.item);
+        reward = (TextView) findViewById(R.id.reward);
+        zonetype = (TextView) findViewById(R.id.zonetype);
+
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
+
+        String qrcode;
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+
+            if (extras == null) {
+                qrcode = null;
+            } else {
+                qrcode = extras.getString("qrcode");
+            }
+        } else {
+            qrcode = (String) savedInstanceState.getSerializable("qrcode");
+        }
+        int zoneIdFromQRCode = Zone.findZoneIdByQRCode(Integer.parseInt(qrcode));
+        zone = Zone.getZoneByZoneId(zoneIdFromQRCode);
+        quests = Quest.getAllQuestByZoneId(zoneIdFromQRCode);
+        QuestInActionAdapter adapter = new QuestInActionAdapter(this, quests);
+        quest_action_listview = (ListView) findViewById(R.id.quest_action_listview);
+        quest_action_listview.setAdapter(adapter);
+
+        zonename.setText(zone.getZoneName());
+        item.setText(zone.getItemSet());
+        reward.setText(Integer.toString(zone.getRewardId()));
+        zonetype.setText(Integer.toString(zone.getZoneTypeId()));
+
+        if (!(zone.getImageUrl() == null || zone.getMiniMapUrl()== null)) {
+            new DownloadImageTask(quest_browsing_picture).execute("http://52.74.64.61" + zone.getImageUrl());
+            new DownloadImageTask(quest_browsing_minimap).execute("http://52.74.64.61" + zone.getMiniMapUrl());
+        }
+
+    }
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
     }
 }
