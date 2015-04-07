@@ -16,9 +16,9 @@ import java.util.ArrayList;
 /**
  * Created by coad4u4ever on 05-Apr-15.
  */
-public class QuestInActionAdapter  extends ArrayAdapter<Quest> {
+public class QuestInActionAdapter extends ArrayAdapter<Quest> {
 
-    public static final String LOG_TAG= NewsListAdapter.class.getSimpleName();
+    public static final String LOG_TAG = NewsListAdapter.class.getSimpleName();
 
     private static class ViewHolder {
         private ImageView questtype;
@@ -56,6 +56,17 @@ public class QuestInActionAdapter  extends ArrayAdapter<Quest> {
         viewHolder.questid.setText(Integer.toString(items.getQuestId()));
         viewHolder.questname.setText(items.getQuestName());
         viewHolder.questdetails.setText(items.getQuestDetails());
+        switch (items.getQuestTypeId()) {
+            case 1:
+                viewHolder.questtype.setImageResource(R.drawable.ic_icon_quiz);
+                break;
+            case 2:
+                viewHolder.questtype.setImageResource(R.drawable.ic_icon_riddle);
+                break;
+            case 3:
+                viewHolder.questtype.setImageResource(R.drawable.ic_icon_puzzle);
+                break;
+        }
 
 //        viewHolder.questtype.setImageDrawable();
 //        viewHolder.difficulty.setImageDrawable();

@@ -13,5 +13,6 @@ public class JsonTagHelper {
     public static final String TAG_PLACE_LONGITUDE = "longitude";
     public static final String TAG_PLACE_RADIUS = "radius";
     public static final String TAG_PLACE_TYPE = "placetype";
+    public static final String TAG_PLACE_IMAGEURL = "imageurl";
 
 }

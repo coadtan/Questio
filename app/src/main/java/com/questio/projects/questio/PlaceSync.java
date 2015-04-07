@@ -86,6 +86,7 @@ public class PlaceSync extends AsyncTask<String, Void, String> {
                     queryValues.put(JsonTagHelper.TAG_PLACE_LONGITUDE, obj.get(JsonTagHelper.TAG_PLACE_LONGITUDE).toString());
                     queryValues.put(JsonTagHelper.TAG_PLACE_RADIUS, obj.get(JsonTagHelper.TAG_PLACE_RADIUS).toString());
                     queryValues.put(JsonTagHelper.TAG_PLACE_TYPE, obj.get(JsonTagHelper.TAG_PLACE_TYPE).toString());
+                    queryValues.put(JsonTagHelper.TAG_PLACE_IMAGEURL, obj.get(JsonTagHelper.TAG_PLACE_IMAGEURL).toString());
                     ContentValues values = new ContentValues();
                     values.put(JsonTagHelper.TAG_PLACE_ID, queryValues.get(JsonTagHelper.TAG_PLACE_ID));
                     values.put(JsonTagHelper.TAG_PLACE_NAME, queryValues.get(JsonTagHelper.TAG_PLACE_NAME));
@@ -96,6 +97,7 @@ public class PlaceSync extends AsyncTask<String, Void, String> {
                     values.put(JsonTagHelper.TAG_PLACE_LONGITUDE, queryValues.get(JsonTagHelper.TAG_PLACE_LONGITUDE));
                     values.put(JsonTagHelper.TAG_PLACE_RADIUS, queryValues.get(JsonTagHelper.TAG_PLACE_RADIUS));
                     values.put(JsonTagHelper.TAG_PLACE_TYPE, queryValues.get(JsonTagHelper.TAG_PLACE_TYPE));
+                    values.put(JsonTagHelper.TAG_PLACE_IMAGEURL, queryValues.get(JsonTagHelper.TAG_PLACE_IMAGEURL));
                     database.insert("place", null, values);
                 }
             }

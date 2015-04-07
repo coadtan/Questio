@@ -1,6 +1,7 @@
 package com.questio.projects.questio.adepters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,36 +33,79 @@ public class QuestRecycleViewAdapter extends RecyclerView.Adapter<QuestListRowHo
     @Override
     public void onBindViewHolder(QuestListRowHolder questListRowHolder, int i) {
         Quest questItem = questItemList.get(i);
+
+        switch (questItem.getDiffId()) {
+            case 1:
+                questListRowHolder.cardview_quest.setCardBackgroundColor(Color.parseColor("#ff76ff53"));
+                questListRowHolder.cardview_quest.setRadius(40);
+                break;
+            case 2:
+                questListRowHolder.cardview_quest.setCardBackgroundColor(Color.parseColor("#CCFF99"));
+                questListRowHolder.cardview_quest.setRadius(40);
+                break;
+            case 3:
+                questListRowHolder.cardview_quest.setCardBackgroundColor(Color.parseColor("#fffbff61"));
+                questListRowHolder.cardview_quest.setRadius(40);
+                break;
+            case 4:
+                questListRowHolder.cardview_quest.setCardBackgroundColor(Color.parseColor("#ffffce44"));
+                questListRowHolder.cardview_quest.setRadius(40);
+                break;
+            case 5:
+                questListRowHolder.cardview_quest.setCardBackgroundColor(Color.parseColor("#ffff9022"));
+                questListRowHolder.cardview_quest.setRadius(40);
+                break;
+            default:
+                questListRowHolder.cardview_quest.setCardBackgroundColor(Color.parseColor("#ff362913"));
+                questListRowHolder.cardview_quest.setRadius(40);
+                break;
+        }
+
         questListRowHolder.quest_list_questid.setText(Integer.toString(questItem.getQuestId()));
         questListRowHolder.quest_list_questname.setText(questItem.getQuestName());
         questListRowHolder.quest_list_questdetails.setText(questItem.getQuestDetails());
         switch (questItem.getQuestTypeId()) {
             case 1:
-                questListRowHolder.quest_list_questtypeid.setText("ถาม-ตอบ");
+                questListRowHolder.quest_list_questtypeid.setImageResource(R.drawable.ic_icon_quiz);
                 break;
             case 2:
-                questListRowHolder.quest_list_questtypeid.setText("ปริศนา");
+                questListRowHolder.quest_list_questtypeid.setImageResource(R.drawable.ic_icon_riddle);
                 break;
             case 3:
-                questListRowHolder.quest_list_questtypeid.setText("ทายรูปภาพ");
+                questListRowHolder.quest_list_questtypeid.setImageResource(R.drawable.ic_icon_puzzle);
+                //questListRowHolder.quest_list_questtypeid.setText("ทายรูปภาพ");
                 break;
             default:
-                questListRowHolder.quest_list_questtypeid.setText("ไม่สามารถระบุประเภทได้");
+                questListRowHolder.quest_list_questtypeid.setImageResource(R.drawable.ic_icon_riddle);
+                //questListRowHolder.quest_list_questtypeid.setText("ไม่สามารถระบุประเภทได้");
                 break;
         }
 
-        questListRowHolder.quest_list_zoneid.setText("ตำแหน่ง "+ questItem.getZoneName() + ", " +questItem.getFloorName()+", "+questItem.getBuildingName());
+        questListRowHolder.quest_list_zoneid.setText("ตำแหน่ง " + questItem.getZoneName() + ", " + questItem.getFloorName() + ", " + questItem.getBuildingName());
         String diff;
-        switch (questItem.getDiffId()){
-            case 1 : diff = "ง่ายมาก"; break;
-            case 2 : diff = "ง่าย"; break;
-            case 3 : diff = "ปานกลาง"; break;
-            case 4 : diff = "ยาก"; break;
-            case 5 : diff = "ยากมาก"; break;
+        switch (questItem.getDiffId()) {
+            case 1:
+                diff = "ง่ายมาก";
+                break;
+            case 2:
+                diff = "ง่าย";
+                break;
+            case 3:
+                diff = "ปานกลาง";
+                break;
+            case 4:
+                diff = "ยาก";
+                break;
+            case 5:
+                diff = "ยากมาก";
+                break;
             default:
-                diff = "ไม่สามารถระบุได้"; break;
+                diff = "ไม่สามารถระบุได้";
+                break;
         }
         questListRowHolder.quest_list_diffid.setText("ระดับความยาก " + diff);
+
+
     }
 
     @Override

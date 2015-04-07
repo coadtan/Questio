@@ -8,5 +8,12 @@
     <color name="questio_light_orange">#fff4c738</color>
     <color name="questio_orange">#fff48712</color>
 
+    <color name="quest_veryeasy">#ff76ff53</color>
+    <color name="quest_easy">#CCFF99</color>
+    <color name="quest_normal">#fffbff61</color>
+    <color name="quest_hard">#ffffce44</color>
+    <color name="quest_veryhard">#ffff9022</color>
+    <color name="quest_unknown">#ff362913</color>
+
 
 </resources>

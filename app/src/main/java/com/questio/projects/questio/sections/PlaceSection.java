@@ -288,11 +288,14 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
                 startActivityForResult(intent, 0);
 
                 return true;
-//            case R.id.action_enter_zone0:
-//                Intent intent = new Intent(mContext, QuestZoning.class);
-//                intent.putExtra("p", p);
-//                startActivity(intent);
-//                return true;
+            case R.id.action_enter_zone68001:
+                String[] qr = {"zone", "68001"};
+                if (qr[0].equalsIgnoreCase("zone")) {
+                    Intent intentToQuestAction = new Intent(mContext, QuestAction.class);
+                    intentToQuestAction.putExtra("qrcode", qr[1]);
+                    startActivity(intentToQuestAction);
+                }
+                return true;
             default:
                 break;
         }
@@ -311,7 +314,7 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
             // Toast.makeText(getActivity(), "Scan Result Type = " + data.getIntExtra(ZBarConstants.SCAN_RESULT_TYPE, 0), Toast.LENGTH_SHORT).show();
             // The value of type indicates one of the symbols listed in Advanced Options below.
             String[] qr = QuestioHelper.getDeQRCode(data.getStringExtra(ZBarConstants.SCAN_RESULT));
-            if(qr[0].equalsIgnoreCase("zone")){
+            if (qr[0].equalsIgnoreCase("zone")) {
                 Intent intent = new Intent(getActivity(), QuestAction.class);
                 intent.putExtra("qrcode", qr[1]);
                 startActivity(intent);

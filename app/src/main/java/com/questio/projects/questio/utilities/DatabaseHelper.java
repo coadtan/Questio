@@ -25,7 +25,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " latitude TEXT," +
                 " longitude TEXT," +
                 " radius REAL," +
-                " placetype TEXT)";
+                " placetype TEXT, " +
+                " imageurl TEXT )";
         database.execSQL(query);
     }
 

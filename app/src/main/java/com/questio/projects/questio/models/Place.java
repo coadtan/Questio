@@ -24,6 +24,7 @@ public class Place  implements Serializable {
     private double longitude;
     private double radius;
     private String placetype;
+    private String imageurl;
 
     Context mContext;
 
@@ -106,6 +107,14 @@ public class Place  implements Serializable {
         this.placetype = placetype;
     }
 
+    public String getImageurl() {
+        return imageurl;
+    }
+
+    public void setImageurl(String imageurl) {
+        this.imageurl = imageurl;
+    }
+
     @Override
     public String toString() {
         return "Place{" +
@@ -118,6 +127,8 @@ public class Place  implements Serializable {
                 ", longitude=" + longitude +
                 ", radius=" + radius +
                 ", placetype='" + placetype + '\'' +
+                ", imageurl='" + imageurl + '\'' +
+                ", mContext=" + mContext +
                 '}';
     }
 
@@ -132,7 +143,7 @@ public class Place  implements Serializable {
         // 7 radius
         // 8 placetype
         Cursor cursor;
-        String selectQuery = "SELECT  placeid as _id, placename, placefullname, qrcode, sensorid, latitude, longitude, radius, placetype FROM place";
+        String selectQuery = "SELECT  placeid as _id, placename, placefullname, qrcode, sensorid, latitude, longitude, radius, placetype, imageurl FROM place";
         DatabaseHelper databaseHelper = new DatabaseHelper(mContext);
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
         cursor = database.rawQuery(selectQuery, null);
@@ -161,6 +172,7 @@ public class Place  implements Serializable {
                 po.setLongitude(Double.parseDouble(cursor.getString(6)));
                 po.setRadius(Double.parseDouble(cursor.getString(7)));
                 po.setPlacetype(cursor.getString(8));
+                po.setImageurl(cursor.getString(9));
                 list.add(po);
             } while (cursor.moveToNext());
         }

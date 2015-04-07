@@ -8,9 +8,9 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_enter_zone0"
+        android:id="@+id/action_enter_zone68001"
         android:orderInCategory="101"
-        android:title="fake enter zone0"
+        android:title="fake enter zone:68001"
         app:showAsAction="never" />
 
     <item

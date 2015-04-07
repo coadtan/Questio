@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.questio.projects.questio.R;
@@ -22,6 +23,7 @@ import com.questio.projects.questio.libraries.zbarscanner.ZBarScannerActivity;
 import com.questio.projects.questio.models.Floor;
 import com.questio.projects.questio.models.Place;
 import com.questio.projects.questio.models.Quest;
+import com.questio.projects.questio.utilities.DownloadImageHelper;
 
 import net.sourceforge.zbar.Symbol;
 
@@ -41,7 +43,7 @@ public class QuestBrowsing extends ActionBarActivity {
     private RecyclerView questBrowsingRecyclerView;
     private QuestRecycleViewAdapter adapterRecycleView;
     private ArrayList<Quest> quests;
-
+    private ImageView quest_browsing_picture;
     public ArrayList<Quest> getQuests() {
         return quests;
     }
@@ -55,6 +57,7 @@ public class QuestBrowsing extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quest_browsing);
         toolbar = (Toolbar) findViewById(R.id.app_bar);
+        quest_browsing_picture = (ImageView)findViewById(R.id.quest_browsing_picture);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -63,9 +66,11 @@ public class QuestBrowsing extends ActionBarActivity {
                 onBackPressed();
             }
         });
+        Log.d(LOG_TAG, "oncreate");
         place = (Place) getIntent().getSerializableExtra("place");
         if(place!=null) {
-            Log.d(LOG_TAG, Integer.toString(place.getPlaceId()));
+            Log.d(LOG_TAG, Integer.toString(place.getPlaceId()) + place.getImageurl());
+            new DownloadImageHelper(quest_browsing_picture).execute("http://52.74.64.61" + place.getImageurl());
             ArrayList<Quest> quests = Quest.getAllQuestByPlaceId(place.getPlaceId());
             if (quests != null) {
                 setQuests(quests);
@@ -109,4 +114,6 @@ public class QuestBrowsing extends ActionBarActivity {
         }
         return false;
     }
+
+
 }
