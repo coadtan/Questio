@@ -28,9 +28,10 @@ public class QuestInActionAdapter extends ArrayAdapter<Quest> {
         private TextView questname;
         private TextView questid;
         private TextView questdetails;
+        private TextView questTypeInvisible;
 
         public ViewHolder(View view) {
-
+            questTypeInvisible = (TextView) view.findViewById(R.id.questTypeInvisible);
             questtype = (ImageView) view.findViewById(R.id.questtype);
             difficulty = (ImageView) view.findViewById(R.id.difficulty);
             status = (ImageView) view.findViewById(R.id.status);
@@ -56,6 +57,7 @@ public class QuestInActionAdapter extends ArrayAdapter<Quest> {
         viewHolder.questid.setText(Integer.toString(items.getQuestId()));
         viewHolder.questname.setText(items.getQuestName());
         viewHolder.questdetails.setText(items.getQuestDetails());
+        viewHolder.questTypeInvisible.setText(Integer.toString(items.getQuestTypeId()));
         switch (items.getQuestTypeId()) {
             case 1:
                 viewHolder.questtype.setImageResource(R.drawable.ic_icon_quiz);

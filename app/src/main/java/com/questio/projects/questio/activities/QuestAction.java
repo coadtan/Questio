@@ -1,5 +1,6 @@
 package com.questio.projects.questio.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -80,7 +81,32 @@ public class QuestAction extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TextView questId = (TextView) view.findViewById(R.id.questid);
-                TextView questTypeId = (TextView) view.findViewById(R.id.placeLat);
+                TextView questName = (TextView) view.findViewById(R.id.questname);
+                TextView questTypeInvisible = (TextView) view.findViewById(R.id.questTypeInvisible);
+                String questIdForIntent = questId.getText().toString();
+                String questNameForIntent = questName.getText().toString();
+                switch (Integer.parseInt(questTypeInvisible.getText().toString())) {
+                    case 1:
+                        Intent intentToQuiz = new Intent(QuestAction.this, QuizAction.class);
+                        intentToQuiz.putExtra("questid", questIdForIntent);
+                        intentToQuiz.putExtra("questname", questNameForIntent);
+                        startActivity(intentToQuiz);
+                        break;
+                    case 2:
+                        Intent intentToRiddle = new Intent(QuestAction.this, QuizAction.class);
+                        intentToRiddle.putExtra("questid", questIdForIntent);
+                        intentToRiddle.putExtra("questname", questNameForIntent);
+                        startActivity(intentToRiddle);
+                        break;
+                    case 3:
+                        Intent intentToPuzzle = new Intent(QuestAction.this, QuizAction.class);
+                        intentToPuzzle.putExtra("questid", questIdForIntent);
+                        intentToPuzzle.putExtra("questname", questNameForIntent);
+                        startActivity(intentToPuzzle);
+                        break;
+                }
+
+
             }
         });
         zonename.setText(zone.getZoneName());
@@ -88,7 +114,7 @@ public class QuestAction extends ActionBarActivity {
         reward.setText(Integer.toString(zone.getRewardId()));
         zonetype.setText(Integer.toString(zone.getZoneTypeId()));
 
-        if (!(zone.getImageUrl() == null || zone.getMiniMapUrl()== null)) {
+        if (!(zone.getImageUrl() == null || zone.getMiniMapUrl() == null)) {
             new DownloadImageHelper(quest_action_picture).execute("http://52.74.64.61" + zone.getImageUrl());
             new DownloadImageHelper(quest_action_minimap).execute("http://52.74.64.61" + zone.getMiniMapUrl());
         }
