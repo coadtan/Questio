@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <include
         android:id="@+id/app_bar"
@@ -11,4 +12,75 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@android:color/holo_orange_dark" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/quiz_prequiz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="&lt;"
+            android:textSize="30sp" />
+        <TextView
+            android:id="@+id/quiz_current_seq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="1"
+            android:textSize="30dp"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/textView" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text=" / "
+            android:textSize="30dp"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/quiz_count_quiz"
+            android:id="@+id/textView" />
+        <TextView
+            android:id="@+id/quiz_count_quiz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="10"
+            android:textSize="30dp"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/quiz_next"
+            android:layout_marginEnd="45dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="&gt;"
+            android:textSize="30sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/quiz_next" />
+
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/quiz_action_bot_section"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include layout="@layout/quest_quiz_layout" />
+
+        </ScrollView>
+    </FrameLayout>
+
 </LinearLayout>
