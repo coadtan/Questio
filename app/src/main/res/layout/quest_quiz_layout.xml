@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -9,76 +10,95 @@
         android:layout_height="1dp"
         android:background="@android:color/holo_orange_dark" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/quiz_sequence"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:orientation="horizontal">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="20dp">
-
-            <TextView
-                android:id="@+id/quiz_question"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="คำถาม assasasasasasasasasasssssssssssssssssssssasasasasasasasasasasasasasa"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:background="@color/questio_light_orange"/>
-        </FrameLayout>
-
+        android:padding="20dp">
 
         <TextView
-            android:id="@+id/quiz_sequence"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="3dp"
-            android:text="1"
+            android:id="@+id/quiz_question"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/questio_light_orange"
+            android:padding="20dp"
+            android:text="คำถาม assasasasasasasasasasssssssssssssssssssssasasasasasasasasasasasasasa"
+            android:textSize="20sp"
             android:textStyle="bold" />
-    </LinearLayout>
+    </FrameLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        android:padding="20dp">
 
-        <Button
-            android:id="@+id/quiz_answer_a"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:text="aaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            >
 
-        <Button
-            android:id="@+id/quiz_answer_b"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:text="bbbbbbbbbb" />
+            <Button
+                android:id="@+id/quiz_answer_a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:text="aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                android:background="@color/grey_900"
+                android:textColor="@color/white"
+                />
 
-        <Button
-            android:id="@+id/quiz_answer_c"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:text="teccccccccccccccccst" />
+            <Button
+                android:id="@+id/quiz_answer_b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/quiz_answer_a"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:text="bbbbbbbbbb"
+                android:background="@color/grey_900"
+                android:textColor="@color/white"/>
 
-        <Button
-            android:id="@+id/quiz_answer_d"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:text="ddddddddddddddd" />
-    </LinearLayout>
+            <Button
+                android:id="@+id/quiz_answer_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/quiz_answer_b"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:text="teccccccccccccccccst"
+                android:background="@color/grey_900"
+                android:textColor="@color/white"/>
+
+            <Button
+                android:id="@+id/quiz_answer_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/quiz_answer_c"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:text="ddddddddddddddd"
+                android:background="@color/grey_900"
+                android:textColor="@color/white"/>
+        </RelativeLayout>
+    </FrameLayout>
 
 </LinearLayout>

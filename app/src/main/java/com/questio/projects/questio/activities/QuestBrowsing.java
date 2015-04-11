@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.adepters.FloorSpinnerAdapter;
 import com.questio.projects.questio.adepters.QuestRecycleViewAdapter;
@@ -23,7 +25,6 @@ import com.questio.projects.questio.libraries.zbarscanner.ZBarScannerActivity;
 import com.questio.projects.questio.models.Floor;
 import com.questio.projects.questio.models.Place;
 import com.questio.projects.questio.models.Quest;
-import com.questio.projects.questio.utilities.DownloadImageHelper;
 
 import net.sourceforge.zbar.Symbol;
 
@@ -44,6 +45,7 @@ public class QuestBrowsing extends ActionBarActivity {
     private QuestRecycleViewAdapter adapterRecycleView;
     private ArrayList<Quest> quests;
     private ImageView quest_browsing_picture;
+
     public ArrayList<Quest> getQuests() {
         return quests;
     }
@@ -57,7 +59,7 @@ public class QuestBrowsing extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quest_browsing);
         toolbar = (Toolbar) findViewById(R.id.app_bar);
-        quest_browsing_picture = (ImageView)findViewById(R.id.quest_browsing_picture);
+        quest_browsing_picture = (ImageView) findViewById(R.id.quest_browsing_picture);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -68,9 +70,15 @@ public class QuestBrowsing extends ActionBarActivity {
         });
         Log.d(LOG_TAG, "oncreate");
         place = (Place) getIntent().getSerializableExtra("place");
-        if(place!=null) {
+        if (place != null) {
             Log.d(LOG_TAG, Integer.toString(place.getPlaceId()) + place.getImageurl());
-            new DownloadImageHelper(quest_browsing_picture).execute("http://52.74.64.61" + place.getImageurl());
+            Glide.with(this)
+                    .load("http://52.74.64.61" + place.getImageurl())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(quest_browsing_picture);
+            // new DownloadImageHelper(quest_browsing_picture).execute("http://52.74.64.61" + place.getImageurl());
+
+
             ArrayList<Quest> quests = Quest.getAllQuestByPlaceId(place.getPlaceId());
             if (quests != null) {
                 setQuests(quests);
@@ -78,11 +86,11 @@ public class QuestBrowsing extends ActionBarActivity {
                 QuestRecycleView fragment = new QuestRecycleView();
                 transaction.replace(R.id.quest_browsing_null, fragment);
                 transaction.commit();
-            }else{
-                Log.d(LOG_TAG,"quests: is null");
+            } else {
+                Log.d(LOG_TAG, "quests: is null");
             }
-        }else{
-            Log.d(LOG_TAG,"place: is null");
+        } else {
+            Log.d(LOG_TAG, "place: is null");
         }
 
 
@@ -90,7 +98,7 @@ public class QuestBrowsing extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater=getMenuInflater();
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_quest_browsing, menu);
         return true;
     }
