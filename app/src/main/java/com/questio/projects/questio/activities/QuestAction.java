@@ -99,7 +99,7 @@ public class QuestAction extends ActionBarActivity {
                         startActivity(intentToRiddle);
                         break;
                     case 3:
-                        Intent intentToPuzzle = new Intent(QuestAction.this, QuizAction.class);
+                        Intent intentToPuzzle = new Intent(QuestAction.this, PicturePuzzleAction.class);
                         intentToPuzzle.putExtra("questid", questIdForIntent);
                         intentToPuzzle.putExtra("questname", questNameForIntent);
                         startActivity(intentToPuzzle);
