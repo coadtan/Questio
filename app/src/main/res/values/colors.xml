@@ -3,10 +3,11 @@
 
     <color name="white">#FFFFFF</color>
     <color name="grey">#cccccc</color>
+    <color name="grey_500">#ff8b9797</color>
     <color name="grey_700">#646464</color>
     <color name="grey_900">#ff332e2a</color>
     <color name="green_quiz_correct">#ff60cc49</color>
-    <color name="yellow_quiz_wrong">#ffc3cc4c</color>
+    <color name="yellow_quiz_wrong">#ffcc3d34</color>
     <color name="black">#000000</color>
     <color name="questio_light_orange">#fff4c738</color>
     <color name="questio_orange">#fff48712</color>

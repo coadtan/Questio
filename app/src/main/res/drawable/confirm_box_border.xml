@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <stroke
+        android:width="2dp"
+        android:color="@android:color/darker_gray" />
+    <selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <!-- State when a row is being pressed, but hasn't yet been activated (finger down) -->
+        <item android:state_pressed="true"
+            android:drawable="@color/questio_orange" />
+
+        <!-- When the view is "activated".  In SINGLE_CHOICE_MODE, it flags the active row
+             of a ListView -->
+        <item android:state_activated="true"
+            android:drawable="@color/questio_light_orange" />
+
+        <!-- Default, "just hangin' out" state. -->
+        <item android:drawable="@android:color/transparent" />
+    </selector>
+</shape>

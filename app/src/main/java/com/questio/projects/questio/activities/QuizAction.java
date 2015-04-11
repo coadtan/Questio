@@ -1,14 +1,16 @@
 package com.questio.projects.questio.activities;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.models.Quiz;
@@ -37,7 +39,6 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
     Button quiz_answer_d;
 
 
-
     int currentQuiz;
     Quiz q;
 
@@ -55,7 +56,6 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         quiz_answer_b = (Button) findViewById(R.id.quiz_answer_b);
         quiz_answer_c = (Button) findViewById(R.id.quiz_answer_c);
         quiz_answer_d = (Button) findViewById(R.id.quiz_answer_d);
-
 
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -92,7 +92,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
 
         for (int i = 0; i < quizCount; i++) {
             button = new Button(this);
-            if(i == 0){
+            if (i == 0) {
                 button.setTextColor(getResources().getColor(R.color.white));
                 button.setText("?");
             }
@@ -127,34 +127,71 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.quiz_answer_a:
-                if (q.getAnswerId().equalsIgnoreCase("1")) {
-                    Toast.makeText(this, "ถูกค้องนะครับ", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "ยังไม่ถูกนะครับ", Toast.LENGTH_SHORT).show();
-                }
+                onAnswer(1);
                 break;
             case R.id.quiz_answer_b:
-                if (q.getAnswerId().equalsIgnoreCase("2")) {
-                    Toast.makeText(this, "ถูกค้องนะครับ", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "ยังไม่ถูกนะครับ", Toast.LENGTH_SHORT).show();
-                }
+                onAnswer(2);
                 break;
             case R.id.quiz_answer_c:
-                if (q.getAnswerId().equalsIgnoreCase("3")) {
-                    Toast.makeText(this, "ถูกค้องนะครับ", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "ยังไม่ถูกนะครับ", Toast.LENGTH_SHORT).show();
-                }
+                onAnswer(3);
                 break;
             case R.id.quiz_answer_d:
-                if (q.getAnswerId().equalsIgnoreCase("4")) {
-                    Toast.makeText(this, "ถูกค้องนะครับ", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "ยังไม่ถูกนะครับ", Toast.LENGTH_SHORT).show();
-                }
+                onAnswer(4);
                 break;
         }
+    }
+
+    void onAnswer(final int answer) {
+        final Dialog dialog = new Dialog(QuizAction.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.confirm_dialog);
+        dialog.setCancelable(true);
+        TextView answerTV = (TextView) dialog.findViewById(R.id.confirm_answer);
+        switch (answer) {
+            case 1:
+                answerTV.setText(q.getChoiceA());
+                break;
+            case 2:
+                answerTV.setText(q.getChoiceB());
+                break;
+            case 3:
+                answerTV.setText(q.getChoiceC());
+                break;
+            case 4:
+                answerTV.setText(q.getChoiceD());
+                break;
+        }
+        ImageButton btnNo = (ImageButton) dialog.findViewById(R.id.confirm_no);
+        btnNo.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+
+        ImageButton btnYes = (ImageButton) dialog.findViewById(R.id.confirm_yes);
+        btnYes.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (q.getAnswerId().equalsIgnoreCase(Integer.toString(answer))) {
+                    onCorrect(q.getSeqId());
+                } else {
+                    onIncorrect(q.getSeqId());
+                }
+                dialog.cancel();
+            }
+        });
+
+        dialog.show();
+    }
+
+    void onCorrect(int quizId) {
+        Button b = (Button)findViewById(quizId-1);
+        b.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+    }
+
+    void onIncorrect(int quizId) {
+        Log.d(LOG_TAG, "Before minus 1: " + quizId);
+        Button b = (Button)findViewById(quizId-1);
+        b.setBackgroundColor(getResources().getColor(R.color.yellow_quiz_wrong));
     }
 
     void pupulateQuiz(int i) {
@@ -169,6 +206,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
 
     private class ButtonProgressListener implements Button.OnClickListener {
         int pos;
+
         public ButtonProgressListener(int position) {
             pos = position;
         }
@@ -176,13 +214,13 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         @Override
         public void onClick(View v) {
             pupulateQuiz(v.getId());
-            changeButtonColor(v.getId());
+            changeButtonIndicator(v.getId());
         }
 
 
     }
 
-    public void changeButtonColor(int selected) {
+    public void changeButtonIndicator(int selected) {
         View v = findViewById(android.R.id.content);
         Button b;
         for (int i = 0; i < quizs.size(); i++) {
@@ -191,7 +229,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                 //b.setBackgroundResource(R.color.yellow_quiz_selected);
                 b.setTextColor(getResources().getColor(R.color.white));
                 b.setText("?");
-            }else{
+            } else {
                 b.setText("");
                 //b.setBackgroundResource(R.color.grey_700);
             }
