@@ -157,8 +157,12 @@ public class Quiz {
                     q.setQuestion(question);
                     q.setChoiceA(choicea);
                     q.setChoiceB(choiceb);
-                    q.setChoiceC(choicec);
-                    q.setChoiceD(choiced);
+                    if(!choicec.equalsIgnoreCase("null")) {
+                        q.setChoiceC(choicec);
+                    }
+                    if(!choiced.equalsIgnoreCase("null")) {
+                        q.setChoiceD(choiced);
+                    }
                     q.setAnswerId(answerid);
 
                     arr.add(q);
