@@ -139,5 +139,6 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     void onUnMask() {
         points--;
         pointTV.setText(Integer.toString(points));
+        //
     }
 }
