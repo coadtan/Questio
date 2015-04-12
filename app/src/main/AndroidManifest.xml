@@ -6,7 +6,6 @@
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature
@@ -20,7 +19,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBCs14O9VYKFPVrmtI7VmbKUQcj1PPXR1g" />
+            android:value="AIzaSyBvaIoDzarKp-4CUfRcjVWhi231eZ112zs" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -47,7 +46,7 @@
 
     </application>
 
-</manifest><!--  coad : key for notebook: AIzaSyAUMlogcXYzkaef6c3qMsnYE6RX267PKws
+</manifest><!--  coad : key for notebook: AIzaSyBvaIoDzarKp-4CUfRcjVWhi231eZ112zs
 coad : key for pc: AIzaSyBCs14O9VYKFPVrmtI7VmbKUQcj1PPXR1g
 ningsama key for notebook: AIzaSyD4aHDODbX7CxabLM8Av6Fgmw2GIzhheHQ
 -->
