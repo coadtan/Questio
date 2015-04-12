@@ -42,4 +42,7 @@
     <string name="zbar_scan_2">สแกน QR Code ได้เลยครับ</string>
     <string name="zbar_scan_3">QR Code จะถูกสแกนแบบอัตโนมัติเมื่อเราเอากล้องไปอ่านมัน</string>
 
+    <string name="riddle_riddle">Test fufufufufufufufufufufufufufufufufufufufufufufufufufufufufu</string>
+    <string name="riddle_scan">Scan Here!</string>
+    <string name="riddle_unrevealed">"??????????????????????????????????"</string>
 </resources>
