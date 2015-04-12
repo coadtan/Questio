@@ -29,6 +29,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
 
     Toolbar toolbar;
     PicturePuzzle pp;
+    static int points = 9;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,30 +95,39 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         switch (view.getId()) {
             case R.id.topLeft:
                 topLeft.setVisibility(View.INVISIBLE);
+                points-=1;
                 break;
             case R.id.topMiddle:
                 topMiddle.setVisibility(View.INVISIBLE);
+                points-=1;
                 break;
             case R.id.topRight:
                 topRight.setVisibility(View.INVISIBLE);
+                points-=1;
                 break;
             case R.id.middleLeft:
                 middleLeft.setVisibility(View.INVISIBLE);
+                points-=1;
                 break;
             case R.id.middleMiddle:
                 middleMiddle.setVisibility(View.INVISIBLE);
+                points-=1;
                 break;
             case R.id.middleRight:
                 middleRight.setVisibility(View.INVISIBLE);
+                points-=1;
                 break;
             case R.id.bottomLeft:
                 bottomLeft.setVisibility(View.INVISIBLE);
+                points-=1;
                 break;
             case R.id.bottomMiddle:
                 bottomMiddle.setVisibility(View.INVISIBLE);
+                points-=1;
                 break;
             case R.id.bottomRight:
                 bottomRight.setVisibility(View.INVISIBLE);
+                points-=1;
                 break;
         }
 
