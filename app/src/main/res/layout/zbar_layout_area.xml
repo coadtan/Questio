@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_margin="5dp"
-            android:text="  แสกน QR Code"
+            android:text="@string/zbar_scan_1"
             android:textColor="@color/black"
             android:textSize="20sp" />
     </FrameLayout>
@@ -28,7 +28,7 @@
             android:layout_gravity="center_vertical"
             android:layout_margin="5dp"
             android:gravity="center"
-            android:text="แสกน QR Code ได้เลยครับ"
+            android:text="@string/zbar_scan_2"
             android:textColor="@color/white"
             android:textSize="15sp" />
     </FrameLayout>
@@ -60,7 +60,7 @@
             android:layout_gravity="center_vertical"
             android:layout_margin="5dp"
             android:gravity="center"
-            android:text="QR Code จะถูกสแกนแบบอัตโนมัติเมื่อเราเอากล้องไปอ่านมัน"
+            android:text="@string/zbar_scan_3"
             android:textColor="@color/white"
             android:textSize="15sp" />
     </FrameLayout>

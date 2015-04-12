@@ -14,7 +14,7 @@
         android:id="@+id/quiz_sequence"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1"
+        android:text="@string/test_quiz_sequence"
         android:textStyle="bold"
         android:visibility="gone" />
 
@@ -30,7 +30,7 @@
             android:layout_height="match_parent"
             android:background="@color/questio_light_orange"
             android:padding="20dp"
-            android:text="@string/test_quiz_1"
+            android:text="@string/test_quiz_question"
             android:textSize="20sp"
             android:textStyle="bold" />
     </FrameLayout>
@@ -56,7 +56,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:text="aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                android:text="@string/test_quiz_a"
                 android:background="@drawable/choice_button_selector"
                 android:textColor="@color/white"
                 />
@@ -70,7 +70,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:text="bbbbbbbbbb"
+                android:text="@string/test_quiz_b"
                 android:background="@drawable/choice_button_selector"
                 android:textColor="@color/white"/>
 
@@ -82,7 +82,7 @@
                 android:layout_below="@+id/quiz_answer_b"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:text="teccccccccccccccccst"
+                android:text="@string/test_quiz_c"
                 android:background="@drawable/choice_button_selector"
                 android:textColor="@color/white"/>
 
@@ -95,7 +95,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:text="ddddddddddddddd"
+                android:text="@string/test_quiz_d"
                 android:background="@drawable/choice_button_selector"
                 android:textColor="@color/white"/>
         </RelativeLayout>

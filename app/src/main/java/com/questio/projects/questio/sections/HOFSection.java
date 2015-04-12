@@ -15,7 +15,7 @@ public class HOFSection extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.section_hallofframe, container, false);
+        View rootView = inflater.inflate(R.layout.section_halloffame, container, false);
         Bundle args = getArguments();
 
         return rootView;

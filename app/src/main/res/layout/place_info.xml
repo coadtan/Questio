@@ -50,7 +50,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-condensed"
-                        android:text="Place Name"
+                        android:text="@string/test_placeinfo_name"
                         android:textSize="20sp" />
 
                     <TextView
@@ -58,7 +58,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-condensed"
-                        android:text="Place Full Name"
+                        android:text="@string/test_placeinfo_fullname"
                         android:textSize="15sp" />
 
                 </LinearLayout>
@@ -89,7 +89,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="sans-serif-condensed"
-                    android:text="088888888"
+                    android:text="@string/test_placeinfo_contact1"
                     android:textSize="15sp" />
             </LinearLayout>
 
@@ -111,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="sans-serif-condensed"
-                    android:text="002222222"
+                    android:text="@string/test_placeinfo_contact2"
                     android:textSize="15sp" />
             </LinearLayout>
 
@@ -131,7 +131,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="sans-serif-condensed"
-                    android:text="www.kmutt.ac.th"
+                    android:text="@string/test_placeinfo_www"
                     android:textSize="15sp" />
             </LinearLayout>
 
@@ -151,7 +151,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="sans-serif-condensed"
-                    android:text="kmutt@gmail.com"
+                    android:text="@string/test_placeinfo_email"
                     android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>

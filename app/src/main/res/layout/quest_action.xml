@@ -53,7 +53,7 @@
         android:layout_marginTop="5dp"
         android:fontFamily="sans-serif-condensed"
         android:gravity="center"
-        android:text="SIT KMUTT"
+        android:text="@string/test_questaction_zonename"
         android:textSize="20dp" />
 
     <View
@@ -72,7 +72,7 @@
             android:layout_marginLeft="6dp"
             android:layout_weight="1"
             android:fontFamily="sans-serif-condensed"
-            android:text="Item: "
+            android:text="@string/questaction_item"
             android:textStyle="bold" />
 
         <TextView
@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:fontFamily="sans-serif-condensed"
-            android:text="Gaia Hammer" />
+            android:text="@string/test_questaction_item" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -89,7 +89,7 @@
             android:layout_marginLeft="6dp"
             android:layout_weight="1"
             android:fontFamily="sans-serif-condensed"
-            android:text="Rewards: "
+            android:text="@string/questaction_rewards"
             android:textStyle="bold" />
 
         <TextView
@@ -98,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:fontFamily="sans-serif-condensed"
-            android:text="God" />
+            android:text="@string/test_questaction_rewards" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -106,7 +106,7 @@
             android:layout_marginLeft="6dp"
             android:layout_weight="1"
             android:fontFamily="sans-serif-condensed"
-            android:text="Type: "
+            android:text="@string/questaction_type"
             android:textStyle="bold" />
 
         <TextView
@@ -115,7 +115,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:fontFamily="sans-serif-condensed"
-            android:text="Misc." />
+            android:text="@string/test_questaction_type" />
     </LinearLayout>
 
     <View

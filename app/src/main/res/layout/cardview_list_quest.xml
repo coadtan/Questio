@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
-                android:text="QuestName"
+                android:text="@string/test_quest_name"
                 android:textStyle="bold"
                 android:textSize="22sp" />
 
@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/quest_list_questname"
-                android:text="QuestDetailsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                android:text="@string/test_quest_details"
                 android:layout_toStartOf="@+id/quest_list_questtypeid" />
 
 
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/quest_list_questdetails"
-                android:text="1"
+                android:text="@string/test_quest_zoneid"
                 android:layout_alignEnd="@+id/quest_list_questdetails" />
 
             <TextView
@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/quest_list_zoneid"
                 android:gravity="center_vertical"
-                android:text="1" />
+                android:text="@string/test_quest_diffid" />
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

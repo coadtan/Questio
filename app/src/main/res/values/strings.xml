@@ -1,7 +1,45 @@
 <resources>
     <string name="app_name">Questio</string>
 
+    <string name="test_quest_name">QuestName</string>
+    <string name="test_quest_details">QuestDetailsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</string>
+    <string name="test_quest_zoneid">1</string>
+    <string name="test_quest_diffid">1</string>
 
-    <string name="test_quiz_1">คำถาม assasasasasasasasasasssssssssssssssssssssasasasasasasasasasasasasasa</string>
+    <string name="dialog_confirm">ยืนยันคำตอบ?</string>
+    <string name="test_dialog_answer">คำตอบ</string>
+
+    <string name="test_news_datetime">29 Mar 2015 16:00:00</string>
+    <string name="test_news_header">Hello New PROMOTION!</string>
+    <string name="test_news_content">สำหรับใครที่อยากกินไอติมฟรีไปรับได้ที่ห้องสวนนํ้าชั้น 1 ค่ะ</string>
+
+    <string name="test_questlist_name">Quest A</string>
+    <string name="test_questlist_details">Please follow the step</string>
+
+    <string name="test_placeinfo_name">Place Name</string>
+    <string name="test_placeinfo_fullname">Place Full Name</string>
+    <string name="test_placeinfo_contact1">088888888</string>
+    <string name="test_placeinfo_contact2">002222222</string>
+    <string name="test_placeinfo_www">www.kmutt.ac.th</string>
+    <string name="test_placeinfo_email">kmutt@gmail.com</string>
+
+    <string name="test_questaction_zonename">SIT KMUTT</string>
+    <string name="test_questaction_item">Gaia Hammer</string>
+    <string name="test_questaction_rewards">God</string>
+    <string name="test_questaction_type">Misc.</string>
+    <string name="questaction_item">Item: </string>
+    <string name="questaction_rewards">Rewards: </string>
+    <string name="questaction_type">Type: </string>
+
+    <string name="test_quiz_sequence">1</string>
+    <string name="test_quiz_question">คำถาม assasasasasasasasasasssssssssssssssssssssasasasasasasasasasasasasasa</string>
+    <string name="test_quiz_a">aaaaaaaaaaaaaaaaaaaaaaaaaaaa</string>
+    <string name="test_quiz_b">bbbbbbbbbb</string>
+    <string name="test_quiz_c">teccccccccccccccccst</string>
+    <string name="test_quiz_d">ddddddddddddddd</string>
+
+    <string name="zbar_scan_1">  สแกน QR Code</string>
+    <string name="zbar_scan_2">สแกน QR Code ได้เลยครับ</string>
+    <string name="zbar_scan_3">QR Code จะถูกสแกนแบบอัตโนมัติเมื่อเราเอากล้องไปอ่านมัน</string>
 
 </resources>

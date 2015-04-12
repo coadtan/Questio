@@ -18,14 +18,14 @@
         android:id="@+id/news_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="29 Mar 2015 16:00:00"
+        android:text="@string/test_news_datetime"
         android:textSize="10sp"/>
 
     <TextView
         android:id="@+id/news_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello New PROMOTION!"
+        android:text="@string/test_news_header"
         android:textStyle="bold"
         android:textSize="24sp"/>
 
@@ -33,7 +33,7 @@
         android:id="@+id/news_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="สำหรับใครที่อยากกินไอติมฟรีไปรับได้ที่ห้องสวนนํ้าชั้น 1 ค่ะ"
+        android:text="@string/test_news_content"
         android:textSize="15sp"/>
 
 

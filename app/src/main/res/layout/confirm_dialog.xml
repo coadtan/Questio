@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:gravity="center"
-        android:text="ยืนยันคำตอบ?"
+        android:text="@string/dialog_confirm"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="@color/white"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:gravity="center"
-        android:text="คำตอบ"
+        android:text="@string/test_dialog_answer"
         android:textSize="15sp"
         android:textColor="@color/white"
         android:layout_marginBottom="20dp"/>

@@ -84,6 +84,6 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                 bottomRight.setVisibility(View.INVISIBLE);
                 break;
         }
-        //Tomorrow I have to go to The Mall Bangkae...
+
     }
 }
