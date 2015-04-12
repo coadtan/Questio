@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.models.PicturePuzzle;
@@ -26,10 +27,10 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     private ImageView bottomMiddle;
     private ImageView bottomRight;
     private EditText picturePuzzleAnswer;
-
+    TextView pointTV;
     Toolbar toolbar;
     PicturePuzzle pp;
-    static int points = 9;
+    int points = 9;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,8 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        pointTV = (TextView) toolbar.findViewById(R.id.toolbar_points);
+        pointTV.setText(Integer.toString(points));
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,41 +98,46 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         switch (view.getId()) {
             case R.id.topLeft:
                 topLeft.setVisibility(View.INVISIBLE);
-                points-=1;
+                onUnMask();
                 break;
             case R.id.topMiddle:
                 topMiddle.setVisibility(View.INVISIBLE);
-                points-=1;
+                onUnMask();
                 break;
             case R.id.topRight:
                 topRight.setVisibility(View.INVISIBLE);
-                points-=1;
+                onUnMask();
                 break;
             case R.id.middleLeft:
                 middleLeft.setVisibility(View.INVISIBLE);
-                points-=1;
+                onUnMask();
                 break;
             case R.id.middleMiddle:
                 middleMiddle.setVisibility(View.INVISIBLE);
-                points-=1;
+                onUnMask();
                 break;
             case R.id.middleRight:
                 middleRight.setVisibility(View.INVISIBLE);
-                points-=1;
+                onUnMask();
                 break;
             case R.id.bottomLeft:
                 bottomLeft.setVisibility(View.INVISIBLE);
-                points-=1;
+                onUnMask();
                 break;
             case R.id.bottomMiddle:
                 bottomMiddle.setVisibility(View.INVISIBLE);
-                points-=1;
+                onUnMask();
                 break;
             case R.id.bottomRight:
                 bottomRight.setVisibility(View.INVISIBLE);
-                points-=1;
+                onUnMask();
                 break;
         }
 
+    }
+
+    void onUnMask() {
+        points--;
+        pointTV.setText(Integer.toString(points));
     }
 }
