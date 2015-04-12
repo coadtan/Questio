@@ -3,10 +3,13 @@ package com.questio.projects.questio.activities;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.questio.projects.questio.R;
+import com.questio.projects.questio.models.PicturePuzzle;
 
 /**
  * Created by ning jittima on 11/4/2558.
@@ -22,8 +25,10 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     private ImageView bottomLeft;
     private ImageView bottomMiddle;
     private ImageView bottomRight;
+    private EditText picturePuzzleAnswer;
 
     Toolbar toolbar;
+    PicturePuzzle pp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +38,12 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         topLeft = (ImageView) findViewById(R.id.topLeft);
         topMiddle = (ImageView) findViewById(R.id.topMiddle);
         topRight = (ImageView) findViewById(R.id.topRight);
@@ -42,6 +53,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         bottomLeft = (ImageView) findViewById(R.id.bottomLeft);
         bottomMiddle = (ImageView) findViewById(R.id.bottomMiddle);
         bottomRight = (ImageView) findViewById(R.id.bottomRight);
+        picturePuzzleAnswer = (EditText) findViewById(R.id.picture_puzzle_answer);
         topLeft.setOnClickListener(this);
         topMiddle.setOnClickListener(this);
         topRight.setOnClickListener(this);
@@ -51,6 +63,30 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         bottomLeft.setOnClickListener(this);
         bottomMiddle.setOnClickListener(this);
         bottomRight.setOnClickListener(this);
+
+        String questId;
+        String questName;
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+
+            if (extras == null) {
+                questId = null;
+                questName = null;
+            } else {
+                questId = extras.getString("questid");
+                questName = extras.getString("questname");
+            }
+        } else {
+            questId = (String) savedInstanceState.getSerializable("questid");
+            questName = (String) savedInstanceState.getSerializable("questname");
+        }
+        Log.d(LOG_TAG, "questid: " + questId + " questName: " + questName);
+
+        getSupportActionBar().setTitle(questName);
+
+        pp = PicturePuzzle.getAllPicturePuzzleByQuestId(Integer.parseInt(questId));
+
+        picturePuzzleAnswer.setHint(pp.getHelperAnswer());
     }
 
     @Override

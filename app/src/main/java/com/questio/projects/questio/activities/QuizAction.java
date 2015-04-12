@@ -87,6 +87,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         currentQuiz = 0;
         int quizCount = quizs.size();
 
+
         LinearLayout quizActionProgressLinerSection = (LinearLayout) findViewById(R.id.quiz_action_progress_liner_section);
         quizActionProgressLinerSection.setWeightSum(quizCount);
 

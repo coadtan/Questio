@@ -8,7 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -69,19 +68,19 @@ public class PicturePuzzle {
                 '}';
     }
 
-    public static ArrayList<PicturePuzzle> getAllPicturePuzzleByQuestId(int id){
-        ArrayList<PicturePuzzle> arr = null;
-        PicturePuzzle pp;
-        final String URL = "http://52.74.64.61/api/select_all_picturepuzzle_by_questid.php?questid="+id;
+    public static PicturePuzzle getAllPicturePuzzleByQuestId(int id){
+       // ArrayList<PicturePuzzle> arr = null;
+        PicturePuzzle pp = null;
+        final String URL = "http://52.74.64.61/api/select_all_picturepuzzle_by_puzzleid.php?puzzleid="+id;
         try {
             String response = new HttpHelper().execute(URL).get();
             Log.d(LOG_TAG,"getAllPicturePuzzleByQuestId response: " + response);
             JSONArray jsonArray = new JSONArray(response);
             if(jsonArray.length()!=0){
-                arr = new ArrayList<>();
-                for (int i = 0; i < jsonArray.length(); i++) {
+                //arr = new ArrayList<>();
+               // for (int i = 0; i < jsonArray.length(); i++) {
                     pp = new PicturePuzzle();
-                    JSONObject jsonObject = (JSONObject)jsonArray.get(i);
+                    JSONObject jsonObject = (JSONObject)jsonArray.get(0);
                     String puzzleid = jsonObject.get("puzzleid").toString();
                     String imageurl = jsonObject.get("imageurl").toString();
                     String helperanswer = jsonObject.get("helperanswer").toString();
@@ -92,12 +91,13 @@ public class PicturePuzzle {
                     pp.setCorrectAnswer(correctanswer);
                     pp.setImageUrl(imageurl);
                     pp.setPuzzleId(Integer.parseInt(puzzleid));
-                    arr.add(pp);
-                }
+                //    arr.add(pp);
+              //  }
             }
         } catch (InterruptedException | ExecutionException | JSONException e) {
             e.printStackTrace();
         }
-        return arr;
+        //return arr;
+        return pp;
     }
 }
