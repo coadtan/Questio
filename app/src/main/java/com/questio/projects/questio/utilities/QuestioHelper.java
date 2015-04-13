@@ -17,6 +17,7 @@ public class QuestioHelper {
         final String BEGIN_TYPE_2 = "questio:place:";
         final String BEGIN_TYPE_3 = "questio:floor:";
         final String BEGIN_TYPE_4 = "questio:building:";
+        final String BEGIN_TYPE_5 = "questio:riddleanswer:";
         final String END = ":questio";
         // 1 Step: check size
         if (qrCode.length() < (BEGIN_TYPE_2.length() + END.length())) {
@@ -33,6 +34,8 @@ public class QuestioHelper {
             qrCode = qrCode.replace(BEGIN_TYPE_4, "");
         }else if (type.equalsIgnoreCase("place")) {
             qrCode = qrCode.replace(BEGIN_TYPE_2, "");
+        }else if (type.equalsIgnoreCase("riddleanswer")){
+            qrCode = qrCode.replace(BEGIN_TYPE_5, "");
         }
 
         // 3 Step: removeEnd
@@ -52,7 +55,10 @@ public class QuestioHelper {
             type = "building";
         } else if (type.equalsIgnoreCase("p")) {
             type = "place";
-        } else {
+        }else if (type.equalsIgnoreCase("r")){
+            type = "riddleanswer";
+        }
+        else {
             type = "N/A";
         }
         return type;

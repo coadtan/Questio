@@ -6,7 +6,7 @@
 
     <include
         android:id="@+id/app_bar"
-        layout="@layout/toolbar_layout" />
+        layout="@layout/toolbar_riddle_layout" />
 
     <View
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
         android:padding="20dp">
 
         <TextView
-            android:id="@+id/riddle"
+            android:id="@+id/riddle_riddle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/questio_light_orange"
@@ -36,6 +36,7 @@
         android:orientation="vertical">
 
         <ImageButton
+            android:id="@+id/riddle_scanHere"
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:background="@color/grey_500"
@@ -61,21 +62,21 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/hint1"
+                android:id="@+id/riddle_hint1Btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Hint 1" />
 
             <Button
-                android:id="@+id/hint2"
+                android:id="@+id/riddle_hint2Btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Hint 2" />
 
             <Button
-                android:id="@+id/hint3"
+                android:id="@+id/riddle_hint3Btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -86,7 +87,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
-                android:id="@+id/hintrevealA"
+                android:id="@+id/riddle_hintReveal1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/riddle_unrevealed"
@@ -94,7 +95,7 @@
                 android:background="@color/questio_orange"
                 android:gravity="center"/>
             <TextView
-                android:id="@+id/hintrevealB"
+                android:id="@+id/riddle_hintReveal2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/riddle_unrevealed"
@@ -103,7 +104,7 @@
                 android:gravity="center"
                 />
             <TextView
-                android:id="@+id/hintrevealC"
+                android:id="@+id/riddle_hintReveal3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/riddle_unrevealed"

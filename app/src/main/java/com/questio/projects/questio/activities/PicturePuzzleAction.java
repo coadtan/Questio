@@ -3,6 +3,8 @@ package com.questio.projects.questio.activities;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -27,6 +29,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     private ImageView bottomMiddle;
     private ImageView bottomRight;
     private EditText picturePuzzleAnswer;
+    String currentAnswer;
     TextView pointTV;
     Toolbar toolbar;
     PicturePuzzle pp;
@@ -70,6 +73,8 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
 
         String questId;
         String questName;
+
+
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
 
@@ -91,6 +96,27 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         pp = PicturePuzzle.getAllPicturePuzzleByQuestId(Integer.parseInt(questId));
 
         picturePuzzleAnswer.setHint(pp.getHelperAnswer());
+
+        picturePuzzleAnswer.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                currentAnswer = picturePuzzleAnswer.getText().toString();
+                if(currentAnswer.equalsIgnoreCase(pp.getCorrectAnswer())){
+                    picturePuzzleAnswer.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+                }
+            }
+        });
     }
 
     @Override
@@ -141,4 +167,6 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         pointTV.setText(Integer.toString(points));
         //
     }
+
+
 }
