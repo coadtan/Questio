@@ -113,19 +113,16 @@ public class Riddle{
                 '}';
     }
 
-    public static ArrayList<Riddle> getAllRiddleByQuestId(int id){
-        Riddle r;
-        ArrayList<Riddle> arr = null;
+    public static Riddle getAllRiddleByRiddleId(int id){
+        Riddle r = null;
         final String URL = "http://52.74.64.61/api/select_all_riddle_by_questid.php?questid=" + id;
         try {
             String response = new HttpHelper().execute(URL).get();
             Log.d(LOG_TAG,"getAllRiddleByQuestId response: " + response);
             JSONArray jsonArray = new JSONArray(response);
             if(jsonArray.length()!=0){
-                arr = new ArrayList<>();
-                for (int i = 0; i < jsonArray.length(); i++) {
                     r = new Riddle();
-                    JSONObject jsonObject = (JSONObject)jsonArray.get(i);
+                    JSONObject jsonObject = (JSONObject)jsonArray.get(0);
                     String ridid = jsonObject.get("ridid").toString();
                     String riddetails = jsonObject.get("riddetails").toString();
                     String qrcode = jsonObject.get("qrcode").toString();
@@ -152,12 +149,10 @@ public class Riddle{
                     r.setRidDetails(riddetails);
                     r.setRidId(Integer.parseInt(ridid));
                     r.setScanLimit(Integer.parseInt(scanlimit));
-                    arr.add(r);
-                }
             }
         } catch (InterruptedException | ExecutionException | JSONException e) {
             e.printStackTrace();
         }
-        return arr;
+        return r;
     }
 }
