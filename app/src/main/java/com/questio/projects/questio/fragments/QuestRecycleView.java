@@ -19,9 +19,9 @@ import com.questio.projects.questio.adepters.QuestRecycleViewAdapter;
  */
 public class QuestRecycleView extends Fragment {
     private static final String LOG_TAG = QuestRecycleView.class.getSimpleName();
-    private RecyclerView questBrowsingRecyclerView;
-    private QuestRecycleViewAdapter adapterRecycleView;
-    private View rootView;
+    RecyclerView questBrowsingRecyclerView;
+    QuestRecycleViewAdapter adapterRecycleView;
+    View rootView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

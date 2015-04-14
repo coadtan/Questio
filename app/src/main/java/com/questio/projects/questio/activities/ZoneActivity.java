@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -34,7 +35,13 @@ public class ZoneActivity extends ActionBarActivity {
     TextView item;
     TextView reward;
     TextView zonetype;
+    String qrcode;
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString("qrcode", qrcode);
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +67,8 @@ public class ZoneActivity extends ActionBarActivity {
             }
         });
 
-        String qrcode;
         if (savedInstanceState == null) {
+            Log.d(LOG_TAG, "savedInstanceState: null");
             Bundle extras = getIntent().getExtras();
 
             if (extras == null) {
@@ -70,8 +77,12 @@ public class ZoneActivity extends ActionBarActivity {
                 qrcode = extras.getString("qrcode");
             }
         } else {
-            qrcode = (String) savedInstanceState.getSerializable("qrcode");
+            Log.d(LOG_TAG, "savedInstanceState: !null");
+            //qrcode = (String) savedInstanceState.getSerializable("qrcode");
+            qrcode = savedInstanceState.getString("qrcode");
         }
+        Log.d(LOG_TAG,"qrcode: " + qrcode);
+        Log.d(LOG_TAG,"savedInstanceState: " + savedInstanceState);
         int zoneIdFromQRCode = Zone.findZoneIdByQRCode(Integer.parseInt(qrcode));
         zone = Zone.getZoneByZoneId(zoneIdFromQRCode);
         quests = Quest.getAllQuestByZoneId(zoneIdFromQRCode);

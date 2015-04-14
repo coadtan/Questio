@@ -35,7 +35,8 @@
                 android:id="@+id/topLeft"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:background="@color/grey" />
+                android:src="@drawable/picture_puzzle_mask"
+                />
 
             <ImageView
                 android:id="@+id/topMiddle"
@@ -43,7 +44,8 @@
                 android:layout_height="100dp"
                 android:layout_alignParentTop="true"
                 android:layout_toEndOf="@+id/topLeft"
-                android:background="@color/grey" />
+                android:src="@drawable/picture_puzzle_mask"
+                 />
 
             <ImageView
                 android:id="@+id/topRight"
@@ -51,7 +53,7 @@
                 android:layout_height="100dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
-                android:background="@color/grey" />
+                android:src="@drawable/picture_puzzle_mask" />
 
             <ImageView
                 android:id="@+id/middleLeft"
@@ -59,7 +61,7 @@
                 android:layout_height="100dp"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/topLeft"
-                android:background="@color/grey" />
+                android:src="@drawable/picture_puzzle_mask" />
 
             <ImageView
                 android:id="@+id/middleMiddle"
@@ -67,7 +69,7 @@
                 android:layout_height="100dp"
                 android:layout_below="@+id/topLeft"
                 android:layout_toEndOf="@+id/topLeft"
-                android:background="@color/grey" />
+                android:src="@drawable/picture_puzzle_mask" />
 
             <ImageView
                 android:id="@+id/middleRight"
@@ -75,7 +77,7 @@
                 android:layout_height="100dp"
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/topMiddle"
-                android:background="@color/grey" />
+                android:src="@drawable/picture_puzzle_mask" />
 
             <ImageView
                 android:id="@+id/bottomLeft"
@@ -83,7 +85,7 @@
                 android:layout_height="100dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true"
-                android:background="@color/grey" />
+                android:src="@drawable/picture_puzzle_mask" />
 
             <ImageView
                 android:id="@+id/bottomMiddle"
@@ -91,7 +93,7 @@
                 android:layout_height="100dp"
                 android:layout_alignParentBottom="true"
                 android:layout_toEndOf="@+id/middleLeft"
-                android:background="@color/grey" />
+                android:src="@drawable/picture_puzzle_mask" />
 
             <ImageView
                 android:id="@+id/bottomRight"
@@ -99,7 +101,7 @@
                 android:layout_height="100dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:background="@color/grey" />
+                android:src="@drawable/picture_puzzle_mask" />
         </RelativeLayout>
 
     </FrameLayout>

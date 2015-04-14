@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -17,12 +16,9 @@ import android.widget.Spinner;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.questio.projects.questio.R;
-import com.questio.projects.questio.adepters.FloorSpinnerAdapter;
-import com.questio.projects.questio.adepters.QuestRecycleViewAdapter;
 import com.questio.projects.questio.fragments.QuestRecycleView;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarConstants;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarScannerActivity;
-import com.questio.projects.questio.models.Floor;
 import com.questio.projects.questio.models.Place;
 import com.questio.projects.questio.models.Quest;
 
@@ -37,12 +33,8 @@ import java.util.ArrayList;
 public class PlaceActivity extends ActionBarActivity {
     private Toolbar toolbar;
     private Spinner floorSpinner;
-    private FloorSpinnerAdapter floorSpinnerAdapter;
-    private ArrayList<Floor> floors;
     private Place place;
     private static final String LOG_TAG = PlaceActivity.class.getSimpleName();
-    private RecyclerView questBrowsingRecyclerView;
-    private QuestRecycleViewAdapter adapterRecycleView;
     private ArrayList<Quest> quests;
     private ImageView quest_browsing_picture;
 
