@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.models.Quiz;
+import com.questio.projects.questio.utilities.QuestioConstants;
 
 import java.util.ArrayList;
 
@@ -73,12 +74,12 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                 questId = null;
                 questName = null;
             } else {
-                questId = extras.getString("questid");
-                questName = extras.getString("questname");
+                questId = extras.getString(QuestioConstants.QUEST_ID);
+                questName = extras.getString(QuestioConstants.QUEST_NAME);
             }
         } else {
-            questId = (String) savedInstanceState.getSerializable("questid");
-            questName = (String) savedInstanceState.getSerializable("questname");
+            questId = (String) savedInstanceState.getSerializable(QuestioConstants.QUEST_ID);
+            questName = (String) savedInstanceState.getSerializable(QuestioConstants.QUEST_NAME);
         }
         Log.d(LOG_TAG, "questid: " + questId + " questName: " + questName);
 

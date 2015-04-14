@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.inthecheesefactory.thecheeselibrary.fragment.support.v4.app.StatedFragment;
 import com.questio.projects.questio.R;
-import com.questio.projects.questio.activities.QuestAction;
+import com.questio.projects.questio.activities.ZoneActivity;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarConstants;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarScannerActivity;
 
@@ -86,7 +86,7 @@ public class RankingSection extends StatedFragment {
             case R.id.action_enter_zone68001:
                 String[] qr = {"zone", "68001"};
                 if (qr[0].equalsIgnoreCase("zone")) {
-                    Intent intentToQuestAction = new Intent(getActivity(), QuestAction.class);
+                    Intent intentToQuestAction = new Intent(getActivity(), ZoneActivity.class);
                     intentToQuestAction.putExtra("qrcode", qr[1]);
                     startActivity(intentToQuestAction);
                 }

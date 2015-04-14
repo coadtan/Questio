@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.questio.projects.questio.R;
-import com.questio.projects.questio.activities.QuestBrowsing;
+import com.questio.projects.questio.activities.PlaceActivity;
 import com.questio.projects.questio.adepters.QuestRecycleViewAdapter;
 
 /**
@@ -36,7 +36,7 @@ public class QuestRecycleView extends Fragment {
         Bundle args = getArguments();
         questBrowsingRecyclerView = (RecyclerView)rootView.findViewById(R.id.quest_browsing_recycler_view);
         questBrowsingRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapterRecycleView = new QuestRecycleViewAdapter(getActivity(), ((QuestBrowsing)getActivity()).getQuests() );
+        adapterRecycleView = new QuestRecycleViewAdapter(getActivity(), ((PlaceActivity)getActivity()).getQuests() );
         questBrowsingRecyclerView.setAdapter(adapterRecycleView);
 
         return rootView;

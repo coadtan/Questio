@@ -7,7 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.questio.projects.questio.utilities.DatabaseHelper;
-import com.questio.projects.questio.utilities.JsonTagHelper;
+import com.questio.projects.questio.utilities.QuestioConstants;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -77,27 +77,27 @@ public class PlaceSync extends AsyncTask<String, Void, String> {
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject obj = (JSONObject) arr.get(i);
                     HashMap<String, String> queryValues = new HashMap<>();
-                    queryValues.put(JsonTagHelper.TAG_PLACE_ID, obj.get(JsonTagHelper.TAG_PLACE_ID).toString());
-                    queryValues.put(JsonTagHelper.TAG_PLACE_NAME, obj.get(JsonTagHelper.TAG_PLACE_NAME).toString());
-                    queryValues.put(JsonTagHelper.TAG_PLACE_FULL_NAME, obj.get(JsonTagHelper.TAG_PLACE_FULL_NAME).toString());
-                    queryValues.put(JsonTagHelper.TAG_PLACE_QR_CODE, obj.get(JsonTagHelper.TAG_PLACE_QR_CODE).toString());
-                    queryValues.put(JsonTagHelper.TAG_PLACE_SENSOR_ID, obj.get(JsonTagHelper.TAG_PLACE_SENSOR_ID).toString());
-                    queryValues.put(JsonTagHelper.TAG_PLACE_LATITUDE, obj.get(JsonTagHelper.TAG_PLACE_LATITUDE).toString());
-                    queryValues.put(JsonTagHelper.TAG_PLACE_LONGITUDE, obj.get(JsonTagHelper.TAG_PLACE_LONGITUDE).toString());
-                    queryValues.put(JsonTagHelper.TAG_PLACE_RADIUS, obj.get(JsonTagHelper.TAG_PLACE_RADIUS).toString());
-                    queryValues.put(JsonTagHelper.TAG_PLACE_TYPE, obj.get(JsonTagHelper.TAG_PLACE_TYPE).toString());
-                    queryValues.put(JsonTagHelper.TAG_PLACE_IMAGEURL, obj.get(JsonTagHelper.TAG_PLACE_IMAGEURL).toString());
+                    queryValues.put(QuestioConstants.TAG_PLACE_ID, obj.get(QuestioConstants.TAG_PLACE_ID).toString());
+                    queryValues.put(QuestioConstants.TAG_PLACE_NAME, obj.get(QuestioConstants.TAG_PLACE_NAME).toString());
+                    queryValues.put(QuestioConstants.TAG_PLACE_FULL_NAME, obj.get(QuestioConstants.TAG_PLACE_FULL_NAME).toString());
+                    queryValues.put(QuestioConstants.TAG_PLACE_QR_CODE, obj.get(QuestioConstants.TAG_PLACE_QR_CODE).toString());
+                    queryValues.put(QuestioConstants.TAG_PLACE_SENSOR_ID, obj.get(QuestioConstants.TAG_PLACE_SENSOR_ID).toString());
+                    queryValues.put(QuestioConstants.TAG_PLACE_LATITUDE, obj.get(QuestioConstants.TAG_PLACE_LATITUDE).toString());
+                    queryValues.put(QuestioConstants.TAG_PLACE_LONGITUDE, obj.get(QuestioConstants.TAG_PLACE_LONGITUDE).toString());
+                    queryValues.put(QuestioConstants.TAG_PLACE_RADIUS, obj.get(QuestioConstants.TAG_PLACE_RADIUS).toString());
+                    queryValues.put(QuestioConstants.TAG_PLACE_TYPE, obj.get(QuestioConstants.TAG_PLACE_TYPE).toString());
+                    queryValues.put(QuestioConstants.TAG_PLACE_IMAGEURL, obj.get(QuestioConstants.TAG_PLACE_IMAGEURL).toString());
                     ContentValues values = new ContentValues();
-                    values.put(JsonTagHelper.TAG_PLACE_ID, queryValues.get(JsonTagHelper.TAG_PLACE_ID));
-                    values.put(JsonTagHelper.TAG_PLACE_NAME, queryValues.get(JsonTagHelper.TAG_PLACE_NAME));
-                    values.put(JsonTagHelper.TAG_PLACE_FULL_NAME, queryValues.get(JsonTagHelper.TAG_PLACE_FULL_NAME));
-                    values.put(JsonTagHelper.TAG_PLACE_QR_CODE, queryValues.get(JsonTagHelper.TAG_PLACE_QR_CODE));
-                    values.put(JsonTagHelper.TAG_PLACE_SENSOR_ID, queryValues.get(JsonTagHelper.TAG_PLACE_SENSOR_ID));
-                    values.put(JsonTagHelper.TAG_PLACE_LATITUDE, queryValues.get(JsonTagHelper.TAG_PLACE_LATITUDE));
-                    values.put(JsonTagHelper.TAG_PLACE_LONGITUDE, queryValues.get(JsonTagHelper.TAG_PLACE_LONGITUDE));
-                    values.put(JsonTagHelper.TAG_PLACE_RADIUS, queryValues.get(JsonTagHelper.TAG_PLACE_RADIUS));
-                    values.put(JsonTagHelper.TAG_PLACE_TYPE, queryValues.get(JsonTagHelper.TAG_PLACE_TYPE));
-                    values.put(JsonTagHelper.TAG_PLACE_IMAGEURL, queryValues.get(JsonTagHelper.TAG_PLACE_IMAGEURL));
+                    values.put(QuestioConstants.TAG_PLACE_ID, queryValues.get(QuestioConstants.TAG_PLACE_ID));
+                    values.put(QuestioConstants.TAG_PLACE_NAME, queryValues.get(QuestioConstants.TAG_PLACE_NAME));
+                    values.put(QuestioConstants.TAG_PLACE_FULL_NAME, queryValues.get(QuestioConstants.TAG_PLACE_FULL_NAME));
+                    values.put(QuestioConstants.TAG_PLACE_QR_CODE, queryValues.get(QuestioConstants.TAG_PLACE_QR_CODE));
+                    values.put(QuestioConstants.TAG_PLACE_SENSOR_ID, queryValues.get(QuestioConstants.TAG_PLACE_SENSOR_ID));
+                    values.put(QuestioConstants.TAG_PLACE_LATITUDE, queryValues.get(QuestioConstants.TAG_PLACE_LATITUDE));
+                    values.put(QuestioConstants.TAG_PLACE_LONGITUDE, queryValues.get(QuestioConstants.TAG_PLACE_LONGITUDE));
+                    values.put(QuestioConstants.TAG_PLACE_RADIUS, queryValues.get(QuestioConstants.TAG_PLACE_RADIUS));
+                    values.put(QuestioConstants.TAG_PLACE_TYPE, queryValues.get(QuestioConstants.TAG_PLACE_TYPE));
+                    values.put(QuestioConstants.TAG_PLACE_IMAGEURL, queryValues.get(QuestioConstants.TAG_PLACE_IMAGEURL));
                     database.insert("place", null, values);
                 }
             }

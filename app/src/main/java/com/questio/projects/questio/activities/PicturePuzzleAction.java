@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.models.PicturePuzzle;
+import com.questio.projects.questio.utilities.QuestioConstants;
 
 /**
  * Created by ning jittima on 11/4/2558.
@@ -29,6 +30,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     private ImageView bottomMiddle;
     private ImageView bottomRight;
     private EditText picturePuzzleAnswer;
+    private EditText picturePuzzleHint;
     String currentAnswer;
     TextView pointTV;
     Toolbar toolbar;
@@ -61,6 +63,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         bottomMiddle = (ImageView) findViewById(R.id.bottomMiddle);
         bottomRight = (ImageView) findViewById(R.id.bottomRight);
         picturePuzzleAnswer = (EditText) findViewById(R.id.picture_puzzle_answer);
+        picturePuzzleHint = (EditText) findViewById(R.id.picture_puzzle_hint);
         topLeft.setOnClickListener(this);
         topMiddle.setOnClickListener(this);
         topRight.setOnClickListener(this);
@@ -82,12 +85,12 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                 questId = null;
                 questName = null;
             } else {
-                questId = extras.getString("questid");
-                questName = extras.getString("questname");
+                questId = extras.getString(QuestioConstants.QUEST_ID);
+                questName = extras.getString(QuestioConstants.QUEST_NAME);
             }
         } else {
-            questId = (String) savedInstanceState.getSerializable("questid");
-            questName = (String) savedInstanceState.getSerializable("questname");
+            questId = (String) savedInstanceState.getSerializable(QuestioConstants.QUEST_ID);
+            questName = (String) savedInstanceState.getSerializable(QuestioConstants.QUEST_NAME);
         }
         Log.d(LOG_TAG, "questid: " + questId + " questName: " + questName);
 
@@ -95,7 +98,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
 
         pp = PicturePuzzle.getAllPicturePuzzleByQuestId(Integer.parseInt(questId));
 
-        picturePuzzleAnswer.setHint(pp.getHelperAnswer());
+        picturePuzzleHint.setHint(pp.getHelperAnswer());
 
         picturePuzzleAnswer.addTextChangedListener(new TextWatcher() {
 

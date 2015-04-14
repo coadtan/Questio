@@ -26,15 +26,15 @@ public class QuestioHelper {
         // 2 Step: removeBegin
         String type = getQRType(qrCode);
 
-        if (type.equalsIgnoreCase("zone")) {
+        if (type.equalsIgnoreCase(QuestioConstants.QRTYPE_ZONE)) {
             qrCode = qrCode.replace(BEGIN_TYPE_1, "");
-        } else if (type.equalsIgnoreCase("floor")) {
+        } else if (type.equalsIgnoreCase(QuestioConstants.QRTYPE_FLOOR)) {
             qrCode = qrCode.replace(BEGIN_TYPE_3, "");
-        }else if (type.equalsIgnoreCase("building")) {
+        }else if (type.equalsIgnoreCase(QuestioConstants.QRTYPE_BUILDING)) {
             qrCode = qrCode.replace(BEGIN_TYPE_4, "");
-        }else if (type.equalsIgnoreCase("place")) {
+        }else if (type.equalsIgnoreCase(QuestioConstants.QRTYPE_PLACE)) {
             qrCode = qrCode.replace(BEGIN_TYPE_2, "");
-        }else if (type.equalsIgnoreCase("riddleanswer")){
+        }else if (type.equalsIgnoreCase(QuestioConstants.QRTYPE_RIDDLE_ANSWER)){
             qrCode = qrCode.replace(BEGIN_TYPE_5, "");
         }
 
@@ -48,15 +48,15 @@ public class QuestioHelper {
     public static String getQRType(String qrCode) {
         String type = qrCode.substring(8, 9);
         if (type.equalsIgnoreCase("z")) {
-            type = "zone";
+            type = QuestioConstants.QRTYPE_ZONE;
         } else if (type.equalsIgnoreCase("f")) {
-            type = "floor";
+            type = QuestioConstants.QRTYPE_FLOOR;
         } else if (type.equalsIgnoreCase("b")) {
-            type = "building";
+            type = QuestioConstants.QRTYPE_BUILDING;
         } else if (type.equalsIgnoreCase("p")) {
-            type = "place";
+            type = QuestioConstants.QRTYPE_PLACE;
         }else if (type.equalsIgnoreCase("r")){
-            type = "riddleanswer";
+            type = QuestioConstants.QRTYPE_RIDDLE_ANSWER;
         }
         else {
             type = "N/A";

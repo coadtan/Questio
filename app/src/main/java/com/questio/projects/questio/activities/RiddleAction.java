@@ -16,6 +16,7 @@ import com.questio.projects.questio.R;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarConstants;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarScannerActivity;
 import com.questio.projects.questio.models.Riddle;
+import com.questio.projects.questio.utilities.QuestioConstants;
 import com.questio.projects.questio.utilities.QuestioHelper;
 
 import net.sourceforge.zbar.Symbol;
@@ -87,12 +88,12 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
                 questId = null;
                 questName = null;
             } else {
-                questId = extras.getString("questid");
-                questName = extras.getString("questname");
+                questId = extras.getString(QuestioConstants.QUEST_ID);
+                questName = extras.getString(QuestioConstants.QUEST_NAME);
             }
         } else {
-            questId = (String) savedInstanceState.getSerializable("questid");
-            questName = (String) savedInstanceState.getSerializable("questname");
+            questId = (String) savedInstanceState.getSerializable(QuestioConstants.QUEST_ID);
+            questName = (String) savedInstanceState.getSerializable(QuestioConstants.QUEST_NAME);
         }
         Log.d(LOG_TAG, "questid: " + questId + " questName: " + questName);
 
@@ -161,7 +162,7 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
             // Toast.makeText(getActivity(), "Scan Result Type = " + data.getIntExtra(ZBarConstants.SCAN_RESULT_TYPE, 0), Toast.LENGTH_SHORT).show();
             // The value of type indicates one of the symbols listed in Advanced Options below.
             String[] qr = QuestioHelper.getDeQRCode(data.getStringExtra(ZBarConstants.SCAN_RESULT));
-            if (qr[0].equalsIgnoreCase("riddleanswer")) {
+            if (qr[0].equalsIgnoreCase(QuestioConstants.QRTYPE_RIDDLE_ANSWER)) {
                 onAnswer(qr[1]);
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {

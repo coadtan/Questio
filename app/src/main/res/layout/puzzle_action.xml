@@ -22,7 +22,6 @@
         android:padding="10dp">
 
 
-
         <RelativeLayout
             android:layout_width="300dp"
             android:layout_height="300dp">
@@ -105,17 +104,33 @@
 
     </FrameLayout>
 
-    <EditText
-        android:id="@+id/picture_puzzle_answer"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:layout_marginBottom="30dp"
         android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:gravity="center"
-        android:hint="ตอบ"
-        android:textSize="30sp" />
+        android:layout_marginRight="30dp">
+
+        <EditText
+            android:id="@+id/picture_puzzle_hint"
+            android:focusable="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:hint="คำใบ้"
+            android:textSize="30sp" />
 
 
+        <EditText
+            android:id="@+id/picture_puzzle_answer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:textSize="30sp"
+            />
+
+
+    </RelativeLayout>
 </LinearLayout>

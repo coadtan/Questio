@@ -15,14 +15,15 @@ import com.questio.projects.questio.adepters.QuestInActionAdapter;
 import com.questio.projects.questio.models.Quest;
 import com.questio.projects.questio.models.Zone;
 import com.questio.projects.questio.utilities.DownloadImageHelper;
+import com.questio.projects.questio.utilities.QuestioConstants;
 
 import java.util.ArrayList;
 
 /**
  * Created by ning jittima on 4/4/2558.
  */
-public class QuestAction extends ActionBarActivity {
-    private static final String LOG_TAG = QuestAction.class.getSimpleName();
+public class ZoneActivity extends ActionBarActivity {
+    private static final String LOG_TAG = ZoneActivity.class.getSimpleName();
     Toolbar toolbar;
     ArrayList<Quest> quests;
     ListView quest_action_listview;
@@ -87,21 +88,21 @@ public class QuestAction extends ActionBarActivity {
                 String questNameForIntent = questName.getText().toString();
                 switch (Integer.parseInt(questTypeInvisible.getText().toString())) {
                     case 1:
-                        Intent intentToQuiz = new Intent(QuestAction.this, QuizAction.class);
-                        intentToQuiz.putExtra("questid", questIdForIntent);
-                        intentToQuiz.putExtra("questname", questNameForIntent);
+                        Intent intentToQuiz = new Intent(ZoneActivity.this, QuizAction.class);
+                        intentToQuiz.putExtra(QuestioConstants.QUEST_ID, questIdForIntent);
+                        intentToQuiz.putExtra(QuestioConstants.QUEST_NAME, questNameForIntent);
                         startActivity(intentToQuiz);
                         break;
                     case 2:
-                        Intent intentToRiddle = new Intent(QuestAction.this, RiddleAction.class);
-                        intentToRiddle.putExtra("questid", questIdForIntent);
-                        intentToRiddle.putExtra("questname", questNameForIntent);
+                        Intent intentToRiddle = new Intent(ZoneActivity.this, RiddleAction.class);
+                        intentToRiddle.putExtra(QuestioConstants.QUEST_ID, questIdForIntent);
+                        intentToRiddle.putExtra(QuestioConstants.QUEST_NAME, questNameForIntent);
                         startActivity(intentToRiddle);
                         break;
                     case 3:
-                        Intent intentToPuzzle = new Intent(QuestAction.this, PicturePuzzleAction.class);
-                        intentToPuzzle.putExtra("questid", questIdForIntent);
-                        intentToPuzzle.putExtra("questname", questNameForIntent);
+                        Intent intentToPuzzle = new Intent(ZoneActivity.this, PicturePuzzleAction.class);
+                        intentToPuzzle.putExtra(QuestioConstants.QUEST_ID, questIdForIntent);
+                        intentToPuzzle.putExtra(QuestioConstants.QUEST_NAME, questNameForIntent);
                         startActivity(intentToPuzzle);
                         break;
                 }

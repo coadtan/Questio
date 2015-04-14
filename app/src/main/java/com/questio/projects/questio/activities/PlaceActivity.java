@@ -34,13 +34,13 @@ import java.util.ArrayList;
 /**
  * Created by coad4u4ever on 01-Apr-15.
  */
-public class QuestBrowsing extends ActionBarActivity {
+public class PlaceActivity extends ActionBarActivity {
     private Toolbar toolbar;
     private Spinner floorSpinner;
     private FloorSpinnerAdapter floorSpinnerAdapter;
     private ArrayList<Floor> floors;
     private Place place;
-    private static final String LOG_TAG = QuestBrowsing.class.getSimpleName();
+    private static final String LOG_TAG = PlaceActivity.class.getSimpleName();
     private RecyclerView questBrowsingRecyclerView;
     private QuestRecycleViewAdapter adapterRecycleView;
     private ArrayList<Quest> quests;

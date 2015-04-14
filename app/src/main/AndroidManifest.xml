@@ -33,9 +33,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.QuestBrowsing"/>
+        <activity android:name=".activities.PlaceActivity"/>
         <activity android:name=".activities.PlaceInfo"/>'
-        <activity android:name=".activities.QuestAction"/>
+        <activity android:name=".activities.ZoneActivity"/>
         <activity android:name=".activities.QuizAction"/>
         <activity android:name=".activities.PicturePuzzleAction"/>
         <activity android:name=".activities.RiddleAction"/>
