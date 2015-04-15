@@ -11,15 +11,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.models.PicturePuzzle;
 import com.questio.projects.questio.utilities.QuestioConstants;
+import com.questio.projects.questio.utilities.QuestioHelper;
 
 /**
  * Created by ning jittima on 11/4/2558.
  */
 public class PicturePuzzleAction extends ActionBarActivity implements View.OnClickListener {
     private static final String LOG_TAG = PicturePuzzleAction.class.getSimpleName();
+    private ImageView picturePuzzleQuestion;
     private ImageView topLeft;
     private ImageView topMiddle;
     private ImageView topRight;
@@ -53,6 +57,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                 onBackPressed();
             }
         });
+        picturePuzzleQuestion = (ImageView) findViewById(R.id.picture_puzzle_question);
         topLeft = (ImageView) findViewById(R.id.topLeft);
         topMiddle = (ImageView) findViewById(R.id.topMiddle);
         topRight = (ImageView) findViewById(R.id.topRight);
@@ -97,6 +102,11 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         getSupportActionBar().setTitle(questName);
 
         pp = PicturePuzzle.getAllPicturePuzzleByQuestId(Integer.parseInt(questId));
+        Log.d(LOG_TAG,QuestioHelper.getImgLink(pp.getImageUrl()));
+        Glide.with(this)
+                .load(QuestioHelper.getImgLink(pp.getImageUrl()))
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(picturePuzzleQuestion);
 
         picturePuzzleHint.setHint(pp.getHelperAnswer());
 
@@ -115,7 +125,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
             @Override
             public void afterTextChanged(Editable editable) {
                 currentAnswer = picturePuzzleAnswer.getText().toString();
-                if(currentAnswer.equalsIgnoreCase(pp.getCorrectAnswer())){
+                if (currentAnswer.equalsIgnoreCase(pp.getCorrectAnswer())) {
                     picturePuzzleAnswer.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
                 }
             }

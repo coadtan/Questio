@@ -27,6 +27,7 @@
             android:layout_height="300dp">
 
             <ImageView
+                android:id="@+id/picture_puzzle_question"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/black" />
@@ -35,8 +36,7 @@
                 android:id="@+id/topLeft"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/picture_puzzle_mask"
-                />
+                android:src="@drawable/picture_puzzle_mask" />
 
             <ImageView
                 android:id="@+id/topMiddle"
@@ -44,8 +44,7 @@
                 android:layout_height="100dp"
                 android:layout_alignParentTop="true"
                 android:layout_toEndOf="@+id/topLeft"
-                android:src="@drawable/picture_puzzle_mask"
-                 />
+                android:src="@drawable/picture_puzzle_mask" />
 
             <ImageView
                 android:id="@+id/topRight"
@@ -115,10 +114,10 @@
 
         <EditText
             android:id="@+id/picture_puzzle_hint"
-            android:focusable="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:focusable="false"
             android:gravity="center"
             android:hint="คำใบ้"
             android:textSize="30sp" />
@@ -130,9 +129,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:textSize="30sp"
-            />
-
-
+            android:textSize="30sp" />
     </RelativeLayout>
 </LinearLayout>

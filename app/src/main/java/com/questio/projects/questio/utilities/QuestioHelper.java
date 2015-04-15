@@ -96,4 +96,8 @@ public class QuestioHelper {
         return result;
     }
 
+    public static String getImgLink(String path){
+        return "http://52.74.64.61"+path;
+    }
+
 }
