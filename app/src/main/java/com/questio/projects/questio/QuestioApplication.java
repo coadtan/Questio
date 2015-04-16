@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.questio.projects.questio.models.Place;
 import com.questio.projects.questio.utilities.HttpHelper;
+import com.questio.projects.questio.utilities.PlaceSync;
 import com.questio.projects.questio.utilities.QuestioHelper;
 
 import java.util.concurrent.ExecutionException;
@@ -16,9 +17,19 @@ import java.util.concurrent.ExecutionException;
 public class QuestioApplication extends Application {
     private static final String LOG_TAG = QuestioApplication.class.getSimpleName();
     private static QuestioApplication singleton;
+    private static boolean login = false;
+
 
     public QuestioApplication getInstance() {
         return singleton;
+    }
+
+    public static boolean isLogin() {
+        return login;
+    }
+
+    public static void setLogin(boolean login) {
+        QuestioApplication.login = login;
     }
 
     @Override

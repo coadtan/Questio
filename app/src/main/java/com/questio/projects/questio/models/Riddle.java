@@ -1,16 +1,6 @@
 package com.questio.projects.questio.models;
 
-import android.util.Log;
-
 import com.google.gson.annotations.SerializedName;
-import com.questio.projects.questio.utilities.HttpHelper;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by ning jittima on 11/4/2558.
@@ -123,46 +113,46 @@ public class Riddle{
                 '}';
     }
 
-    public static Riddle getAllRiddleByRiddleId(int id){
-        Riddle r = null;
-        final String URL = "http://52.74.64.61/api/select_all_riddle_by_questid.php?questid=" + id;
-        try {
-            String response = new HttpHelper().execute(URL).get();
-            Log.d(LOG_TAG,"getAllRiddleByQuestId response: " + response);
-            JSONArray jsonArray = new JSONArray(response);
-            if(jsonArray.length()!=0){
-                    r = new Riddle();
-                    JSONObject jsonObject = (JSONObject)jsonArray.get(0);
-                    String ridid = jsonObject.get("ridid").toString();
-                    String riddetails = jsonObject.get("riddetails").toString();
-                    String qrcode = jsonObject.get("qrcode").toString();
-                    String sensorid = jsonObject.get("sensorid").toString();
-                    String scanlimit = jsonObject.get("scanlimit").toString();
-                    String hint1 = jsonObject.get("hint1").toString();
-                    String hint2 = jsonObject.get("hint2").toString();
-                    String hint3 = jsonObject.get("hint3").toString();
-                    if(!hint1.equalsIgnoreCase("null")){
-                        r.setHint1(hint1);
-                    }
-                    if(!hint2.equalsIgnoreCase("null")){
-                        r.setHint2(hint2);
-                    }
-                    if(!hint3.equalsIgnoreCase("null")){
-                        r.setHint3(hint3);
-                    }
-                    if(!qrcode.equalsIgnoreCase("null")){
-                        r.setQrCode(Long.parseLong(qrcode));
-                    }
-                    if(!sensorid.equalsIgnoreCase("null")){
-                        r.setSensorId(Long.parseLong(sensorid));
-                    }
-                    r.setRidDetails(riddetails);
-                    r.setRidId(Integer.parseInt(ridid));
-                    r.setScanLimit(Integer.parseInt(scanlimit));
-            }
-        } catch (InterruptedException | ExecutionException | JSONException e) {
-            e.printStackTrace();
-        }
-        return r;
-    }
+//    public static Riddle getAllRiddleByRiddleId(int id){
+//        Riddle r = null;
+//        final String URL = "http://52.74.64.61/api/select_all_riddle_by_questid.php?questid=" + id;
+//        try {
+//            String response = new HttpHelper().execute(URL).get();
+//            Log.d(LOG_TAG,"getAllRiddleByQuestId response: " + response);
+//            JSONArray jsonArray = new JSONArray(response);
+//            if(jsonArray.length()!=0){
+//                    r = new Riddle();
+//                    JSONObject jsonObject = (JSONObject)jsonArray.get(0);
+//                    String ridid = jsonObject.get("ridid").toString();
+//                    String riddetails = jsonObject.get("riddetails").toString();
+//                    String qrcode = jsonObject.get("qrcode").toString();
+//                    String sensorid = jsonObject.get("sensorid").toString();
+//                    String scanlimit = jsonObject.get("scanlimit").toString();
+//                    String hint1 = jsonObject.get("hint1").toString();
+//                    String hint2 = jsonObject.get("hint2").toString();
+//                    String hint3 = jsonObject.get("hint3").toString();
+//                    if(!hint1.equalsIgnoreCase("null")){
+//                        r.setHint1(hint1);
+//                    }
+//                    if(!hint2.equalsIgnoreCase("null")){
+//                        r.setHint2(hint2);
+//                    }
+//                    if(!hint3.equalsIgnoreCase("null")){
+//                        r.setHint3(hint3);
+//                    }
+//                    if(!qrcode.equalsIgnoreCase("null")){
+//                        r.setQrCode(Long.parseLong(qrcode));
+//                    }
+//                    if(!sensorid.equalsIgnoreCase("null")){
+//                        r.setSensorId(Long.parseLong(sensorid));
+//                    }
+//                    r.setRidDetails(riddetails);
+//                    r.setRidId(Integer.parseInt(ridid));
+//                    r.setScanLimit(Integer.parseInt(scanlimit));
+//            }
+//        } catch (InterruptedException | ExecutionException | JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return r;
+//    }
 }

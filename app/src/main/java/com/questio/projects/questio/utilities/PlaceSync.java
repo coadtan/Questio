@@ -1,13 +1,10 @@
-package com.questio.projects.questio;
+package com.questio.projects.questio.utilities;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
-
-import com.questio.projects.questio.utilities.DatabaseHelper;
-import com.questio.projects.questio.utilities.QuestioConstants;
 
 import org.json.JSONArray;
 import org.json.JSONException;
