@@ -13,12 +13,18 @@ import android.widget.TextView;
 
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.adepters.QuestInActionAdapter;
+import com.questio.projects.questio.interfaces.QuestAPI;
 import com.questio.projects.questio.models.Quest;
 import com.questio.projects.questio.models.Zone;
 import com.questio.projects.questio.utilities.DownloadImageHelper;
 import com.questio.projects.questio.utilities.QuestioConstants;
 
 import java.util.ArrayList;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by ning jittima on 4/4/2558.
@@ -27,7 +33,7 @@ public class ZoneActivity extends ActionBarActivity {
     private static final String LOG_TAG = ZoneActivity.class.getSimpleName();
     Toolbar toolbar;
     ArrayList<Quest> quests;
-    ListView quest_action_listview;
+    private ListView quest_action_listview;
     Zone zone;
     ImageView quest_action_picture;
     ImageView quest_action_minimap;
@@ -54,6 +60,7 @@ public class ZoneActivity extends ActionBarActivity {
         item = (TextView) findViewById(R.id.item);
         reward = (TextView) findViewById(R.id.reward);
         zonetype = (TextView) findViewById(R.id.zonetype);
+        quest_action_listview = (ListView) findViewById(R.id.quest_action_listview);
 
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
@@ -81,14 +88,14 @@ public class ZoneActivity extends ActionBarActivity {
             //qrcode = (String) savedInstanceState.getSerializable("qrcode");
             qrcode = savedInstanceState.getString("qrcode");
         }
-        Log.d(LOG_TAG,"qrcode: " + qrcode);
-        Log.d(LOG_TAG,"savedInstanceState: " + savedInstanceState);
+        Log.d(LOG_TAG, "qrcode: " + qrcode);
+        Log.d(LOG_TAG, "savedInstanceState: " + savedInstanceState);
         int zoneIdFromQRCode = Zone.findZoneIdByQRCode(Integer.parseInt(qrcode));
         zone = Zone.getZoneByZoneId(zoneIdFromQRCode);
-        quests = Quest.getAllQuestByZoneId(zoneIdFromQRCode);
-        QuestInActionAdapter adapter = new QuestInActionAdapter(this, quests);
-        quest_action_listview = (ListView) findViewById(R.id.quest_action_listview);
-        quest_action_listview.setAdapter(adapter);
+
+
+        requestQuestData(zoneIdFromQRCode);
+
         quest_action_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -133,4 +140,26 @@ public class ZoneActivity extends ActionBarActivity {
 
     }
 
+    private void requestQuestData(int id) {
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(QuestioConstants.ENDPOINT)
+                .build();
+        QuestAPI api = adapter.create(QuestAPI.class);
+        api.getAllQuestByZoneId(id, new Callback<ArrayList<Quest>>() {
+            @Override
+            public void success(ArrayList<Quest> quests, Response response) {
+                if (quests != null) {
+                    QuestInActionAdapter adapter = new QuestInActionAdapter(ZoneActivity.this, quests);
+                    quest_action_listview.setAdapter(adapter);
+                } else {
+                    Log.d(LOG_TAG, "quests: is null");
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(LOG_TAG, "requestQuestData: failure");
+            }
+        });
+    }
 }

@@ -29,6 +29,10 @@ dependencies {
     compile 'com.android.support:support-v4:22.0.0'
     compile 'com.inthecheesefactory.thecheeselibrary:stated-fragment-support-v4:0.9.1'
     compile 'com.google.code.gson:gson:2.3'
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
+    compile 'com.squareup.okhttp:okhttp:2.0.0'
     compile files('lib/zbar.jar')
+    compile files('libs/RiddleForRetrofit.jar')
 }
 

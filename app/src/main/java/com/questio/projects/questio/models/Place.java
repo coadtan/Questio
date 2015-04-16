@@ -4,16 +4,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
-import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.questio.projects.questio.utilities.DatabaseHelper;
-import com.questio.projects.questio.utilities.HttpHelper;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by coad4u4ever on 01-Apr-15.
@@ -217,24 +213,6 @@ public class Place implements Serializable {
         databaseHelper.close();
         database.close();
         return count;
-    }
-
-    public static void getGsonPlace() {
-
-
-        String response = null;
-        final String URL = "http://52.74.64.61/api/select_all_place.php";
-        try {
-            response = new HttpHelper().execute(URL).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        Gson gson = new Gson();
-        Place[] place = gson.fromJson(response, Place[].class);
-        int size = place.length;
-        Log.d(LOG_TAG, "gson: " +place[0].toString());
-
     }
 
 }

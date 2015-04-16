@@ -1,17 +1,6 @@
 package com.questio.projects.questio.models;
 
-import android.util.Log;
-
-import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
-import com.questio.projects.questio.utilities.HttpHelper;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by ning jittima on 2/4/2558.
@@ -139,45 +128,45 @@ public class Quest {
                 '}';
     }
 
-    public static ArrayList<Quest> getAllQuestByPlaceId(int placeId) {
-        ArrayList<Quest> arr = null;
-        final String URL = "http://52.74.64.61/api/select_all_quest_by_placeid_location_name.php?placeid=" + placeId;
-        try {
-            String response = new HttpHelper().execute(URL).get();
-            Log.d(LOG_TAG, "getAllQuestByPlaceId response:" + response);
-            JSONArray jsonArray = new JSONArray(response);
-            if (jsonArray.length() != 0) {
-                arr = getQuestsFromJSON(response);
-            }
-        } catch (InterruptedException | ExecutionException | JSONException e) {
-            e.printStackTrace();
-        }
+//    public static ArrayList<Quest> getAllQuestByPlaceId(int placeId) {
+//        ArrayList<Quest> arr = null;
+//        final String URL = "http://52.74.64.61/api/select_all_quest_by_placeid_location_name.php?placeid=" + placeId;
+//        try {
+//            String response = new HttpHelper().execute(URL).get();
+//            Log.d(LOG_TAG, "getAllQuestByPlaceId response:" + response);
+//            JSONArray jsonArray = new JSONArray(response);
+//            if (jsonArray.length() != 0) {
+//                arr = getQuestsFromJSON(response);
+//            }
+//        } catch (InterruptedException | ExecutionException | JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return arr;
+//    }
 
-        return arr;
-    }
-
-    public static ArrayList<Quest> getAllQuestByZoneId(int zoneId) {
-        ArrayList<Quest> arr = null;
-        final String URL = "http://52.74.64.61/api/select_all_quest_by_zoneid.php?zoneid=" + zoneId;
-        try {
-            String response = new HttpHelper().execute(URL).get();
-            Log.d(LOG_TAG, "getAllQuestByZoneId response:" + response);
-            JSONArray jsonArray = new JSONArray(response);
-            if (jsonArray.length() != 0) {
-                arr =  getQuestsFromJSON(response);
-            }
-        } catch (InterruptedException | ExecutionException | JSONException e) {
-            e.printStackTrace();
-        }
-        return arr;
-    }
+//    public static ArrayList<Quest> getAllQuestByZoneId(int zoneId) {
+//        ArrayList<Quest> arr = null;
+//        final String URL = "http://52.74.64.61/api/select_all_quest_by_zoneid.php?zoneid=" + zoneId;
+//        try {
+//            String response = new HttpHelper().execute(URL).get();
+//            Log.d(LOG_TAG, "getAllQuestByZoneId response:" + response);
+//            JSONArray jsonArray = new JSONArray(response);
+//            if (jsonArray.length() != 0) {
+//                arr =  getQuestsFromJSON(response);
+//            }
+//        } catch (InterruptedException | ExecutionException | JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return arr;
+//    }
 
 
-    public static ArrayList<Quest> getQuestsFromJSON(String response) {
-        ArrayList<Quest> quests = new ArrayList<>();
-        Gson gson = new Gson();
-        Quest[] questsTemp = gson.fromJson(response, Quest[].class);
-        Collections.addAll(quests, questsTemp);
-        return quests;
-    }
+//    public static ArrayList<Quest> getQuestsFromJSON(String response) {
+//        ArrayList<Quest> quests = new ArrayList<>();
+//        Gson gson = new Gson();
+//        Quest[] questsTemp = gson.fromJson(response, Quest[].class);
+//        Collections.addAll(quests, questsTemp);
+//        return quests;
+//    }
 }
