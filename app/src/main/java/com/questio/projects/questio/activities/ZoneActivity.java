@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.adepters.QuestInActionAdapter;
-import com.questio.projects.questio.interfaces.QuestAPI;
+import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.models.Quest;
 import com.questio.projects.questio.models.Zone;
 import com.questio.projects.questio.utilities.DownloadImageHelper;
@@ -144,7 +144,7 @@ public class ZoneActivity extends ActionBarActivity {
         RestAdapter adapter = new RestAdapter.Builder()
                 .setEndpoint(QuestioConstants.ENDPOINT)
                 .build();
-        QuestAPI api = adapter.create(QuestAPI.class);
+        QuestioAPIService api = adapter.create(QuestioAPIService.class);
         api.getAllQuestByZoneId(id, new Callback<ArrayList<Quest>>() {
             @Override
             public void success(ArrayList<Quest> quests, Response response) {

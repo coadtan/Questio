@@ -14,9 +14,15 @@ import android.widget.TextView;
 
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.models.Quiz;
+import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
 
 import java.util.ArrayList;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by coad4u4ever on 08-Apr-15.
@@ -26,6 +32,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
     private final int FIRST_QUIZ = 0;
     Toolbar toolbar;
     int buttonId = 0;
+    int quizCount;
 
     ArrayList<Quiz> quizs;
     TextView quiz_question;
@@ -84,38 +91,15 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         Log.d(LOG_TAG, "questid: " + questId + " questName: " + questName);
 
 
-        quizs = Quiz.getAllQuizByQuestId(Integer.parseInt(questId));
+       // quizs = Quiz.getAllQuizByQuestId(Integer.parseInt(questId));
+        requestQuizData(Integer.parseInt(questId));
         currentQuiz = 0;
-        int quizCount = quizs.size();
 
 
-        LinearLayout quizActionProgressLinerSection = (LinearLayout) findViewById(R.id.quiz_action_progress_liner_section);
-        quizActionProgressLinerSection.setWeightSum(quizCount);
-
-        for (int i = 0; i < quizCount; i++) {
-            button = new Button(this);
-            if (i == 0) {
-                button.setTextColor(getResources().getColor(R.color.white));
-                button.setText("?");
-            }
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    0,
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    1.0f
-            );
-            button.setBackgroundColor(getResources().getColor(R.color.grey_700));
-            //params.setMargins(left, top, right, bottom);
-            params.setMargins(5, 5, 5, 5);
-            button.setId(buttonId);
-            button.setOnClickListener(new ButtonProgressListener(buttonId));
-            button.setLayoutParams(params);
-            quizActionProgressLinerSection.addView(button);
-            buttonId++;
-        }
 
 
         getSupportActionBar().setTitle(questName);
-        pupulateQuiz(FIRST_QUIZ);
+
 
 
         quiz_answer_a.setOnClickListener(this);
@@ -236,5 +220,49 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                 //b.setBackgroundResource(R.color.grey_700);
             }
         }
+    }
+
+    private void requestQuizData(int id){
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(QuestioConstants.ENDPOINT)
+                .build();
+        QuestioAPIService api = adapter.create(QuestioAPIService.class);
+        api.getAllQuizByQuestId(id, new Callback<ArrayList<Quiz>>() {
+            @Override
+            public void success(ArrayList<Quiz> quizsTemp, Response response) {
+                quizs = quizsTemp;
+                quizCount = quizs.size();
+                LinearLayout quizActionProgressLinerSection = (LinearLayout) findViewById(R.id.quiz_action_progress_liner_section);
+                quizActionProgressLinerSection.setWeightSum(quizCount);
+
+                for (int i = 0; i < quizCount; i++) {
+                    button = new Button(QuizAction.this);
+                    if (i == 0) {
+                        button.setTextColor(getResources().getColor(R.color.white));
+                        button.setText("?");
+                    }
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                            0,
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            1.0f
+                    );
+                    button.setBackgroundColor(getResources().getColor(R.color.grey_700));
+                    //params.setMargins(left, top, right, bottom);
+                    params.setMargins(5, 5, 5, 5);
+                    button.setId(buttonId);
+                    button.setOnClickListener(new ButtonProgressListener(buttonId));
+                    button.setLayoutParams(params);
+                    quizActionProgressLinerSection.addView(button);
+                    buttonId++;
+                }
+                pupulateQuiz(FIRST_QUIZ);
+
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+
+            }
+        });
     }
 }

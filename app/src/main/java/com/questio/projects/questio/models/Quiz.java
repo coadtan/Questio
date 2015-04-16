@@ -142,50 +142,50 @@ public class Quiz {
 
 
 
-    public static ArrayList<Quiz> getAllQuizByQuestId(int questId) {
-        Quiz q;
-        ArrayList<Quiz> arr = null;
-        final String URL = "http://52.74.64.61/api/select_all_quiz_by_questid.php?questid=" + questId;
-        try {
-            String response = new HttpHelper().execute(URL).get();
-            Log.d(LOG_TAG, "getAllQuizByQuestId response:" + response);
-            JSONArray jsonArray = new JSONArray(response);
-            if (jsonArray.length() != 0) {
-                arr = new ArrayList<>();
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    q = new Quiz();
-                    JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                    String quizid = jsonObject.get("quizid").toString();
-                    String questid = jsonObject.get("questid").toString();
-                    String seqid = jsonObject.get("seqid").toString();
-                    String question = jsonObject.get("question").toString();
-                    String choicea = jsonObject.get("choicea").toString();
-                    String choiceb = jsonObject.get("choiceb").toString();
-                    String choicec = jsonObject.get("choicec").toString();
-                    String choiced = jsonObject.get("choiced").toString();
-                    String answerid = jsonObject.get("answerid").toString();
-                    q.setQuizId(Integer.parseInt(quizid));
-                    q.setQuestId(Integer.parseInt(questid));
-                    if(!seqid.equalsIgnoreCase("null")) {
-                        q.setSeqId(Integer.parseInt(seqid));
-                    }
-                    q.setQuestion(question);
-                    q.setChoiceA(choicea);
-                    q.setChoiceB(choiceb);
-                    if(!choicec.equalsIgnoreCase("null")) {
-                        q.setChoiceC(choicec);
-                    }
-                    if(!choiced.equalsIgnoreCase("null")) {
-                        q.setChoiceD(choiced);
-                    }
-                    q.setAnswerId(answerid);
-
-                    arr.add(q);
-                }
-            }
-        } catch (InterruptedException | ExecutionException | JSONException e) {
-            e.printStackTrace();
-        }
-        return arr;
-    }
+//    public static ArrayList<Quiz> getAllQuizByQuestId(int questId) {
+//        Quiz q;
+//        ArrayList<Quiz> arr = null;
+//        final String URL = "http://52.74.64.61/api/select_all_quiz_by_questid.php?questid=" + questId;
+//        try {
+//            String response = new HttpHelper().execute(URL).get();
+//            Log.d(LOG_TAG, "getAllQuizByQuestId response:" + response);
+//            JSONArray jsonArray = new JSONArray(response);
+//            if (jsonArray.length() != 0) {
+//                arr = new ArrayList<>();
+//                for (int i = 0; i < jsonArray.length(); i++) {
+//                    q = new Quiz();
+//                    JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+//                    String quizid = jsonObject.get("quizid").toString();
+//                    String questid = jsonObject.get("questid").toString();
+//                    String seqid = jsonObject.get("seqid").toString();
+//                    String question = jsonObject.get("question").toString();
+//                    String choicea = jsonObject.get("choicea").toString();
+//                    String choiceb = jsonObject.get("choiceb").toString();
+//                    String choicec = jsonObject.get("choicec").toString();
+//                    String choiced = jsonObject.get("choiced").toString();
+//                    String answerid = jsonObject.get("answerid").toString();
+//                    q.setQuizId(Integer.parseInt(quizid));
+//                    q.setQuestId(Integer.parseInt(questid));
+//                    if(!seqid.equalsIgnoreCase("null")) {
+//                        q.setSeqId(Integer.parseInt(seqid));
+//                    }
+//                    q.setQuestion(question);
+//                    q.setChoiceA(choicea);
+//                    q.setChoiceB(choiceb);
+//                    if(!choicec.equalsIgnoreCase("null")) {
+//                        q.setChoiceC(choicec);
+//                    }
+//                    if(!choiced.equalsIgnoreCase("null")) {
+//                        q.setChoiceD(choiced);
+//                    }
+//                    q.setAnswerId(answerid);
+//
+//                    arr.add(q);
+//                }
+//            }
+//        } catch (InterruptedException | ExecutionException | JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return arr;
+//    }
 }

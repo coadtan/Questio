@@ -16,10 +16,16 @@ import com.questio.projects.questio.R;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarConstants;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarScannerActivity;
 import com.questio.projects.questio.models.Riddle;
+import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
 import com.questio.projects.questio.utilities.QuestioHelper;
 
 import net.sourceforge.zbar.Symbol;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by ning jittima on 12/4/2558.
@@ -49,6 +55,8 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+
         scanTV = (TextView) toolbar.findViewById(R.id.toolbar_limit);
         scanTV.setText(Integer.toString(scanLimit));
 
@@ -61,10 +69,7 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
         hintReveal2 = (TextView)findViewById(R.id.riddle_hintReveal2);
         hintReveal3 = (TextView)findViewById(R.id.riddle_hintReveal3);
 
-        hint1Btn.setOnClickListener(this);
-        hint2Btn.setOnClickListener(this);
-        hint3Btn.setOnClickListener(this);
-        scanHere.setOnClickListener(this);
+
 
 
 
@@ -99,31 +104,10 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
 
         getSupportActionBar().setTitle(questName);
 
-        r = Riddle.getAllRiddleByRiddleId((Integer.parseInt(questId)));
+        //r = Riddle.getAllRiddleByRiddleId((Integer.parseInt(questId)));
+        requestRiddleData(Integer.parseInt(questId));
 
-        if(r.getHint1().equalsIgnoreCase("")){
-            hint1Btn.setEnabled(false);
-            hint1Btn.setClickable(false);
-            hint1Btn.setBackgroundColor(getResources().getColor(R.color.grey_500));
-            hintReveal1.setVisibility(View.INVISIBLE);
-        }
 
-        if(r.getHint2().equalsIgnoreCase("")){
-            hint2Btn.setEnabled(false);
-            hint2Btn.setClickable(false);
-            hint2Btn.setBackgroundColor(getResources().getColor(R.color.grey_500));
-            hintReveal2.setVisibility(View.INVISIBLE);
-        }
-        if(r.getHint3().equalsIgnoreCase("")){
-            hint3Btn.setEnabled(false);
-            hint3Btn.setClickable(false);
-            hint3Btn.setBackgroundColor(getResources().getColor(R.color.grey_500));
-            hintReveal3.setVisibility(View.INVISIBLE);
-        }
-
-        riddle.setText(r.getRidDetails());
-
-        scanLimit = r.getScanLimit();
     }
 
 
@@ -181,5 +165,54 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
             }
         }
 
+    }
+
+    private void requestRiddleData(int id) {
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(QuestioConstants.ENDPOINT)
+                .build();
+        QuestioAPIService api = adapter.create(QuestioAPIService.class);
+        api.getRiddleByQuestId(id, new Callback<Riddle[]>() {
+            @Override
+            public void success(Riddle[] riddleTemp, Response response) {
+                r = riddleTemp[0];
+                Log.d(LOG_TAG, r.toString());
+                if(r.getHint1().equalsIgnoreCase("")){
+                    hint1Btn.setEnabled(false);
+                    hint1Btn.setClickable(false);
+                    hint1Btn.setBackgroundColor(getResources().getColor(R.color.grey_500));
+                    hintReveal1.setVisibility(View.INVISIBLE);
+                }
+
+                if(r.getHint2().equalsIgnoreCase("")){
+                    hint2Btn.setEnabled(false);
+                    hint2Btn.setClickable(false);
+                    hint2Btn.setBackgroundColor(getResources().getColor(R.color.grey_500));
+                    hintReveal2.setVisibility(View.INVISIBLE);
+                }
+                if(r.getHint3().equalsIgnoreCase("")){
+                    hint3Btn.setEnabled(false);
+                    hint3Btn.setClickable(false);
+                    hint3Btn.setBackgroundColor(getResources().getColor(R.color.grey_500));
+                    hintReveal3.setVisibility(View.INVISIBLE);
+                }
+
+                riddle.setText(r.getRidDetails());
+
+                scanLimit = r.getScanLimit();
+
+                hint1Btn.setOnClickListener(RiddleAction.this);
+                hint2Btn.setOnClickListener(RiddleAction.this);
+                hint3Btn.setOnClickListener(RiddleAction.this);
+                scanHere.setOnClickListener(RiddleAction.this);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.d(LOG_TAG, "Fail: " + retrofitError.toString());
+                Log.d(LOG_TAG, "Fail: " + retrofitError.getUrl());
+                Log.d(LOG_TAG, "Fail: " + retrofitError.getStackTrace());
+            }
+        });
     }
 }

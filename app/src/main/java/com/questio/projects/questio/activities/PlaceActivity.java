@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.fragments.QuestRecycleView;
-import com.questio.projects.questio.interfaces.QuestAPI;
+import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarConstants;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarScannerActivity;
 import com.questio.projects.questio.models.Place;
@@ -115,7 +115,7 @@ public class PlaceActivity extends ActionBarActivity {
         RestAdapter adapter = new RestAdapter.Builder()
                 .setEndpoint(QuestioConstants.ENDPOINT)
                 .build();
-        QuestAPI api = adapter.create(QuestAPI.class);
+        QuestioAPIService api = adapter.create(QuestioAPIService.class);
         api.getQuestsByPlaceId(id, new Callback<ArrayList<Quest>>() {
             @Override
             public void success(ArrayList<Quest> quests, Response response) {
