@@ -2,14 +2,8 @@ package com.questio.projects.questio;
 
 import android.app.Application;
 import android.content.res.Configuration;
-import android.util.Log;
 
-import com.questio.projects.questio.models.Place;
-import com.questio.projects.questio.utilities.HttpHelper;
-import com.questio.projects.questio.utilities.PlaceSync;
-import com.questio.projects.questio.utilities.QuestioHelper;
-
-import java.util.concurrent.ExecutionException;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 /**
  * Created by coad4u4ever on 01-Apr-15.
@@ -18,7 +12,7 @@ public class QuestioApplication extends Application {
     private static final String LOG_TAG = QuestioApplication.class.getSimpleName();
     private static QuestioApplication singleton;
     private static boolean login = false;
-
+    public static GoogleApiClient mGoogleApiClient;
 
     public QuestioApplication getInstance() {
         return singleton;
@@ -27,6 +21,7 @@ public class QuestioApplication extends Application {
     public static boolean isLogin() {
         return login;
     }
+
 
     public static void setLogin(boolean login) {
         QuestioApplication.login = login;
@@ -41,21 +36,8 @@ public class QuestioApplication extends Application {
     public void onCreate() {
         super.onCreate();
         singleton = this;
-        Place place = new Place(getApplicationContext());
-        try {
-            String res = new HttpHelper().execute("http://52.74.64.61/api/select_all_place_count.php").get();
 
-            Log.d(LOG_TAG, "count: " + res);
-            long placeServerCount = QuestioHelper.getPlaceCountFromJson(res);
-            long placeSQLiteCount = place.getPlaceCount();
-            Log.d(LOG_TAG, "placeServerCount: " + placeServerCount + " placeSQLiteCount: " + placeSQLiteCount);
-            if (placeServerCount != placeSQLiteCount) {
-                place.delectAllPlace();
-                new PlaceSync(getApplicationContext()).execute("http://52.74.64.61/api/select_all_place.php");
-            }
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Override

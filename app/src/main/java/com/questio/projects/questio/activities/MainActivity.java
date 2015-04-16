@@ -11,6 +11,11 @@ import com.questio.projects.questio.QuestioApplication;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.libraries.slidingtabs.SlidingTabsBasicFragment;
 import com.questio.projects.questio.models.Place;
+import com.questio.projects.questio.utilities.HttpHelper;
+import com.questio.projects.questio.utilities.PlaceSync;
+import com.questio.projects.questio.utilities.QuestioHelper;
+
+import java.util.concurrent.ExecutionException;
 
 /*
  * Created by coad4u4ever on 01-Apr-15.
@@ -29,6 +34,22 @@ public class MainActivity extends ActionBarActivity {
         }
 
 
+        Place place = new Place(getApplicationContext());
+        try {
+            String res = new HttpHelper().execute("http://52.74.64.61/api/select_all_place_count.php").get();
+
+            Log.d(LOG_TAG, "count: " + res);
+            long placeServerCount = QuestioHelper.getPlaceCountFromJson(res);
+            long placeSQLiteCount = place.getPlaceCount();
+            Log.d(LOG_TAG, "placeServerCount: " + placeServerCount + " placeSQLiteCount: " + placeSQLiteCount);
+            if (placeServerCount != placeSQLiteCount) {
+                place.delectAllPlace();
+                new PlaceSync(getApplicationContext()).execute("http://52.74.64.61/api/select_all_place.php");
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
         setContentView(R.layout.main_layout);
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
@@ -38,7 +59,6 @@ public class MainActivity extends ActionBarActivity {
             transaction.replace(R.id.sample_content_fragment, fragment);
             transaction.commit();
         }
-        Place place = new Place(getApplicationContext());
         Log.d(LOG_TAG,"count: " + place.getPlaceCount());
     }
 }

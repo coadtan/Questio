@@ -55,13 +55,20 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
 //                .addOnConnectionFailedListener(this).addApi(Plus.API, null)
 //                .addScope(Plus.SCOPE_PLUS_LOGIN).build();
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this,this,this)
-                .addApi(Plus.API)
-                .addScope(Plus.SCOPE_PLUS_LOGIN)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
+//        mGoogleApiClient = new GoogleApiClient.Builder(this,this,this)
+//                .addApi(Plus.API)
+//                .addScope(Plus.SCOPE_PLUS_LOGIN)
+//                .addConnectionCallbacks(this)
+//                .addOnConnectionFailedListener(this)
+//                .build();
 
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this).addApi(Plus.API)
+                .addScope(Plus.SCOPE_PLUS_PROFILE).build();
+
+        QuestioApplication.mGoogleApiClient = mGoogleApiClient;
     }
 
 
@@ -72,9 +79,9 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
 
     protected void onStop() {
         super.onStop();
-        if (mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
+//        if (mGoogleApiClient.isConnected()) {
+//            mGoogleApiClient.disconnect();
+//        }
     }
 
 
@@ -123,15 +130,13 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
     @Override
     public void onConnected(Bundle bundle) {
         mSignInClicked = false;
-        Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
-
-        // Get user's information
 
         try {
             if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
                 Person currentPerson = Plus.PeopleApi
                         .getCurrentPerson(mGoogleApiClient);
                 String personName = currentPerson.getDisplayName();
+                Toast.makeText(this, "ยินดีต้อนรับ: " + personName, Toast.LENGTH_LONG).show();
                 String personPhotoUrl = currentPerson.getImage().getUrl();
                 String personGooglePlusProfile = currentPerson.getUrl();
                 String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
@@ -141,7 +146,7 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                 Log.d(LOG_TAG, "Name: " + personName + ", plusProfile: "
                         + personGooglePlusProfile + ", email: " + email
                         + ", Image: " + personPhotoUrl);
-
+                Log.d(LOG_TAG, ""+currentPerson.getId());
 
             } else {
                 Toast.makeText(getApplicationContext(),
@@ -156,7 +161,6 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
 
         btnSignIn.setVisibility(View.INVISIBLE);
         finish();
-        // Update the UI after signin
     }
 
     @Override
