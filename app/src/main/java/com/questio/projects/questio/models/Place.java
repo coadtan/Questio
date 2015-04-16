@@ -4,27 +4,48 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.questio.projects.questio.utilities.DatabaseHelper;
+import com.questio.projects.questio.utilities.HttpHelper;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by coad4u4ever on 01-Apr-15.
  */
-public class Place  implements Serializable {
+public class Place implements Serializable {
     private static final String LOG_TAG = Place.class.getSimpleName();
+    @SerializedName("placeid")
     private int placeId;
+
+    @SerializedName("placename")
     private String placeName;
+
+    @SerializedName("placefullname")
     private String placeFullName;
+
+    @SerializedName("qrcode")
     private long qrCode;
+
+    @SerializedName("sensorid")
     private long sensorId;
+
     private double latitude;
+
     private double longitude;
+
     private double radius;
-    private String placetype;
-    private String imageurl;
+
+    @SerializedName("placetype")
+    private String placeType;
+
+    @SerializedName("imageurl")
+    private String imageUrl;
 
     Context mContext;
 
@@ -99,20 +120,20 @@ public class Place  implements Serializable {
         this.radius = radius;
     }
 
-    public String getPlacetype() {
-        return placetype;
+    public String getPlaceType() {
+        return placeType;
     }
 
-    public void setPlacetype(String placetype) {
-        this.placetype = placetype;
+    public void setPlaceType(String placeType) {
+        this.placeType = placeType;
     }
 
-    public String getImageurl() {
-        return imageurl;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImageurl(String imageurl) {
-        this.imageurl = imageurl;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     @Override
@@ -126,9 +147,8 @@ public class Place  implements Serializable {
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", radius=" + radius +
-                ", placetype='" + placetype + '\'' +
-                ", imageurl='" + imageurl + '\'' +
-                ", mContext=" + mContext +
+                ", placetype='" + placeType + '\'' +
+                ", imageurl='" + imageUrl + '\'' +
                 '}';
     }
 
@@ -141,7 +161,7 @@ public class Place  implements Serializable {
         // 5 latitude
         // 6 longitude
         // 7 radius
-        // 8 placetype
+        // 8 placeType
         Cursor cursor;
         String selectQuery = "SELECT  placeid as _id, placename, placefullname, qrcode, sensorid, latitude, longitude, radius, placetype, imageurl FROM place";
         DatabaseHelper databaseHelper = new DatabaseHelper(mContext);
@@ -149,6 +169,7 @@ public class Place  implements Serializable {
         cursor = database.rawQuery(selectQuery, null);
         return cursor;
     }
+
     public ArrayList<Place> getAllPlaceArrayList() {
         ArrayList<Place> list = new ArrayList<>();
         Place po;
@@ -162,17 +183,17 @@ public class Place  implements Serializable {
                 po.setPlaceId(Integer.parseInt(cursor.getString(0)));
                 po.setPlaceName(cursor.getString(1));
                 po.setPlaceFullName(cursor.getString(2));
-                if(!cursor.getString(3).equalsIgnoreCase("null")){
+                if (!cursor.getString(3).equalsIgnoreCase("null")) {
                     po.setQrCode(Integer.parseInt(cursor.getString(3)));
                 }
-                if(!cursor.getString(4).equalsIgnoreCase("null")){
+                if (!cursor.getString(4).equalsIgnoreCase("null")) {
                     po.setSensorId(Integer.parseInt(cursor.getString(4)));
                 }
                 po.setLatitude(Double.parseDouble(cursor.getString(5)));
                 po.setLongitude(Double.parseDouble(cursor.getString(6)));
                 po.setRadius(Double.parseDouble(cursor.getString(7)));
-                po.setPlacetype(cursor.getString(8));
-                po.setImageurl(cursor.getString(9));
+                po.setPlaceType(cursor.getString(8));
+                po.setImageUrl(cursor.getString(9));
                 list.add(po);
             } while (cursor.moveToNext());
         }
@@ -180,6 +201,7 @@ public class Place  implements Serializable {
         database.close();
         return list;
     }
+
     public void delectAllPlace() {
         DatabaseHelper databaseHelper = new DatabaseHelper(mContext);
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
@@ -187,7 +209,8 @@ public class Place  implements Serializable {
         databaseHelper.close();
         database.close();
     }
-    public  long getPlaceCount() {
+
+    public long getPlaceCount() {
         DatabaseHelper databaseHelper = new DatabaseHelper(mContext);
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
         long count = DatabaseUtils.queryNumEntries(database, "place");
@@ -196,5 +219,22 @@ public class Place  implements Serializable {
         return count;
     }
 
+    public static void getGsonPlace() {
+
+
+        String response = null;
+        final String URL = "http://52.74.64.61/api/select_all_place.php";
+        try {
+            response = new HttpHelper().execute(URL).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        Gson gson = new Gson();
+        Place[] place = gson.fromJson(response, Place[].class);
+        int size = place.length;
+        Log.d(LOG_TAG, "gson: " +place[0].toString());
+
+    }
 
 }

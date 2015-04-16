@@ -15,7 +15,6 @@ import java.net.URL;
 public class HttpHelper extends AsyncTask<String, Void, String> {
     private static final String LOG_TAG = HttpHelper.class.getSimpleName();
 
-
     @Override
     protected String doInBackground(String... arg) {
         try{

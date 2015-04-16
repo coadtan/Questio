@@ -32,6 +32,4 @@ public class MainActivity extends ActionBarActivity {
         Place place = new Place(getApplicationContext());
         Log.d(LOG_TAG,"count: " + place.getPlaceCount());
     }
-
-
 }

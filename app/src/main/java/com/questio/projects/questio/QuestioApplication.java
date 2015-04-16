@@ -17,9 +17,10 @@ public class QuestioApplication extends Application {
     private static final String LOG_TAG = QuestioApplication.class.getSimpleName();
     private static QuestioApplication singleton;
 
-    public QuestioApplication getInstance(){
+    public QuestioApplication getInstance() {
         return singleton;
     }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -36,8 +37,8 @@ public class QuestioApplication extends Application {
             Log.d(LOG_TAG, "count: " + res);
             long placeServerCount = QuestioHelper.getPlaceCountFromJson(res);
             long placeSQLiteCount = place.getPlaceCount();
-            Log.d(LOG_TAG, "placeServerCount: " + placeServerCount + " placeSQLiteCount: "+ placeSQLiteCount);
-            if(placeServerCount!=placeSQLiteCount){
+            Log.d(LOG_TAG, "placeServerCount: " + placeServerCount + " placeSQLiteCount: " + placeSQLiteCount);
+            if (placeServerCount != placeSQLiteCount) {
                 place.delectAllPlace();
                 new PlaceSync(getApplicationContext()).execute("http://52.74.64.61/api/select_all_place.php");
             }

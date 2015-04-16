@@ -2,13 +2,15 @@ package com.questio.projects.questio.models;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.questio.projects.questio.utilities.HttpHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -16,14 +18,32 @@ import java.util.concurrent.ExecutionException;
  */
 public class Quest {
     private static final String LOG_TAG = Quest.class.getSimpleName();
+
+    @SerializedName("questid")
     private int questId;
+
+    @SerializedName("questname")
     private String questName;
+
+    @SerializedName("questdetails")
     private String questDetails;
+
+    @SerializedName("questtypeid")
     private int questTypeId;
+
+    @SerializedName("zoneid")
     private int zoneId;
+
+    @SerializedName("diffid")
     private int diffId;
+
+    @SerializedName("zonename")
     private String zoneName;
+
+    @SerializedName("floorname")
     private String floorName;
+
+    @SerializedName("buildingname")
     private String buildingName;
 
 
@@ -119,76 +139,45 @@ public class Quest {
                 '}';
     }
 
-    public static ArrayList<Quest> getAllQuestByPlaceId(int placeId){
-        Quest q;
+    public static ArrayList<Quest> getAllQuestByPlaceId(int placeId) {
         ArrayList<Quest> arr = null;
         final String URL = "http://52.74.64.61/api/select_all_quest_by_placeid_location_name.php?placeid=" + placeId;
         try {
             String response = new HttpHelper().execute(URL).get();
-            Log.d(LOG_TAG,"getAllQuestByPlaceId response:" +response);
+            Log.d(LOG_TAG, "getAllQuestByPlaceId response:" + response);
             JSONArray jsonArray = new JSONArray(response);
-            if(jsonArray.length() != 0){
-                arr = new ArrayList<>();
-                for(int i = 0; i < jsonArray.length(); i++){
-                    q = new Quest();
-                    JSONObject jsonObject = (JSONObject)jsonArray.get(i);
-                    String questid = jsonObject.get("questid").toString();
-                    String questname = jsonObject.get("questname").toString();
-                    String questdetails = jsonObject.get("questdetails").toString();
-                    String questtypeid = jsonObject.get("questtypeid").toString();
-                    String zoneid = jsonObject.get("zoneid").toString();
-                    String diffid = jsonObject.get("diffid").toString();
-                    String zonename = jsonObject.get("zonename").toString();
-                    String floorname = jsonObject.get("floorname").toString();
-                    String buildingname = jsonObject.get("buildingname").toString();
-                    q.setQuestId(Integer.parseInt(questid));
-                    q.setQuestName(questname);
-                    q.setQuestDetails(questdetails);
-                    q.setQuestTypeId(Integer.parseInt(questtypeid));
-                    q.setDiffId(Integer.parseInt(diffid));
-                    q.setZoneId(Integer.parseInt(zoneid));
-                    q.setZoneName(zonename);
-                    q.setFloorName(floorname);
-                    q.setBuildingName(buildingname);
-                    arr.add(q);
-                }
+            if (jsonArray.length() != 0) {
+                arr = getQuestsFromJSON(response);
+            }
+        } catch (InterruptedException | ExecutionException | JSONException e) {
+            e.printStackTrace();
+        }
+
+        return arr;
+    }
+
+    public static ArrayList<Quest> getAllQuestByZoneId(int zoneId) {
+        ArrayList<Quest> arr = null;
+        final String URL = "http://52.74.64.61/api/select_all_quest_by_zoneid.php?zoneid=" + zoneId;
+        try {
+            String response = new HttpHelper().execute(URL).get();
+            Log.d(LOG_TAG, "getAllQuestByZoneId response:" + response);
+            JSONArray jsonArray = new JSONArray(response);
+            if (jsonArray.length() != 0) {
+                arr =  getQuestsFromJSON(response);
             }
         } catch (InterruptedException | ExecutionException | JSONException e) {
             e.printStackTrace();
         }
         return arr;
     }
-    public static ArrayList<Quest> getAllQuestByZoneId(int zoneId){
-        Quest q;
-        ArrayList<Quest> arr = null;
-        final String URL = "http://52.74.64.61/api/select_all_quest_by_zoneid.php?zoneid=" + zoneId;
-        try {
-            String response = new HttpHelper().execute(URL).get();
-            Log.d(LOG_TAG,"getAllQuestByZoneId response:" +response);
-            JSONArray jsonArray = new JSONArray(response);
-            if(jsonArray.length() != 0){
-                arr = new ArrayList<>();
-                for(int i = 0; i < jsonArray.length(); i++){
-                    q = new Quest();
-                    JSONObject jsonObject = (JSONObject)jsonArray.get(i);
-                    String questid = jsonObject.get("questid").toString();
-                    String questname = jsonObject.get("questname").toString();
-                    String questdetails = jsonObject.get("questdetails").toString();
-                    String questtypeid = jsonObject.get("questtypeid").toString();
-                    String zoneid = jsonObject.get("zoneid").toString();
-                    String diffid = jsonObject.get("diffid").toString();
-                    q.setQuestId(Integer.parseInt(questid));
-                    q.setQuestName(questname);
-                    q.setQuestDetails(questdetails);
-                    q.setQuestTypeId(Integer.parseInt(questtypeid));
-                    q.setDiffId(Integer.parseInt(diffid));
-                    q.setZoneId(Integer.parseInt(zoneid));
-                    arr.add(q);
-                }
-            }
-        } catch (InterruptedException | ExecutionException | JSONException e) {
-            e.printStackTrace();
-        }
-        return arr;
+
+
+    public static ArrayList<Quest> getQuestsFromJSON(String response) {
+        ArrayList<Quest> quests = new ArrayList<>();
+        Gson gson = new Gson();
+        Quest[] questsTemp = gson.fromJson(response, Quest[].class);
+        Collections.addAll(quests, questsTemp);
+        return quests;
     }
 }

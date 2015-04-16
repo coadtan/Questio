@@ -63,12 +63,12 @@ public class PlaceActivity extends ActionBarActivity {
         Log.d(LOG_TAG, "oncreate");
         place = (Place) getIntent().getSerializableExtra("place");
         if (place != null) {
-            Log.d(LOG_TAG, Integer.toString(place.getPlaceId()) + place.getImageurl());
+            Log.d(LOG_TAG, Integer.toString(place.getPlaceId()) + place.getImageUrl());
             Glide.with(this)
-                    .load("http://52.74.64.61" + place.getImageurl())
+                    .load("http://52.74.64.61" + place.getImageUrl())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(quest_browsing_picture);
-            // new DownloadImageHelper(quest_browsing_picture).execute("http://52.74.64.61" + place.getImageurl());
+            // new DownloadImageHelper(quest_browsing_picture).execute("http://52.74.64.61" + place.getImageUrl());
 
 
             ArrayList<Quest> quests = Quest.getAllQuestByPlaceId(place.getPlaceId());
