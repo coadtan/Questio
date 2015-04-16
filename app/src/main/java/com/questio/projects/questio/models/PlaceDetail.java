@@ -2,6 +2,7 @@ package com.questio.projects.questio.models;
 
 import android.util.Log;
 
+import com.google.gson.annotations.SerializedName;
 import com.questio.projects.questio.utilities.HttpHelper;
 
 import org.json.JSONArray;
@@ -24,12 +25,25 @@ public class PlaceDetail {
     imageurl
     */
     private static final String LOG_TAG = PlaceDetail.class.getSimpleName();
+    @SerializedName("placeid")
     private int placeId;
+
+    @SerializedName("placedetails")
     private String placeDetails;
+
+    @SerializedName("phonecontact1")
     private String phoneContact1;
+
+    @SerializedName("phonecontact2")
     private String phoneContact2;
+
+    @SerializedName("website")
     private String webSite;
+
+    @SerializedName("email")
     private String eMail;
+
+    @SerializedName("imageurl")
     private String imageUrl;
 
     public int getPlaceId() {

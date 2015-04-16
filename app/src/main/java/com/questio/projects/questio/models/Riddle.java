@@ -2,6 +2,7 @@ package com.questio.projects.questio.models;
 
 import android.util.Log;
 
+import com.google.gson.annotations.SerializedName;
 import com.questio.projects.questio.utilities.HttpHelper;
 
 import org.json.JSONArray;
@@ -26,10 +27,19 @@ public class Riddle{
     * hint2
     * hint3
     * */
+    @SerializedName("ridid")
     private int ridId;
+
+    @SerializedName("riddetails")
     private String ridDetails;
+
+    @SerializedName("qrcode")
     private long qrCode;
+
+    @SerializedName("sensorid")
     private long sensorId;
+
+    @SerializedName("scanlimit")
     private int scanLimit;
     private String hint1;
     private String hint2;

@@ -2,6 +2,7 @@ package com.questio.projects.questio.models;
 
 import android.util.Log;
 
+import com.google.gson.annotations.SerializedName;
 import com.questio.projects.questio.utilities.HttpHelper;
 
 import org.json.JSONArray;
@@ -17,12 +18,24 @@ import java.util.concurrent.ExecutionException;
 public class Floor {
 
     private static final String LOG_TAG = Floor.class.getSimpleName();
+
+    @SerializedName("floorid")
     private int floorId;
+
+    @SerializedName("placeid")
     private int placeId;
+
+    @SerializedName("floorname")
     private String floorName;
+
+    @SerializedName("imageurl")
     private String imageUrl;
-    private double latitude;
-    private double longitude;
+
+    @SerializedName("qrcode")
+    private long qrCode;
+
+    @SerializedName("sensorid")
+    private long sensorId;
 
 
     public int getFloorId() {
@@ -57,20 +70,20 @@ public class Floor {
         this.imageUrl = imageUrl;
     }
 
-    public double getLatitude() {
-        return latitude;
+    public long getQrCode() {
+        return qrCode;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
+    public void setQrCode(long qrCode) {
+        this.qrCode = qrCode;
     }
 
-    public double getLongitude() {
-        return longitude;
+    public long getSensorId() {
+        return sensorId;
     }
 
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
+    public void setSensorId(long sensorId) {
+        this.sensorId = sensorId;
     }
 
     @Override
@@ -80,8 +93,8 @@ public class Floor {
                 ", placeId=" + placeId +
                 ", floorName='" + floorName + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
+                ", qrCode=" + qrCode +
+                ", sensorId=" + sensorId +
                 '}';
     }
 
@@ -101,12 +114,14 @@ public class Floor {
                     floor.setFloorId(Integer.parseInt(obj.get("floorid").toString()));
                     floor.setFloorName(obj.get("floorname").toString());
                     floor.setPlaceId(Integer.parseInt(obj.get("placeid").toString()));
-                    floor.setImageUrl(obj.get("imageurl").toString());
-                    if (!obj.get("latitude").toString().equalsIgnoreCase("null")) {
-                        floor.setLatitude(Double.parseDouble(obj.get("latitude").toString()));
+                    if (!obj.get("imageurl").toString().equalsIgnoreCase("null")) {
+                        floor.setImageUrl(obj.get("imageurl").toString());
+                    }
+                    if (!obj.get("qrcode").toString().equalsIgnoreCase("null")) {
+                        floor.setQrCode(Long.parseLong(obj.get("qrcode").toString()));
                     }
                     if (!obj.get("longitude").toString().equalsIgnoreCase("null")) {
-                        floor.setLongitude(Double.parseDouble(obj.get("longitude").toString()));
+                        floor.setSensorId(Long.parseLong(obj.get("sensorid").toString()));
                     }
                     al.add(floor);
                 }

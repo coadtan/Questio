@@ -2,6 +2,7 @@ package com.questio.projects.questio.models;
 
 import android.util.Log;
 
+import com.google.gson.annotations.SerializedName;
 import com.questio.projects.questio.utilities.HttpHelper;
 
 import org.json.JSONArray;
@@ -16,16 +17,38 @@ import java.util.concurrent.ExecutionException;
  */
 public class Zone {
     private static final String LOG_TAG = Zone.class.getSimpleName();
+
+    @SerializedName("zoneid")
     private int zoneId;
+
+    @SerializedName("floorid")
     private int floorId;
+
+    @SerializedName("zonetypeid")
     private int zoneTypeId;
+
+    @SerializedName("zonename")
     private String zoneName;
+
+    @SerializedName("zonedetails")
     private String zoneDetails;
+
+    @SerializedName("qrcode")
     private int qrCode;
+
+    @SerializedName("sensorid")
     private int sensorId;
+
+    @SerializedName("imageurl")
     private String imageUrl;
+
+    @SerializedName("minimapurl")
     private String miniMapUrl;
+
+    @SerializedName("itemset")
     private String itemSet;
+
+    @SerializedName("rewardid")
     private int rewardId;
 
     public int getZoneId() {

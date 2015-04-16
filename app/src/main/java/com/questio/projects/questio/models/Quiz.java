@@ -2,6 +2,7 @@ package com.questio.projects.questio.models;
 
 import android.util.Log;
 
+import com.google.gson.annotations.SerializedName;
 import com.questio.projects.questio.utilities.HttpHelper;
 
 import org.json.JSONArray;
@@ -27,15 +28,29 @@ public class Quiz {
     choiced
     answerid
     */
-
+    @SerializedName("quizid")
     private int quizId;
+
+    @SerializedName("questid")
     private int questId;
+
+    @SerializedName("seqid")
     private int seqId;
     private String question;
+
+    @SerializedName("choicea")
     private String choiceA;
+
+    @SerializedName("choiceb")
     private String choiceB;
+
+    @SerializedName("choicec")
     private String choiceC;
+
+    @SerializedName("choiced")
     private String choiceD;
+
+    @SerializedName("answerid")
     private String answerId;
 
     public int getQuizId() {

@@ -2,6 +2,7 @@ package com.questio.projects.questio.models;
 
 import android.util.Log;
 
+import com.google.gson.annotations.SerializedName;
 import com.questio.projects.questio.utilities.HttpHelper;
 
 import org.json.JSONArray;
@@ -24,11 +25,22 @@ public class PlaceNews {
     dateended
     */
     private static final String LOG_TAG = PlaceNews.class.getSimpleName();
+    @SerializedName("newsid")
     private int newsId;
+
+    @SerializedName("placeid")
     private int placeId;
+
+    @SerializedName("newsheader")
     private String newsHeader;
+
+    @SerializedName("newsdetails")
     private String newsDetails;
+
+    @SerializedName("datestarted")
     private String dateStarted;
+
+    @SerializedName("dateended")
     private String dateEnded;
 
     public int getNewsId() {

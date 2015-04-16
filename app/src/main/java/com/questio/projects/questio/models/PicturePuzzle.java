@@ -2,6 +2,7 @@ package com.questio.projects.questio.models;
 
 import android.util.Log;
 
+import com.google.gson.annotations.SerializedName;
 import com.questio.projects.questio.utilities.HttpHelper;
 
 import org.json.JSONArray;
@@ -21,9 +22,16 @@ public class PicturePuzzle {
     helperanswer
     correctanswer
      */
+    @SerializedName("puzzleid")
     private int puzzleId;
+
+    @SerializedName("imageurl")
     private String imageUrl;
+
+    @SerializedName("helperanswer")
     private String helperAnswer;
+
+    @SerializedName("correctanswer")
     private String correctAnswer;
 
     public int getPuzzleId() {
