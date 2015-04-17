@@ -230,38 +230,45 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         api.getAllQuizByQuestId(id, new Callback<ArrayList<Quiz>>() {
             @Override
             public void success(ArrayList<Quiz> quizsTemp, Response response) {
-                quizs = quizsTemp;
-                quizCount = quizs.size();
-                LinearLayout quizActionProgressLinerSection = (LinearLayout) findViewById(R.id.quiz_action_progress_liner_section);
-                quizActionProgressLinerSection.setWeightSum(quizCount);
+                if(quizsTemp!= null){
+                    quizs = quizsTemp;
+                    quizCount = quizs.size();
+                    LinearLayout quizActionProgressLinerSection = (LinearLayout) findViewById(R.id.quiz_action_progress_liner_section);
+                    quizActionProgressLinerSection.setWeightSum(quizCount);
 
-                for (int i = 0; i < quizCount; i++) {
-                    button = new Button(QuizAction.this);
-                    if (i == 0) {
-                        button.setTextColor(getResources().getColor(R.color.white));
-                        button.setText("?");
+                    for (int i = 0; i < quizCount; i++) {
+                        button = new Button(QuizAction.this);
+                        if (i == 0) {
+                            button.setTextColor(getResources().getColor(R.color.white));
+                            button.setText("?");
+                        }
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                0,
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                1.0f
+                        );
+                        button.setBackgroundColor(getResources().getColor(R.color.grey_700));
+                        //params.setMargins(left, top, right, bottom);
+                        params.setMargins(5, 5, 5, 5);
+                        button.setId(buttonId);
+                        button.setOnClickListener(new ButtonProgressListener(buttonId));
+                        button.setLayoutParams(params);
+                        quizActionProgressLinerSection.addView(button);
+                        buttonId++;
                     }
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                            0,
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            1.0f
-                    );
-                    button.setBackgroundColor(getResources().getColor(R.color.grey_700));
-                    //params.setMargins(left, top, right, bottom);
-                    params.setMargins(5, 5, 5, 5);
-                    button.setId(buttonId);
-                    button.setOnClickListener(new ButtonProgressListener(buttonId));
-                    button.setLayoutParams(params);
-                    quizActionProgressLinerSection.addView(button);
-                    buttonId++;
+                    pupulateQuiz(FIRST_QUIZ);
+                }else{
+                    Log.d(LOG_TAG, "Quiz is null");
                 }
-                pupulateQuiz(FIRST_QUIZ);
+
 
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
-
+                Log.d(LOG_TAG, "Fail: " + retrofitError.toString());
+                Log.d(LOG_TAG, "Fail: " + retrofitError.getUrl());
+                Log.d(LOG_TAG, "Fail: " + retrofitError.getStackTrace());
             }
         });
     }

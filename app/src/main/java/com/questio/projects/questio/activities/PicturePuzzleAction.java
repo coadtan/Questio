@@ -15,8 +15,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.models.PicturePuzzle;
+import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
 import com.questio.projects.questio.utilities.QuestioHelper;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by ning jittima on 11/4/2558.
@@ -69,15 +75,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         bottomRight = (ImageView) findViewById(R.id.bottomRight);
         picturePuzzleAnswer = (EditText) findViewById(R.id.picture_puzzle_answer);
         picturePuzzleHint = (EditText) findViewById(R.id.picture_puzzle_hint);
-        topLeft.setOnClickListener(this);
-        topMiddle.setOnClickListener(this);
-        topRight.setOnClickListener(this);
-        middleLeft.setOnClickListener(this);
-        middleMiddle.setOnClickListener(this);
-        middleRight.setOnClickListener(this);
-        bottomLeft.setOnClickListener(this);
-        bottomMiddle.setOnClickListener(this);
-        bottomRight.setOnClickListener(this);
+
 
         String questId;
         String questName;
@@ -101,35 +99,8 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
 
         getSupportActionBar().setTitle(questName);
 
-        pp = PicturePuzzle.getAllPicturePuzzleByQuestId(Integer.parseInt(questId));
-        Log.d(LOG_TAG,QuestioHelper.getImgLink(pp.getImageUrl()));
-        Glide.with(this)
-                .load(QuestioHelper.getImgLink(pp.getImageUrl()))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(picturePuzzleQuestion);
+        requestPicturePuzzleData(Integer.parseInt(questId));
 
-        picturePuzzleHint.setHint(pp.getHelperAnswer());
-
-        picturePuzzleAnswer.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                currentAnswer = picturePuzzleAnswer.getText().toString();
-                if (currentAnswer.equalsIgnoreCase(pp.getCorrectAnswer())) {
-                    picturePuzzleAnswer.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
-                }
-            }
-        });
     }
 
     @Override
@@ -181,5 +152,67 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         //
     }
 
+    private void requestPicturePuzzleData(int id) {
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(QuestioConstants.ENDPOINT)
+                .build();
+        QuestioAPIService api = adapter.create(QuestioAPIService.class);
+        api.getPicturePuzzleByPuzzleId(id, new Callback<PicturePuzzle[]>() {
+            @Override
+            public void success(PicturePuzzle[] picturePuzzleTemp, Response response) {
+                if(picturePuzzleTemp[0]!= null){
+                    pp = picturePuzzleTemp[0];
 
+                    Log.d(LOG_TAG,QuestioHelper.getImgLink(pp.getImageUrl()));
+                    Glide.with(PicturePuzzleAction.this)
+                            .load(QuestioHelper.getImgLink(pp.getImageUrl()))
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(picturePuzzleQuestion);
+
+                    picturePuzzleHint.setHint(pp.getHelperAnswer());
+
+                    picturePuzzleAnswer.addTextChangedListener(new TextWatcher() {
+
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+                            currentAnswer = picturePuzzleAnswer.getText().toString();
+                            if (currentAnswer.equalsIgnoreCase(pp.getCorrectAnswer())) {
+                                picturePuzzleAnswer.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+                            }
+                        }
+                    });
+
+                    topLeft.setOnClickListener(PicturePuzzleAction.this);
+                    topMiddle.setOnClickListener(PicturePuzzleAction.this);
+                    topRight.setOnClickListener(PicturePuzzleAction.this);
+                    middleLeft.setOnClickListener(PicturePuzzleAction.this);
+                    middleMiddle.setOnClickListener(PicturePuzzleAction.this);
+                    middleRight.setOnClickListener(PicturePuzzleAction.this);
+                    bottomLeft.setOnClickListener(PicturePuzzleAction.this);
+                    bottomMiddle.setOnClickListener(PicturePuzzleAction.this);
+                    bottomRight.setOnClickListener(PicturePuzzleAction.this);
+                }else{
+                    Log.d(LOG_TAG,"Picture Puzzle is null");
+                }
+            }
+
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.d(LOG_TAG, "Fail: " + retrofitError.toString());
+                Log.d(LOG_TAG, "Fail: " + retrofitError.getUrl());
+                Log.d(LOG_TAG, "Fail: " + retrofitError.getStackTrace());
+            }
+        });
+    }
 }

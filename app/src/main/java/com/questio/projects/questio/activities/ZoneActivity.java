@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.adepters.QuestInActionAdapter;
 import com.questio.projects.questio.utilities.QuestioAPIService;
@@ -18,6 +20,7 @@ import com.questio.projects.questio.models.Quest;
 import com.questio.projects.questio.models.Zone;
 import com.questio.projects.questio.utilities.DownloadImageHelper;
 import com.questio.projects.questio.utilities.QuestioConstants;
+import com.questio.projects.questio.utilities.QuestioHelper;
 
 import java.util.ArrayList;
 
@@ -91,7 +94,7 @@ public class ZoneActivity extends ActionBarActivity {
         Log.d(LOG_TAG, "qrcode: " + qrcode);
         Log.d(LOG_TAG, "savedInstanceState: " + savedInstanceState);
         int zoneIdFromQRCode = Zone.findZoneIdByQRCode(Integer.parseInt(qrcode));
-        zone = Zone.getZoneByZoneId(zoneIdFromQRCode);
+        requestZoneData(zoneIdFromQRCode);
 
 
         requestQuestData(zoneIdFromQRCode);
@@ -128,15 +131,7 @@ public class ZoneActivity extends ActionBarActivity {
 
             }
         });
-        zonename.setText(zone.getZoneName());
-        item.setText(zone.getItemSet());
-        reward.setText(Integer.toString(zone.getRewardId()));
-        zonetype.setText(Integer.toString(zone.getZoneTypeId()));
 
-        if (!(zone.getImageUrl() == null || zone.getMiniMapUrl() == null)) {
-            new DownloadImageHelper(quest_action_picture).execute("http://52.74.64.61" + zone.getImageUrl());
-            new DownloadImageHelper(quest_action_minimap).execute("http://52.74.64.61" + zone.getMiniMapUrl());
-        }
 
     }
 
@@ -159,6 +154,44 @@ public class ZoneActivity extends ActionBarActivity {
             @Override
             public void failure(RetrofitError error) {
                 Log.d(LOG_TAG, "requestQuestData: failure");
+            }
+        });
+    }
+
+    private void requestZoneData(int id) {
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(QuestioConstants.ENDPOINT)
+                .build();
+        QuestioAPIService api = adapter.create(QuestioAPIService.class);
+        api.getZoneByZoneId(id, new Callback<Zone[]>() {
+            @Override
+            public void success(Zone[] zones, Response response) {
+                if(zones[0] != null){
+                    zone = zones[0];
+                    zonename.setText(zone.getZoneName());
+                    item.setText(zone.getItemSet());
+                    reward.setText(Integer.toString(zone.getRewardId()));
+                    zonetype.setText(Integer.toString(zone.getZoneTypeId()));
+
+                    if (!(zone.getImageUrl() == null || zone.getMiniMapUrl() == null)) {
+                        Glide.with(ZoneActivity.this)
+                                .load(QuestioHelper.getImgLink(zone.getImageUrl()))
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(quest_action_picture);
+                        Glide.with(ZoneActivity.this)
+                                .load(QuestioHelper.getImgLink(zone.getMiniMapUrl()))
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(quest_action_minimap);
+                    }
+                }else{
+                    Log.d(LOG_TAG, "Zone is null");
+                }
+
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+
             }
         });
     }

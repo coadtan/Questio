@@ -175,36 +175,41 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
         api.getRiddleByQuestId(id, new Callback<Riddle[]>() {
             @Override
             public void success(Riddle[] riddleTemp, Response response) {
-                r = riddleTemp[0];
-                Log.d(LOG_TAG, r.toString());
-                if(r.getHint1().equalsIgnoreCase("")){
-                    hint1Btn.setEnabled(false);
-                    hint1Btn.setClickable(false);
-                    hint1Btn.setBackgroundColor(getResources().getColor(R.color.grey_500));
-                    hintReveal1.setVisibility(View.INVISIBLE);
+                if(riddleTemp[0]!= null){
+                    r = riddleTemp[0];
+                    Log.d(LOG_TAG, r.toString());
+                    if(r.getHint1().equalsIgnoreCase("")){
+                        hint1Btn.setEnabled(false);
+                        hint1Btn.setClickable(false);
+                        hint1Btn.setBackgroundColor(getResources().getColor(R.color.grey_500));
+                        hintReveal1.setVisibility(View.INVISIBLE);
+                    }
+
+                    if(r.getHint2().equalsIgnoreCase("")){
+                        hint2Btn.setEnabled(false);
+                        hint2Btn.setClickable(false);
+                        hint2Btn.setBackgroundColor(getResources().getColor(R.color.grey_500));
+                        hintReveal2.setVisibility(View.INVISIBLE);
+                    }
+                    if(r.getHint3().equalsIgnoreCase("")){
+                        hint3Btn.setEnabled(false);
+                        hint3Btn.setClickable(false);
+                        hint3Btn.setBackgroundColor(getResources().getColor(R.color.grey_500));
+                        hintReveal3.setVisibility(View.INVISIBLE);
+                    }
+
+                    riddle.setText(r.getRidDetails());
+
+                    scanLimit = r.getScanLimit();
+
+                    hint1Btn.setOnClickListener(RiddleAction.this);
+                    hint2Btn.setOnClickListener(RiddleAction.this);
+                    hint3Btn.setOnClickListener(RiddleAction.this);
+                    scanHere.setOnClickListener(RiddleAction.this);
+                }else{
+                    Log.d(LOG_TAG, "Riddle is null");
                 }
 
-                if(r.getHint2().equalsIgnoreCase("")){
-                    hint2Btn.setEnabled(false);
-                    hint2Btn.setClickable(false);
-                    hint2Btn.setBackgroundColor(getResources().getColor(R.color.grey_500));
-                    hintReveal2.setVisibility(View.INVISIBLE);
-                }
-                if(r.getHint3().equalsIgnoreCase("")){
-                    hint3Btn.setEnabled(false);
-                    hint3Btn.setClickable(false);
-                    hint3Btn.setBackgroundColor(getResources().getColor(R.color.grey_500));
-                    hintReveal3.setVisibility(View.INVISIBLE);
-                }
-
-                riddle.setText(r.getRidDetails());
-
-                scanLimit = r.getScanLimit();
-
-                hint1Btn.setOnClickListener(RiddleAction.this);
-                hint2Btn.setOnClickListener(RiddleAction.this);
-                hint3Btn.setOnClickListener(RiddleAction.this);
-                scanHere.setOnClickListener(RiddleAction.this);
             }
 
             @Override

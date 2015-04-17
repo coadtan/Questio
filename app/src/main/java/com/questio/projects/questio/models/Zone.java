@@ -157,7 +157,7 @@ public class Zone {
     }
 
 
-    public static ArrayList<Zone> getAllZoneByFoorId(int floorId) {
+    /*public static ArrayList<Zone> getAllZoneByFoorId(int floorId) {
         ArrayList<Zone> al = null;
         Zone zone;
         final String URL = "http://52.74.64.61/api/select_all_zone_by_floorid.php?floorid=" + floorId;
@@ -211,9 +211,9 @@ public class Zone {
         }
 
         return al;
-    }
+    }*/
 
-    public static ArrayList<Zone> getAllZoneByPlaceId(int placeId) {
+    /*public static ArrayList<Zone> getAllZoneByPlaceId(int placeId) {
         ArrayList<Zone> al = null;
         Zone zone;
         final String URL = "http://52.74.64.61/api/select_all_zone_by_placeid.php?placeid=" + placeId;
@@ -274,7 +274,7 @@ public class Zone {
         }
 
         return al;
-    }
+    }*/
 
     public static int findZoneIdByQRCode(int qrCode) {
         int zoneId = 0;

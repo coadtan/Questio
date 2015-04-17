@@ -76,7 +76,7 @@ public class PicturePuzzle {
                 '}';
     }
 
-    public static PicturePuzzle getAllPicturePuzzleByQuestId(int id){
+    /*public static PicturePuzzle getAllPicturePuzzleByQuestId(int id){
        // ArrayList<PicturePuzzle> arr = null;
         PicturePuzzle pp = null;
         final String URL = "http://52.74.64.61/api/select_all_picturepuzzle_by_puzzleid.php?puzzleid="+id;
@@ -107,5 +107,5 @@ public class PicturePuzzle {
         }
         //return arr;
         return pp;
-    }
+    }*/
 }
