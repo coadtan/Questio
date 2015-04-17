@@ -44,4 +44,25 @@ public interface QuestioAPIService {
 
     @GET("/select_zone_by_zoneid.php")
     public void getZoneByZoneId(@Query("zoneid") int id, Callback<Zone[]> response);
+
+    @GET("/select_count_adventurer.php")
+    public void getCountAdventurer(Callback<Long[]> response);
+
+    @GET("/select_guserid_adventurer_from_guserid.php")
+    public void getGuserIdByGuserId(@Query("guserid") String gid, Callback<String[]> response);
+
+    @GET("/insert_adventurer.php")
+    public void addAdventurer(@Query("adventurerid") int id,
+                              @Query("guserid") String gid,
+                              @Query("email") String email,
+                              @Query("avatarid") int aid,
+                              @Query("detailid") int did,
+                              Callback<String[]> response);
+
+    @GET("/insert_adventurerdetails.php")
+    public void addAdventurerDetails(@Query("detailid") int id,
+                              @Query("fname") String fname,
+                              @Query("lname") String lname,
+                              @Query("telephone") String telephone,
+                              Callback<String[]> response);
 }

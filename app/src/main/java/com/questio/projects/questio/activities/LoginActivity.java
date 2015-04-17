@@ -20,6 +20,14 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.questio.projects.questio.QuestioApplication;
 import com.questio.projects.questio.R;
+import com.questio.projects.questio.utilities.HttpHelper;
+import com.questio.projects.questio.utilities.QuestioAPIService;
+import com.questio.projects.questio.utilities.QuestioConstants;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by coad4u4ever on 16-Apr-15.
@@ -35,6 +43,7 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
     private ConnectionResult mConnectionResult;
     private SignInButton btnSignIn;
     private Button btnSignOut, btnRevoke;
+    private long adventurerCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +156,7 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                         + personGooglePlusProfile + ", email: " + email
                         + ", Image: " + personPhotoUrl);
                 Log.d(LOG_TAG, ""+currentPerson.getId());
+                String res = new HttpHelper().execute("http://52.74.64.61/api/select_count_adventurer.php").get();
 
             } else {
                 Toast.makeText(getApplicationContext(),
@@ -220,5 +230,23 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
         }
     }
 
+    private void register() {
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(QuestioConstants.ENDPOINT)
+                .build();
+        QuestioAPIService api = adapter.create(QuestioAPIService.class);
+        api.getCountAdventurer(new Callback<Long[]>() {
+            @Override
+            public void success(Long[] aLong, Response response) {
+                adventurerCount = aLong[0];
+
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+
+            }
+        });
+    }
 
 }

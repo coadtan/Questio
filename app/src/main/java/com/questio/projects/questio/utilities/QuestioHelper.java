@@ -100,4 +100,23 @@ public class QuestioHelper {
         return "http://52.74.64.61"+path;
     }
 
+    public static long getAdventurerCountFromJson(String response) {
+        JSONArray arr = null;
+        Log.d(LOG_TAG, "getAdventurerCountFromJson: " + response);
+        long result = 0;
+        try {
+            arr = new JSONArray(response);
+            if (arr.length() != 0) {
+                for (int i = 0; i < arr.length(); i++) {
+                    JSONObject obj = (JSONObject) arr.get(i);
+                    result = Long.parseLong(obj.get("count").toString());
+
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 }
