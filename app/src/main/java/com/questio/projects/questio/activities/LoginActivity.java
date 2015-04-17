@@ -189,8 +189,8 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                                     aId = (QuestioHelper.getAdventurerCountFromJson(result) + 1);
                                     Log.d(LOG_TAG, "aId: " + aId);
 
-                                    api.addAdventurerDetails(aId, currentPerson.getDisplayName(), currentPerson.getDisplayName()
-                                            , "0888022222", new Callback<Response>() {
+                                    api.addAdventurerDetails(aId, currentPerson.getDisplayName(), currentPerson.getBirthday()
+                                            , new Callback<Response>() {
                                         @Override
                                         public void success(Response response, Response response2) {
 

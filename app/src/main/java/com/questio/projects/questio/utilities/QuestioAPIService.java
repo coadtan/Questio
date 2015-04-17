@@ -62,8 +62,7 @@ public interface QuestioAPIService {
 
     @GET("/insert_adventurerdetails.php")
     public void addAdventurerDetails(@Query("detailid") long id,
-                              @Query("fname") String fname,
-                              @Query("lname") String lname,
-                              @Query("telephone") String telephone,
+                              @Query("displayname") String displayName,
+                              @Query("birthdate") String birthDate,
                               Callback<Response> response);
 }
