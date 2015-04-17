@@ -11,6 +11,7 @@ import com.questio.projects.questio.models.Zone;
 import java.util.ArrayList;
 
 import retrofit.Callback;
+import retrofit.client.Response;
 import retrofit.http.GET;
 import retrofit.http.Query;
 
@@ -46,23 +47,23 @@ public interface QuestioAPIService {
     public void getZoneByZoneId(@Query("zoneid") int id, Callback<Zone[]> response);
 
     @GET("/select_count_adventurer.php")
-    public void getCountAdventurer(Callback<Long[]> response);
+    public void getCountAdventurer(Callback<Response> response);
 
     @GET("/select_guserid_adventurer_from_guserid.php")
-    public void getGuserIdByGuserId(@Query("guserid") String gid, Callback<String[]> response);
+    public void getGuserIdByGuserId(@Query("guserid") String gid, Callback<Response> response);
 
     @GET("/insert_adventurer.php")
-    public void addAdventurer(@Query("adventurerid") int id,
+    public void addAdventurer(@Query("adventurerid") long id,
                               @Query("guserid") String gid,
                               @Query("email") String email,
-                              @Query("avatarid") int aid,
-                              @Query("detailid") int did,
-                              Callback<String[]> response);
+                              @Query("avatarid") long aid,
+                              @Query("detailid") long did,
+                              Callback<Response> response);
 
     @GET("/insert_adventurerdetails.php")
-    public void addAdventurerDetails(@Query("detailid") int id,
+    public void addAdventurerDetails(@Query("detailid") long id,
                               @Query("fname") String fname,
                               @Query("lname") String lname,
                               @Query("telephone") String telephone,
-                              Callback<String[]> response);
+                              Callback<Response> response);
 }

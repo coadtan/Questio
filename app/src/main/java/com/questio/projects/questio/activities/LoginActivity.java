@@ -23,6 +23,7 @@ import com.questio.projects.questio.R;
 import com.questio.projects.questio.utilities.HttpHelper;
 import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
+import com.questio.projects.questio.utilities.QuestioHelper;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -44,6 +45,10 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
     private SignInButton btnSignIn;
     private Button btnSignOut, btnRevoke;
     private long adventurerCount;
+    boolean isNew;
+    Person currentPerson;
+    QuestioAPIService api;
+    Long aId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,12 +116,14 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                 break;
         }
     }
+
     private void signInWithGplus() {
         if (!mGoogleApiClient.isConnecting()) {
             mSignInClicked = true;
             resolveSignInError();
         }
     }
+
     private void signOutFromGplus() {
         if (mGoogleApiClient.isConnected()) {
             Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
@@ -125,6 +132,7 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
 
         }
     }
+
     private void resolveSignInError() {
         if (mConnectionResult.hasResolution()) {
             try {
@@ -136,13 +144,14 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
             }
         }
     }
+
     @Override
     public void onConnected(Bundle bundle) {
         mSignInClicked = false;
 
         try {
             if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
-                Person currentPerson = Plus.PeopleApi
+                currentPerson = Plus.PeopleApi
                         .getCurrentPerson(mGoogleApiClient);
                 String personName = currentPerson.getDisplayName();
                 Toast.makeText(this, "ยินดีต้อนรับ: " + personName, Toast.LENGTH_LONG).show();
@@ -151,13 +160,86 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                 String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
 
 
-
                 Log.d(LOG_TAG, "Name: " + personName + ", plusProfile: "
                         + personGooglePlusProfile + ", email: " + email
                         + ", Image: " + personPhotoUrl);
-                Log.d(LOG_TAG, ""+currentPerson.getId());
+                Log.d(LOG_TAG, "" + currentPerson.getId());
+                Log.d(LOG_TAG, "" + currentPerson.getBirthday());
                 String res = new HttpHelper().execute("http://52.74.64.61/api/select_count_adventurer.php").get();
 
+                // step 1: isNewAdventurer
+                RestAdapter adapter = new RestAdapter.Builder()
+                        .setEndpoint(QuestioConstants.ENDPOINT)
+                        .build();
+                api = adapter.create(QuestioAPIService.class);
+
+                api.getGuserIdByGuserId(currentPerson.getId(), new Callback<Response>() {
+                    @Override
+                    public void success(Response response, Response response2) {
+                        Log.d(LOG_TAG, "s:getGuserIdByGuserId");
+                        String result = QuestioHelper.responseToString(response);
+                        if (result.equalsIgnoreCase("null")) {
+                            api.getCountAdventurer(new Callback<Response>() {
+                                @Override
+                                public void success(Response response, Response response2) {
+
+                                    String result = QuestioHelper.responseToString(response);
+                                    Log.d(LOG_TAG, "result: " + result);
+
+                                    aId = (QuestioHelper.getAdventurerCountFromJson(result) + 1);
+                                    Log.d(LOG_TAG, "aId: " + aId);
+
+                                    api.addAdventurerDetails(aId, currentPerson.getDisplayName(), currentPerson.getDisplayName()
+                                            , "0888022222", new Callback<Response>() {
+                                        @Override
+                                        public void success(Response response, Response response2) {
+
+                                            String result = QuestioHelper.responseToString(response);
+                                            Log.d(LOG_TAG, "addAdDetail: " + result);
+
+                                            api.addAdventurer(aId, currentPerson.getId(), Plus.AccountApi.getAccountName(mGoogleApiClient),
+                                                    aId, aId, new Callback<Response>() {
+                                                        @Override
+                                                        public void success(Response response, Response response2) {
+
+                                                            String result = QuestioHelper.responseToString(response);
+                                                            Log.d(LOG_TAG, "addAdventurer: " + result);
+                                                        }
+
+                                                        @Override
+                                                        public void failure(RetrofitError error) {
+
+                                                        }
+                                                    });
+
+                                        }
+
+                                        @Override
+                                        public void failure(RetrofitError error) {
+
+                                        }
+                                    });
+
+
+                                }
+
+                                @Override
+                                public void failure(RetrofitError error) {
+
+                                }
+                            });
+                        } else {
+                            Log.d(LOG_TAG, "gid: " + result + " is already exists.");
+
+                        }
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.d(LOG_TAG, "f:getGuserIdByGuserId");
+                    }
+                });
             } else {
                 Toast.makeText(getApplicationContext(),
                         "Person information is null", Toast.LENGTH_LONG).show();
@@ -214,6 +296,7 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
             }
         }
     }
+
     private void revokeGplusAccess() {
         if (mGoogleApiClient.isConnected()) {
             Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
@@ -230,23 +313,49 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
         }
     }
 
-    private void register() {
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(QuestioConstants.ENDPOINT)
-                .build();
-        QuestioAPIService api = adapter.create(QuestioAPIService.class);
-        api.getCountAdventurer(new Callback<Long[]>() {
-            @Override
-            public void success(Long[] aLong, Response response) {
-                adventurerCount = aLong[0];
-
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-
-            }
-        });
-    }
 
 }
+
+
+/*
+
+                                @Override
+                                public void success(Long[] longs, Response response) {
+                                    Log.d(LOG_TAG, "s:getCountAdventurer");
+                                    aId = longs[0]+1;
+
+                                    api.addAdventurerDetails(aId, currentPerson.getDisplayName(), currentPerson.getDisplayName()
+                                    , "0888022222" , new Callback<String[]>() {
+                                        @Override
+                                        public void success(String[] strings, Response response) {
+
+                                            Log.d(LOG_TAG, "s:addAdventurerDetails");
+                                            api.addAdventurer(aId, currentPerson.getId(), Plus.AccountApi.getAccountName(mGoogleApiClient),
+                                                    aId, aId, new Callback<String[]>() {
+                                                        @Override
+                                                        public void success(String[] strings, Response response) {
+                                                            Log.d(LOG_TAG, "s:addAdventurer");
+                                                        }
+
+                                                        @Override
+                                                        public void failure(RetrofitError error) {
+                                                            Log.d(LOG_TAG, "f:addAdventurer");
+                                                        }
+                                                    });
+                                        }
+                                        @Override
+                                        public void failure(RetrofitError error) {
+                                            Log.d(LOG_TAG, "f:addAdventurerDetails");
+                                        }
+                                    });
+                                }
+                                @Override
+                                public void failure(RetrofitError error) {
+                                    Log.d(LOG_TAG, "f:getCountAdventurer");
+                                    Log.d(LOG_TAG, "f:getCountAdventurer " + error.getStackTrace().toString());
+                                    Log.d(LOG_TAG, "f:getCountAdventurer " + error.getUrl());
+                                    Log.d(LOG_TAG, "f:getCountAdventurer " + error.getBody());
+
+                                }
+
+ */
