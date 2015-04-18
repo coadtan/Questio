@@ -52,6 +52,11 @@ public interface QuestioAPIService {
     @GET("/select_guserid_adventurer_from_guserid.php")
     public void getGuserIdByGuserId(@Query("guserid") String gid, Callback<Response> response);
 
+    @GET("/select_adventurerid_adventurer_from_guserid.php")
+    public void getAdventurerIdByGuserId(@Query("guserid") String gid, Callback<Response> response);
+
+
+
     @GET("/insert_adventurer.php")
     public void addAdventurer(@Query("adventurerid") long id,
                               @Query("guserid") String gid,

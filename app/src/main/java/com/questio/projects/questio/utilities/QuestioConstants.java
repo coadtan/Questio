@@ -22,5 +22,8 @@ public class QuestioConstants {
     public static final String QRTYPE_BUILDING = "building";
     public static final String QRTYPE_PLACE = "place";
     public static final String QRTYPE_RIDDLE_ANSWER = "riddleanswer";
+    public static final String ADVENTURER_PROFILE = "adventurer_profile";
+    public static final String ADVENTURER_ID = "adventurer_id";
+    public static final String ADVENTURER_DISPLAYNAME = "adventurer_displayname";
 
 }

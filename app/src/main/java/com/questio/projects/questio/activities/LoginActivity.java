@@ -2,12 +2,11 @@ package com.questio.projects.questio.activities;
 
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -20,7 +19,6 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.questio.projects.questio.QuestioApplication;
 import com.questio.projects.questio.R;
-import com.questio.projects.questio.utilities.HttpHelper;
 import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
 import com.questio.projects.questio.utilities.QuestioHelper;
@@ -36,16 +34,14 @@ import retrofit.client.Response;
 public class LoginActivity extends ActionBarActivity implements View.OnClickListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private static final String LOG_TAG = LoginActivity.class.getSimpleName();
-    Toolbar toolbar;
+//    Toolbar toolbar;
     private static final int RC_SIGN_IN = 0;
     private GoogleApiClient mGoogleApiClient;
     private boolean mIntentInProgress;
     private boolean mSignInClicked;
     private ConnectionResult mConnectionResult;
     private SignInButton btnSignIn;
-    private Button btnSignOut, btnRevoke;
-    private long adventurerCount;
-    boolean isNew;
+    //Button btnSignOut, btnRevoke;
     Person currentPerson;
     QuestioAPIService api;
     Long aId;
@@ -54,15 +50,15 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
-        setSupportActionBar(toolbar);
+//        toolbar = (Toolbar) findViewById(R.id.app_bar);
+//        setSupportActionBar(toolbar);
         btnSignIn = (SignInButton) findViewById(R.id.sign_in_button);
-        btnSignOut = (Button) findViewById(R.id.sign_out_button);
-        btnRevoke = (Button) findViewById(R.id.revoke_button);
+//        btnSignOut = (Button) findViewById(R.id.sign_out_button);
+//        btnRevoke = (Button) findViewById(R.id.revoke_button);
 
         btnSignIn.setOnClickListener(this);
-        btnSignOut.setOnClickListener(this);
-        btnRevoke.setOnClickListener(this);
+//        btnSignOut.setOnClickListener(this);
+//        btnRevoke.setOnClickListener(this);
 
 //        mGoogleApiClient = new GoogleApiClient.Builder(this)
 //                .addConnectionCallbacks(this)
@@ -106,14 +102,14 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                 // Signin button clicked
                 signInWithGplus();
                 break;
-            case R.id.sign_out_button:
-                // Signout button clicked
-                signOutFromGplus();
-                break;
-            case R.id.revoke_button:
-                // Revoke access button clicked
-                revokeGplusAccess();
-                break;
+//            case R.id.sign_out_button:
+//                // Signout button clicked
+//                signOutFromGplus();
+//                break;
+//            case R.id.revoke_button:
+//                // Revoke access button clicked
+//                revokeGplusAccess();
+//                break;
         }
     }
 
@@ -124,14 +120,7 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
         }
     }
 
-    private void signOutFromGplus() {
-        if (mGoogleApiClient.isConnected()) {
-            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-            mGoogleApiClient.disconnect();
-            mGoogleApiClient.connect();
 
-        }
-    }
 
     private void resolveSignInError() {
         if (mConnectionResult.hasResolution()) {
@@ -165,7 +154,8 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                         + ", Image: " + personPhotoUrl);
                 Log.d(LOG_TAG, "" + currentPerson.getId());
                 Log.d(LOG_TAG, "" + currentPerson.getBirthday());
-                String res = new HttpHelper().execute("http://52.74.64.61/api/select_count_adventurer.php").get();
+
+
 
                 // step 1: isNewAdventurer
                 RestAdapter adapter = new RestAdapter.Builder()
@@ -188,6 +178,18 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
 
                                     aId = (QuestioHelper.getAdventurerCountFromJson(result) + 1);
                                     Log.d(LOG_TAG, "aId: " + aId);
+                                    // add to SharedPreferences
+                                    SharedPreferences.Editor editor = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE).edit();
+                                    editor.putLong(QuestioConstants.ADVENTURER_ID, aId);
+                                    editor.putString(QuestioConstants.ADVENTURER_DISPLAYNAME, currentPerson.getDisplayName());
+                                    editor.apply();
+                                    // end of - add to SharedPreferences
+
+                                    SharedPreferences prefs = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
+                                    String displayName = prefs.getString(QuestioConstants.ADVENTURER_DISPLAYNAME, null);
+                                    long id = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
+
+                                    Log.d(LOG_TAG, "displayName: " + displayName + " id: " + id);
 
                                     api.addAdventurerDetails(aId, currentPerson.getDisplayName(), currentPerson.getBirthday()
                                             , new Callback<Response>() {
@@ -230,6 +232,24 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                             });
                         } else {
                             Log.d(LOG_TAG, "gid: " + result + " is already exists.");
+
+                            api.getAdventurerIdByGuserId(currentPerson.getId(), new Callback<Response>() {
+                                @Override
+                                public void success(Response response, Response response2) {
+
+                                    String idStr = QuestioHelper.getJSONStringValueByTag("adventurerid", QuestioHelper.responseToString(response));
+                                    SharedPreferences.Editor editor = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE).edit();
+                                    editor.putLong(QuestioConstants.ADVENTURER_ID, Long.parseLong(idStr));
+                                    editor.putString(QuestioConstants.ADVENTURER_DISPLAYNAME, currentPerson.getDisplayName());
+                                    editor.apply();
+                                }
+
+                                @Override
+                                public void failure(RetrofitError error) {
+
+                                }
+                            });
+
 
                         }
 
@@ -310,6 +330,14 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                         }
 
                     });
+        }
+    }
+    private void signOutFromGplus() {
+        if (mGoogleApiClient.isConnected()) {
+            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+            mGoogleApiClient.disconnect();
+            mGoogleApiClient.connect();
+
         }
     }
 

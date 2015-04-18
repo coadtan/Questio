@@ -1,7 +1,9 @@
 package com.questio.projects.questio.sections;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -23,6 +25,7 @@ import com.google.android.gms.plus.model.people.Person;
 import com.questio.projects.questio.QuestioApplication;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.activities.LoginActivity;
+import com.questio.projects.questio.utilities.QuestioConstants;
 
 /**
  * Created by coad4u4ever on 01-Apr-15.
@@ -65,6 +68,12 @@ public class AvatarSection extends Fragment {
     }
 
     private void signOutFromGplus() {
+        SharedPreferences.Editor editor = getActivity().getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, Context.MODE_PRIVATE).edit();
+        editor.clear();
+        editor.apply();
+
+
+
         if (QuestioApplication.mGoogleApiClient.isConnected()) {
             final Dialog dialog = new Dialog(getActivity());
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -95,7 +104,6 @@ public class AvatarSection extends Fragment {
 
                     Plus.AccountApi.clearDefaultAccount(QuestioApplication.mGoogleApiClient);
                     QuestioApplication.mGoogleApiClient.disconnect();
-                    QuestioApplication.mGoogleApiClient.connect();
                     QuestioApplication.setLogin(false);
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(intent);

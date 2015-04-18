@@ -5,10 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/holo_orange_dark" />
+
 
     <TextView
         android:id="@+id/quiz_sequence"

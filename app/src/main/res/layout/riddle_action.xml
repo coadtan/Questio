@@ -8,10 +8,7 @@
         android:id="@+id/app_bar"
         layout="@layout/toolbar_riddle_layout" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/holo_orange_dark" />
+
 
     <FrameLayout
         android:layout_width="match_parent"

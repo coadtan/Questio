@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/windowBackground"
     android:orientation="vertical">
 
     <include
         android:id="@+id/app_bar"
         layout="@layout/toolbar_layout" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/holo_orange_dark" />
+
 
     <FrameLayout
         android:id="@+id/quest_browsing_top_frame"

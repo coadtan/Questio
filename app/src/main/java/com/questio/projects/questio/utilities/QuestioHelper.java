@@ -146,4 +146,24 @@ public class QuestioHelper {
         return sb.toString();
     }
 
+
+    public static String getJSONStringValueByTag(String tag, String result){
+
+            JSONArray arr = null;
+            Log.d(LOG_TAG, "getJSONStringValueByTag: " + result);
+            String resultForReturn = null;
+            try {
+                arr = new JSONArray(result);
+                if (arr.length() != 0) {
+                    for (int i = 0; i < arr.length(); i++) {
+                        JSONObject obj = (JSONObject) arr.get(i);
+                        resultForReturn = obj.get(tag).toString();
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return resultForReturn;
+    }
+
 }

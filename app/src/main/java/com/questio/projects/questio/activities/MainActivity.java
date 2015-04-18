@@ -1,6 +1,7 @@
 package com.questio.projects.questio.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
@@ -13,6 +14,7 @@ import com.questio.projects.questio.libraries.slidingtabs.SlidingTabsBasicFragme
 import com.questio.projects.questio.models.Place;
 import com.questio.projects.questio.utilities.HttpHelper;
 import com.questio.projects.questio.utilities.PlaceSync;
+import com.questio.projects.questio.utilities.QuestioConstants;
 import com.questio.projects.questio.utilities.QuestioHelper;
 
 import java.util.concurrent.ExecutionException;
@@ -24,11 +26,22 @@ import java.util.concurrent.ExecutionException;
 public class MainActivity extends ActionBarActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(!QuestioApplication.isLogin()){
+        SharedPreferences.Editor editor = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE).edit();
+        editor.clear();
+        editor.apply();
+        SharedPreferences prefs = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
+        String displayName = prefs.getString(QuestioConstants.ADVENTURER_DISPLAYNAME, null);
+        long id = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
+
+        Log.d(LOG_TAG, "displayName: " + displayName + " id: " + id);
+
+
+        if (!QuestioApplication.isLogin()) {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
         }
@@ -59,6 +72,6 @@ public class MainActivity extends ActionBarActivity {
             transaction.replace(R.id.sample_content_fragment, fragment);
             transaction.commit();
         }
-        Log.d(LOG_TAG,"count: " + place.getPlaceCount());
+        Log.d(LOG_TAG, "count: " + place.getPlaceCount());
     }
 }

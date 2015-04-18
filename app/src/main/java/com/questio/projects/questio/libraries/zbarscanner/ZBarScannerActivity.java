@@ -3,6 +3,7 @@ package com.questio.projects.questio.libraries.zbarscanner;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.questio.projects.questio.R;
@@ -53,6 +55,13 @@ public class ZBarScannerActivity extends FragmentActivity implements Camera.Prev
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.zbar_layout_area);
+        TextView textView1 = (TextView)findViewById(R.id.text1);
+        TextView textView2 = (TextView)findViewById(R.id.text2);
+
+
+        Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/THSarabunNew.ttf");
+        textView1.setTypeface(custom_font);
+        textView2.setTypeface(custom_font);
 
         mAutoFocusHandler = new Handler();
         // Create and configure the ImageScanner;

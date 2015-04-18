@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
+    private static final String LOG_TAG = CameraPreview.class.getSimpleName();
     private final String TAG = "CameraPreview";
 
     SurfaceView mSurfaceView;
@@ -73,8 +74,11 @@ class CameraPreview extends ViewGroup implements SurfaceHolder.Callback {
             int previewWidth = width;
             int previewHeight = height;
             if (mPreviewSize != null) {
-                previewWidth = mPreviewSize.width;
-                previewHeight = mPreviewSize.height;
+//                previewWidth = mPreviewSize.width;
+//                previewHeight = mPreviewSize.height;
+                previewWidth = mPreviewSize.height;
+                previewHeight = mPreviewSize.width;
+                Log.d(LOG_TAG,"previewWidth: " + previewWidth + " previewHeight: "+ previewHeight);
             }
 
             // Center the child SurfaceView within the parent.
