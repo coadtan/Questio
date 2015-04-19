@@ -2,6 +2,9 @@ package com.questio.projects.questio.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
 /**
  * Created by ning jittima on 2/4/2558.
  */
@@ -128,6 +131,52 @@ public class Quest {
                 '}';
     }
 
+
+    public static int[] countAttribute(ArrayList<Quest> arrayList) {
+        int[] count = new int[3];
+        HashSet<String> buildingSet = new HashSet<>();
+        HashSet<String> floorSet = new HashSet<>();
+        HashSet<String> zoneSet = new HashSet<>();
+        for (Quest q : arrayList) {
+            buildingSet.add(q.getBuildingName());
+            floorSet.add(q.getFloorName());
+            zoneSet.add(q.getZoneName());
+        }
+
+        count[0] = buildingSet.size();
+        count[1] = floorSet.size();
+        count[2] = zoneSet.size();
+        return count;
+    }
+
+    public static String[] getBuildingNamesArray(String tag, ArrayList<Quest> arrayList) {
+        if (tag.equalsIgnoreCase("building")) {
+            String[] buildingNames;
+            HashSet<String> buildingSet = new HashSet<>();
+            for (Quest q : arrayList) {
+                buildingSet.add(q.getBuildingName());
+            }
+            buildingNames = buildingSet.toArray(new String[buildingSet.size()]);
+            return buildingNames;
+        } else if (tag.equalsIgnoreCase("floor")) {
+            String[] floorNames;
+            HashSet<String> floorSet = new HashSet<>();
+            for (Quest q : arrayList) {
+                floorSet.add(q.getFloorName());
+            }
+            floorNames = floorSet.toArray(new String[floorSet.size()]);
+            return floorNames;
+        }else if (tag.equalsIgnoreCase("zone")) {
+            String[] zoneNames;
+            HashSet<String> zoneSet = new HashSet<>();
+            for (Quest q : arrayList) {
+                zoneSet.add(q.getZoneName());
+            }
+            zoneNames = zoneSet.toArray(new String[zoneSet.size()]);
+            return zoneNames;
+        }
+        return null;
+    }
 //    public static ArrayList<Quest> getAllQuestByPlaceId(int placeId) {
 //        ArrayList<Quest> arr = null;
 //        final String URL = "http://52.74.64.61/api/select_all_quest_by_placeid_location_name.php?placeid=" + placeId;

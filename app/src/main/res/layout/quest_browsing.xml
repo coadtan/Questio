@@ -9,8 +9,15 @@
         android:id="@+id/app_bar"
         layout="@layout/toolbar_layout" />
 
-
-
+    <Button
+        android:id="@+id/place_btn_triger_map"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="แสดง แผนที่"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="30sp" />
     <FrameLayout
         android:id="@+id/quest_browsing_top_frame"
         android:layout_width="match_parent"
@@ -26,15 +33,101 @@
 
     </FrameLayout>
 
-    <Spinner
-        android:id="@+id/quest_browsing_spinner"
+    <Button
+        android:id="@+id/place_btn_triger_filter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"
+        android:background="@color/colorPrimary"
+        android:text="คัดกรอง ภารกิจ"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="30sp" />
 
-        />
+    <LinearLayout
+        android:id="@+id/place_activity_filter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="7">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:padding="5dip"
+                android:text="ตึก"
+                android:textColor="@color/grey_700"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+
+            <Spinner
+                android:id="@+id/place_building_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:gravity="end" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="7">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:padding="5dip"
+                android:text="ชั้น"
+                android:textColor="@color/grey_700"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/place_floor_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:gravity="end" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="7">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:padding="5dip"
+                android:text="โซน"
+                android:textColor="@color/grey_700"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/place_zone_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:gravity="end" />
+        </LinearLayout>
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/quest_browsing_null"

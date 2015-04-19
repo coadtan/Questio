@@ -37,27 +37,27 @@ public class QuestRecycleViewAdapter extends RecyclerView.Adapter<QuestListRowHo
         switch (questItem.getDiffId()) {
             case 1:
                 questListRowHolder.cardview_quest.setCardBackgroundColor(Color.parseColor("#ff76ff53"));
-                questListRowHolder.cardview_quest.setRadius(40);
+               // questListRowHolder.cardview_quest.setRadius(40);
                 break;
             case 2:
                 questListRowHolder.cardview_quest.setCardBackgroundColor(Color.parseColor("#CCFF99"));
-                questListRowHolder.cardview_quest.setRadius(40);
+                //questListRowHolder.cardview_quest.setRadius(40);
                 break;
             case 3:
                 questListRowHolder.cardview_quest.setCardBackgroundColor(Color.parseColor("#fffbff61"));
-                questListRowHolder.cardview_quest.setRadius(40);
+              //  questListRowHolder.cardview_quest.setRadius(40);
                 break;
             case 4:
                 questListRowHolder.cardview_quest.setCardBackgroundColor(Color.parseColor("#ffffce44"));
-                questListRowHolder.cardview_quest.setRadius(40);
+             //   questListRowHolder.cardview_quest.setRadius(40);
                 break;
             case 5:
                 questListRowHolder.cardview_quest.setCardBackgroundColor(Color.parseColor("#ffff9022"));
-                questListRowHolder.cardview_quest.setRadius(40);
+              //  questListRowHolder.cardview_quest.setRadius(40);
                 break;
             default:
                 questListRowHolder.cardview_quest.setCardBackgroundColor(Color.parseColor("#ff362913"));
-                questListRowHolder.cardview_quest.setRadius(40);
+              //  questListRowHolder.cardview_quest.setRadius(40);
                 break;
         }
 

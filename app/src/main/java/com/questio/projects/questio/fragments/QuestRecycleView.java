@@ -22,6 +22,7 @@ public class QuestRecycleView extends Fragment {
     RecyclerView questBrowsingRecyclerView;
     QuestRecycleViewAdapter adapterRecycleView;
     View rootView;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,10 +35,12 @@ public class QuestRecycleView extends Fragment {
         Log.d(LOG_TAG, "QuestRecycleView called");
         rootView = inflater.inflate(R.layout.quest_recycle_fragment, container, false);
         Bundle args = getArguments();
-        questBrowsingRecyclerView = (RecyclerView)rootView.findViewById(R.id.quest_browsing_recycler_view);
+
+        questBrowsingRecyclerView = (RecyclerView) rootView.findViewById(R.id.quest_browsing_recycler_view);
         questBrowsingRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapterRecycleView = new QuestRecycleViewAdapter(getActivity(), ((PlaceActivity)getActivity()).getQuests() );
+        adapterRecycleView = new QuestRecycleViewAdapter(getActivity(), ((PlaceActivity) getActivity()).getQuests());
         questBrowsingRecyclerView.setAdapter(adapterRecycleView);
+
 
         return rootView;
     }
