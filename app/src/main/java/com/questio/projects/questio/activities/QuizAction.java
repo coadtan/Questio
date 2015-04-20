@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 import retrofit.Callback;
@@ -43,7 +44,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
     int quizCount;
 
     ArrayList<Quiz> quizs;
-    ArrayList<QuizStatus> quizStatus;
+    HashMap<String, String> quizStatusHashMap;
 
     TextView quiz_question;
     TextView quiz_sequence;
@@ -222,8 +223,6 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
             pupulateQuiz(v.getId());
             changeButtonIndicator(v.getId());
         }
-
-
     }
 
     public void changeButtonIndicator(int selected) {
@@ -254,10 +253,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                     quizs = quizsTemp;
                     requestProgressData();
                     quizCount = quizs.size();
-                    quizStatus = getRequestStatus(Integer.parseInt(Integer.toString(qid) + (int) adventurerId));
-                    for(QuizStatus qs : quizStatus){
-                        Log.d(LOG_TAG, "quiz status: " + qs.toString());
-                    }
+                    Log.d(LOG_TAG, "ref: " + Integer.parseInt(Integer.toString(qid) + (int) adventurerId));
                     LinearLayout quizActionProgressLinerSection = (LinearLayout) findViewById(R.id.quiz_action_progress_liner_section);
                     quizActionProgressLinerSection.setWeightSum(quizCount);
 
@@ -276,6 +272,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                         //params.setMargins(left, top, right, bottom);
                         params.setMargins(5, 5, 5, 5);
                         button.setId(buttonId);
+                        button.setContentDescription(Integer.toString(quizs.get(i).getQuizId()));
                         button.setOnClickListener(new ButtonProgressListener(buttonId));
                         button.setLayoutParams(params);
                         quizActionProgressLinerSection.addView(button);
@@ -286,6 +283,19 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                     Log.d(LOG_TAG, "Quiz is null");
                 }
 
+                quizStatusHashMap = getRequestStatus(Integer.parseInt(Integer.toString(qid) + (int) adventurerId));
+                if(!quizStatusHashMap.isEmpty()) {
+                    Button bProgess;
+                    String statusStr;
+                    int status;
+                    for (int i = 0; i < quizCount; i++) {
+                        bProgess = (Button)findViewById(i);
+                        String quizIdFromButton = bProgess.getContentDescription().toString();
+                        statusStr = quizStatusHashMap.get(quizIdFromButton);
+                        status = Integer.parseInt(statusStr);
+                        populateButtonQuizProgress(i, status);
+                    }
+                }
 
             }
 
@@ -368,15 +378,15 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
 
     }
 
-    private ArrayList<QuizStatus> getRequestStatus(int ref) {
-        ArrayList<QuizStatus> arr = null;
+    private HashMap<String, String> getRequestStatus(int ref) {
+        HashMap<String,String> hashMap = new HashMap<>();
         final String URL =
                 "http://52.74.64.61/api/select_all_quizprogress_by_ref.php?ref=" + ref;
         try {
             String response = new HttpHelper().execute(URL).get();
+            Log.d(LOG_TAG, "response: " + response);
             JSONArray jsonArray = new JSONArray(response);
             if (jsonArray.length() != 0) {
-                arr = new ArrayList<>();
                 for (int i = 0; i < jsonArray.length(); i++) {
                     QuizStatus qs = new QuizStatus();
                     JSONObject jsonObject = (JSONObject) jsonArray.get(i);
@@ -384,14 +394,14 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                     String status = jsonObject.get("statusid").toString();
                     qs.setQuizId(Integer.parseInt(quizid));
                     qs.setStatus(Integer.parseInt(status));
-                    arr.add(qs);
+                    hashMap.put(quizid,status );
                 }
 
             }
         } catch (InterruptedException | ExecutionException | JSONException e) {
             e.printStackTrace();
         }
-        return arr;
+        return hashMap;
     }
 
 
