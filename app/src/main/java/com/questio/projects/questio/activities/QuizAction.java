@@ -57,6 +57,8 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
     Button quiz_answer_c;
     Button quiz_answer_d;
 
+    TextView quiz_id;
+
     int qid;
     long adventurerId;
     int zid;
@@ -65,6 +67,8 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
     Quiz q;
 
     QuestioAPIService api;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +84,8 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         quiz_answer_b = (Button) findViewById(R.id.quiz_answer_b);
         quiz_answer_c = (Button) findViewById(R.id.quiz_answer_c);
         quiz_answer_d = (Button) findViewById(R.id.quiz_answer_d);
+        quiz_id = (TextView) findViewById(R.id.quiz_id);
+
 
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -180,6 +186,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
             public void onClick(View v) {
                 if (q.getAnswerId().equalsIgnoreCase(Integer.toString(answer))) {
                     onCorrect(q.getSeqId());
+
                 } else {
                     onIncorrect(q.getSeqId());
                 }
@@ -193,12 +200,18 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
     void onCorrect(int quizId) {
         Button b = (Button) findViewById(quizId - 1);
         b.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+        updateStatus(QuestioConstants.QUEST_CORRECT);
+        b.setEnabled(false);
+        b.setClickable(false);
     }
 
     void onIncorrect(int quizId) {
         Log.d(LOG_TAG, "Before minus 1: " + quizId);
         Button b = (Button) findViewById(quizId - 1);
         b.setBackgroundColor(getResources().getColor(R.color.red_quiz_wrong));
+        updateStatus(QuestioConstants.QUEST_FAILED);
+        b.setEnabled(false);
+        b.setClickable(false);
     }
 
     void pupulateQuiz(int i) {
@@ -209,6 +222,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         quiz_answer_b.setText(q.getChoiceB());
         quiz_answer_c.setText(q.getChoiceC());
         quiz_answer_d.setText(q.getChoiceD());
+        quiz_id.setText(Integer.toString(q.getQuizId()));
     }
 
     private class ButtonProgressListener implements Button.OnClickListener {
@@ -231,9 +245,11 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         for (int i = 0; i < quizs.size(); i++) {
             b = (Button) v.findViewById(i);
             if (i == selected) {
-                //b.setBackgroundResource(R.color.yellow_quiz_selected);
+                b.setBackgroundResource(R.color.yellow_quiz_unanswered);
                 b.setTextColor(getResources().getColor(R.color.white));
                 b.setText("?");
+                updateStatus(QuestioConstants.QUEST_NOT_FINISHED);
+
             } else {
                 b.setText("");
                 //b.setBackgroundResource(R.color.grey_700);
@@ -370,8 +386,12 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         Button b = (Button) findViewById(buttonId);
         if (status == QuestioConstants.QUEST_CORRECT) {
             b.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+            b.setEnabled(false);
+            b.setClickable(false);
         } else if (status == QuestioConstants.QUEST_FAILED) {
             b.setBackgroundColor(getResources().getColor(R.color.red_quiz_wrong));
+            b.setEnabled(false);
+            b.setClickable(false);
         } else if (status == QuestioConstants.QUEST_NOT_FINISHED) {
             b.setBackgroundColor(getResources().getColor(R.color.yellow_quiz_unanswered));
         }
@@ -394,7 +414,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                     String status = jsonObject.get("statusid").toString();
                     qs.setQuizId(Integer.parseInt(quizid));
                     qs.setStatus(Integer.parseInt(status));
-                    hashMap.put(quizid,status );
+                    hashMap.put(quizid, status);
                 }
 
             }
@@ -404,6 +424,28 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         return hashMap;
     }
 
+    private void updateStatus(int status){
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(QuestioConstants.ENDPOINT)
+                .build();
+        api = adapter.create(QuestioAPIService.class);
+        api.updateStatusQuizProgressByRefAndQuizId(status, Integer.parseInt(Integer.toString(qid) + (int) adventurerId), q.getQuizId(), new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+//                String questioStatus = QuestioHelper.responseToString(response);
+//                if (QuestioHelper.getJSONStringValueByTag("status", questioStatus).equalsIgnoreCase("1")) {
+//                    Log.d(LOG_TAG, "Update Successful");
+//                } else {
+//                    Log.d(LOG_TAG, "Update Failed: " + questioStatus);
+//                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
 
     private class QuizStatus {
         private int quizId;
@@ -433,4 +475,5 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                     '}';
         }
     }
+
 }

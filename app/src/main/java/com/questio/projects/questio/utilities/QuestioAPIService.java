@@ -101,14 +101,14 @@ public interface QuestioAPIService {
 
     @GET("/update_status_questprogress_by_questid_and_adventurerid.php")
     public void updateStatusQuestProgressByQuestIdAndAdventurerId(
-            @Query("status") int status,
+            @Query("statusid") int status,
             @Query("questid") int questid,
             @Query("adventurerid") long adventurerid,
             Callback<Response> response);
 
     @GET("/update_status_quizprogress_by_ref_and_quizid.php")
     public void updateStatusQuizProgressByRefAndQuizId(
-            @Query("status") int status,
+            @Query("statusid") int status,
             @Query("ref") int ref,
             @Query("quizid") int quizid,
             Callback<Response> response);
