@@ -1,6 +1,7 @@
 package com.questio.projects.questio.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -105,25 +106,31 @@ public class ZoneActivity extends ActionBarActivity {
                 TextView questId = (TextView) view.findViewById(R.id.questid);
                 TextView questName = (TextView) view.findViewById(R.id.questname);
                 TextView questTypeInvisible = (TextView) view.findViewById(R.id.questTypeInvisible);
+                TextView zoneId = (TextView) view.findViewById(R.id.quest_zoneId);
                 String questIdForIntent = questId.getText().toString();
                 String questNameForIntent = questName.getText().toString();
+                String zoneIdForIntent = zoneId.getText().toString();
                 switch (Integer.parseInt(questTypeInvisible.getText().toString())) {
                     case 1:
                         Intent intentToQuiz = new Intent(ZoneActivity.this, QuizAction.class);
                         intentToQuiz.putExtra(QuestioConstants.QUEST_ID, questIdForIntent);
                         intentToQuiz.putExtra(QuestioConstants.QUEST_NAME, questNameForIntent);
+                        intentToQuiz.putExtra(QuestioConstants.QUEST_ZONE_ID, zoneIdForIntent);
+
                         startActivity(intentToQuiz);
                         break;
                     case 2:
                         Intent intentToRiddle = new Intent(ZoneActivity.this, RiddleAction.class);
                         intentToRiddle.putExtra(QuestioConstants.QUEST_ID, questIdForIntent);
                         intentToRiddle.putExtra(QuestioConstants.QUEST_NAME, questNameForIntent);
+                        intentToRiddle.putExtra(QuestioConstants.QUEST_ZONE_ID, zoneIdForIntent);
                         startActivity(intentToRiddle);
                         break;
                     case 3:
                         Intent intentToPuzzle = new Intent(ZoneActivity.this, PicturePuzzleAction.class);
                         intentToPuzzle.putExtra(QuestioConstants.QUEST_ID, questIdForIntent);
                         intentToPuzzle.putExtra(QuestioConstants.QUEST_NAME, questNameForIntent);
+                        intentToPuzzle.putExtra(QuestioConstants.QUEST_ZONE_ID, zoneIdForIntent);
                         startActivity(intentToPuzzle);
                         break;
                 }
@@ -195,4 +202,7 @@ public class ZoneActivity extends ActionBarActivity {
             }
         });
     }
+
+
+
 }

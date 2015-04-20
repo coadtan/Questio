@@ -70,4 +70,69 @@ public interface QuestioAPIService {
                               @Query("displayname") String displayName,
                               @Query("birthdate") String birthDate,
                               Callback<Response> response);
+
+    @GET("/select_all_questprogress_by_questid_and_adventurerid.php")
+    public void getQuestProgressByQuestIdAndAdventurerId(
+            @Query("questid") int questid,
+            @Query("adventurerid") long adventurerid,
+            Callback<Response> response);
+
+    @GET("/select_all_questprogress_by_adventurerid.php")
+    public void getQuestProgressByAdventurerId(
+            @Query("adventurerid") long adventurerid,
+            Callback<Response> response);
+
+    @GET("/select_all_questprogress_by_questid.php")
+    public void getQuestProgressByQuestId(
+            @Query("questid") int questid,
+            Callback<Response> response);
+
+    @GET("/select_all_quizprogress_by_ref.php")
+    public void getQuizProgressByRef(
+            @Query("ref") int ref,
+            Callback<Response> response);
+
+    @GET("/update_score_questprogress_by_questid_and_adventurerid.php")
+    public void updateScoreQuestProgressByQuestIdAndAdventurerId(
+            @Query("score") int score,
+            @Query("questid") int questid,
+            @Query("adventurerid") long adventurerid,
+            Callback<Response> response);
+
+    @GET("/update_status_questprogress_by_questid_and_adventurerid.php")
+    public void updateStatusQuestProgressByQuestIdAndAdventurerId(
+            @Query("status") int status,
+            @Query("questid") int questid,
+            @Query("adventurerid") long adventurerid,
+            Callback<Response> response);
+
+    @GET("/update_status_quizprogress_by_ref_and_quizid.php")
+    public void updateStatusQuizProgressByRefAndQuizId(
+            @Query("status") int status,
+            @Query("ref") int ref,
+            @Query("quizid") int quizid,
+            Callback<Response> response);
+
+    @GET("/insert_questprogress.php")
+    public void addQuestProgress(
+            @Query("questid") int qid,
+            @Query("adventurerid") long aid,
+            @Query("ref") int ref,
+            @Query("zoneid") int zid,
+            @Query("questtypeid") int qtid,
+            Callback<Response> response);
+
+    @GET("/insert_questprogress.php")
+    public void addQuestProgressNonQuiz(
+            @Query("questid") int qid,
+            @Query("adventurerid") long aid,
+            @Query("zoneid") int zid,
+            @Query("questtypeid") int qtid,
+            Callback<Response> response);
+
+    @GET("/insert_quizprogress.php")
+    public void addQuizProgress(
+            @Query("ref") int ref,
+            @Query("quizid") int aid,
+            Callback<Response> response);
 }

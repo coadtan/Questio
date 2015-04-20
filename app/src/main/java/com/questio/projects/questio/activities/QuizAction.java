@@ -1,6 +1,7 @@
 package com.questio.projects.questio.activities;
 
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,10 +15,17 @@ import android.widget.TextView;
 
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.models.Quiz;
+import com.questio.projects.questio.utilities.HttpHelper;
 import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
+import com.questio.projects.questio.utilities.QuestioHelper;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -35,6 +43,8 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
     int quizCount;
 
     ArrayList<Quiz> quizs;
+    ArrayList<QuizStatus> quizStatus;
+
     TextView quiz_question;
     TextView quiz_sequence;
 
@@ -46,9 +56,14 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
     Button quiz_answer_c;
     Button quiz_answer_d;
 
+    int qid;
+    long adventurerId;
+    int zid;
 
     int currentQuiz;
     Quiz q;
+
+    QuestioAPIService api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,32 +89,37 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         });
         String questId;
         String questName;
+        String zoneId;
+
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
 
             if (extras == null) {
                 questId = null;
                 questName = null;
+                zoneId = null;
             } else {
                 questId = extras.getString(QuestioConstants.QUEST_ID);
                 questName = extras.getString(QuestioConstants.QUEST_NAME);
+                zoneId = extras.getString(QuestioConstants.QUEST_ZONE_ID);
             }
         } else {
             questId = (String) savedInstanceState.getSerializable(QuestioConstants.QUEST_ID);
             questName = (String) savedInstanceState.getSerializable(QuestioConstants.QUEST_NAME);
+            zoneId = (String) savedInstanceState.getSerializable(QuestioConstants.QUEST_ZONE_ID);
         }
         Log.d(LOG_TAG, "questid: " + questId + " questName: " + questName);
+        SharedPreferences prefs = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
+        adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
 
-
-       // quizs = Quiz.getAllQuizByQuestId(Integer.parseInt(questId));
+        qid = Integer.parseInt(questId);
+        zid = Integer.parseInt(zoneId);
+        // quizs = Quiz.getAllQuizByQuestId(Integer.parseInt(questId));
         requestQuizData(Integer.parseInt(questId));
         currentQuiz = 0;
 
 
-
-
         getSupportActionBar().setTitle(questName);
-
 
 
         quiz_answer_a.setOnClickListener(this);
@@ -170,14 +190,14 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
     }
 
     void onCorrect(int quizId) {
-        Button b = (Button)findViewById(quizId-1);
+        Button b = (Button) findViewById(quizId - 1);
         b.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
     }
 
     void onIncorrect(int quizId) {
         Log.d(LOG_TAG, "Before minus 1: " + quizId);
-        Button b = (Button)findViewById(quizId-1);
-        b.setBackgroundColor(getResources().getColor(R.color.yellow_quiz_wrong));
+        Button b = (Button) findViewById(quizId - 1);
+        b.setBackgroundColor(getResources().getColor(R.color.red_quiz_wrong));
     }
 
     void pupulateQuiz(int i) {
@@ -222,17 +242,22 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         }
     }
 
-    private void requestQuizData(int id){
+    private void requestQuizData(int id) {
         RestAdapter adapter = new RestAdapter.Builder()
                 .setEndpoint(QuestioConstants.ENDPOINT)
                 .build();
-        QuestioAPIService api = adapter.create(QuestioAPIService.class);
+        api = adapter.create(QuestioAPIService.class);
         api.getAllQuizByQuestId(id, new Callback<ArrayList<Quiz>>() {
             @Override
             public void success(ArrayList<Quiz> quizsTemp, Response response) {
-                if(quizsTemp!= null){
+                if (quizsTemp != null) {
                     quizs = quizsTemp;
+                    requestProgressData();
                     quizCount = quizs.size();
+                    quizStatus = getRequestStatus(Integer.parseInt(Integer.toString(qid) + (int) adventurerId));
+                    for(QuizStatus qs : quizStatus){
+                        Log.d(LOG_TAG, "quiz status: " + qs.toString());
+                    }
                     LinearLayout quizActionProgressLinerSection = (LinearLayout) findViewById(R.id.quiz_action_progress_liner_section);
                     quizActionProgressLinerSection.setWeightSum(quizCount);
 
@@ -257,7 +282,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                         buttonId++;
                     }
                     pupulateQuiz(FIRST_QUIZ);
-                }else{
+                } else {
                     Log.d(LOG_TAG, "Quiz is null");
                 }
 
@@ -271,5 +296,131 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                 Log.d(LOG_TAG, "Fail: " + retrofitError.getStackTrace());
             }
         });
+    }
+
+    private void requestProgressData() {
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(QuestioConstants.ENDPOINT)
+                .build();
+        api = adapter.create(QuestioAPIService.class);
+//        api.getQuestProgressByQuestIdAndAdventurerId(qid, adventurerId, new Callback<Response>() {
+//            @Override
+//            public void success(Response response, Response response2) {
+//                if (QuestioHelper.responseToString(response).equalsIgnoreCase("null")){
+        Log.d(LOG_TAG, "No Progress in Quest");
+        api.addQuestProgress(qid, adventurerId, Integer.parseInt(Integer.toString(qid) + (int) adventurerId), zid, 1, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                String questioStatus = QuestioHelper.responseToString(response);
+//                if (QuestioHelper.getJSONStringValueByTag("status", questioStatus).equalsIgnoreCase("1")) {
+//                Log.d(LOG_TAG, "Add Quest Progress + " + qid + "Successful");
+                Log.d(LOG_TAG, "Add Quest Progress: " + qid + " " + questioStatus);
+                for (Quiz q : quizs) {
+                    api.addQuizProgress(Integer.parseInt(Integer.toString(qid) + (int) adventurerId), q.getQuizId(), new Callback<Response>() {
+                        @Override
+                        public void success(Response response, Response response2) {
+                            String questioStatus = QuestioHelper.responseToString(response);
+                            if (QuestioHelper.getJSONStringValueByTag("status", questioStatus).equalsIgnoreCase("1")) {
+                                Log.d(LOG_TAG, "Add Quiz Progress Successful");
+                            } else {
+                                Log.d(LOG_TAG, "Add Quiz Progress Failed: " + questioStatus);
+                            }
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+
+                        }
+                    });
+                }
+
+//                } else {
+//                    Log.d(LOG_TAG, "Add Quest Progress Failed: " + questioStatus);
+//                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+//                }else{
+//                    Log.d(LOG_TAG, "Quiz Progress Exists");
+//                }
+    }
+
+//            @Override
+//            public void failure(RetrofitError error) {
+//
+//            }
+//        });
+//    }
+
+    void populateButtonQuizProgress(int buttonId, int status) {
+        Button b = (Button) findViewById(buttonId);
+        if (status == QuestioConstants.QUEST_CORRECT) {
+            b.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+        } else if (status == QuestioConstants.QUEST_FAILED) {
+            b.setBackgroundColor(getResources().getColor(R.color.red_quiz_wrong));
+        } else if (status == QuestioConstants.QUEST_NOT_FINISHED) {
+            b.setBackgroundColor(getResources().getColor(R.color.yellow_quiz_unanswered));
+        }
+
+    }
+
+    private ArrayList<QuizStatus> getRequestStatus(int ref) {
+        ArrayList<QuizStatus> arr = null;
+        final String URL =
+                "http://52.74.64.61/api/select_all_quizprogress_by_ref.php?ref=" + ref;
+        try {
+            String response = new HttpHelper().execute(URL).get();
+            JSONArray jsonArray = new JSONArray(response);
+            if (jsonArray.length() != 0) {
+                arr = new ArrayList<>();
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    QuizStatus qs = new QuizStatus();
+                    JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                    String quizid = jsonObject.get("quizid").toString();
+                    String status = jsonObject.get("statusid").toString();
+                    qs.setQuizId(Integer.parseInt(quizid));
+                    qs.setStatus(Integer.parseInt(status));
+                    arr.add(qs);
+                }
+
+            }
+        } catch (InterruptedException | ExecutionException | JSONException e) {
+            e.printStackTrace();
+        }
+        return arr;
+    }
+
+
+    private class QuizStatus {
+        private int quizId;
+        private int status;
+
+        public int getQuizId() {
+            return quizId;
+        }
+
+        public void setQuizId(int quizId) {
+            this.quizId = quizId;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+        @Override
+        public String toString() {
+            return "QuizStatus{" +
+                    "quizId=" + quizId +
+                    ", status=" + status +
+                    '}';
+        }
     }
 }

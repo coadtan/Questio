@@ -31,9 +31,6 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences.Editor editor = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE).edit();
-        editor.clear();
-        editor.apply();
         SharedPreferences prefs = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
         String displayName = prefs.getString(QuestioConstants.ADVENTURER_DISPLAYNAME, null);
         long id = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);

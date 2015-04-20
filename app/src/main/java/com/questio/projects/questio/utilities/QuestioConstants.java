@@ -17,6 +17,7 @@ public class QuestioConstants {
     public static final String TAG_PLACE_IMAGEURL = "imageurl";
     public static final String QUEST_ID = "questid";
     public static final String QUEST_NAME = "questname";
+    public static final String QUEST_ZONE_ID = "zoneid";
     public static final String QRTYPE_ZONE = "zone";
     public static final String QRTYPE_FLOOR = "floor";
     public static final String QRTYPE_BUILDING = "building";
@@ -25,5 +26,9 @@ public class QuestioConstants {
     public static final String ADVENTURER_PROFILE = "adventurer_profile";
     public static final String ADVENTURER_ID = "adventurer_id";
     public static final String ADVENTURER_DISPLAYNAME = "adventurer_displayname";
+
+    public static final int QUEST_NOT_FINISHED = 2;
+    public static final int QUEST_CORRECT = 3;
+    public static final int QUEST_FAILED = 4;
 
 }
