@@ -57,11 +57,15 @@ public class ZBarScannerActivity extends FragmentActivity implements Camera.Prev
         setContentView(R.layout.zbar_layout_area);
         TextView textView1 = (TextView)findViewById(R.id.text1);
         TextView textView2 = (TextView)findViewById(R.id.text2);
+        TextView textView3 = (TextView)findViewById(R.id.text3);
+        TextView textView4 = (TextView)findViewById(R.id.text4);
 
 
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/THSarabunNew.ttf");
         textView1.setTypeface(custom_font);
         textView2.setTypeface(custom_font);
+        textView3.setTypeface(custom_font);
+        textView4.setTypeface(custom_font);
 
         mAutoFocusHandler = new Handler();
         // Create and configure the ImageScanner;
