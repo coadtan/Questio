@@ -11,6 +11,8 @@
 
 
     <TextView
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:id="@+id/text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,8 +24,11 @@
         android:textColor="@color/white"
         android:textSize="35sp" />
 
+
     <TextView
         android:id="@+id/text2"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -32,9 +37,37 @@
         android:background="@color/grey_700"
         android:text="แสกน QR Code"
         android:textColor="@color/white"
-        android:textSize="35sp"
-        />
+        android:textSize="35sp" />
 
+    <com.questio.projects.questio.customviews.VerticalTextView
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:id="@+id/text3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text4"
+        android:layout_alignParentStart="true"
+        android:layout_gravity="center_vertical"
+        android:background="@color/grey_700"
+        android:gravity="bottom|center_horizontal"
+        android:text="แสกน QR Code"
+        android:textColor="@color/white"
+        android:textSize="35sp" />
+
+    <com.questio.projects.questio.customviews.VerticalTextView
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:id="@+id/text4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical|end"
+        android:background="@color/grey_700"
+        android:gravity="top|center_horizontal"
+        android:text="แสกน QR Code"
+        android:textColor="@color/white"
+        android:textSize="35sp" />
 
 
 </RelativeLayout>
