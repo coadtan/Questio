@@ -57,8 +57,6 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
     Button quiz_answer_c;
     Button quiz_answer_d;
 
-    TextView quiz_id;
-
     int qid;
     long adventurerId;
     int zid;
@@ -67,6 +65,9 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
     Quiz q;
 
     QuestioAPIService api;
+
+
+
 
 
 
@@ -84,7 +85,6 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         quiz_answer_b = (Button) findViewById(R.id.quiz_answer_b);
         quiz_answer_c = (Button) findViewById(R.id.quiz_answer_c);
         quiz_answer_d = (Button) findViewById(R.id.quiz_answer_d);
-        quiz_id = (TextView) findViewById(R.id.quiz_id);
 
 
 
@@ -201,8 +201,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         Button b = (Button) findViewById(quizId - 1);
         b.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
         updateStatus(QuestioConstants.QUEST_CORRECT);
-        b.setEnabled(false);
-        b.setClickable(false);
+        disableButton();
     }
 
     void onIncorrect(int quizId) {
@@ -210,8 +209,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         Button b = (Button) findViewById(quizId - 1);
         b.setBackgroundColor(getResources().getColor(R.color.red_quiz_wrong));
         updateStatus(QuestioConstants.QUEST_FAILED);
-        b.setEnabled(false);
-        b.setClickable(false);
+        disableButton();
     }
 
     void pupulateQuiz(int i) {
@@ -222,7 +220,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         quiz_answer_b.setText(q.getChoiceB());
         quiz_answer_c.setText(q.getChoiceC());
         quiz_answer_d.setText(q.getChoiceD());
-        quiz_id.setText(Integer.toString(q.getQuizId()));
+        currentQuiz = q.getQuizId();
     }
 
     private class ButtonProgressListener implements Button.OnClickListener {
@@ -236,6 +234,22 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         public void onClick(View v) {
             pupulateQuiz(v.getId());
             changeButtonIndicator(v.getId());
+            currentQuiz = q.getQuizId();
+            quizStatusHashMap = getRequestStatus(Integer.parseInt(Integer.toString(qid) + (int) adventurerId));
+            String statusStr;
+            int status;
+
+            if(!quizStatusHashMap.isEmpty()) {
+                    statusStr = quizStatusHashMap.get(Integer.toString(currentQuiz));
+                    status = Integer.parseInt(statusStr);
+                if(status == QuestioConstants.QUEST_CORRECT || status == QuestioConstants.QUEST_FAILED){
+                    disableButton();
+                }else{
+                    enableButton();
+                }
+
+
+            }
         }
     }
 
@@ -245,17 +259,34 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         for (int i = 0; i < quizs.size(); i++) {
             b = (Button) v.findViewById(i);
             if (i == selected) {
-                b.setBackgroundResource(R.color.yellow_quiz_unanswered);
-                b.setTextColor(getResources().getColor(R.color.white));
-                b.setText("?");
-                updateStatus(QuestioConstants.QUEST_NOT_FINISHED);
+                quizStatusHashMap = getRequestStatus(Integer.parseInt(Integer.toString(qid) + (int) adventurerId));
+                String statusStr;
+                int status;
 
-            } else {
-                b.setText("");
-                //b.setBackgroundResource(R.color.grey_700);
+                if (!quizStatusHashMap.isEmpty()) {
+                    statusStr = quizStatusHashMap.get(Integer.toString(currentQuiz));
+                    status = Integer.parseInt(statusStr);
+                    if (status == QuestioConstants.QUEST_CORRECT || status == QuestioConstants.QUEST_FAILED) {
+                        disableButton();
+                        b.setTextColor(getResources().getColor(R.color.white));
+                        b.setText("?");
+                    } else {
+                        b.setBackgroundResource(R.color.yellow_quiz_unanswered);
+                        b.setTextColor(getResources().getColor(R.color.white));
+                        b.setText("?");
+                        updateStatus(QuestioConstants.QUEST_NOT_FINISHED);
+                        enableButton();
+                    }
+                }
+
+
+                } else {
+                    b.setText("");
+                    //b.setBackgroundResource(R.color.grey_700);
+                }
             }
         }
-    }
+
 
     private void requestQuizData(int id) {
         RestAdapter adapter = new RestAdapter.Builder()
@@ -272,6 +303,10 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                     Log.d(LOG_TAG, "ref: " + Integer.parseInt(Integer.toString(qid) + (int) adventurerId));
                     LinearLayout quizActionProgressLinerSection = (LinearLayout) findViewById(R.id.quiz_action_progress_liner_section);
                     quizActionProgressLinerSection.setWeightSum(quizCount);
+
+
+
+
 
                     for (int i = 0; i < quizCount; i++) {
                         button = new Button(QuizAction.this);
@@ -295,6 +330,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                         buttonId++;
                     }
                     pupulateQuiz(FIRST_QUIZ);
+
                 } else {
                     Log.d(LOG_TAG, "Quiz is null");
                 }
@@ -310,6 +346,14 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                         statusStr = quizStatusHashMap.get(quizIdFromButton);
                         status = Integer.parseInt(statusStr);
                         populateButtonQuizProgress(i, status);
+                    }
+
+                    statusStr = quizStatusHashMap.get(Integer.toString(currentQuiz));
+                    status = Integer.parseInt(statusStr);
+                    if (status == QuestioConstants.QUEST_CORRECT || status == QuestioConstants.QUEST_FAILED) {
+                        disableButton();
+                    } else {
+                        enableButton();
                     }
                 }
 
@@ -386,12 +430,8 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         Button b = (Button) findViewById(buttonId);
         if (status == QuestioConstants.QUEST_CORRECT) {
             b.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
-            b.setEnabled(false);
-            b.setClickable(false);
         } else if (status == QuestioConstants.QUEST_FAILED) {
             b.setBackgroundColor(getResources().getColor(R.color.red_quiz_wrong));
-            b.setEnabled(false);
-            b.setClickable(false);
         } else if (status == QuestioConstants.QUEST_NOT_FINISHED) {
             b.setBackgroundColor(getResources().getColor(R.color.yellow_quiz_unanswered));
         }
@@ -474,6 +514,28 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                     ", status=" + status +
                     '}';
         }
+    }
+
+    private void disableButton(){
+        quiz_answer_a.setEnabled(false);
+        quiz_answer_a.setClickable(false);
+        quiz_answer_b.setEnabled(false);
+        quiz_answer_b.setClickable(false);
+        quiz_answer_c.setEnabled(false);
+        quiz_answer_c.setClickable(false);
+        quiz_answer_d.setEnabled(false);
+        quiz_answer_d.setClickable(false);
+    }
+
+    private void enableButton(){
+        quiz_answer_a.setEnabled(true);
+        quiz_answer_a.setClickable(true);
+        quiz_answer_b.setEnabled(true);
+        quiz_answer_b.setClickable(true);
+        quiz_answer_c.setEnabled(true);
+        quiz_answer_c.setClickable(true);
+        quiz_answer_d.setEnabled(true);
+        quiz_answer_d.setClickable(true);
     }
 
 }
