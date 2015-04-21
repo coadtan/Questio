@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -212,7 +213,12 @@ public class PlaceActivity extends ActionBarActivity {
                     floorSpinner.setAdapter(adapterFloor);
                     zoneSpinner.setAdapter(adapterZone);
 
+                    buildingSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+                        }
+                    });
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                     QuestRecycleView fragment = new QuestRecycleView();
                     transaction.replace(R.id.quest_browsing_null, fragment);

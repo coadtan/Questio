@@ -344,7 +344,11 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                         bProgess = (Button)findViewById(i);
                         String quizIdFromButton = bProgess.getContentDescription().toString();
                         statusStr = quizStatusHashMap.get(quizIdFromButton);
-                        status = Integer.parseInt(statusStr);
+                        if(statusStr != null){
+                            status = Integer.parseInt(statusStr);
+                        }else{
+                            status = QuestioConstants.QUEST_NOT_STARTED;
+                        }
                         populateButtonQuizProgress(i, status);
                     }
 
@@ -434,6 +438,8 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
             b.setBackgroundColor(getResources().getColor(R.color.red_quiz_wrong));
         } else if (status == QuestioConstants.QUEST_NOT_FINISHED) {
             b.setBackgroundColor(getResources().getColor(R.color.yellow_quiz_unanswered));
+        } else if (status == QuestioConstants.QUEST_NOT_STARTED){
+            b.setBackgroundColor(getResources().getColor(R.color.grey_700));
         }
 
     }

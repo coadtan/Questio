@@ -27,6 +27,7 @@ public class QuestioConstants {
     public static final String ADVENTURER_ID = "adventurer_id";
     public static final String ADVENTURER_DISPLAYNAME = "adventurer_displayname";
 
+    public static final int QUEST_NOT_STARTED = 1;
     public static final int QUEST_NOT_FINISHED = 2;
     public static final int QUEST_CORRECT = 3;
     public static final int QUEST_FAILED = 4;
