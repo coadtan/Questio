@@ -200,22 +200,22 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
     }
 
     void onCorrect(int quizId) {
+        quizFinished++;
         Button b = (Button) findViewById(quizId - 1);
         b.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
         updateQuizStatus(QuestioConstants.QUEST_CORRECT);
         disableButton();
-        quizFinished++;
         checkQuizFinished();
 
     }
 
     void onIncorrect(int quizId) {
+        quizFinished++;
         Log.d(LOG_TAG, "Before minus 1: " + quizId);
         Button b = (Button) findViewById(quizId - 1);
         b.setBackgroundColor(getResources().getColor(R.color.red_quiz_wrong));
         updateQuizStatus(QuestioConstants.QUEST_FAILED);
         disableButton();
-        quizFinished++;
         checkQuizFinished();
     }
 
