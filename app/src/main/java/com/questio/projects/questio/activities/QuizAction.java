@@ -244,7 +244,11 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
 
             if (!quizStatusHashMap.isEmpty()) {
                 statusStr = quizStatusHashMap.get(Integer.toString(currentQuiz));
-                status = Integer.parseInt(statusStr);
+                if (statusStr != null) {
+                    status = Integer.parseInt(statusStr);
+                } else {
+                    status = QuestioConstants.QUEST_NOT_STARTED;
+                }
                 if (status == QuestioConstants.QUEST_CORRECT || status == QuestioConstants.QUEST_FAILED) {
                     disableButton();
                 } else {
@@ -263,26 +267,30 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         for (int i = 0; i < quizs.size(); i++) {
             b = (Button) v.findViewById(i);
             if (i == selected) {
-//                quizStatusHashMap = getRequestStatus(Integer.parseInt(Integer.toString(qid) + (int) adventurerId));
-//                String statusStr;
-//                int status;
-//                b.setTextColor(getResources().getColor(R.color.white));
+                quizStatusHashMap = getRequestStatus(Integer.parseInt(Integer.toString(qid) + (int) adventurerId));
+                String statusStr;
+                int status;
+                b.setTextColor(getResources().getColor(R.color.white));
                 b.setText("?");
-//                if (!quizStatusHashMap.isEmpty()) {
-//                    statusStr = quizStatusHashMap.get(Integer.toString(currentQuiz));
-//                    status = Integer.parseInt(statusStr);
-//                    if (status == QuestioConstants.QUEST_CORRECT || status == QuestioConstants.QUEST_FAILED) {
-//                        disableButton();
-//
-//                    } else {
-//                        b.setBackgroundResource(R.color.yellow_quiz_unanswered);
-//                        b.setTextColor(getResources().getColor(R.color.white));
-//                        b.setText("?");
-//                        updateQuizStatus(QuestioConstants.QUEST_NOT_FINISHED);
-//                        updateQuestStatus(QuestioConstants.QUEST_NOT_FINISHED);
-//                        enableButton();
-//                    }
-//                }
+               if (!quizStatusHashMap.isEmpty()) {
+                    statusStr = quizStatusHashMap.get(Integer.toString(currentQuiz));
+                   if (statusStr != null) {
+                       status = Integer.parseInt(statusStr);
+                   } else {
+                       status = QuestioConstants.QUEST_NOT_STARTED;
+                   }
+                    if (status == QuestioConstants.QUEST_CORRECT || status == QuestioConstants.QUEST_FAILED) {
+                       disableButton();
+
+                    } else {
+                        b.setBackgroundResource(R.color.yellow_quiz_unanswered);
+                        b.setTextColor(getResources().getColor(R.color.white));
+                        b.setText("?");
+                        updateQuizStatus(QuestioConstants.QUEST_NOT_FINISHED);
+                        updateQuestStatus(QuestioConstants.QUEST_NOT_FINISHED);
+                        enableButton();
+                    }
+                }
 
 
             } else {
