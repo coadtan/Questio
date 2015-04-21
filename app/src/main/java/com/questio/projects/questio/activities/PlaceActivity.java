@@ -191,7 +191,6 @@ public class PlaceActivity extends ActionBarActivity {
                 if (quests != null) {
                     setQuests(quests);
 
-
                     String[] buildingNames = Quest.getBuildingNamesArray("building", quests);
                     String[] floorNames = Quest.getBuildingNamesArray("floor", quests);
                     String[] zoneNames = Quest.getBuildingNamesArray("zone", quests);

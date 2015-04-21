@@ -156,7 +156,8 @@ public class Quest {
             for (Quest q : arrayList) {
                 buildingSet.add(q.getBuildingName());
             }
-            buildingNames = buildingSet.toArray(new String[buildingSet.size()]);
+            buildingNames = buildingSet.toArray(new String[buildingSet.size() + 1]);
+            buildingNames[buildingSet.size()] = " ";
             return buildingNames;
         } else if (tag.equalsIgnoreCase("floor")) {
             String[] floorNames;
@@ -164,7 +165,8 @@ public class Quest {
             for (Quest q : arrayList) {
                 floorSet.add(q.getFloorName());
             }
-            floorNames = floorSet.toArray(new String[floorSet.size()]);
+            floorNames = floorSet.toArray(new String[floorSet.size() + 1]);
+            floorNames[floorSet.size()] = " ";
             return floorNames;
         }else if (tag.equalsIgnoreCase("zone")) {
             String[] zoneNames;
@@ -172,7 +174,8 @@ public class Quest {
             for (Quest q : arrayList) {
                 zoneSet.add(q.getZoneName());
             }
-            zoneNames = zoneSet.toArray(new String[zoneSet.size()]);
+            zoneNames = zoneSet.toArray(new String[zoneSet.size() + 1]);
+            zoneNames[zoneSet.size()] = " ";
             return zoneNames;
         }
         return null;
