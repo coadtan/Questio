@@ -135,4 +135,9 @@ public interface QuestioAPIService {
             @Query("ref") int ref,
             @Query("quizid") int aid,
             Callback<Response> response);
+
+    @GET("/select_count_quizprogress_by_ref_finished.php")
+    public void getCountQuizProgressFinishedByRef(
+            @Query("ref") int ref,
+            Callback<Response> response);
 }

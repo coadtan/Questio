@@ -42,6 +42,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
     Toolbar toolbar;
     int buttonId = 0;
     int quizCount;
+    int quizFinished;
 
     ArrayList<Quiz> quizs;
     HashMap<String, String> quizStatusHashMap;
@@ -86,7 +87,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         quiz_answer_c = (Button) findViewById(R.id.quiz_answer_c);
         quiz_answer_d = (Button) findViewById(R.id.quiz_answer_d);
 
-
+        quizFinished = 0;
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,6 +156,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
     }
 
     void onAnswer(final int answer) {
+
         final Dialog dialog = new Dialog(QuizAction.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.confirm_dialog);
@@ -200,19 +202,24 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
     void onCorrect(int quizId) {
         Button b = (Button) findViewById(quizId - 1);
         b.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
-        updateStatus(QuestioConstants.QUEST_CORRECT);
+        updateQuizStatus(QuestioConstants.QUEST_CORRECT);
         disableButton();
+        quizFinished++;
+        checkQuizFinished();
+
     }
 
     void onIncorrect(int quizId) {
         Log.d(LOG_TAG, "Before minus 1: " + quizId);
         Button b = (Button) findViewById(quizId - 1);
         b.setBackgroundColor(getResources().getColor(R.color.red_quiz_wrong));
-        updateStatus(QuestioConstants.QUEST_FAILED);
+        updateQuizStatus(QuestioConstants.QUEST_FAILED);
         disableButton();
+        quizFinished++;
+        checkQuizFinished();
     }
 
-    void pupulateQuiz(int i) {
+    void populateQuiz(int i) {
         q = quizs.get(i);
         quiz_question.setText(q.getQuestion());
         quiz_sequence.setText(Integer.toString(q.getSeqId()));
@@ -232,7 +239,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
 
         @Override
         public void onClick(View v) {
-            pupulateQuiz(v.getId());
+            populateQuiz(v.getId());
             changeButtonIndicator(v.getId());
             currentQuiz = q.getQuizId();
             quizStatusHashMap = getRequestStatus(Integer.parseInt(Integer.toString(qid) + (int) adventurerId));
@@ -245,6 +252,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                 if(status == QuestioConstants.QUEST_CORRECT || status == QuestioConstants.QUEST_FAILED){
                     disableButton();
                 }else{
+
                     enableButton();
                 }
 
@@ -274,7 +282,8 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                         b.setBackgroundResource(R.color.yellow_quiz_unanswered);
                         b.setTextColor(getResources().getColor(R.color.white));
                         b.setText("?");
-                        updateStatus(QuestioConstants.QUEST_NOT_FINISHED);
+                        updateQuizStatus(QuestioConstants.QUEST_NOT_FINISHED);
+                        updateQuestStatus(QuestioConstants.QUEST_NOT_FINISHED);
                         enableButton();
                     }
                 }
@@ -329,7 +338,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                         quizActionProgressLinerSection.addView(button);
                         buttonId++;
                     }
-                    pupulateQuiz(FIRST_QUIZ);
+                    populateQuiz(FIRST_QUIZ);
 
                 } else {
                     Log.d(LOG_TAG, "Quiz is null");
@@ -360,6 +369,8 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                         enableButton();
                     }
                 }
+
+                checkQuizFinished();
 
             }
 
@@ -470,7 +481,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         return hashMap;
     }
 
-    private void updateStatus(int status){
+    private void updateQuizStatus(int status){
         RestAdapter adapter = new RestAdapter.Builder()
                 .setEndpoint(QuestioConstants.ENDPOINT)
                 .build();
@@ -484,6 +495,47 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
 //                } else {
 //                    Log.d(LOG_TAG, "Update Failed: " + questioStatus);
 //                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    private void updateQuestStatus(int status){
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(QuestioConstants.ENDPOINT)
+                .build();
+        api = adapter.create(QuestioAPIService.class);
+        api.updateStatusQuestProgressByQuestIdAndAdventurerId(status, qid, adventurerId, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    private void checkQuizFinished(){
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(QuestioConstants.ENDPOINT)
+                .build();
+        api = adapter.create(QuestioAPIService.class);
+        api.getCountQuizProgressFinishedByRef(Integer.parseInt(Integer.toString(qid) + (int) adventurerId), new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                String countQuizFinishedStr = QuestioHelper.responseToString(response);
+                quizFinished = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("count", countQuizFinishedStr));
+                Log.d(LOG_TAG, "Quiz Finished Count: " + quizFinished);
+                if (quizFinished == quizCount){
+                    updateQuestStatus(QuestioConstants.QUEST_CORRECT);
+                }
             }
 
             @Override

@@ -1,5 +1,6 @@
 package com.questio.projects.questio.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -47,6 +48,12 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     PicturePuzzle pp;
     int points = 9;
 
+    int qid;
+    int zid;
+    long adventurerId;
+
+    QuestioAPIService api;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +86,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
 
         String questId;
         String questName;
+        String zoneId;
 
 
         if (savedInstanceState == null) {
@@ -87,20 +95,32 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
             if (extras == null) {
                 questId = null;
                 questName = null;
+                zoneId = null;
             } else {
                 questId = extras.getString(QuestioConstants.QUEST_ID);
                 questName = extras.getString(QuestioConstants.QUEST_NAME);
+                zoneId = extras.getString(QuestioConstants.QUEST_ZONE_ID);
             }
         } else {
             questId = (String) savedInstanceState.getSerializable(QuestioConstants.QUEST_ID);
             questName = (String) savedInstanceState.getSerializable(QuestioConstants.QUEST_NAME);
+            zoneId = (String) savedInstanceState.getSerializable(QuestioConstants.QUEST_ZONE_ID);
         }
         Log.d(LOG_TAG, "questid: " + questId + " questName: " + questName);
+
+
 
         getSupportActionBar().setTitle(questName);
 
         requestPicturePuzzleData(Integer.parseInt(questId));
 
+        qid = Integer.parseInt(questId);
+        zid = Integer.parseInt(zoneId);
+
+        SharedPreferences prefs = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
+        adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
+
+        requestProgressData();
     }
 
     @Override
@@ -149,7 +169,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     void onUnMask() {
         points--;
         pointTV.setText(Integer.toString(points));
-        //
+        updateQuestStatus(QuestioConstants.QUEST_NOT_FINISHED);
     }
 
     private void requestPicturePuzzleData(int id) {
@@ -188,6 +208,8 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                             currentAnswer = picturePuzzleAnswer.getText().toString();
                             if (currentAnswer.equalsIgnoreCase(pp.getCorrectAnswer())) {
                                 picturePuzzleAnswer.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+                                updateQuestStatus(QuestioConstants.QUEST_CORRECT);
+                                disableAll();
                             }
                         }
                     });
@@ -214,5 +236,83 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                 Log.d(LOG_TAG, "Fail: " + retrofitError.getStackTrace());
             }
         });
+    }
+
+    private void requestProgressData() {
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(QuestioConstants.ENDPOINT)
+                .build();
+        api = adapter.create(QuestioAPIService.class);
+//        api.getQuestProgressByQuestIdAndAdventurerId(qid, adventurerId, new Callback<Response>() {
+//            @Override
+//            public void success(Response response, Response response2) {
+//                if (QuestioHelper.responseToString(response).equalsIgnoreCase("null")){
+        Log.d(LOG_TAG, "No Progress in Quest");
+        api.addQuestProgressNonQuiz(qid, adventurerId, zid, 3, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                String questioStatus = QuestioHelper.responseToString(response);
+                Log.d(LOG_TAG, "Add Quest Progress: " + qid + " " + questioStatus);
+
+
+//                } else {
+//                    Log.d(LOG_TAG, "Add Quest Progress Failed: " + questioStatus);
+//                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+//                }else{
+//                    Log.d(LOG_TAG, "Quiz Progress Exists");
+//                }
+    }
+
+//            @Override
+//            public void failure(RetrofitError error) {
+//
+//            }
+//        });
+//    }
+
+    private void updateQuestStatus(int status){
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(QuestioConstants.ENDPOINT)
+                .build();
+        api = adapter.create(QuestioAPIService.class);
+        api.updateStatusQuestProgressByQuestIdAndAdventurerId(status, qid, adventurerId, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    private void disableAll(){
+        topRight.setClickable(false);
+        topMiddle.setClickable(false);
+        topLeft.setClickable(false);
+        middleRight.setClickable(false);
+        middleMiddle.setClickable(false);
+        middleLeft.setClickable(false);
+        bottomRight.setClickable(false);
+        bottomMiddle.setClickable(false);
+        bottomLeft.setClickable(false);
+        topRight.setEnabled(false);
+        topMiddle.setEnabled(false);
+        topLeft.setEnabled(false);
+        bottomRight.setEnabled(false);
+        bottomMiddle.setEnabled(false);
+        bottomLeft.setEnabled(false);
+        middleRight.setEnabled(false);
+        middleMiddle.setEnabled(false);
+        middleLeft.setEnabled(false);
     }
 }

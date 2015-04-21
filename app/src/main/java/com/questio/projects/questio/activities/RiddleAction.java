@@ -2,6 +2,7 @@ package com.questio.projects.questio.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -46,6 +47,12 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
     TextView scanTV;
     int scanLimit;
 
+    int qid;
+    int zid;
+    long adventurerId;
+
+    QuestioAPIService api;
+
     Riddle r;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +65,6 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
 
 
         scanTV = (TextView) toolbar.findViewById(R.id.toolbar_limit);
-        scanTV.setText(Integer.toString(scanLimit));
 
         riddle = (TextView)findViewById(R.id.riddle_riddle);
         hint1Btn = (Button)findViewById(R.id.riddle_hint1Btn);
@@ -84,6 +90,7 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
 
         String questId;
         String questName;
+        String zoneId;
 
 
         if (savedInstanceState == null) {
@@ -92,22 +99,30 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
             if (extras == null) {
                 questId = null;
                 questName = null;
+                zoneId = null;
             } else {
                 questId = extras.getString(QuestioConstants.QUEST_ID);
                 questName = extras.getString(QuestioConstants.QUEST_NAME);
+                zoneId = extras.getString(QuestioConstants.QUEST_ZONE_ID);
             }
         } else {
             questId = (String) savedInstanceState.getSerializable(QuestioConstants.QUEST_ID);
             questName = (String) savedInstanceState.getSerializable(QuestioConstants.QUEST_NAME);
+            zoneId = (String) savedInstanceState.getSerializable(QuestioConstants.QUEST_ZONE_ID);
         }
         Log.d(LOG_TAG, "questid: " + questId + " questName: " + questName);
 
         getSupportActionBar().setTitle(questName);
 
+        SharedPreferences prefs = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
+        adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
+        qid = Integer.parseInt(questId);
+        zid = Integer.parseInt(zoneId);
+
         //r = Riddle.getAllRiddleByRiddleId((Integer.parseInt(questId)));
         requestRiddleData(Integer.parseInt(questId));
 
-
+        requestProgressData();
     }
 
 
@@ -119,15 +134,19 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
                 Intent intent = new Intent(this, ZBarScannerActivity.class);
                 intent.putExtra(ZBarConstants.SCAN_MODES, new int[]{Symbol.QRCODE});
                 startActivityForResult(intent, 0);
+                updateQuestStatus(QuestioConstants.QUEST_NOT_FINISHED);
                 break;
             case R.id.riddle_hint1Btn:
                 hintReveal1.setText(r.getHint1());
+                updateQuestStatus(QuestioConstants.QUEST_NOT_FINISHED);
                 break;
             case R.id.riddle_hint2Btn:
                 hintReveal2.setText(r.getHint2());
+                updateQuestStatus(QuestioConstants.QUEST_NOT_FINISHED);
                 break;
             case R.id.riddle_hint3Btn:
                 hintReveal3.setText(r.getHint3());
+                updateQuestStatus(QuestioConstants.QUEST_NOT_FINISHED);
                 break;
         }
 
@@ -159,9 +178,18 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
         if(scanLimit != 0){
             if(answer.equalsIgnoreCase(Long.toString(r.getQrCode()))){
                 riddle.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+                updateQuestStatus(QuestioConstants.QUEST_CORRECT);
+                scanHere.setEnabled(false);
+                scanHere.setClickable(false);
             }else{
                 scanLimit--;
                 scanTV.setText(Integer.toString(scanLimit));
+                updateQuestStatus(QuestioConstants.QUEST_NOT_FINISHED);
+                if(scanLimit == 0){
+                    updateQuestStatus(QuestioConstants.QUEST_FAILED);
+                    scanHere.setEnabled(false);
+                    scanHere.setClickable(false);
+                }
             }
         }
 
@@ -206,6 +234,8 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
                     hint2Btn.setOnClickListener(RiddleAction.this);
                     hint3Btn.setOnClickListener(RiddleAction.this);
                     scanHere.setOnClickListener(RiddleAction.this);
+
+                    scanTV.setText(Integer.toString(scanLimit));
                 }else{
                     Log.d(LOG_TAG, "Riddle is null");
                 }
@@ -217,6 +247,63 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
                 Log.d(LOG_TAG, "Fail: " + retrofitError.toString());
                 Log.d(LOG_TAG, "Fail: " + retrofitError.getUrl());
                 Log.d(LOG_TAG, "Fail: " + retrofitError.getStackTrace());
+            }
+        });
+    }
+
+    private void requestProgressData() {
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(QuestioConstants.ENDPOINT)
+                .build();
+        api = adapter.create(QuestioAPIService.class);
+//        api.getQuestProgressByQuestIdAndAdventurerId(qid, adventurerId, new Callback<Response>() {
+//            @Override
+//            public void success(Response response, Response response2) {
+//                if (QuestioHelper.responseToString(response).equalsIgnoreCase("null")){
+        Log.d(LOG_TAG, "No Progress in Quest");
+        api.addQuestProgressNonQuiz(qid, adventurerId, zid, 2, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                String questioStatus = QuestioHelper.responseToString(response);
+                Log.d(LOG_TAG, "Add Quest Progress: " + qid + " " + questioStatus);
+
+
+//                } else {
+//                    Log.d(LOG_TAG, "Add Quest Progress Failed: " + questioStatus);
+//                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+//                }else{
+//                    Log.d(LOG_TAG, "Quiz Progress Exists");
+//                }
+    }
+
+//            @Override
+//            public void failure(RetrofitError error) {
+//
+//            }
+//        });
+//    }
+
+    private void updateQuestStatus(int status){
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(QuestioConstants.ENDPOINT)
+                .build();
+        api = adapter.create(QuestioAPIService.class);
+        api.updateStatusQuestProgressByQuestIdAndAdventurerId(status, qid, adventurerId, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
             }
         });
     }
