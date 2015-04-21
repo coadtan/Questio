@@ -230,7 +230,8 @@ public class PlaceActivity extends ActionBarActivity {
                                         floorFilter.add(q.getFloorName());
                                     }
                                 }
-                                String[] floorNameFilter = floorFilter.toArray(new String[floorFilter.size()]);
+                                String[] floorNameFilter = floorFilter.toArray(new String[floorFilter.size() + 1]);
+                                floorNameFilter[floorFilter.size()] = " ";
                                 ArrayAdapter<String> adapterFloorFiltered = new ArrayAdapter<>(PlaceActivity.this,
                                         R.layout.spinner_item_list, floorNameFilter);
                                 floorSpinner.setAdapter(adapterFloorFiltered);
@@ -246,13 +247,30 @@ public class PlaceActivity extends ActionBarActivity {
                                                     zoneFilter.add(q.getZoneName());
                                                 }
                                             }
-                                            String[] zoneNameFilter = zoneFilter.toArray(new String[zoneFilter.size()]);
+                                            String[] zoneNameFilter = zoneFilter.toArray(new String[zoneFilter.size() + 1]);
+                                            zoneNameFilter[zoneFilter.size()] = " ";
                                             ArrayAdapter<String> adapterZoneFiltered = new ArrayAdapter<>(PlaceActivity.this,
                                                     R.layout.spinner_item_list, zoneNameFilter);
                                             zoneSpinner.setAdapter(adapterZoneFiltered);
                                         }else{
-                                            zoneFilter.clear();
-                                            zoneSpinner.setAdapter(adapterZone);
+                                            String buildingItem = buildingSpinner.getSelectedItem().toString();
+                                            if (!buildingItem.equalsIgnoreCase(" ")){
+                                                zoneFilter.clear();
+                                                for (Quest q : quests) {
+                                                    if (q.getBuildingName().equalsIgnoreCase(buildingItem)) {
+                                                        zoneFilter.add(q.getZoneName());
+                                                    }
+                                                }
+                                                String[] zoneNameFilter = zoneFilter.toArray(new String[zoneFilter.size() + 1]);
+                                                zoneNameFilter[zoneFilter.size()] = " ";
+                                                ArrayAdapter<String> adapterZoneFiltered = new ArrayAdapter<>(PlaceActivity.this,
+                                                        R.layout.spinner_item_list, zoneNameFilter);
+                                                zoneSpinner.setAdapter(adapterZoneFiltered);
+                                            }else{
+                                                zoneFilter.clear();
+                                                zoneSpinner.setAdapter(adapterZone);
+                                            }
+
                                         }
                                     }
 
@@ -263,6 +281,7 @@ public class PlaceActivity extends ActionBarActivity {
                                 });
 
                             }else{
+
                                 floorFilter.clear();
                                 floorSpinner.setAdapter(adapterFloor);
                                 floorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -276,13 +295,29 @@ public class PlaceActivity extends ActionBarActivity {
                                                     zoneFilter.add(q.getZoneName());
                                                 }
                                             }
-                                            String[] zoneNameFilter = zoneFilter.toArray(new String[zoneFilter.size()]);
+                                            String[] zoneNameFilter = zoneFilter.toArray(new String[zoneFilter.size() + 1]);
+                                            zoneNameFilter[zoneFilter.size()] = " ";
                                             ArrayAdapter<String> adapterZoneFiltered = new ArrayAdapter<>(PlaceActivity.this,
                                                     R.layout.spinner_item_list, zoneNameFilter);
                                             zoneSpinner.setAdapter(adapterZoneFiltered);
                                         }else{
-                                            zoneFilter.clear();
-                                            zoneSpinner.setAdapter(adapterZone);
+                                            String buildingItem = buildingSpinner.getSelectedItem().toString();
+                                            if (!buildingItem.equalsIgnoreCase(" ")){
+                                                zoneFilter.clear();
+                                                for (Quest q : quests) {
+                                                    if (q.getBuildingName().equalsIgnoreCase(buildingItem)) {
+                                                        zoneFilter.add(q.getZoneName());
+                                                    }
+                                                }
+                                                String[] zoneNameFilter = zoneFilter.toArray(new String[zoneFilter.size() + 1]);
+                                                zoneNameFilter[zoneFilter.size()] = " ";
+                                                ArrayAdapter<String> adapterZoneFiltered = new ArrayAdapter<>(PlaceActivity.this,
+                                                        R.layout.spinner_item_list, zoneNameFilter);
+                                                zoneSpinner.setAdapter(adapterZoneFiltered);
+                                            }else{
+                                                zoneFilter.clear();
+                                                zoneSpinner.setAdapter(adapterZone);
+                                            }
                                         }
                                     }
 
@@ -291,6 +326,7 @@ public class PlaceActivity extends ActionBarActivity {
 
                                     }
                                 });
+
                             }
                         }
 
