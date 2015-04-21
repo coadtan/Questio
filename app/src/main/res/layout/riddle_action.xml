@@ -2,12 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/windowBackground"
     android:orientation="vertical">
 
     <include
         android:id="@+id/app_bar"
         layout="@layout/toolbar_riddle_layout" />
-
 
 
     <FrameLayout
@@ -34,9 +34,10 @@
 
         <ImageButton
             android:id="@+id/riddle_scanHere"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:background="@color/grey_500"
+            android:layout_width="142dp"
+            android:layout_height="142dp"
+            android:background="@color/white"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_action_qrscan" />
 
         <TextView
@@ -47,68 +48,87 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="20dp">
 
-            <Button
-                android:id="@+id/riddle_hint1Btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Hint 1" />
-
-            <Button
-                android:id="@+id/riddle_hint2Btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Hint 2" />
-
-            <Button
-                android:id="@+id/riddle_hint3Btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Hint 3" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/riddle_hintReveal1"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/riddle_unrevealed"
-                android:padding="10dp"
-                android:background="@color/questio_orange"
-                android:gravity="center"/>
-            <TextView
-                android:id="@+id/riddle_hintReveal2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/riddle_unrevealed"
-                android:padding="10dp"
-                android:background="@color/questio_orange"
-                android:gravity="center"
-                />
-            <TextView
-                android:id="@+id/riddle_hintReveal3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/riddle_unrevealed"
-                android:padding="10dp"
-                android:background="@color/questio_orange"
-                android:gravity="center"/>
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/riddle_hint1Btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Hint 1" />
+
+                <Button
+                    android:id="@+id/riddle_hint2Btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Hint 2" />
+
+                <Button
+                    android:id="@+id/riddle_hint3Btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Hint 3" />
             </LinearLayout>
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/riddle_hintReveal1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/questio_orange"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/riddle_unrevealed"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/riddle_hintReveal2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/questio_orange"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/riddle_unrevealed"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/riddle_hintReveal3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/questio_orange"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/riddle_unrevealed"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
 </LinearLayout>

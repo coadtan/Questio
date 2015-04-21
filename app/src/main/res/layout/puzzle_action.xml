@@ -116,7 +116,7 @@
             android:layout_gravity="center_horizontal"
             android:focusable="false"
             android:gravity="center"
-            android:hint="คำใบ้"
+            android:hint="กำลังโหลด"
             android:textSize="30sp" />
 
 
