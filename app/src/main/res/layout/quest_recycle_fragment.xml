@@ -1,7 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/quest_browsing_bot_frame"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    >
     <android.support.v7.widget.RecyclerView
         android:id="@+id/quest_browsing_recycler_view"
         android:layout_width="match_parent"

@@ -38,8 +38,8 @@ import net.sourceforge.zbar.Symbol;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -99,6 +99,8 @@ public class PlaceActivity extends ActionBarActivity {
         place_activity_filter = (LinearLayout) findViewById(R.id.place_activity_filter);
         placeBtnTrigerMap = (Button) findViewById(R.id.place_btn_triger_map);
         quest_browsing_top_frame = (FrameLayout) findViewById(R.id.quest_browsing_top_frame);
+
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -276,8 +278,8 @@ public class PlaceActivity extends ActionBarActivity {
                                             zoneSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                 @Override
                                                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                                    reTempArray();
                                                     zoneItem = zoneSpinner.getSelectedItem().toString();
+                                                    reTempArray();
                                                 }
 
                                                 @Override
@@ -436,81 +438,78 @@ public class PlaceActivity extends ActionBarActivity {
     }
 
     private void reTempArray() {
+        questsTemp = new ArrayList<>();
+        Iterator<Quest> iter = quests.iterator();
+        Log.d(LOG_TAG, "buildingItem: " + buildingItem);
+        Log.d(LOG_TAG, "floorItem: " + floorItem);
+        Log.d(LOG_TAG, "zoneItem: " + zoneItem);
 
-        /*if (buildingItem.equalsIgnoreCase(" ") &&
-                floorItem.equalsIgnoreCase(" ") &&
-                zoneItem.equalsIgnoreCase(" ")) {
-                //All Empty
-            questsTemp = quests;
-
-        }else if (
-                floorItem.equalsIgnoreCase(" ") &&
-                zoneItem.equalsIgnoreCase(" ")){
-            //Building not Empty
-            for(Quest q: quests){
-                if(q.getBuildingName().equalsIgnoreCase(buildingItem)){
-                    questsTemp.add(q);
-                }
-            }
-        }*/
-        if(buildingItem.equalsIgnoreCase(" ")){
-            if(floorItem.equalsIgnoreCase(" ")){
-                if(zoneItem.equalsIgnoreCase(" ")){
+        if (buildingItem.equalsIgnoreCase(" ")) {
+            if (floorItem.equalsIgnoreCase(" ")) {
+                if (zoneItem.equalsIgnoreCase(" ")) {
                     //All Empty
                     questsTemp = quests;
-                }else{
+                } else {
                     //Zone not Empty
-                    for(Quest q: quests) {
+                    while (iter.hasNext()) {
+                        Quest q = iter.next();
                         if (q.getZoneName().equalsIgnoreCase(zoneItem)) {
                             questsTemp.add(q);
                         }
                     }
                 }
-            }else{
-                if(zoneItem.equalsIgnoreCase(" ")){
+            } else {
+                if (zoneItem.equalsIgnoreCase(" ")) {
                     //Floor not Empty
-                    for(Quest q: quests) {
+                    while (iter.hasNext()) {
+                        Quest q = iter.next();
                         if (q.getFloorName().equalsIgnoreCase(floorItem)) {
                             questsTemp.add(q);
                         }
                     }
-                }else{
+                } else {
                     //Zone and Floor not Empty
-                    for(Quest q: quests) {
+                    while (iter.hasNext()) {
+                        Quest q = iter.next();
                         if (q.getZoneName().equalsIgnoreCase(zoneItem) && q.getFloorName().equalsIgnoreCase(floorItem)) {
                             questsTemp.add(q);
                         }
                     }
                 }
             }
-        }else{
-            if(floorItem.equalsIgnoreCase(" ")){
-                if(zoneItem.equalsIgnoreCase(" ")){
+        } else {
+            if (floorItem.equalsIgnoreCase(" ")) {
+                if (zoneItem.equalsIgnoreCase(" ")) {
                     //Building not Empty
-                    for(Quest q: quests) {
+
+                    while (iter.hasNext()) {
+                        Quest q = iter.next();
                         if (q.getBuildingName().equalsIgnoreCase(buildingItem)) {
                             questsTemp.add(q);
                         }
                     }
-                }else{
+                } else {
                     //Building and Zone not Empty
-                    for(Quest q: quests) {
+                    while (iter.hasNext()) {
+                        Quest q = iter.next();
                         if (q.getBuildingName().equalsIgnoreCase(buildingItem) && q.getZoneName().equalsIgnoreCase(zoneItem)) {
                             questsTemp.add(q);
                         }
                     }
                 }
-            }else{
-                if(zoneItem.equalsIgnoreCase(" ")){
+            } else {
+                if (zoneItem.equalsIgnoreCase(" ")) {
                     //Building and Floor not Empty
-                    for(Quest q: quests) {
+                    while (iter.hasNext()) {
+                        Quest q = iter.next();
                         if (q.getBuildingName().equalsIgnoreCase(buildingItem) && q.getFloorName().equalsIgnoreCase(floorItem)) {
                             questsTemp.add(q);
                         }
                     }
-                }else{
+                } else {
                     //All not Empty
-                    for(Quest q: quests) {
+                    while (iter.hasNext()) {
+                        Quest q = iter.next();
                         if (q.getZoneName().equalsIgnoreCase(zoneItem) && q.getFloorName().equalsIgnoreCase(floorItem) && q.getBuildingName().equalsIgnoreCase(buildingItem)) {
                             questsTemp.add(q);
                         }
@@ -518,5 +517,11 @@ public class PlaceActivity extends ActionBarActivity {
                 }
             }
         }
+
+        // END OF CREATE NEW TEMP QUESTS
+
+        QuestRecycleView fragment = (QuestRecycleView) getSupportFragmentManager().findFragmentById(R.id.quest_browsing_null);
+        fragment.reCreateRecyclerView();
+
     }
 }

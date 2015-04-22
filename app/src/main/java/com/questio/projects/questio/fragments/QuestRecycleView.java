@@ -45,5 +45,10 @@ public class QuestRecycleView extends Fragment {
         return rootView;
     }
 
-
+    public void reCreateRecyclerView(){
+        questBrowsingRecyclerView = (RecyclerView) rootView.findViewById(R.id.quest_browsing_recycler_view);
+        questBrowsingRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapterRecycleView = new QuestRecycleViewAdapter(getActivity(), ((PlaceActivity) getActivity()).getQuestsTemp());
+        questBrowsingRecyclerView.setAdapter(adapterRecycleView);
+    }
 }
