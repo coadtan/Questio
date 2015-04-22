@@ -2,6 +2,7 @@ package com.questio.projects.questio.activities;
 
 import android.app.Dialog;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -63,6 +64,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
     int zid;
 
     int currentQuiz;
+    int currentSeq;
     Quiz q;
 
     QuestioAPIService api;
@@ -217,6 +219,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
 
     void populateQuiz(int i) {
         q = quizs.get(i);
+        currentSeq = i;
         quiz_question.setText(q.getQuestion());
         quiz_sequence.setText(Integer.toString(q.getSeqId()));
         quiz_answer_a.setText(q.getChoiceA());
@@ -272,15 +275,15 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                 int status;
                 b.setTextColor(getResources().getColor(R.color.white));
                 b.setText("?");
-               if (!quizStatusHashMap.isEmpty()) {
+                if (!quizStatusHashMap.isEmpty()) {
                     statusStr = quizStatusHashMap.get(Integer.toString(currentQuiz));
-                   if (statusStr != null) {
-                       status = Integer.parseInt(statusStr);
-                   } else {
-                       status = QuestioConstants.QUEST_NOT_STARTED;
-                   }
+                    if (statusStr != null) {
+                        status = Integer.parseInt(statusStr);
+                    } else {
+                        status = QuestioConstants.QUEST_NOT_STARTED;
+                    }
                     if (status == QuestioConstants.QUEST_CORRECT || status == QuestioConstants.QUEST_FAILED) {
-                       disableButton();
+                        disableButton();
 
                     } else {
                         b.setBackgroundResource(R.color.yellow_quiz_unanswered);
@@ -322,6 +325,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                         button = new Button(QuizAction.this);
                         if (i == 0) {
                             button.setTextColor(getResources().getColor(R.color.white));
+                            button.setBackgroundColor(getResources().getColor(R.color.yellow_quiz_unanswered));
                             button.setText("?");
                         }
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -584,9 +588,52 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         quiz_answer_c.setClickable(false);
         quiz_answer_d.setEnabled(false);
         quiz_answer_d.setClickable(false);
+        setButtonAlpha("disable");
+        int correct = Integer.parseInt(quizs.get(currentSeq).getAnswerId());
+        switch (correct) {
+            case 1:
+                quiz_answer_a.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+                quiz_answer_a.setTypeface(null, Typeface.BOLD);
+                break;
+            case 2:
+                quiz_answer_b.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+                quiz_answer_b.setTypeface(null, Typeface.BOLD);
+                break;
+            case 3:
+                quiz_answer_c.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+                quiz_answer_c.setTypeface(null, Typeface.BOLD);
+                break;
+            case 4:
+                quiz_answer_d.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+                quiz_answer_d.setTypeface(null, Typeface.BOLD);
+                break;
+        }
+
+    }
+
+    private void setButtonAlpha(String mode) {
+        if (mode.equalsIgnoreCase("enable")) {
+            quiz_answer_a.getBackground().setAlpha(255);
+            quiz_answer_b.getBackground().setAlpha(255);
+            quiz_answer_c.getBackground().setAlpha(255);
+            quiz_answer_d.getBackground().setAlpha(255);
+        } else if (mode.equalsIgnoreCase("disable")) {
+            quiz_answer_a.getBackground().setAlpha(30);
+            quiz_answer_b.getBackground().setAlpha(30);
+            quiz_answer_c.getBackground().setAlpha(30);
+            quiz_answer_d.getBackground().setAlpha(30);
+        }
     }
 
     private void enableButton() {
+        quiz_answer_a.setBackgroundColor(getResources().getColor(R.color.grey_900));
+        quiz_answer_b.setBackgroundColor(getResources().getColor(R.color.grey_900));
+        quiz_answer_c.setBackgroundColor(getResources().getColor(R.color.grey_900));
+        quiz_answer_d.setBackgroundColor(getResources().getColor(R.color.grey_900));
+        quiz_answer_a.setTypeface(null, Typeface.NORMAL);
+        quiz_answer_b.setTypeface(null, Typeface.NORMAL);
+        quiz_answer_c.setTypeface(null, Typeface.NORMAL);
+        quiz_answer_d.setTypeface(null, Typeface.NORMAL);
         quiz_answer_a.setEnabled(true);
         quiz_answer_a.setClickable(true);
         quiz_answer_b.setEnabled(true);
@@ -595,6 +642,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         quiz_answer_c.setClickable(true);
         quiz_answer_d.setEnabled(true);
         quiz_answer_d.setClickable(true);
+        setButtonAlpha("enable");
     }
 
 }
