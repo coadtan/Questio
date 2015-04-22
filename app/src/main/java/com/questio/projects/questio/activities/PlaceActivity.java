@@ -32,10 +32,13 @@ import com.questio.projects.questio.models.Place;
 import com.questio.projects.questio.models.Quest;
 import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
+import com.questio.projects.questio.utilities.QuestioHelper;
 
 import net.sourceforge.zbar.Symbol;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 
 import retrofit.Callback;
@@ -57,11 +60,23 @@ public class PlaceActivity extends ActionBarActivity {
     private Place place;
     private static final String LOG_TAG = PlaceActivity.class.getSimpleName();
     private ArrayList<Quest> quests;
+    private ArrayList<Quest> questsTemp;
     ImageView quest_browsing_picture;
     LinearLayout place_activity_filter;
     boolean isFilterVisable = false;
     FrameLayout quest_browsing_top_frame;
     boolean isMapVisable = true;
+    String buildingItem = " ";
+    String floorItem = " ";
+    String zoneItem = " ";
+
+    public ArrayList<Quest> getQuestsTemp() {
+        return questsTemp;
+    }
+
+    public void setQuestsTemp(ArrayList<Quest> questsTemp) {
+        this.questsTemp = questsTemp;
+    }
 
     public ArrayList<Quest> getQuests() {
         return quests;
@@ -222,8 +237,9 @@ public class PlaceActivity extends ActionBarActivity {
 
                         @Override
                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                            String buildingItem = buildingSpinner.getSelectedItem().toString();
+                            buildingItem = buildingSpinner.getSelectedItem().toString();
                             if (!buildingItem.equalsIgnoreCase(" ")) {
+                                reTempArray();
                                 floorFilter.clear();
                                 for (Quest q : quests) {
                                     if (q.getBuildingName().equalsIgnoreCase(buildingItem)) {
@@ -232,15 +248,18 @@ public class PlaceActivity extends ActionBarActivity {
                                 }
                                 String[] floorNameFilter = floorFilter.toArray(new String[floorFilter.size() + 1]);
                                 floorNameFilter[floorFilter.size()] = " ";
+
                                 ArrayAdapter<String> adapterFloorFiltered = new ArrayAdapter<>(PlaceActivity.this,
-                                        R.layout.spinner_item_list, floorNameFilter);
+                                        R.layout.spinner_item_list, QuestioHelper.moveBackToFront(floorNameFilter));
                                 floorSpinner.setAdapter(adapterFloorFiltered);
 
                                 floorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                     @Override
                                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                        String floorItem = floorSpinner.getSelectedItem().toString();
+                                        floorItem = floorSpinner.getSelectedItem().toString();
+
                                         if (!floorItem.equalsIgnoreCase(" ")) {
+                                            reTempArray();
                                             zoneFilter.clear();
                                             for (Quest q : quests) {
                                                 if (q.getFloorName().equalsIgnoreCase(floorItem)) {
@@ -249,12 +268,27 @@ public class PlaceActivity extends ActionBarActivity {
                                             }
                                             String[] zoneNameFilter = zoneFilter.toArray(new String[zoneFilter.size() + 1]);
                                             zoneNameFilter[zoneFilter.size()] = " ";
+
                                             ArrayAdapter<String> adapterZoneFiltered = new ArrayAdapter<>(PlaceActivity.this,
-                                                    R.layout.spinner_item_list, zoneNameFilter);
+                                                    R.layout.spinner_item_list, QuestioHelper.moveBackToFront(zoneNameFilter));
                                             zoneSpinner.setAdapter(adapterZoneFiltered);
-                                        }else{
-                                            String buildingItem = buildingSpinner.getSelectedItem().toString();
-                                            if (!buildingItem.equalsIgnoreCase(" ")){
+
+                                            zoneSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                @Override
+                                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                                    reTempArray();
+                                                    zoneItem = zoneSpinner.getSelectedItem().toString();
+                                                }
+
+                                                @Override
+                                                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                                }
+                                            });
+                                        } else {
+                                            buildingItem = buildingSpinner.getSelectedItem().toString();
+                                            if (!buildingItem.equalsIgnoreCase(" ")) {
+                                                reTempArray();
                                                 zoneFilter.clear();
                                                 for (Quest q : quests) {
                                                     if (q.getBuildingName().equalsIgnoreCase(buildingItem)) {
@@ -263,10 +297,28 @@ public class PlaceActivity extends ActionBarActivity {
                                                 }
                                                 String[] zoneNameFilter = zoneFilter.toArray(new String[zoneFilter.size() + 1]);
                                                 zoneNameFilter[zoneFilter.size()] = " ";
+
+                                                Log.d(LOG_TAG, "Zone Name Filter" + Arrays.toString(zoneNameFilter));
+                                                Log.d(LOG_TAG, "Temp Zone Name Filter" + Arrays.toString(QuestioHelper.moveBackToFront(zoneNameFilter)));
                                                 ArrayAdapter<String> adapterZoneFiltered = new ArrayAdapter<>(PlaceActivity.this,
-                                                        R.layout.spinner_item_list, zoneNameFilter);
+                                                        R.layout.spinner_item_list, QuestioHelper.moveBackToFront(zoneNameFilter));
                                                 zoneSpinner.setAdapter(adapterZoneFiltered);
-                                            }else{
+
+                                                zoneSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                    @Override
+                                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                                                        zoneItem = zoneSpinner.getSelectedItem().toString();
+                                                        reTempArray();
+                                                    }
+
+                                                    @Override
+                                                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                                    }
+                                                });
+                                            } else {
+                                                reTempArray();
                                                 zoneFilter.clear();
                                                 zoneSpinner.setAdapter(adapterZone);
                                             }
@@ -280,15 +332,16 @@ public class PlaceActivity extends ActionBarActivity {
                                     }
                                 });
 
-                            }else{
-
+                            } else {
+                                reTempArray();
                                 floorFilter.clear();
                                 floorSpinner.setAdapter(adapterFloor);
                                 floorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                     @Override
                                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                        String floorItem = floorSpinner.getSelectedItem().toString();
+                                        floorItem = floorSpinner.getSelectedItem().toString();
                                         if (!floorItem.equalsIgnoreCase(" ")) {
+                                            reTempArray();
                                             zoneFilter.clear();
                                             for (Quest q : quests) {
                                                 if (q.getFloorName().equalsIgnoreCase(floorItem)) {
@@ -297,12 +350,27 @@ public class PlaceActivity extends ActionBarActivity {
                                             }
                                             String[] zoneNameFilter = zoneFilter.toArray(new String[zoneFilter.size() + 1]);
                                             zoneNameFilter[zoneFilter.size()] = " ";
+
                                             ArrayAdapter<String> adapterZoneFiltered = new ArrayAdapter<>(PlaceActivity.this,
-                                                    R.layout.spinner_item_list, zoneNameFilter);
+                                                    R.layout.spinner_item_list, QuestioHelper.moveBackToFront(zoneNameFilter));
                                             zoneSpinner.setAdapter(adapterZoneFiltered);
-                                        }else{
-                                            String buildingItem = buildingSpinner.getSelectedItem().toString();
-                                            if (!buildingItem.equalsIgnoreCase(" ")){
+
+                                            zoneSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                @Override
+                                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                                    zoneItem = zoneSpinner.getSelectedItem().toString();
+                                                    reTempArray();
+                                                }
+
+                                                @Override
+                                                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                                }
+                                            });
+                                        } else {
+                                            buildingItem = buildingSpinner.getSelectedItem().toString();
+                                            if (!buildingItem.equalsIgnoreCase(" ")) {
+                                                reTempArray();
                                                 zoneFilter.clear();
                                                 for (Quest q : quests) {
                                                     if (q.getBuildingName().equalsIgnoreCase(buildingItem)) {
@@ -311,10 +379,25 @@ public class PlaceActivity extends ActionBarActivity {
                                                 }
                                                 String[] zoneNameFilter = zoneFilter.toArray(new String[zoneFilter.size() + 1]);
                                                 zoneNameFilter[zoneFilter.size()] = " ";
+
                                                 ArrayAdapter<String> adapterZoneFiltered = new ArrayAdapter<>(PlaceActivity.this,
-                                                        R.layout.spinner_item_list, zoneNameFilter);
+                                                        R.layout.spinner_item_list, QuestioHelper.moveBackToFront(zoneNameFilter));
                                                 zoneSpinner.setAdapter(adapterZoneFiltered);
-                                            }else{
+
+                                                zoneSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                    @Override
+                                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                                        zoneItem = zoneSpinner.getSelectedItem().toString();
+                                                        reTempArray();
+                                                    }
+
+                                                    @Override
+                                                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                                    }
+                                                });
+                                            } else {
+                                                reTempArray();
                                                 zoneFilter.clear();
                                                 zoneSpinner.setAdapter(adapterZone);
                                             }
@@ -336,7 +419,6 @@ public class PlaceActivity extends ActionBarActivity {
                         }
                     });
 
-
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                     QuestRecycleView fragment = new QuestRecycleView();
                     transaction.replace(R.id.quest_browsing_null, fragment);
@@ -351,5 +433,90 @@ public class PlaceActivity extends ActionBarActivity {
                 Log.d(LOG_TAG, "requestQuestData: failure");
             }
         });
+    }
+
+    private void reTempArray() {
+
+        /*if (buildingItem.equalsIgnoreCase(" ") &&
+                floorItem.equalsIgnoreCase(" ") &&
+                zoneItem.equalsIgnoreCase(" ")) {
+                //All Empty
+            questsTemp = quests;
+
+        }else if (
+                floorItem.equalsIgnoreCase(" ") &&
+                zoneItem.equalsIgnoreCase(" ")){
+            //Building not Empty
+            for(Quest q: quests){
+                if(q.getBuildingName().equalsIgnoreCase(buildingItem)){
+                    questsTemp.add(q);
+                }
+            }
+        }*/
+        if(buildingItem.equalsIgnoreCase(" ")){
+            if(floorItem.equalsIgnoreCase(" ")){
+                if(zoneItem.equalsIgnoreCase(" ")){
+                    //All Empty
+                    questsTemp = quests;
+                }else{
+                    //Zone not Empty
+                    for(Quest q: quests) {
+                        if (q.getZoneName().equalsIgnoreCase(zoneItem)) {
+                            questsTemp.add(q);
+                        }
+                    }
+                }
+            }else{
+                if(zoneItem.equalsIgnoreCase(" ")){
+                    //Floor not Empty
+                    for(Quest q: quests) {
+                        if (q.getFloorName().equalsIgnoreCase(floorItem)) {
+                            questsTemp.add(q);
+                        }
+                    }
+                }else{
+                    //Zone and Floor not Empty
+                    for(Quest q: quests) {
+                        if (q.getZoneName().equalsIgnoreCase(zoneItem) && q.getFloorName().equalsIgnoreCase(floorItem)) {
+                            questsTemp.add(q);
+                        }
+                    }
+                }
+            }
+        }else{
+            if(floorItem.equalsIgnoreCase(" ")){
+                if(zoneItem.equalsIgnoreCase(" ")){
+                    //Building not Empty
+                    for(Quest q: quests) {
+                        if (q.getBuildingName().equalsIgnoreCase(buildingItem)) {
+                            questsTemp.add(q);
+                        }
+                    }
+                }else{
+                    //Building and Zone not Empty
+                    for(Quest q: quests) {
+                        if (q.getBuildingName().equalsIgnoreCase(buildingItem) && q.getZoneName().equalsIgnoreCase(zoneItem)) {
+                            questsTemp.add(q);
+                        }
+                    }
+                }
+            }else{
+                if(zoneItem.equalsIgnoreCase(" ")){
+                    //Building and Floor not Empty
+                    for(Quest q: quests) {
+                        if (q.getBuildingName().equalsIgnoreCase(buildingItem) && q.getFloorName().equalsIgnoreCase(floorItem)) {
+                            questsTemp.add(q);
+                        }
+                    }
+                }else{
+                    //All not Empty
+                    for(Quest q: quests) {
+                        if (q.getZoneName().equalsIgnoreCase(zoneItem) && q.getFloorName().equalsIgnoreCase(floorItem) && q.getBuildingName().equalsIgnoreCase(buildingItem)) {
+                            questsTemp.add(q);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

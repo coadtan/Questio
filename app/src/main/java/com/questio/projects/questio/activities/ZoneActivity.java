@@ -180,11 +180,13 @@ public class ZoneActivity extends ActionBarActivity {
                     reward.setText(Integer.toString(zone.getRewardId()));
                     zonetype.setText(Integer.toString(zone.getZoneTypeId()));
 
-                    if (!(zone.getImageUrl() == null || zone.getMiniMapUrl() == null)) {
+                    if (!(zone.getImageUrl() == null)) {
                         Glide.with(ZoneActivity.this)
                                 .load(QuestioHelper.getImgLink(zone.getImageUrl()))
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(quest_action_picture);
+                    }
+                    if (!(zone.getMiniMapUrl() == null)) {
                         Glide.with(ZoneActivity.this)
                                 .load(QuestioHelper.getImgLink(zone.getMiniMapUrl()))
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)

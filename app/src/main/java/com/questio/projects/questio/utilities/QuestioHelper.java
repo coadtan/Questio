@@ -166,4 +166,15 @@ public class QuestioHelper {
             return resultForReturn;
     }
 
+    public static String[] moveBackToFront(String[] items){
+        String temp[] = new String[items.length];
+        for(int i = items.length-1 ; i>= 0 ; i--){
+            if(i == items.length-1){
+                temp[0] = items[items.length-1];
+                continue;
+            }
+            temp[i+1] = items[i];
+        }
+        return temp;
+    }
 }

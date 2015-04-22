@@ -44,4 +44,6 @@ public class QuestRecycleView extends Fragment {
 
         return rootView;
     }
+
+
 }

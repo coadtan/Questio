@@ -1,8 +1,11 @@
 package com.questio.projects.questio.models;
 
 import com.google.gson.annotations.SerializedName;
+import com.questio.projects.questio.utilities.QuestioHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 
 /**
@@ -158,7 +161,8 @@ public class Quest {
             }
             buildingNames = buildingSet.toArray(new String[buildingSet.size() + 1]);
             buildingNames[buildingSet.size()] = " ";
-            return buildingNames;
+
+            return QuestioHelper.moveBackToFront(buildingNames);
         } else if (tag.equalsIgnoreCase("floor")) {
             String[] floorNames;
             HashSet<String> floorSet = new HashSet<>();
@@ -167,7 +171,8 @@ public class Quest {
             }
             floorNames = floorSet.toArray(new String[floorSet.size() + 1]);
             floorNames[floorSet.size()] = " ";
-            return floorNames;
+
+            return QuestioHelper.moveBackToFront(floorNames);
         }else if (tag.equalsIgnoreCase("zone")) {
             String[] zoneNames;
             HashSet<String> zoneSet = new HashSet<>();
@@ -176,7 +181,8 @@ public class Quest {
             }
             zoneNames = zoneSet.toArray(new String[zoneSet.size() + 1]);
             zoneNames[zoneSet.size()] = " ";
-            return zoneNames;
+
+            return QuestioHelper.moveBackToFront(zoneNames);
         }
         return null;
     }
