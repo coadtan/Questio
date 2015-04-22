@@ -46,6 +46,7 @@
         <activity android:name=".activities.PicturePuzzleAction" />
         <activity android:name=".activities.RiddleAction" />
         <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.FloorActivity" />
         <activity android:name=".libraries.zbarscanner.ZBarScannerActivity"/>
 
     </application>
