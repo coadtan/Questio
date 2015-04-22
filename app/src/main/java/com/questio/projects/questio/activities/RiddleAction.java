@@ -203,7 +203,7 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
         api.getRiddleByQuestId(id, new Callback<Riddle[]>() {
             @Override
             public void success(Riddle[] riddleTemp, Response response) {
-                if(riddleTemp[0]!= null){
+                if(riddleTemp != null){
                     r = riddleTemp[0];
                     Log.d(LOG_TAG, r.toString());
                     if(r.getHint1().equalsIgnoreCase("")){
