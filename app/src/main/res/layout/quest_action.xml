@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/windowBackground">
+    android:background="@color/windowBackground"
+    android:orientation="vertical">
 
     <include
         android:id="@+id/app_bar"
@@ -39,75 +39,85 @@
 
 
     <LinearLayout
-        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
         android:orientation="horizontal"
-        android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        >
+        android:paddingTop="10dp">
 
         <TextView
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginStart="15dp"
             android:layout_weight="1"
             android:fontFamily="sans-serif-condensed"
             android:text="@string/questaction_item"
-            android:textStyle="bold"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/item"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="2"
             android:fontFamily="sans-serif-condensed"
             android:text="@string/test_questaction_item" />
 
         <TextView
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginStart="5dp"
             android:layout_weight="1"
             android:fontFamily="sans-serif-condensed"
             android:text="@string/questaction_rewards"
-            android:textStyle="bold"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/reward"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="2"
             android:fontFamily="sans-serif-condensed"
-            android:layout_gravity="center"
             android:text="@string/test_questaction_rewards" />
 
         <TextView
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginStart="6dp"
             android:layout_weight="1"
             android:fontFamily="sans-serif-condensed"
             android:text="@string/questaction_type"
-            android:textStyle="bold"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/zonetype"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="2"
             android:fontFamily="sans-serif-condensed"
-            android:layout_gravity="center"
             android:text="@string/test_questaction_type" />
     </LinearLayout>
 
+
+    <ProgressBar
+        android:id="@+id/quest_action_progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:progress="10"
+        android:progressDrawable="@drawable/progressbar_style"
+
+        />
 
     <ListView
         android:id="@+id/quest_action_listview"
