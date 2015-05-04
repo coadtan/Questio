@@ -5,6 +5,7 @@ import com.questio.projects.questio.models.PlaceDetail;
 import com.questio.projects.questio.models.PlaceNews;
 import com.questio.projects.questio.models.Quest;
 import com.questio.projects.questio.models.Quiz;
+import com.questio.projects.questio.models.QuizProgress;
 import com.questio.projects.questio.models.Riddle;
 import com.questio.projects.questio.models.Zone;
 
@@ -90,7 +91,7 @@ public interface QuestioAPIService {
     @GET("/select_all_quizprogress_by_ref.php")
     public void getQuizProgressByRef(
             @Query("ref") int ref,
-            Callback<Response> response);
+            Callback<ArrayList<QuizProgress>> response);
 
     @GET("/update_score_questprogress_by_questid_and_adventurerid.php")
     public void updateScoreQuestProgressByQuestIdAndAdventurerId(
@@ -109,6 +110,37 @@ public interface QuestioAPIService {
     @GET("/update_status_quizprogress_by_ref_and_quizid.php")
     public void updateStatusQuizProgressByRefAndQuizId(
             @Query("statusid") int status,
+            @Query("ref") int ref,
+            @Query("quizid") int quizid,
+            Callback<Response> response);
+
+    @GET("/update_score_quizprogress_by_ref_and_quizid.php")
+    public void updateScoreQuizProgressByRefAndQuizId(
+            @Query("score") int score,
+            @Query("ref") int ref,
+            @Query("quizid") int quizid,
+            Callback<Response> response);
+    @GET("update_statuschoicea_quizprogress_by_ref_and_quizid.php")
+    public void updateStatusChoiceAQuizByRefAndQuizId(
+            @Query("status") int status,
+            @Query("ref") int ref,
+            @Query("quizid") int quizid,
+            Callback<Response> response);
+    @GET("update_statuschoiceb_quizprogress_by_ref_and_quizid.php")
+    public void updateStatusChoiceBQuizByRefAndQuizId(
+            @Query("status") int status,
+            @Query("ref") int ref,
+            @Query("quizid") int quizid,
+            Callback<Response> response);
+    @GET("update_statuschoicec_quizprogress_by_ref_and_quizid.php")
+    public void updateStatusChoiceCQuizByRefAndQuizId(
+            @Query("status") int status,
+            @Query("ref") int ref,
+            @Query("quizid") int quizid,
+            Callback<Response> response);
+    @GET("update_statuschoiced_quizprogress_by_ref_and_quizid.php")
+    public void updateStatusChoiceDQuizByRefAndQuizId(
+            @Query("status") int status,
             @Query("ref") int ref,
             @Query("quizid") int quizid,
             Callback<Response> response);

@@ -6,7 +6,7 @@
 
     <include
         android:id="@+id/app_bar"
-        layout="@layout/toolbar_layout" />
+        layout="@layout/toolbar_quiz_layout" />
 
 
 
