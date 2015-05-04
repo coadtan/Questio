@@ -280,7 +280,7 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
                 return true;
 
             case R.id.action_delect_all_data:
-                place.delectAllPlace();
+                place.deleteAllPlace();
                 return true;
 
             case R.id.action_qrcode_scan:

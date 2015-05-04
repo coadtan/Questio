@@ -198,7 +198,7 @@ public class Place implements Serializable {
         return list;
     }
 
-    public void delectAllPlace() {
+    public void deleteAllPlace() {
         DatabaseHelper databaseHelper = new DatabaseHelper(mContext);
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
         database.delete("place", null, null);
