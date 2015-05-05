@@ -110,7 +110,8 @@ public class ZoneActivity extends ActionBarActivity {
                 String zoneIdForIntent = zoneId.getText().toString();
                 switch (Integer.parseInt(questTypeInvisible.getText().toString())) {
                     case 1:
-                        Intent intentToQuiz = new Intent(ZoneActivity.this, QuizAction.class);
+//                        Intent intentToQuiz = new Intent(ZoneActivity.this, QuizAction.class);
+                        Intent intentToQuiz = new Intent(ZoneActivity.this, QuizActivity.class);
                         intentToQuiz.putExtra(QuestioConstants.QUEST_ID, questIdForIntent);
                         intentToQuiz.putExtra(QuestioConstants.QUEST_NAME, questNameForIntent);
                         intentToQuiz.putExtra(QuestioConstants.QUEST_ZONE_ID, zoneIdForIntent);

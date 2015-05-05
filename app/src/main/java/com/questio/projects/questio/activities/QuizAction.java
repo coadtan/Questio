@@ -35,9 +35,6 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-/**
- * Created by coad4u4ever on 08-Apr-15.
- */
 public class QuizAction extends ActionBarActivity implements View.OnClickListener {
     private static final String LOG_TAG = QuizAction.class.getSimpleName();
     private final int FIRST_QUIZ = 0;
