@@ -35,6 +35,9 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+/**
+ * Created by coad4u4ever on 08-Apr-15.
+ */
 public class QuizAction extends ActionBarActivity implements View.OnClickListener {
     private static final String LOG_TAG = QuizAction.class.getSimpleName();
     private final int FIRST_QUIZ = 0;
@@ -408,7 +411,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                 .setEndpoint(QuestioConstants.ENDPOINT)
                 .build();
         api = adapter.create(QuestioAPIService.class);
-//        api.getQuestProgressByQuestIdAndAdventurerId(qid, adventurerId, new Callback<Response>() {
+//        api.getQuestProgressByQuestIdAndAdventurerId(questId, adventurerId, new Callback<Response>() {
 //            @Override
 //            public void success(Response response, Response response2) {
 //                if (QuestioHelper.responseToString(response).equalsIgnoreCase("null")){
@@ -418,7 +421,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
             public void success(Response response, Response response2) {
                 String questioStatus = QuestioHelper.responseToString(response);
 //                if (QuestioHelper.getJSONStringValueByTag("status", questioStatus).equalsIgnoreCase("1")) {
-//                Log.d(LOG_TAG, "Add Quest Progress + " + qid + "Successful");
+//                Log.d(LOG_TAG, "Add Quest Progress + " + questId + "Successful");
                 Log.d(LOG_TAG, "Add Quest Progress: " + qid + " " + questioStatus);
                 for (Quiz q : quizs) {
                     api.addQuizProgress(ref, q.getQuizId(), new Callback<Response>() {
@@ -527,74 +530,6 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                 .build();
         api = adapter.create(QuestioAPIService.class);
         api.updateScoreQuizProgressByRefAndQuizId(score, ref, quizId, new Callback<Response>() {
-            @Override
-            public void success(Response response, Response response2) {
-
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
-        });
-    }
-    private void updateChoiceAStatus() {
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(QuestioConstants.ENDPOINT)
-                .build();
-        api = adapter.create(QuestioAPIService.class);
-        api.updateStatusChoiceAQuizByRefAndQuizId(1, ref, q.getQuizId(), new Callback<Response>() {
-            @Override
-            public void success(Response response, Response response2) {
-
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
-        });
-    }
-    private void updateChoiceBStatus() {
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(QuestioConstants.ENDPOINT)
-                .build();
-        api = adapter.create(QuestioAPIService.class);
-        api.updateStatusChoiceBQuizByRefAndQuizId(1, ref, q.getQuizId(), new Callback<Response>() {
-            @Override
-            public void success(Response response, Response response2) {
-
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
-        });
-    }
-    private void updateChoiceCStatus() {
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(QuestioConstants.ENDPOINT)
-                .build();
-        api = adapter.create(QuestioAPIService.class);
-        api.updateStatusChoiceCQuizByRefAndQuizId(1, ref, q.getQuizId(), new Callback<Response>() {
-            @Override
-            public void success(Response response, Response response2) {
-
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
-        });
-    }
-    private void updateChoiceDStatus() {
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(QuestioConstants.ENDPOINT)
-                .build();
-        api = adapter.create(QuestioAPIService.class);
-        api.updateStatusChoiceDQuizByRefAndQuizId(1, ref, q.getQuizId(), new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
 

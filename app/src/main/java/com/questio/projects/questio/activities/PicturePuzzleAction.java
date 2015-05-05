@@ -243,7 +243,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                 .setEndpoint(QuestioConstants.ENDPOINT)
                 .build();
         api = adapter.create(QuestioAPIService.class);
-//        api.getQuestProgressByQuestIdAndAdventurerId(qid, adventurerId, new Callback<Response>() {
+//        api.getQuestProgressByQuestIdAndAdventurerId(questId, adventurerId, new Callback<Response>() {
 //            @Override
 //            public void success(Response response, Response response2) {
 //                if (QuestioHelper.responseToString(response).equalsIgnoreCase("null")){
