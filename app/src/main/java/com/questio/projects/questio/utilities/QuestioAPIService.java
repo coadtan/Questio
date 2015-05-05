@@ -122,25 +122,21 @@ public interface QuestioAPIService {
             Callback<Response> response);
     @GET("update_statuschoicea_quizprogress_by_ref_and_quizid.php")
     public void updateStatusChoiceAQuizByRefAndQuizId(
-            @Query("status") int status,
             @Query("ref") int ref,
             @Query("quizid") int quizid,
             Callback<Response> response);
     @GET("update_statuschoiceb_quizprogress_by_ref_and_quizid.php")
     public void updateStatusChoiceBQuizByRefAndQuizId(
-            @Query("status") int status,
             @Query("ref") int ref,
             @Query("quizid") int quizid,
             Callback<Response> response);
     @GET("update_statuschoicec_quizprogress_by_ref_and_quizid.php")
     public void updateStatusChoiceCQuizByRefAndQuizId(
-            @Query("status") int status,
             @Query("ref") int ref,
             @Query("quizid") int quizid,
             Callback<Response> response);
     @GET("update_statuschoiced_quizprogress_by_ref_and_quizid.php")
     public void updateStatusChoiceDQuizByRefAndQuizId(
-            @Query("status") int status,
             @Query("ref") int ref,
             @Query("quizid") int quizid,
             Callback<Response> response);
