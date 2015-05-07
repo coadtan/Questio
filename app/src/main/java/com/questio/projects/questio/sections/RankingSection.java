@@ -1,8 +1,8 @@
 package com.questio.projects.questio.sections;
 
+import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.inthecheesefactory.thecheeselibrary.fragment.support.v4.app.StatedFragment;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.activities.ZoneActivity;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarConstants;
@@ -18,44 +17,16 @@ import com.questio.projects.questio.libraries.zbarscanner.ZBarScannerActivity;
 
 import net.sourceforge.zbar.Symbol;
 
-/**
- * Created by coad4u4ever on 01-Apr-15.
- */
-public class RankingSection extends StatedFragment {
+public class RankingSection extends Fragment {
     private static final String LOG_TAG = RankingSection.class.getSimpleName();
     private int i;
 
-    @Override
-    protected void onSaveState(Bundle outState) {
-        outState.putInt("i", i);
-        Log.d(LOG_TAG, "onSaveState i: " + i);
-        super.onSaveState(outState);
 
-    }
-
-    @Override
-    protected void onRestoreState(Bundle savedInstanceState) {
-        i = savedInstanceState.getInt("i");
-        Log.d(LOG_TAG, "onRestoreState i: " + i);
-        super.onRestoreState(savedInstanceState);
-    }
-
-    @Override
-    protected void onFirstTimeLaunched() {
-        super.onFirstTimeLaunched();
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        if (savedInstanceState == null) {
-            i = (int) (Math.random()*100);
-            Log.d(LOG_TAG, "re-random i: "+ i);
-        }else{
-            Log.d(LOG_TAG, "no re-random i: " + i);
-        }
-
 
     }
 
