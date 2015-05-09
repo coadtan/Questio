@@ -60,6 +60,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         setContentView(R.layout.puzzle_action);
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(0xFFFFFFFF);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         pointTV = (TextView) toolbar.findViewById(R.id.toolbar_points);
         pointTV.setText(Integer.toString(points));

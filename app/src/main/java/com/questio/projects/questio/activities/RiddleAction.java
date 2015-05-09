@@ -60,6 +60,7 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
         setContentView(R.layout.riddle_action);
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(0xFFFFFFFF);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 

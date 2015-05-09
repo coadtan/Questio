@@ -1,6 +1,7 @@
 package com.questio.projects.questio.adepters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
  */
 public class QuestInActionAdapter extends ArrayAdapter<Quest> {
 
-    public static final String LOG_TAG = NewsListAdapter.class.getSimpleName();
+    public static final String LOG_TAG = QuestInActionAdapter.class.getSimpleName();
 
     private static class ViewHolder {
         private ImageView questtype;
@@ -52,6 +53,7 @@ public class QuestInActionAdapter extends ArrayAdapter<Quest> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         Quest items = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_quest, parent, false);
@@ -62,6 +64,8 @@ public class QuestInActionAdapter extends ArrayAdapter<Quest> {
         viewHolder.questdetails.setText(items.getQuestDetails());
         viewHolder.questTypeInvisible.setText(Integer.toString(items.getQuestTypeId()));
         viewHolder.zoneid.setText(Integer.toString(items.getZoneId()));
+
+        Log.d(LOG_TAG, "getView: questname = " + items.getQuestName());
         switch (items.getQuestTypeId()) {
             case 1:
                 viewHolder.questtype.setImageResource(R.drawable.ic_icon_quiz);
@@ -74,6 +78,23 @@ public class QuestInActionAdapter extends ArrayAdapter<Quest> {
                 break;
         }
 
+        switch (items.getDiffId()){
+            case 1:
+                viewHolder.difficulty.setImageResource(R.drawable.veryeasy_bar);
+                break;
+            case 2:
+                viewHolder.difficulty.setImageResource(R.drawable.easy_bar);
+                break;
+            case 3:
+                viewHolder.difficulty.setImageResource(R.drawable.normal_bar);
+                break;
+            case 4:
+                viewHolder.difficulty.setImageResource(R.drawable.hard_bar);
+                break;
+            case 5:
+                viewHolder.difficulty.setImageResource(R.drawable.veryhard_bar);
+                break;
+        }
 
 //        viewHolder.questtype.setImageDrawable();
 //        viewHolder.difficulty.setImageDrawable();

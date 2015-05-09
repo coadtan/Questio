@@ -36,6 +36,8 @@ import retrofit.client.Response;
 
 public class QuizActivity extends ActionBarActivity implements View.OnClickListener {
     private static final String LOG_TAG = QuizActivity.class.getSimpleName();
+    private static final int I_DO_NOT_CARE_JUST_CHANGE_IT_IMMEDIATELY_TO_CORRECT = 1;
+    private static final int I_DO_NOT_CARE_JUST_CHANGE_IT_IMMEDIATELY_TO_INCORRECT = 2;
     Toolbar toolbar;
 
 
@@ -152,6 +154,7 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
     private void handleToolbar() {
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(0xFFFFFFFF);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,12 +179,14 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
                     for (int i = 0; i < totalQuiz; i++) {
                         Button button = new Button(QuizActivity.this);
                         if (i == 0) {
-                            button.setBackgroundColor(getResources().getColor(R.color.yellow_quiz_unanswered));
+                            //   button.setBackgroundColor(getResources().getColor(R.color.yellow_quiz_unanswered));
+                            button.setBackground(getResources().getDrawable(R.drawable.corners_button_yellow));
                             button.setText("?");
                         }
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
-                        button.setTextColor(getResources().getColor(R.color.white));
-                        button.setBackgroundColor(getResources().getColor(R.color.grey_700));
+                        button.setTextColor(getResources().getColor(R.color.black));
+                        //  button.setBackgroundColor(getResources().getColor(R.color.grey_700));
+                        button.setBackground(getResources().getDrawable(R.drawable.corners_button));
                         params.setMargins(5, 5, 5, 5);
                         button.setId(buttonId);
                         button.setContentDescription(Integer.toString(quizs.get(i).getQuizId()));
@@ -253,10 +258,31 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
         quizChoice3.setText(q.getChoiceC());
         quizChoice4.setText(q.getChoiceD());
         currentQuiz = q.getQuizId();
-        swapButtonColorByState(Integer.parseInt(q.getAnswerId()));
+        swapButtonColorByState(Integer.parseInt(q.getAnswerId()), 0);
     }
 
-    private void swapButtonColorByState(int answerPosition) {
+    private void swapButtonColorByState(int answerPosition, int flag) {
+        Log.d(LOG_TAG, "swapButtonColorByState: called");
+        Log.d(LOG_TAG, "swapButtonColorByState: answerPosition = " + answerPosition);
+        quizChoice1.setBackground(getResources().getDrawable(R.drawable.answer_button));
+        quizChoice2.setBackground(getResources().getDrawable(R.drawable.answer_button));
+        quizChoice3.setBackground(getResources().getDrawable(R.drawable.answer_button));
+        quizChoice4.setBackground(getResources().getDrawable(R.drawable.answer_button));
+        if (flag == I_DO_NOT_CARE_JUST_CHANGE_IT_IMMEDIATELY_TO_CORRECT) {
+            if (answerStatesMap != null) {
+                AnswerState as = answerStatesMap.get(q.getQuizId());
+                as.setStatus(QuestioConstants.QUEST_CORRECT);
+                answerStatesMap.put(q.getQuizId(), as);
+            } else {
+                Log.d(LOG_TAG, "swapButtonColorByState: answerStatesMap is null");
+            }
+        } else if (flag == I_DO_NOT_CARE_JUST_CHANGE_IT_IMMEDIATELY_TO_INCORRECT) {
+            if (answerStatesMap != null) {
+                AnswerState as = answerStatesMap.get(q.getQuizId());
+                as.setStatus(QuestioConstants.QUEST_FAILED);
+                answerStatesMap.put(q.getQuizId(), as);
+            }
+        }
         if (answerStatesMap != null) {
             AnswerState as = answerStatesMap.get(q.getQuizId());
             if (as.getStatus() == QuestioConstants.QUEST_CORRECT) {
@@ -270,19 +296,47 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
                 quizChoice4.setClickable(false);
                 switch (answerPosition) {
                     case 1:
-                        quizChoice1.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+                        //quizChoice1.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+                        quizChoice1.setBackground(getResources().getDrawable(R.drawable.answer_button_correct));
                         break;
                     case 2:
-                        quizChoice2.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+                        //quizChoice2.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+                        quizChoice2.setBackground(getResources().getDrawable(R.drawable.answer_button_correct));
                         break;
                     case 3:
-                        quizChoice3.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+                        //quizChoice3.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+                        quizChoice3.setBackground(getResources().getDrawable(R.drawable.answer_button_correct));
                         break;
                     case 4:
-                        quizChoice4.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+                        //quizChoice4.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+                        quizChoice4.setBackground(getResources().getDrawable(R.drawable.answer_button_correct));
+                        break;
+                }
+            } else if (as.getStatus() == QuestioConstants.QUEST_FAILED) {
+                quizChoice1.setEnabled(false);
+                quizChoice1.setClickable(false);
+                quizChoice2.setEnabled(false);
+                quizChoice2.setClickable(false);
+                quizChoice3.setEnabled(false);
+                quizChoice3.setClickable(false);
+                quizChoice4.setEnabled(false);
+                quizChoice4.setClickable(false);
+                switch (answerPosition) {
+                    case 1:
+                        quizChoice1.setBackground(getResources().getDrawable(R.drawable.corners_button_yellow));
+                        break;
+                    case 2:
+                        quizChoice2.setBackground(getResources().getDrawable(R.drawable.corners_button_yellow));
+                        break;
+                    case 3:
+                        quizChoice3.setBackground(getResources().getDrawable(R.drawable.corners_button_yellow));
+                        break;
+                    case 4:
+                        quizChoice4.setBackground(getResources().getDrawable(R.drawable.corners_button_yellow));
                         break;
                 }
             } else {
+                Log.d(LOG_TAG, "swapButtonColorByState: QuestioConstants is not QUEST_CORRECT");
                 if (as.isA()) {
                     disableButtonAnswer(quizChoice1);
                 } else {
@@ -304,8 +358,11 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
                     enableButtonAnswer(quizChoice4);
                 }
             }
+        } else {
+            Log.d(LOG_TAG, "swapButtonColorByState: answerStatesMap is null");
         }
     }
+
 
     public void changeButtonIndicator(int selected) {
         View v = findViewById(android.R.id.content);
@@ -313,9 +370,8 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
         for (int i = 0; i < quizs.size(); i++) {
             b = (Button) v.findViewById(i);
             if (i == selected) {
-                b.setTextColor(getResources().getColor(R.color.white));
+                // b.setTextColor(getResources().getColor(R.color.white));
                 b.setText("?");
-
             } else {
                 b.setText("");
             }
@@ -330,7 +386,7 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
             public void success(ArrayList<QuizProgress> quizProgressesTemp, Response response) {
                 quizProgresses = quizProgressesTemp;
                 Log.d(LOG_TAG, "requestQuizProgress: success");
-                if (quizProgresses == null) {
+                if (quizProgresses == null || quizProgresses.size() != totalQuiz) {
                     Log.d(LOG_TAG, "requestQuizProgress: success but quizProgresses is null");
                     insertProgressData();
                 } else {
@@ -339,10 +395,12 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
                         AnswerState as = createAnswerState(qp);
                         if (qp.getStatusId() == QuestioConstants.QUEST_CORRECT) {
                             as.setStatus(QuestioConstants.QUEST_CORRECT);
+                        } else if (qp.getStatusId() == QuestioConstants.QUEST_FAILED) {
+                            as.setStatus(QuestioConstants.QUEST_FAILED);
                         }
                         answerStatesMap.put(qp.getQuizId(), as);
                     }
-                    swapButtonColorByState(Integer.parseInt(quizs.get(FIRST_QUIZ).getAnswerId()));
+                    swapButtonColorByState(Integer.parseInt(quizs.get(FIRST_QUIZ).getAnswerId()), 0);
                     changeButtonProgressColor();
                 }
             }
@@ -385,13 +443,17 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
                             // do nothing
                             break;
                         case 2:
-                            b.setBackgroundColor(getResources().getColor(R.color.yellow_quiz_unanswered));
+                            //b.setBackgroundColor(getResources().getColor(R.color.yellow_quiz_unanswered));
+                            b.setBackground(getResources().getDrawable(R.drawable.corners_button_yellow));
                             break;
                         case 3:
-                            b.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+
+                            //b.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+                            b.setBackground(getResources().getDrawable(R.drawable.corners_button_green));
                             break;
                         case 4:
-                            b.setBackgroundColor(getResources().getColor(R.color.red_quiz_wrong));
+                            //b.setBackgroundColor(getResources().getColor(R.color.red_quiz_wrong));
+                            b.setBackground(getResources().getDrawable(R.drawable.corners_button_red));
                             break;
                     }
                 }
@@ -450,6 +512,7 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     void onCorrect(int seqId, int quizId) {
+        Log.d(LOG_TAG, "onCorrect: called");
         Button b = (Button) findViewById(seqId - 1);
         int answerTime = answerStatesMap.get(quizId).getAnswerTime();
         int score = 3;
@@ -469,15 +532,18 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
                     }
                 });
 
+
         updateQuizProgressStatus(QuestioConstants.QUEST_CORRECT, quizId);
-
-
+        Log.d(LOG_TAG, "onCorrect: seqId = " + seqId);
+        swapButtonColorByState(Integer.parseInt(quizs.get(seqId - 1).getAnswerId()), I_DO_NOT_CARE_JUST_CHANGE_IT_IMMEDIATELY_TO_CORRECT);
     }
 
     void onIncorrect(int seqId, int answer) {
+
         Button b = (Button) findViewById(seqId - 1);
         int quizId = Integer.parseInt(b.getContentDescription().toString());
         AnswerState as = answerStatesMap.get(quizId);
+
         switch (answer) {
             case 1:
                 as.setA(true);
@@ -501,6 +567,26 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
                 break;
         }
 
+        int answerTime = as.getAnswerTime();
+        Log.d(LOG_TAG, "onIncorrect: answerTime = " + answerTime);
+        if (answerTime >= 3) {
+            api.updateScoreQuizProgressByRefAndQuizId(0, ref, Integer.parseInt(b.getContentDescription().toString()),
+                    new Callback<Response>() {
+                        @Override
+                        public void success(Response response, Response response2) {
+
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+
+                        }
+                    });
+            updateQuizProgressStatus(QuestioConstants.QUEST_FAILED, quizId);
+            Log.d(LOG_TAG, "onCorrect: seqId = " + seqId);
+            swapButtonColorByState(Integer.parseInt(quizs.get(seqId - 1).getAnswerId()), I_DO_NOT_CARE_JUST_CHANGE_IT_IMMEDIATELY_TO_INCORRECT);
+
+        }
 
 //        Log.d(LOG_TAG, "Before minus 1: " + seqId);
 //        Button b = (Button) findViewById(seqId - 1);
@@ -510,7 +596,7 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
 
 
     void onLimitAnswer(int seqId) {
-
+        Log.d(LOG_TAG, "onLimitAnswer: called");
     }
 
     void updateQuizProgressStatus(int status, int quizId) {
@@ -533,8 +619,9 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     void disableButtonAnswer(Button b) {
-        b.setBackgroundColor(getResources().getColor(R.color.red_quiz_wrong));
-        b.setTextColor(getResources().getColor(R.color.white));
+        //b.setBackgroundColor(getResources().getColor(R.color.red_quiz_wrong));
+        b.setBackground(getResources().getDrawable(R.drawable.corners_button_red));
+        //b.setTextColor(getResources().getColor(R.color.white));
         b.setEnabled(false);
         b.setClickable(false);
     }
@@ -619,6 +706,15 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
             changeButtonIndicator(v.getId());
             currentQuiz = q.getQuizId();
         }
+    }
+
+    // check if user finish every quiz in quest; return true if it is, false if it was not.
+    private boolean isQuestFinish(){
+        boolean finish = false;
+        // step 1: check all quiz by ref + quest id if all of those status is not 0
+        // if it is then return true
+
+        return finish;
     }
 
     private class AnswerState {
