@@ -6,6 +6,7 @@
     android:background="@drawable/touch_selector"
     android:orientation="horizontal"
     android:padding="10dp"
+
     android:weightSum="7">
 
     <TextView
