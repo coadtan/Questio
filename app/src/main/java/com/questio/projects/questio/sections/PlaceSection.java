@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.location.Location;
@@ -20,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,7 +75,9 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
     GoogleMap googleMap;
     ArrayList<Place> placeListForDistance;
     Marker mMarker;
-
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
+    Button enterPlaceBtn;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +86,9 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
         placeListForDistance = place.getAllPlaceArrayList();
         location = getLocation();
         setHasOptionsMenu(true);
+        //editor = this.getActivity().getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, Context.MODE_PRIVATE).edit();
+        prefs = this.getActivity().getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, Context.MODE_PRIVATE);
+        editor = this.getActivity().getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, Context.MODE_PRIVATE).edit();
     }
 
     @Override
@@ -91,6 +98,7 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
         rootView = inflater.inflate(R.layout.section_place, container, false);
         Bundle args = getArguments();
         mMapView = (MapView) rootView.findViewById(R.id.map);
+        enterPlaceBtn = (Button)rootView.findViewById(R.id.enter_place);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
         try {
@@ -204,21 +212,45 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
 
         if (results[0] <= p.getRadius()) {
 
-            new AlertDialog.Builder(mContext)
-                    .setIcon(android.R.drawable.ic_dialog_info)
-                    .setTitle("เข้าสู่ " + p.getPlaceName() + "!")
-                    .setMessage("ยืนยันการเข้าสู่สถานที่แห่งนี้หรือไม่ครับ")
-                    .setPositiveButton("ยืนยัน!", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(mContext, PlaceActivity.class);
-                            intent.putExtra("place", p);
-                            startActivity(intent);
-                        }
+            int placeIDFromSharedPreferences = prefs.getInt(QuestioConstants.CURRENT_PLACE, 0);
+            //long timeFromSharedPreferences = prefs.getLong(QuestioConstants.CURRENT_PLACE_TIMEOUT, 0);
 
-                    })
-                    .setNegativeButton("ไม่", null)
-                    .show();
+            Log.d(LOG_TAG, "isEnterQuestMap: placeIDFromSharedPreferences = " + placeIDFromSharedPreferences);
+            //Log.d(LOG_TAG,"isEnterQuestMap: timeFromSharedPreferences = "+ timeFromSharedPreferences);
+            Log.d(LOG_TAG, "isEnterQuestMap: p.getPlaceId() = " + p.getPlaceId());
+            if (placeIDFromSharedPreferences != p.getPlaceId()) {
+                //QuestioHelper.isTimeDifferentLessThan3Hours(timeFromSharedPreferences, QuestioHelper.getTimeNow())
+                editor.putInt(QuestioConstants.CURRENT_PLACE, p.getPlaceId());
+                //editor.putLong(QuestioConstants.CURRENT_PLACE_TIMEOUT, QuestioHelper.getTimeNow());
+                editor.apply();
+                new AlertDialog.Builder(mContext)
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .setTitle("เข้าสู่ " + p.getPlaceName() + "!")
+                        .setMessage("ยืนยันการเข้าสู่สถานที่แห่งนี้หรือไม่ครับ")
+                        .setPositiveButton("ยืนยัน!", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(mContext, PlaceActivity.class);
+                                intent.putExtra("place", p);
+                                startActivity(intent);
+                            }
+
+                        })
+                        .setNegativeButton("ไม่", null)
+                        .show();
+            }else{
+                enterPlaceBtn.setVisibility(View.VISIBLE);
+                enterPlaceBtn.setText("ENTER TO " + p.getPlaceName());
+                enterPlaceBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, PlaceActivity.class);
+                        intent.putExtra("place", p);
+                        startActivity(intent);
+                    }
+                });
+            }
+
         }
     }
 
