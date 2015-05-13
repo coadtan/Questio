@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="60dp"
     android:layout_margin="10dp"
     android:background="@drawable/touch_selector"
     android:orientation="horizontal"
-    android:padding="10dp"
 
     android:weightSum="7">
 
@@ -30,10 +29,9 @@
     <ImageView
         android:id="@+id/difficulty"
         android:layout_width="wrap_content"
+        android:layout_weight="0.3"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:adjustViewBounds="true"
-        android:src="@drawable/veryeasy_bar" />
+        />
 
     <ImageView
         android:id="@+id/questtype"
@@ -48,24 +46,24 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="5"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical">
 
         <TextView
             android:id="@+id/questname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
             android:text="@string/test_questlist_name"
             android:textSize="20dp" />
-
         <TextView
             android:id="@+id/questdetails"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
             android:text="@string/test_questlist_details"
-            android:textSize="16dp" />
-
+            android:textSize="12dp"
+            android:visibility="gone"/>
 
     </LinearLayout>
 
@@ -170,5 +168,8 @@
 
 
 </LinearLayout>
+
+detail
+
 
 -->

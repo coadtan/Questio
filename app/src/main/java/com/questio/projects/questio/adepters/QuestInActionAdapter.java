@@ -1,6 +1,7 @@
 package com.questio.projects.questio.adepters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 public class QuestInActionAdapter extends ArrayAdapter<Quest> {
 
     public static final String LOG_TAG = QuestInActionAdapter.class.getSimpleName();
+    private Context mContext;
+    private Typeface tf;
 
     private static class ViewHolder {
         private ImageView questtype;
@@ -49,6 +52,8 @@ public class QuestInActionAdapter extends ArrayAdapter<Quest> {
 
     public QuestInActionAdapter(Context context, ArrayList<Quest> feed) {
         super(context, 0, feed);
+        mContext = context;
+        tf = Typeface.createFromAsset(context.getAssets(), "fonts/CSPraJad.otf");
     }
 
     @Override
@@ -60,7 +65,9 @@ public class QuestInActionAdapter extends ArrayAdapter<Quest> {
         }
         ViewHolder viewHolder = new ViewHolder(convertView);
         viewHolder.questid.setText(Integer.toString(items.getQuestId()));
+        viewHolder.questid.setTypeface(tf);
         viewHolder.questname.setText(items.getQuestName());
+        viewHolder.questname.setTypeface(tf);
         viewHolder.questdetails.setText(items.getQuestDetails());
         viewHolder.questTypeInvisible.setText(Integer.toString(items.getQuestTypeId()));
         viewHolder.zoneid.setText(Integer.toString(items.getZoneId()));
@@ -80,19 +87,19 @@ public class QuestInActionAdapter extends ArrayAdapter<Quest> {
 
         switch (items.getDiffId()){
             case 1:
-                viewHolder.difficulty.setImageResource(R.drawable.veryeasy_bar);
+                viewHolder.difficulty.setBackgroundColor(mContext.getResources().getColor(R.color.quest_veryeasy));
                 break;
             case 2:
-                viewHolder.difficulty.setImageResource(R.drawable.easy_bar);
+                viewHolder.difficulty.setBackgroundColor(mContext.getResources().getColor(R.color.quest_easy));
                 break;
             case 3:
-                viewHolder.difficulty.setImageResource(R.drawable.normal_bar);
+                viewHolder.difficulty.setBackgroundColor(mContext.getResources().getColor(R.color.quest_normal));
                 break;
             case 4:
-                viewHolder.difficulty.setImageResource(R.drawable.hard_bar);
+                viewHolder.difficulty.setBackgroundColor(mContext.getResources().getColor(R.color.quest_hard));
                 break;
             case 5:
-                viewHolder.difficulty.setImageResource(R.drawable.veryhard_bar);
+                viewHolder.difficulty.setBackgroundColor(mContext.getResources().getColor(R.color.quest_veryhard));
                 break;
         }
 
