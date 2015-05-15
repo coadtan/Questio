@@ -169,4 +169,59 @@ public interface QuestioAPIService {
     public void getCountQuizProgressFinishedByRef(
             @Query("ref") int ref,
             Callback<Response> response);
+
+    @GET("/update_puzzleprogress_puzzlepiece_by_ref.php")
+    public void updatePuzzleProgressPieceByRef(
+            @Query("tlstatus") int topLeftStatus,
+            @Query("tmstatus") int topMidStatus,
+            @Query("trstatus") int topRightStatus,
+            @Query("mlstatus") int midLeftStatus,
+            @Query("mmstatus") int midMidStatus,
+            @Query("mrstatus") int midRightStatus,
+            @Query("blstatus") int bottomLeftStatus,
+            @Query("bmstatus") int bottomMidStatus,
+            @Query("brstatus") int bottomRightStatus,
+            @Query("ref") int ref,
+            Callback<Response> response
+    );
+    @GET("/select_all_puzzleprogress_by_ref.php")
+    public void getPuzzleProgressByRef(
+            @Query("ref") int ref,
+            Callback<Response> response
+    );
+
+    @GET("/insert_puzzleprogress.php")
+    public void addPuzzleProgress(
+            @Query("ref") int ref,
+            @Query("puzzleid") int puzzleid,
+            Callback<Response> response
+    );
+
+    @GET("/select_all_riddleprogress_by_ref.php")
+    public void getRiddleProgressByRef(
+            @Query("ref") int ref,
+            Callback<Response> response
+    );
+    @GET("/update_riddleprogress_scanlimit_by_ref.php")
+    public void updateRiddleProgressScanLimitByRef(
+            @Query("scanlimit") int scanLimit,
+            @Query("ref") int ref,
+            Callback<Response> response
+    );
+
+    @GET("/insert_riddleprogress.php")
+    public void addRiddleProgress(
+            @Query("ref") int ref,
+            @Query("riddleid") int riddleId,
+            Callback<Response> response
+    );
+
+    @GET("/update_riddleprogress_hintpiece_by_ref.php")
+    public void updateRiddleProgressHintPieceByRef(
+            @Query("hint1status") int hint1Status,
+            @Query("hint2status") int hint2Status,
+            @Query("hint3status") int hint3Status,
+            @Query("ref") int ref,
+            Callback<Response> response
+    );
 }
