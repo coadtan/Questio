@@ -172,17 +172,48 @@ public interface QuestioAPIService {
             @Query("ref") int ref,
             Callback<Response> response);
 
-    @GET("/update_puzzleprogress_puzzlepiece_by_ref.php")
-    public void updatePuzzleProgressPieceByRef(
-            @Query("tlstatus") int topLeftStatus,
-            @Query("tmstatus") int topMidStatus,
-            @Query("trstatus") int topRightStatus,
-            @Query("mlstatus") int midLeftStatus,
-            @Query("mmstatus") int midMidStatus,
-            @Query("mrstatus") int midRightStatus,
-            @Query("blstatus") int bottomLeftStatus,
-            @Query("bmstatus") int bottomMidStatus,
-            @Query("brstatus") int bottomRightStatus,
+    @GET("/update_puzzleprogress_tlpiece_by_ref.php")
+    public void updatePuzzleProgressTopLeftPieceByRef(
+            @Query("ref") int ref,
+            Callback<Response> response
+    );
+    @GET("/update_puzzleprogress_tmpiece_by_ref.php")
+    public void updatePuzzleProgressTopMidPieceByRef(
+            @Query("ref") int ref,
+            Callback<Response> response
+    );
+    @GET("/update_puzzleprogress_trpiece_by_ref.php")
+    public void updatePuzzleProgressTopRightPieceByRef(
+            @Query("ref") int ref,
+            Callback<Response> response
+    );
+    @GET("/update_puzzleprogress_mlpiece_by_ref.php")
+    public void updatePuzzleProgressMidLeftPieceByRef(
+            @Query("ref") int ref,
+            Callback<Response> response
+    );
+    @GET("/update_puzzleprogress_mmpiece_by_ref.php")
+    public void updatePuzzleProgressMidMidPieceByRef(
+            @Query("ref") int ref,
+            Callback<Response> response
+    );
+    @GET("/update_puzzleprogress_mrpiece_by_ref.php")
+    public void updatePuzzleProgressMidRightPieceByRef(
+            @Query("ref") int ref,
+            Callback<Response> response
+    );
+    @GET("/update_puzzleprogress_blpiece_by_ref.php")
+    public void updatePuzzleProgressBottomLeftPieceByRef(
+            @Query("ref") int ref,
+            Callback<Response> response
+    );
+    @GET("/update_puzzleprogress_bmpiece_by_ref.php")
+    public void updatePuzzleProgressBottomMidPieceByRef(
+            @Query("ref") int ref,
+            Callback<Response> response
+    );
+    @GET("/update_puzzleprogress_brpiece_by_ref.php")
+    public void updatePuzzleProgressBottomRightPieceByRef(
             @Query("ref") int ref,
             Callback<Response> response
     );
@@ -227,11 +258,18 @@ public interface QuestioAPIService {
             Callback<Response> response
     );
 
-    @GET("/update_riddleprogress_hintpiece_by_ref.php")
-    public void updateRiddleProgressHintPieceByRef(
-            @Query("hint1status") int hint1Status,
-            @Query("hint2status") int hint2Status,
-            @Query("hint3status") int hint3Status,
+    @GET("/update_riddleprogress_hint1_by_ref.php")
+    public void updateRiddleProgressHint1ByRef(
+            @Query("ref") int ref,
+            Callback<Response> response
+    );
+    @GET("/update_riddleprogress_hint2_by_ref.php")
+    public void updateRiddleProgressHint2ByRef(
+            @Query("ref") int ref,
+            Callback<Response> response
+    );
+    @GET("/update_riddleprogress_hint3_by_ref.php")
+    public void updateRiddleProgressHint3ByRef(
             @Query("ref") int ref,
             Callback<Response> response
     );
