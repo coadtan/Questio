@@ -179,7 +179,7 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
         if(scanLimit != 0){
             if(answer.equalsIgnoreCase(Long.toString(r.getQrCode()))){
                 riddle.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
-                updateQuestStatus(QuestioConstants.QUEST_CORRECT);
+                updateQuestStatus(QuestioConstants.QUEST_FINISHED);
                 scanHere.setEnabled(false);
                 scanHere.setClickable(false);
             }else{

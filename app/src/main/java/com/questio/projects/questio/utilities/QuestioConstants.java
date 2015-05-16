@@ -30,7 +30,7 @@ public class QuestioConstants {
     public static final String CURRENT_PLACE_TIMEOUT = "current_place_timeout";
     public static final int QUEST_NOT_STARTED = 1;
     public static final int QUEST_NOT_FINISHED = 2;
-    public static final int QUEST_CORRECT = 3;
+    public static final int QUEST_FINISHED = 3;
     public static final int QUEST_FAILED = 4;
 
 }

@@ -147,13 +147,33 @@ public class QuestioHelper {
     }
 
 
-    public static String getJSONStringValueByTag(String tag, String result) {
+    public static String getJSONStringValueByTag(String tag, String inputResponese) {
 
         JSONArray arr = null;
-        Log.d(LOG_TAG, "getJSONStringValueByTag: " + result);
+        Log.d(LOG_TAG, "getJSONStringValueByTag: " + inputResponese);
         String resultForReturn = null;
         try {
-            arr = new JSONArray(result);
+            arr = new JSONArray(inputResponese);
+            if (arr.length() != 0) {
+                for (int i = 0; i < arr.length(); i++) {
+                    JSONObject obj = (JSONObject) arr.get(i);
+                    resultForReturn = obj.get(tag).toString();
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return resultForReturn;
+    }
+
+
+    public static String getJSONStringValueByTag(String tag, Response inputResponese) {
+
+        JSONArray arr = null;
+        Log.d(LOG_TAG, "getJSONStringValueByTag: " + inputResponese);
+        String resultForReturn = null;
+        try {
+            arr = new JSONArray(QuestioHelper.responseToString(inputResponese));
             if (arr.length() != 0) {
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject obj = (JSONObject) arr.get(i);

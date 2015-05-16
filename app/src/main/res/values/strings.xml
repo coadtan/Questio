@@ -49,4 +49,12 @@
     <string name="riddle_riddle">กำลังโหลด....</string>
     <string name="riddle_scan">เปิดการแสกน QR Code</string>
     <string name="riddle_unrevealed">"??????????????????????????????????"</string>
+
+    <string name="quiz_pre">&lt;</string>
+    <string name="quiz_next">&gt;</string>
+    <string name="quiz_title">1</string>
+    <string name="quiz_slash">/</string>
+    <string name="quiz_total_number">3</string>
+    <string name="wait">wait</string>
+
 </resources>

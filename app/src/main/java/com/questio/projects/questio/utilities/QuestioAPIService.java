@@ -57,7 +57,6 @@ public interface QuestioAPIService {
     public void getAdventurerIdByGuserId(@Query("guserid") String gid, Callback<Response> response);
 
 
-
     @GET("/insert_adventurer.php")
     public void addAdventurer(@Query("adventurerid") long id,
                               @Query("guserid") String gid,
@@ -68,9 +67,9 @@ public interface QuestioAPIService {
 
     @GET("/insert_adventurerdetails.php")
     public void addAdventurerDetails(@Query("detailid") long id,
-                              @Query("displayname") String displayName,
-                              @Query("birthdate") String birthDate,
-                              Callback<Response> response);
+                                     @Query("displayname") String displayName,
+                                     @Query("birthdate") String birthDate,
+                                     Callback<Response> response);
 
     @GET("/select_all_questprogress_by_questid_and_adventurerid.php")
     public void getQuestProgressByQuestIdAndAdventurerId(
@@ -120,6 +119,7 @@ public interface QuestioAPIService {
             @Query("ref") int ref,
             @Query("quizid") int quizid,
             Callback<Response> response);
+
     @GET("/update_statuschoicea_quizprogress_by_ref_and_quizid.php")
     public void updateStatusChoiceAQuizByRefAndQuizId(
             @Query("ref") int ref,
@@ -131,11 +131,13 @@ public interface QuestioAPIService {
             @Query("ref") int ref,
             @Query("quizid") int quizid,
             Callback<Response> response);
+
     @GET("/update_statuschoicec_quizprogress_by_ref_and_quizid.php")
     public void updateStatusChoiceCQuizByRefAndQuizId(
             @Query("ref") int ref,
             @Query("quizid") int quizid,
             Callback<Response> response);
+
     @GET("/update_statuschoiced_quizprogress_by_ref_and_quizid.php")
     public void updateStatusChoiceDQuizByRefAndQuizId(
             @Query("ref") int ref,
@@ -184,6 +186,7 @@ public interface QuestioAPIService {
             @Query("ref") int ref,
             Callback<Response> response
     );
+
     @GET("/select_all_puzzleprogress_by_ref.php")
     public void getPuzzleProgressByRef(
             @Query("ref") int ref,
@@ -202,9 +205,17 @@ public interface QuestioAPIService {
             @Query("ref") int ref,
             Callback<Response> response
     );
+
     @GET("/update_riddleprogress_scanlimit_by_ref.php")
     public void updateRiddleProgressScanLimitByRef(
             @Query("scanlimit") int scanLimit,
+            @Query("ref") int ref,
+            Callback<Response> response
+    );
+
+
+    @GET("/select_current_points_puzzle_progress_by_ref.php")
+    public void getCurrentPointsByRef(
             @Query("ref") int ref,
             Callback<Response> response
     );
