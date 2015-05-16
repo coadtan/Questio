@@ -52,6 +52,7 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
     long adventurerId;
 
     QuestioAPIService api;
+    int ref;
 
     Riddle r;
     @Override
@@ -262,7 +263,7 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
 //            public void success(Response response, Response response2) {
 //                if (QuestioHelper.responseToString(response).equalsIgnoreCase("null")){
         Log.d(LOG_TAG, "No Progress in Quest");
-        api.addQuestProgressNonQuiz(qid, adventurerId, zid, 2, new Callback<Response>() {
+        api.addQuestProgress(qid, adventurerId, ref, zid, 2, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 String questioStatus = QuestioHelper.responseToString(response);

@@ -179,31 +179,31 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         pointTV.setText(Integer.toString(points));
         switch (position) {
             case 1:
-                api.updatePuzzleProgressPieceByRef(1, 0, 0, 0, 0, 0, 0, 0, 0, ref, this);
+                api.updatePuzzleProgressTopLeftPieceByRef(ref, this);
                 break;
             case 2:
-                api.updatePuzzleProgressPieceByRef(0, 1, 0, 0, 0, 0, 0, 0, 0, ref, this);
+                api.updatePuzzleProgressTopMidPieceByRef(ref, this);
                 break;
             case 3:
-                api.updatePuzzleProgressPieceByRef(0, 0, 1, 0, 0, 0, 0, 0, 0, ref, this);
+                api.updatePuzzleProgressTopRightPieceByRef(ref, this);
                 break;
             case 4:
-                api.updatePuzzleProgressPieceByRef(0, 0, 0, 1, 0, 0, 0, 0, 0, ref, this);
+                api.updatePuzzleProgressMidLeftPieceByRef(ref, this);
                 break;
             case 5:
-                api.updatePuzzleProgressPieceByRef(0, 0, 0, 0, 1, 0, 0, 0, 0, ref, this);
+                api.updatePuzzleProgressMidMidPieceByRef(ref, this);
                 break;
             case 6:
-                api.updatePuzzleProgressPieceByRef(0, 0, 0, 0, 0, 1, 0, 0, 0, ref, this);
+                api.updatePuzzleProgressMidRightPieceByRef(ref, this);
                 break;
             case 7:
-                api.updatePuzzleProgressPieceByRef(0, 0, 0, 0, 0, 0, 1, 0, 0, ref, this);
+                api.updatePuzzleProgressBottomLeftPieceByRef(ref, this);
                 break;
             case 8:
-                api.updatePuzzleProgressPieceByRef(0, 0, 0, 0, 0, 0, 0, 1, 0, ref, this);
+                api.updatePuzzleProgressBottomMidPieceByRef(ref, this);
                 break;
             case 9:
-                api.updatePuzzleProgressPieceByRef(0, 0, 0, 0, 0, 0, 0, 0, 1, ref, this);
+                api.updatePuzzleProgressBottomRightPieceByRef(ref, this);
                 break;
 
         }
@@ -286,7 +286,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     }
     private void insertProgressData() {
         Log.d(LOG_TAG, "No Progress in Quest");
-        api.addQuestProgressNonQuiz(qid, adventurerId, zid, 3, new Callback<Response>() {
+        api.addQuestProgress(qid, adventurerId, ref, zid, 3, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 String questioStatus = QuestioHelper.responseToString(response);
