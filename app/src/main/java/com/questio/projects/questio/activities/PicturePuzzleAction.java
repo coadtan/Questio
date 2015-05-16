@@ -25,9 +25,6 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-/**
- * Created by ning jittima on 11/4/2558.
- */
 public class PicturePuzzleAction extends ActionBarActivity implements View.OnClickListener, TextWatcher, Callback<Response> {
     private static final String LOG_TAG = PicturePuzzleAction.class.getSimpleName();
     private ImageView picturePuzzleQuestion;
@@ -244,7 +241,6 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
             public void failure(RetrofitError retrofitError) {
                 Log.d(LOG_TAG, "Fail: " + retrofitError.toString());
                 Log.d(LOG_TAG, "Fail: " + retrofitError.getUrl());
-                Log.d(LOG_TAG, "Fail: " + retrofitError.getStackTrace());
             }
         });
     }
@@ -274,6 +270,8 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                         picturePuzzleHint.setVisibility(View.INVISIBLE);
 
                         picturePuzzleAnswer.setText(pp.getCorrectAnswer());
+                    }else{
+
                     }
                 }
             }

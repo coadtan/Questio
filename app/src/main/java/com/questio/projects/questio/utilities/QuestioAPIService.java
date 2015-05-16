@@ -251,6 +251,12 @@ public interface QuestioAPIService {
             Callback<Response> response
     );
 
+    @GET("/select_current_points_riddle_progress_by_ref.php")
+    void getCurrentRiddlePointByRef(
+            @Query("ref") int ref,
+            Callback<Response> response
+    );
+
     @GET("/insert_riddleprogress.php")
     void addRiddleProgress(
             @Query("ref") int ref,

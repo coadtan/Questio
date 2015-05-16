@@ -28,10 +28,7 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-/**
- * Created by ning jittima on 12/4/2558.
- */
-public class RiddleAction extends ActionBarActivity implements View.OnClickListener {
+public class RiddleAction extends ActionBarActivity implements View.OnClickListener, Callback<Response> {
     private static final String LOG_TAG = RiddleAction.class.getSimpleName();
     Toolbar toolbar;
     TextView riddle;
@@ -43,6 +40,7 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
     TextView hintReveal2;
     TextView hintReveal3;
 
+    int points;
 
     TextView scanTV;
     int scanLimit;
@@ -50,11 +48,12 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
     int qid;
     int zid;
     long adventurerId;
-
+    RestAdapter adapter;
     QuestioAPIService api;
     int ref;
 
     Riddle r;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,21 +64,16 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-
         scanTV = (TextView) toolbar.findViewById(R.id.toolbar_limit);
 
-        riddle = (TextView)findViewById(R.id.riddle_riddle);
-        hint1Btn = (Button)findViewById(R.id.riddle_hint1Btn);
-        hint2Btn = (Button)findViewById(R.id.riddle_hint2Btn);
-        hint3Btn = (Button)findViewById(R.id.riddle_hint3Btn);
-        scanHere = (ImageButton)findViewById(R.id.riddle_scanHere);
-        hintReveal1 = (TextView)findViewById(R.id.riddle_hintReveal1);
-        hintReveal2 = (TextView)findViewById(R.id.riddle_hintReveal2);
-        hintReveal3 = (TextView)findViewById(R.id.riddle_hintReveal3);
-
-
-
-
+        riddle = (TextView) findViewById(R.id.riddle_riddle);
+        hint1Btn = (Button) findViewById(R.id.riddle_hint1Btn);
+        hint2Btn = (Button) findViewById(R.id.riddle_hint2Btn);
+        hint3Btn = (Button) findViewById(R.id.riddle_hint3Btn);
+        scanHere = (ImageButton) findViewById(R.id.riddle_scanHere);
+        hintReveal1 = (TextView) findViewById(R.id.riddle_hintReveal1);
+        hintReveal2 = (TextView) findViewById(R.id.riddle_hintReveal2);
+        hintReveal3 = (TextView) findViewById(R.id.riddle_hintReveal3);
 
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -120,35 +114,38 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
         adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
         qid = Integer.parseInt(questId);
         zid = Integer.parseInt(zoneId);
+        ref = Integer.parseInt(Integer.toString(qid) + (int) adventurerId);
 
+        adapter = new RestAdapter.Builder()
+                .setEndpoint(QuestioConstants.ENDPOINT)
+                .build();
+        api = adapter.create(QuestioAPIService.class);
         //r = Riddle.getAllRiddleByRiddleId((Integer.parseInt(questId)));
         requestRiddleData(Integer.parseInt(questId));
 
-        requestProgressData();
-    }
 
+    }
 
 
     @Override
     public void onClick(View view) {
-        switch(view.getId()){
+        switch (view.getId()) {
             case R.id.riddle_scanHere:
                 Intent intent = new Intent(this, ZBarScannerActivity.class);
                 intent.putExtra(ZBarConstants.SCAN_MODES, new int[]{Symbol.QRCODE});
                 startActivityForResult(intent, 0);
-                updateQuestStatus(QuestioConstants.QUEST_NOT_FINISHED);
                 break;
             case R.id.riddle_hint1Btn:
                 hintReveal1.setText(r.getHint1());
-                updateQuestStatus(QuestioConstants.QUEST_NOT_FINISHED);
+                api.updateRiddleProgressHint1ByRef(ref, this);
                 break;
             case R.id.riddle_hint2Btn:
                 hintReveal2.setText(r.getHint2());
-                updateQuestStatus(QuestioConstants.QUEST_NOT_FINISHED);
+                api.updateRiddleProgressHint2ByRef(ref, this);
                 break;
             case R.id.riddle_hint3Btn:
                 hintReveal3.setText(r.getHint3());
-                updateQuestStatus(QuestioConstants.QUEST_NOT_FINISHED);
+                api.updateRiddleProgressHint3ByRef(ref, this);
                 break;
         }
 
@@ -161,11 +158,6 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
         Log.d(LOG_TAG, "requestCode: " + requestCode);
         Log.d(LOG_TAG, "Activity.RESULT_OK: " + Activity.RESULT_OK);
         if (resultCode == Activity.RESULT_OK) {
-            // Scan result is available by making a call to data.getStringExtra(ZBarConstants.SCAN_RESULT)
-            // Type of the scan result is available by making a call to data.getStringExtra(ZBarConstants.SCAN_RESULT_TYPE)
-            //
-            // Toast.makeText(getActivity(), "Scan Result Type = " + data.getIntExtra(ZBarConstants.SCAN_RESULT_TYPE, 0), Toast.LENGTH_SHORT).show();
-            // The value of type indicates one of the symbols listed in Advanced Options below.
             String[] qr = QuestioHelper.getDeQRCode(data.getStringExtra(ZBarConstants.SCAN_RESULT));
             if (qr[0].equalsIgnoreCase(QuestioConstants.QRTYPE_RIDDLE_ANSWER)) {
                 onAnswer(qr[1]);
@@ -175,19 +167,20 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
         }
     }
 
-    void onAnswer(String answer){
+    void onAnswer(String answer) {
 
-        if(scanLimit != 0){
-            if(answer.equalsIgnoreCase(Long.toString(r.getQrCode()))){
+        if (scanLimit != 0) {
+            if (answer.equalsIgnoreCase(Long.toString(r.getQrCode()))) {
                 riddle.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
                 updateQuestStatus(QuestioConstants.QUEST_FINISHED);
+                updateScoreToQuestProgress();
                 scanHere.setEnabled(false);
                 scanHere.setClickable(false);
-            }else{
+            } else {
                 scanLimit--;
                 scanTV.setText(Integer.toString(scanLimit));
-                updateQuestStatus(QuestioConstants.QUEST_NOT_FINISHED);
-                if(scanLimit == 0){
+                api.updateRiddleProgressScanLimitByRef(scanLimit, ref, this);
+                if (scanLimit == 0) {
                     updateQuestStatus(QuestioConstants.QUEST_FAILED);
                     scanHere.setEnabled(false);
                     scanHere.setClickable(false);
@@ -197,31 +190,60 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
 
     }
 
+    private void updateScoreToQuestProgress() {
+        api.getCurrentRiddlePointByRef(ref, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                Log.d(LOG_TAG, "updateScoreToQuestProgressTest: response = " + QuestioHelper.responseToString(response));
+                Log.d(LOG_TAG, "updateScoreToQuestProgressTest: response/points = " + QuestioHelper.getJSONStringValueByTag("points", response));
+                Log.d(LOG_TAG, "updateScoreToQuestProgressTest: ref = " + ref);
+                Log.d(LOG_TAG, "updateScoreToQuestProgressTest: response2 = " + response2.getUrl());
+
+
+                points = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("points", response));
+
+                api.updateScoreQuestProgressByQuestIdAndAdventurerId(points, qid, adventurerId, new Callback<Response>() {
+                    @Override
+                    public void success(Response response, Response response2) {
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+
+    }
+
     private void requestRiddleData(int id) {
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(QuestioConstants.ENDPOINT)
-                .build();
-        QuestioAPIService api = adapter.create(QuestioAPIService.class);
         api.getRiddleByQuestId(id, new Callback<Riddle[]>() {
             @Override
             public void success(Riddle[] riddleTemp, Response response) {
-                if(riddleTemp != null){
+                if (riddleTemp != null) {
                     r = riddleTemp[0];
                     Log.d(LOG_TAG, r.toString());
-                    if(r.getHint1().equalsIgnoreCase("")){
+                    if (r.getHint1().equalsIgnoreCase("")) {
                         hint1Btn.setEnabled(false);
                         hint1Btn.setClickable(false);
                         hint1Btn.setBackgroundColor(getResources().getColor(R.color.grey_500));
                         hintReveal1.setVisibility(View.INVISIBLE);
                     }
 
-                    if(r.getHint2().equalsIgnoreCase("")){
+                    if (r.getHint2().equalsIgnoreCase("")) {
                         hint2Btn.setEnabled(false);
                         hint2Btn.setClickable(false);
                         hint2Btn.setBackgroundColor(getResources().getColor(R.color.grey_500));
                         hintReveal2.setVisibility(View.INVISIBLE);
                     }
-                    if(r.getHint3().equalsIgnoreCase("")){
+                    if (r.getHint3().equalsIgnoreCase("")) {
                         hint3Btn.setEnabled(false);
                         hint3Btn.setClickable(false);
                         hint3Btn.setBackgroundColor(getResources().getColor(R.color.grey_500));
@@ -238,7 +260,10 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
                     scanHere.setOnClickListener(RiddleAction.this);
 
                     scanTV.setText(Integer.toString(scanLimit));
-                }else{
+
+                    requestProgressData();
+
+                } else {
                     Log.d(LOG_TAG, "Riddle is null");
                 }
 
@@ -248,31 +273,40 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
             public void failure(RetrofitError retrofitError) {
                 Log.d(LOG_TAG, "Fail: " + retrofitError.toString());
                 Log.d(LOG_TAG, "Fail: " + retrofitError.getUrl());
-                Log.d(LOG_TAG, "Fail: " + retrofitError.getStackTrace());
             }
         });
     }
 
     private void requestProgressData() {
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(QuestioConstants.ENDPOINT)
-                .build();
-        api = adapter.create(QuestioAPIService.class);
-//        api.getQuestProgressByQuestIdAndAdventurerId(questId, adventurerId, new Callback<Response>() {
-//            @Override
-//            public void success(Response response, Response response2) {
-//                if (QuestioHelper.responseToString(response).equalsIgnoreCase("null")){
-        Log.d(LOG_TAG, "No Progress in Quest");
-        api.addQuestProgress(qid, adventurerId, ref, zid, 2, new Callback<Response>() {
+
+        api.getQuestProgressByQuestIdAndAdventurerId(qid, adventurerId, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
-                String questioStatus = QuestioHelper.responseToString(response);
-                Log.d(LOG_TAG, "Add Quest Progress: " + qid + " " + questioStatus);
+                if (QuestioHelper.responseToString(response).equalsIgnoreCase("null")) {
+                    insertProgressData();
 
+                } else {
+                    String statusStr = QuestioHelper.getJSONStringValueByTag("statusid", response);
+                    int status = Integer.parseInt(statusStr);
+                    if (status == QuestioConstants.QUEST_FINISHED) {
+                        scanHere.setEnabled(false);
+                        scanHere.setClickable(false);
+                    } else {
+                        api.getRiddleProgressByRef(ref, new Callback<Response>() {
+                            @Override
+                            public void success(Response response, Response response2) {
+                                String scanLimitStr = QuestioHelper.getJSONStringValueByTag("scanlimit", response);
+                                scanLimit = Integer.parseInt(scanLimitStr);
+                                scanTV.setText(Integer.toString(scanLimit));
+                            }
 
-//                } else {
-//                    Log.d(LOG_TAG, "Add Quest Progress Failed: " + questioStatus);
-//                }
+                            @Override
+                            public void failure(RetrofitError error) {
+
+                            }
+                        });
+                    }
+                }
             }
 
             @Override
@@ -280,23 +314,44 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
 
             }
         });
-//                }else{
-//                    Log.d(LOG_TAG, "Quiz Progress Exists");
-//                }
+
+
     }
 
-//            @Override
-//            public void failure(RetrofitError error) {
-//
-//            }
-//        });
-//    }
+    private void insertProgressData() {
+        api.addQuestProgress(qid, adventurerId, ref, zid, 2, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                String questioStatus = QuestioHelper.responseToString(response);
+                Log.d(LOG_TAG, "Add Quest Progress: " + qid + " " + questioStatus);
 
-    private void updateQuestStatus(int status){
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(QuestioConstants.ENDPOINT)
-                .build();
-        api = adapter.create(QuestioAPIService.class);
+
+                insertRiddleProgress();
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    private void insertRiddleProgress() {
+        api.addRiddleProgress(ref, qid, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    private void updateQuestStatus(int status) {
         api.updateStatusQuestProgressByQuestIdAndAdventurerId(status, qid, adventurerId, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
@@ -308,5 +363,17 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
 
             }
         });
+    }
+
+
+    // Nothing to do with this
+    @Override
+    public void success(Response response, Response response2) {
+
+    }
+
+    @Override
+    public void failure(RetrofitError error) {
+
     }
 }
