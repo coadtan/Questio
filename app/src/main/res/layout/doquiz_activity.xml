@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/quiz_bg"
     android:orientation="vertical">
 
     <include
@@ -20,15 +21,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="7">
+        android:layout_margin="14dp"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/quiz_pre_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/quiz_pre" />
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/quiz_back_btn" />
 
         <TextView
             android:id="@+id/quiz_current_tv"
@@ -37,6 +37,7 @@
             android:layout_weight="2"
             android:gravity="center"
             android:text="@string/quiz_title"
+            android:textColor="@color/white"
             android:textSize="20sp" />
 
         <TextView
@@ -45,6 +46,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/quiz_slash"
+            android:textColor="@color/white"
             android:textSize="20sp" />
 
         <TextView
@@ -54,14 +56,14 @@
             android:layout_weight="2"
             android:gravity="center"
             android:text="@string/quiz_total_number"
+            android:textColor="@color/white"
             android:textSize="20sp" />
 
         <Button
             android:id="@+id/quiz_next_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/quiz_next" />
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/quiz_next_btn" />
 
     </LinearLayout>
 
@@ -70,35 +72,48 @@
         android:layout_height="wrap_content">
 
         <RelativeLayout
+
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginBottom="30dp"
-            android:layout_marginTop="30dp"
             android:gravity="center_horizontal"
             android:orientation="vertical"
             android:paddingLeft="20dp"
             android:paddingRight="20dp">
 
-            <TextView
-                android:id="@+id/quiz_question"
+            <FrameLayout
+                android:id="@+id/quiz_frame"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:text="@string/test_quiz_question"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:layout_height="150dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/quiz_box"
+                android:padding="20dp"
+                >
+
+                <TextView
+                    android:id="@+id/quiz_question"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/test_quiz_question"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="20sp" />
+            </FrameLayout>
 
             <Button
+                android:layout_marginTop="18dp"
                 android:id="@+id/quiz_choice_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@+id/quiz_question"
+                android:layout_below="@+id/quiz_frame"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/answer_button"
+                android:textColor="@color/white"
+                android:background="@drawable/quiz_btn"
                 android:text="@string/test_quiz_a"
-                android:textColor="@color/grey_900" />
+                />
 
             <Button
                 android:id="@+id/quiz_choice_2"
@@ -108,9 +123,9 @@
                 android:layout_below="@+id/quiz_choice_1"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/answer_button"
                 android:text="@string/test_quiz_b"
-                android:textColor="@color/grey_900" />
+                android:textColor="@color/white"
+                android:background="@drawable/quiz_btn" />
 
             <Button
                 android:id="@+id/quiz_choice_3"
@@ -119,9 +134,9 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/quiz_choice_2"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/answer_button"
                 android:text="@string/test_quiz_c"
-                android:textColor="@color/grey_900" />
+                android:textColor="@color/white"
+                android:background="@drawable/quiz_btn" />
 
             <Button
 
@@ -132,9 +147,9 @@
                 android:layout_below="@+id/quiz_choice_3"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/answer_button"
                 android:text="@string/test_quiz_d"
-                android:textColor="@color/grey_900" />
+                android:textColor="@color/white"
+                android:background="@drawable/quiz_btn"/>
 
         </RelativeLayout>
     </ScrollView>
