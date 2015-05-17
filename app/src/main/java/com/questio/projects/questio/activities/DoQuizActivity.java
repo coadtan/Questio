@@ -232,6 +232,7 @@ public class DoQuizActivity extends ActionBarActivity implements View.OnClickLis
         enableAllChoices();
         if (answerStatesMap != null) {
             AnswerState as = answerStatesMap.get(q.getQuizId());
+            Log.d(LOG_TAG, "answerstate: " + as.toString());
             if (as.getStatus() == QuestioConstants.QUEST_FINISHED) {
                 disableAllChoices();
                 switch (Integer.parseInt(q.getAnswerId())) {
@@ -435,6 +436,9 @@ public class DoQuizActivity extends ActionBarActivity implements View.OnClickLis
         for (int i = 0; i < answerTime; i++) {
             score--;
         }
+
+        as.setStatus(3);
+        answerStatesMap.put(quizId, as);
         disableAllChoices();
         switch (choiceSelected) {
             case 1:
@@ -458,6 +462,8 @@ public class DoQuizActivity extends ActionBarActivity implements View.OnClickLis
                 quizChoice4.setBackground(getResources().getDrawable(R.drawable.corners_button_green));
                 break;
         }
+
+
         api.updateScoreQuizProgressByRefAndQuizId(score, ref, quizId,
                 new Callback<Response>() {
                     @Override
@@ -473,6 +479,7 @@ public class DoQuizActivity extends ActionBarActivity implements View.OnClickLis
 
 
         updateQuizProgressStatus(QuestioConstants.QUEST_FINISHED, quizId);
+        populateQuiz(getPossibleNextQuizSeqFromCurrentSeq(seqId - 1));
         Log.d(LOG_TAG, "onCorrect: seqId = " + seqId);
     }
 
@@ -513,6 +520,9 @@ public class DoQuizActivity extends ActionBarActivity implements View.OnClickLis
 
     void onLimitAnswer(int seqId, int quizId) {
         disableAllChoices();
+        AnswerState as = answerStatesMap.get(quizId);
+        as.setStatus(QuestioConstants.QUEST_FAILED);
+        answerStatesMap.put(quizId, as);
         api.updateScoreQuizProgressByRefAndQuizId(0, ref, quizId,
                 new Callback<Response>() {
                     @Override
@@ -527,8 +537,33 @@ public class DoQuizActivity extends ActionBarActivity implements View.OnClickLis
                 });
         updateQuizProgressStatus(QuestioConstants.QUEST_FAILED, quizId);
         Log.d(LOG_TAG, "onLimitAnswer: called");
+
+        populateQuiz(getPossibleNextQuizSeqFromCurrentSeq(seqId - 1));
     }
 
+
+    int getPossibleNextQuizSeqFromCurrentSeq(int currentSeq) {
+        Log.d(LOG_TAG, "getPossibleNextQuizSeqFromCurrentSeq: called");
+        Log.d(LOG_TAG, "getPossibleNextQuizSeqFromCurrentSeq: ");
+
+        AnswerState as;
+        int i = 0;
+        for (Quiz q : quizs) {
+            as = answerStatesMap.get(q.getQuizId());
+            if (as.getStatus() == QuestioConstants.QUEST_FINISHED || as.getStatus() == QuestioConstants.QUEST_FAILED || i == currentSeq) {
+                i++;
+                continue;
+            }
+            if (i == totalQuiz) {
+                //last quiz?
+                updateProgressStatusAndScore(QuestioConstants.QUEST_FINISHED);
+            }
+            Log.d(LOG_TAG, "getPossibleNextQuizSeqFromCurrentSeq: return: " + i);
+            return i;
+        }
+        Log.d(LOG_TAG, "getPossibleNextQuizSeqFromCurrentSeq: return: " + 0);
+        return 0;
+    }
 
     void updateQuizProgressStatus(int status, int quizId) {
         Log.d(LOG_TAG, "updateQuizProgressStatus: called");
@@ -641,6 +676,21 @@ public class DoQuizActivity extends ActionBarActivity implements View.OnClickLis
         }
     }
 
+    private void updateProgressStatusAndScore(int status) {
+        Log.d(LOG_TAG, "updateProgressStatusAndScore: called");
+        api.updateQuestProgressAutoScoreQuiz(questId, adventurerId, status, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
     private class AnswerState {
         private int status;
         private int quizId;
@@ -723,5 +773,16 @@ public class DoQuizActivity extends ActionBarActivity implements View.OnClickLis
             return i;
         }
 
+        @Override
+        public String toString() {
+            return "AnswerState{" +
+                    "status=" + status +
+                    ", quizId=" + quizId +
+                    ", a=" + a +
+                    ", b=" + b +
+                    ", c=" + c +
+                    ", d=" + d +
+                    '}';
+        }
     }
 }

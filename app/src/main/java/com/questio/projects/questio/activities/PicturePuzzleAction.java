@@ -271,7 +271,54 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
 
                         picturePuzzleAnswer.setText(pp.getCorrectAnswer());
                     }else{
+                        api.getPuzzleProgressByRef(ref, new Callback<Response>() {
+                            @Override
+                            public void success(Response response, Response response2) {
+                                /*
+                                topleftopened
+                                topmidopened
+                                toprightopened
+                                midleftopened
+                                midmidopened
+                                midrightopened
+                                bottomleftopened
+                                bottommidopened
+                                bottomrightopened
+                                 */
+                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("topleftopened", response))==1){
+                                    topLeft.setVisibility(View.INVISIBLE);
+                                }
+                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("topmidopened", response))==1){
+                                    topMiddle.setVisibility(View.INVISIBLE);
+                                }
+                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("toprightopened", response))==1){
+                                    topRight.setVisibility(View.INVISIBLE);
+                                }
+                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("midleftopened", response))==1){
+                                    middleLeft.setVisibility(View.INVISIBLE);
+                                }
+                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("midmidopened", response))==1){
+                                    middleMiddle.setVisibility(View.INVISIBLE);
+                                }
+                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("midrightopened", response))==1){
+                                    middleRight.setVisibility(View.INVISIBLE);
+                                }
+                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("bottomleftopened", response))==1){
+                                    bottomLeft.setVisibility(View.INVISIBLE);
+                                }
+                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("bottommidopened", response))==1){
+                                    bottomMiddle.setVisibility(View.INVISIBLE);
+                                }
+                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("bottomrightopened", response))==1){
+                                    bottomRight.setVisibility(View.INVISIBLE);
+                                }
+                            }
 
+                            @Override
+                            public void failure(RetrofitError error) {
+
+                            }
+                        });
                     }
                 }
             }
@@ -360,6 +407,8 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         middleMiddle.setEnabled(false);
         middleLeft.setEnabled(false);
     }
+
+
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {

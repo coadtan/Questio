@@ -298,6 +298,15 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
                                 String scanLimitStr = QuestioHelper.getJSONStringValueByTag("scanlimit", response);
                                 scanLimit = Integer.parseInt(scanLimitStr);
                                 scanTV.setText(Integer.toString(scanLimit));
+                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hint1opened", response))==1){
+                                    hint1Btn.performClick();
+                                }
+                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hint2opened", response))==1){
+                                    hint2Btn.performClick();
+                                }
+                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hint3opened", response))==1){
+                                    hint3Btn.performClick();
+                                }
                             }
 
                             @Override

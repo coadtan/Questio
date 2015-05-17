@@ -59,17 +59,17 @@ public interface QuestioAPIService {
 
     @GET("/insert_adventurer.php")
     void addAdventurer(@Query("adventurerid") long id,
-                              @Query("guserid") String gid,
-                              @Query("email") String email,
-                              @Query("avatarid") long aid,
-                              @Query("detailid") long did,
-                              Callback<Response> response);
+                       @Query("guserid") String gid,
+                       @Query("email") String email,
+                       @Query("avatarid") long aid,
+                       @Query("detailid") long did,
+                       Callback<Response> response);
 
     @GET("/insert_adventurerdetails.php")
     void addAdventurerDetails(@Query("detailid") long id,
-                                     @Query("displayname") String displayName,
-                                     @Query("birthdate") String birthDate,
-                                     Callback<Response> response);
+                              @Query("displayname") String displayName,
+                              @Query("birthdate") String birthDate,
+                              Callback<Response> response);
 
     @GET("/select_all_questprogress_by_questid_and_adventurerid.php")
     void getQuestProgressByQuestIdAndAdventurerId(
@@ -177,41 +177,49 @@ public interface QuestioAPIService {
             @Query("ref") int ref,
             Callback<Response> response
     );
+
     @GET("/update_puzzleprogress_tmpiece_by_ref.php")
     void updatePuzzleProgressTopMidPieceByRef(
             @Query("ref") int ref,
             Callback<Response> response
     );
+
     @GET("/update_puzzleprogress_trpiece_by_ref.php")
     void updatePuzzleProgressTopRightPieceByRef(
             @Query("ref") int ref,
             Callback<Response> response
     );
+
     @GET("/update_puzzleprogress_mlpiece_by_ref.php")
     void updatePuzzleProgressMidLeftPieceByRef(
             @Query("ref") int ref,
             Callback<Response> response
     );
+
     @GET("/update_puzzleprogress_mmpiece_by_ref.php")
     void updatePuzzleProgressMidMidPieceByRef(
             @Query("ref") int ref,
             Callback<Response> response
     );
+
     @GET("/update_puzzleprogress_mrpiece_by_ref.php")
     void updatePuzzleProgressMidRightPieceByRef(
             @Query("ref") int ref,
             Callback<Response> response
     );
+
     @GET("/update_puzzleprogress_blpiece_by_ref.php")
     void updatePuzzleProgressBottomLeftPieceByRef(
             @Query("ref") int ref,
             Callback<Response> response
     );
+
     @GET("/update_puzzleprogress_bmpiece_by_ref.php")
     void updatePuzzleProgressBottomMidPieceByRef(
             @Query("ref") int ref,
             Callback<Response> response
     );
+
     @GET("/update_puzzleprogress_brpiece_by_ref.php")
     void updatePuzzleProgressBottomRightPieceByRef(
             @Query("ref") int ref,
@@ -269,14 +277,26 @@ public interface QuestioAPIService {
             @Query("ref") int ref,
             Callback<Response> response
     );
+
     @GET("/update_riddleprogress_hint2_by_ref.php")
     void updateRiddleProgressHint2ByRef(
             @Query("ref") int ref,
             Callback<Response> response
     );
+
     @GET("/update_riddleprogress_hint3_by_ref.php")
     void updateRiddleProgressHint3ByRef(
             @Query("ref") int ref,
+            Callback<Response> response
+    );
+
+    //http://52.74.64.61/api/update_questprogress_autoscore_quiz.php?questid=20&adventurerid=1&statusid=3
+
+    @GET("/update_questprogress_autoscore_quiz.php")
+    void updateQuestProgressAutoScoreQuiz(
+            @Query("questid") int questid,
+            @Query("adventurerid") long adventurerid,
+            @Query("statusid") int statusid,
             Callback<Response> response
     );
 }
