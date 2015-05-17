@@ -481,6 +481,7 @@ public class DoQuizActivity extends ActionBarActivity implements View.OnClickLis
         updateQuizProgressStatus(QuestioConstants.QUEST_FINISHED, quizId);
         populateQuiz(getPossibleNextQuizSeqFromCurrentSeq(seqId - 1));
         Log.d(LOG_TAG, "onCorrect: seqId = " + seqId);
+        checkQuestFinish();
     }
 
     void onIncorrect(int seqId, int quizId, int choiceSelected) {
@@ -514,7 +515,7 @@ public class DoQuizActivity extends ActionBarActivity implements View.OnClickLis
         if (answerTime >= 2) {
             onLimitAnswer(seqId, quizId);
         }
-
+        checkQuestFinish();
     }
 
 
@@ -539,6 +540,7 @@ public class DoQuizActivity extends ActionBarActivity implements View.OnClickLis
         Log.d(LOG_TAG, "onLimitAnswer: called");
 
         populateQuiz(getPossibleNextQuizSeqFromCurrentSeq(seqId - 1));
+        checkQuestFinish();
     }
 
 
@@ -554,10 +556,7 @@ public class DoQuizActivity extends ActionBarActivity implements View.OnClickLis
                 i++;
                 continue;
             }
-            if (i == totalQuiz) {
-                //last quiz?
-                updateProgressStatusAndScore(QuestioConstants.QUEST_FINISHED);
-            }
+
             Log.d(LOG_TAG, "getPossibleNextQuizSeqFromCurrentSeq: return: " + i);
             return i;
         }
@@ -677,6 +676,7 @@ public class DoQuizActivity extends ActionBarActivity implements View.OnClickLis
     }
 
     private void updateProgressStatusAndScore(int status) {
+
         Log.d(LOG_TAG, "updateProgressStatusAndScore: called");
         api.updateQuestProgressAutoScoreQuiz(questId, adventurerId, status, new Callback<Response>() {
             @Override
@@ -689,6 +689,25 @@ public class DoQuizActivity extends ActionBarActivity implements View.OnClickLis
 
             }
         });
+    }
+
+
+    void checkQuestFinish() {
+        if(isAllQuizFinish()){
+            updateProgressStatusAndScore(QuestioConstants.QUEST_FINISHED);
+        }
+    }
+
+    boolean isAllQuizFinish() {
+        AnswerState as;
+        for (int i = 0; i < quizs.size(); i++) {
+            as = answerStatesMap.get(quizs.get(i).getQuizId());
+            if (as.getStatus() != QuestioConstants.QUEST_FINISHED) {
+                return false;
+            }
+
+        }
+        return true;
     }
 
     private class AnswerState {
