@@ -221,10 +221,14 @@ public class DoQuizActivity extends ActionBarActivity implements View.OnClickLis
         quizTotalNumberTv.setText(Integer.toString(quizs.size()));
 
         // clear old background
-        quizChoice1.setBackground(getResources().getDrawable(R.drawable.answer_button));
-        quizChoice2.setBackground(getResources().getDrawable(R.drawable.answer_button));
-        quizChoice3.setBackground(getResources().getDrawable(R.drawable.answer_button));
-        quizChoice4.setBackground(getResources().getDrawable(R.drawable.answer_button));
+//        quizChoice1.setBackground(getResources().getDrawable(R.drawable.answer_button));
+//        quizChoice2.setBackground(getResources().getDrawable(R.drawable.answer_button));
+//        quizChoice3.setBackground(getResources().getDrawable(R.drawable.answer_button));
+//        quizChoice4.setBackground(getResources().getDrawable(R.drawable.answer_button));
+        quizChoice1.setBackground(getResources().getDrawable(R.drawable.quiz_btn));
+        quizChoice2.setBackground(getResources().getDrawable(R.drawable.quiz_btn));
+        quizChoice3.setBackground(getResources().getDrawable(R.drawable.quiz_btn));
+        quizChoice4.setBackground(getResources().getDrawable(R.drawable.quiz_btn));
         enableAllChoices();
         if (answerStatesMap != null) {
             AnswerState as = answerStatesMap.get(q.getQuizId());
