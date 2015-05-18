@@ -2,9 +2,9 @@
 <resources>
 
     <color name="colorPrimary">#fff4bc25</color>
-    <color name="colorPrimaryDark">#fff4880b</color>
+    <color name="colorPrimaryDark">#fff47100</color>
     <color name="textColorPrimary">#ffefffd2</color>
-    <color name="windowBackground">#ffe2d5ce</color>
+    <color name="windowBackground">#ffb5c6b7</color>
 
 
     <color name="white">#FFFFFF</color>
@@ -19,7 +19,7 @@
     <color name="questio_light_orange">#fff4c738</color>
     <color name="questio_orange">#fff48712</color>
     <color name="choice_bg">#fff4dd51</color>
-
+    <color name="comfort_orange">#4bff9400</color>
     <color name="quest_veryeasy">#ff76ff53</color>
     <color name="quest_easy">#CCFF99</color>
     <color name="quest_normal">#fffbff61</color>

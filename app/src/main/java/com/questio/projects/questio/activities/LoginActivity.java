@@ -76,7 +76,7 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this).addApi(Plus.API)
-                .addScope(Plus.SCOPE_PLUS_PROFILE).build();
+                .addScope(Plus.SCOPE_PLUS_LOGIN).build();
 
         QuestioApplication.mGoogleApiClient = mGoogleApiClient;
     }

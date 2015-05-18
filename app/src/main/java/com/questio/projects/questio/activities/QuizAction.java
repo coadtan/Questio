@@ -216,7 +216,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
         quizFinished++;
         Button b = (Button) findViewById(quizId - 1);
         b.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
-        updateQuizStatus(QuestioConstants.QUEST_CORRECT);
+        updateQuizStatus(QuestioConstants.QUEST_FINISHED);
         disableButton();
         checkQuizFinished();
 
@@ -267,7 +267,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                 } else {
                     status = QuestioConstants.QUEST_NOT_STARTED;
                 }
-                if (status == QuestioConstants.QUEST_CORRECT || status == QuestioConstants.QUEST_FAILED) {
+                if (status == QuestioConstants.QUEST_FINISHED || status == QuestioConstants.QUEST_FAILED) {
                     disableButton();
                 } else {
 
@@ -297,7 +297,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                     } else {
                         status = QuestioConstants.QUEST_NOT_STARTED;
                     }
-                    if (status == QuestioConstants.QUEST_CORRECT || status == QuestioConstants.QUEST_FAILED) {
+                    if (status == QuestioConstants.QUEST_FINISHED || status == QuestioConstants.QUEST_FAILED) {
                         disableButton();
 
                     } else {
@@ -386,7 +386,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
 
                     statusStr = quizStatusHashMap.get(Integer.toString(currentQuiz));
                     status = Integer.parseInt(statusStr);
-                    if (status == QuestioConstants.QUEST_CORRECT || status == QuestioConstants.QUEST_FAILED) {
+                    if (status == QuestioConstants.QUEST_FINISHED || status == QuestioConstants.QUEST_FAILED) {
                         disableButton();
                     } else {
                         enableButton();
@@ -469,7 +469,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
 
     void populateButtonQuizProgress(int buttonId, int status) {
         Button b = (Button) findViewById(buttonId);
-        if (status == QuestioConstants.QUEST_CORRECT) {
+        if (status == QuestioConstants.QUEST_FINISHED) {
             b.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
         } else if (status == QuestioConstants.QUEST_FAILED) {
             b.setBackgroundColor(getResources().getColor(R.color.red_quiz_wrong));
@@ -572,7 +572,7 @@ public class QuizAction extends ActionBarActivity implements View.OnClickListene
                 quizFinished = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("count", countQuizFinishedStr));
                 Log.d(LOG_TAG, "Quiz Finished Count: " + quizFinished);
                 if (quizFinished == quizCount) {
-                    updateQuestStatus(QuestioConstants.QUEST_CORRECT);
+                    updateQuestStatus(QuestioConstants.QUEST_FINISHED);
                 }
             }
 

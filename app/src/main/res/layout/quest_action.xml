@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/windowBackground"
+    android:background="@color/comfort_orange"
     android:orientation="vertical">
 
     <include
@@ -17,31 +17,50 @@
         <FrameLayout
             android:id="@+id/quest_browsing_top_frame"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@drawable/box_map"
+            android:layout_margin="15dp">
+
 
             <ImageView
                 android:id="@+id/quest_action_picture"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_gravity="center_horizontal|top"
-                android:background="@color/black"
-                android:src="@drawable/loading" />
+                android:src="@drawable/loading"
+                android:alpha="0.5"
+                android:layout_gravity="center_horizontal|top" />
 
             <ImageView
                 android:id="@+id/quest_action_minimap"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_gravity="end|bottom"
+                android:layout_margin="10dp"
                 android:src="@drawable/loading" />
 
         </FrameLayout>
     </RelativeLayout>
 
+    <ProgressBar
+        android:id="@+id/quest_action_progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:progress="10"
+        android:progressDrawable="@drawable/progressbar_style"
 
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/corners_only_top"
         android:orientation="horizontal"
         android:paddingBottom="10dp"
         android:paddingTop="10dp">
@@ -50,12 +69,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="15dp"
             android:layout_weight="1"
             android:fontFamily="sans-serif-condensed"
             android:text="@string/questaction_item"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"/>
 
         <TextView
             android:id="@+id/item"
@@ -64,18 +85,21 @@
             android:layout_gravity="center"
             android:layout_weight="2"
             android:fontFamily="sans-serif-condensed"
-            android:text="@string/test_questaction_item" />
+            android:text="@string/test_questaction_item"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="5dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="5dp"
             android:layout_weight="1"
             android:fontFamily="sans-serif-condensed"
             android:text="@string/questaction_rewards"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"/>
 
         <TextView
             android:id="@+id/reward"
@@ -84,18 +108,21 @@
             android:layout_gravity="center"
             android:layout_weight="2"
             android:fontFamily="sans-serif-condensed"
-            android:text="@string/test_questaction_rewards" />
+            android:text="@string/test_questaction_rewards"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="5dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="6dp"
             android:layout_weight="1"
             android:fontFamily="sans-serif-condensed"
             android:text="@string/questaction_type"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"/>
 
         <TextView
             android:id="@+id/zonetype"
@@ -103,27 +130,19 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="2"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="5dp"
             android:fontFamily="sans-serif-condensed"
             android:text="@string/test_questaction_type" />
     </LinearLayout>
 
-
-    <ProgressBar
-        android:id="@+id/quest_action_progressbar"
-        style="?android:attr/progressBarStyleHorizontal"
+    <ListView
+        android:id="@+id/quest_action_listview"
+        android:background="@drawable/border_list_news"
+        android:backgroundTint="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:progress="10"
-        android:progressDrawable="@drawable/progressbar_style"
-
-        />
-
-    <ListView
-        android:id="@+id/quest_action_listview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" />
-
-
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"/>
 </LinearLayout>

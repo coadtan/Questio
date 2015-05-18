@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Calendar;
 
 import retrofit.client.Response;
 
@@ -18,7 +19,7 @@ public class QuestioHelper {
 
     // passing "questio:zone:123:questio" to paremater qrCode will return "123"
     public static String[] getDeQRCode(String qrCode) {
-        String[] deCodeForReturn = {"failed","failed"};
+        String[] deCodeForReturn = {"failed", "failed"};
         final String BEGIN_TYPE_1 = "questio:zone:";
         final String BEGIN_TYPE_2 = "questio:place:";
         final String BEGIN_TYPE_3 = "questio:floor:";
@@ -36,11 +37,11 @@ public class QuestioHelper {
             qrCode = qrCode.replace(BEGIN_TYPE_1, "");
         } else if (type.equalsIgnoreCase(QuestioConstants.QRTYPE_FLOOR)) {
             qrCode = qrCode.replace(BEGIN_TYPE_3, "");
-        }else if (type.equalsIgnoreCase(QuestioConstants.QRTYPE_BUILDING)) {
+        } else if (type.equalsIgnoreCase(QuestioConstants.QRTYPE_BUILDING)) {
             qrCode = qrCode.replace(BEGIN_TYPE_4, "");
-        }else if (type.equalsIgnoreCase(QuestioConstants.QRTYPE_PLACE)) {
+        } else if (type.equalsIgnoreCase(QuestioConstants.QRTYPE_PLACE)) {
             qrCode = qrCode.replace(BEGIN_TYPE_2, "");
-        }else if (type.equalsIgnoreCase(QuestioConstants.QRTYPE_RIDDLE_ANSWER)){
+        } else if (type.equalsIgnoreCase(QuestioConstants.QRTYPE_RIDDLE_ANSWER)) {
             qrCode = qrCode.replace(BEGIN_TYPE_5, "");
         }
 
@@ -61,10 +62,9 @@ public class QuestioHelper {
             type = QuestioConstants.QRTYPE_BUILDING;
         } else if (type.equalsIgnoreCase("p")) {
             type = QuestioConstants.QRTYPE_PLACE;
-        }else if (type.equalsIgnoreCase("r")){
+        } else if (type.equalsIgnoreCase("r")) {
             type = QuestioConstants.QRTYPE_RIDDLE_ANSWER;
-        }
-        else {
+        } else {
             type = "N/A";
         }
         return type;
@@ -102,8 +102,8 @@ public class QuestioHelper {
         return result;
     }
 
-    public static String getImgLink(String path){
-        return "http://52.74.64.61"+path;
+    public static String getImgLink(String path) {
+        return "http://52.74.64.61" + path;
     }
 
     public static long getAdventurerCountFromJson(String response) {
@@ -125,7 +125,7 @@ public class QuestioHelper {
         return result;
     }
 
-    public static String responseToString(Response response){
+    public static String responseToString(Response response) {
         BufferedReader reader = null;
         StringBuilder sb = new StringBuilder();
         try {
@@ -139,7 +139,7 @@ public class QuestioHelper {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }  catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -147,34 +147,69 @@ public class QuestioHelper {
     }
 
 
-    public static String getJSONStringValueByTag(String tag, String result){
+    public static String getJSONStringValueByTag(String tag, String inputResponese) {
 
-            JSONArray arr = null;
-            Log.d(LOG_TAG, "getJSONStringValueByTag: " + result);
-            String resultForReturn = null;
-            try {
-                arr = new JSONArray(result);
-                if (arr.length() != 0) {
-                    for (int i = 0; i < arr.length(); i++) {
-                        JSONObject obj = (JSONObject) arr.get(i);
-                        resultForReturn = obj.get(tag).toString();
-                    }
+        JSONArray arr = null;
+        Log.d(LOG_TAG, "getJSONStringValueByTag: " + inputResponese);
+        String resultForReturn = null;
+        try {
+            arr = new JSONArray(inputResponese);
+            if (arr.length() != 0) {
+                for (int i = 0; i < arr.length(); i++) {
+                    JSONObject obj = (JSONObject) arr.get(i);
+                    resultForReturn = obj.get(tag).toString();
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
-            return resultForReturn;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return resultForReturn;
     }
 
-    public static String[] moveBackToFront(String[] items){
+
+    public static String getJSONStringValueByTag(String tag, Response inputResponese) {
+
+        JSONArray arr = null;
+        Log.d(LOG_TAG, "getJSONStringValueByTag: " + inputResponese);
+        String resultForReturn = null;
+        try {
+            arr = new JSONArray(QuestioHelper.responseToString(inputResponese));
+            if (arr.length() != 0) {
+                for (int i = 0; i < arr.length(); i++) {
+                    JSONObject obj = (JSONObject) arr.get(i);
+                    resultForReturn = obj.get(tag).toString();
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return resultForReturn;
+    }
+
+    public static String[] moveBackToFront(String[] items) {
         String temp[] = new String[items.length];
-        for(int i = items.length-1 ; i>= 0 ; i--){
-            if(i == items.length-1){
-                temp[0] = items[items.length-1];
+        for (int i = items.length - 1; i >= 0; i--) {
+            if (i == items.length - 1) {
+                temp[0] = items[items.length - 1];
                 continue;
             }
-            temp[i+1] = items[i];
+            temp[i + 1] = items[i];
         }
         return temp;
+    }
+
+    public static long getTimeNow() {
+        return System.currentTimeMillis();
+    }
+
+    public static boolean isTimeDifferentLessThan3Hours(Long startTimeInSecond, Long endTimeInSecond) {
+        long dif;
+        try {
+            dif = endTimeInSecond - startTimeInSecond;
+        } catch (NullPointerException nex) {
+            return false;
+        }
+
+        return dif < 10800;
     }
 }

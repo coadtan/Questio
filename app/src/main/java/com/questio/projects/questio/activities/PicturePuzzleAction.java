@@ -25,10 +25,7 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-/**
- * Created by ning jittima on 11/4/2558.
- */
-public class PicturePuzzleAction extends ActionBarActivity implements View.OnClickListener {
+public class PicturePuzzleAction extends ActionBarActivity implements View.OnClickListener, TextWatcher, Callback<Response> {
     private static final String LOG_TAG = PicturePuzzleAction.class.getSimpleName();
     private ImageView picturePuzzleQuestion;
     private ImageView topLeft;
@@ -46,13 +43,15 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     TextView pointTV;
     Toolbar toolbar;
     PicturePuzzle pp;
-    int points = 9;
-
+    int points;
+    int ref;
     int qid;
     int zid;
     long adventurerId;
 
+
     QuestioAPIService api;
+    RestAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +59,9 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         setContentView(R.layout.puzzle_action);
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(0xFFFFFFFF);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         pointTV = (TextView) toolbar.findViewById(R.id.toolbar_points);
-        pointTV.setText(Integer.toString(points));
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,8 +107,13 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         Log.d(LOG_TAG, "questid: " + questId + " questName: " + questName);
 
 
-
         getSupportActionBar().setTitle(questName);
+
+        adapter = new RestAdapter.Builder()
+                .setEndpoint(QuestioConstants.ENDPOINT)
+                .build();
+        api = adapter.create(QuestioAPIService.class);
+
 
         requestPicturePuzzleData(Integer.parseInt(questId));
 
@@ -120,7 +123,9 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         SharedPreferences prefs = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
         adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
 
-        requestProgressData();
+        ref = Integer.parseInt(Integer.toString(qid) + (int) adventurerId);
+        getCurrentPoints();
+
     }
 
     @Override
@@ -128,92 +133,93 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         switch (view.getId()) {
             case R.id.topLeft:
                 topLeft.setVisibility(View.INVISIBLE);
-                onUnMask();
+                onUnMask(1);
                 break;
             case R.id.topMiddle:
                 topMiddle.setVisibility(View.INVISIBLE);
-                onUnMask();
+                onUnMask(2);
                 break;
             case R.id.topRight:
                 topRight.setVisibility(View.INVISIBLE);
-                onUnMask();
+                onUnMask(3);
                 break;
             case R.id.middleLeft:
                 middleLeft.setVisibility(View.INVISIBLE);
-                onUnMask();
+                onUnMask(4);
                 break;
             case R.id.middleMiddle:
                 middleMiddle.setVisibility(View.INVISIBLE);
-                onUnMask();
+                onUnMask(5);
                 break;
             case R.id.middleRight:
                 middleRight.setVisibility(View.INVISIBLE);
-                onUnMask();
+                onUnMask(6);
                 break;
             case R.id.bottomLeft:
                 bottomLeft.setVisibility(View.INVISIBLE);
-                onUnMask();
+                onUnMask(7);
                 break;
             case R.id.bottomMiddle:
                 bottomMiddle.setVisibility(View.INVISIBLE);
-                onUnMask();
+                onUnMask(8);
                 break;
             case R.id.bottomRight:
                 bottomRight.setVisibility(View.INVISIBLE);
-                onUnMask();
+                onUnMask(9);
                 break;
         }
 
     }
 
-    void onUnMask() {
+    void onUnMask(int position) {
         points--;
         pointTV.setText(Integer.toString(points));
-        updateQuestStatus(QuestioConstants.QUEST_NOT_FINISHED);
+        switch (position) {
+            case 1:
+                api.updatePuzzleProgressTopLeftPieceByRef(ref, this);
+                break;
+            case 2:
+                api.updatePuzzleProgressTopMidPieceByRef(ref, this);
+                break;
+            case 3:
+                api.updatePuzzleProgressTopRightPieceByRef(ref, this);
+                break;
+            case 4:
+                api.updatePuzzleProgressMidLeftPieceByRef(ref, this);
+                break;
+            case 5:
+                api.updatePuzzleProgressMidMidPieceByRef(ref, this);
+                break;
+            case 6:
+                api.updatePuzzleProgressMidRightPieceByRef(ref, this);
+                break;
+            case 7:
+                api.updatePuzzleProgressBottomLeftPieceByRef(ref, this);
+                break;
+            case 8:
+                api.updatePuzzleProgressBottomMidPieceByRef(ref, this);
+                break;
+            case 9:
+                api.updatePuzzleProgressBottomRightPieceByRef(ref, this);
+                break;
+
+        }
     }
 
     private void requestPicturePuzzleData(int id) {
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(QuestioConstants.ENDPOINT)
-                .build();
-        QuestioAPIService api = adapter.create(QuestioAPIService.class);
         api.getPicturePuzzleByPuzzleId(id, new Callback<PicturePuzzle[]>() {
             @Override
             public void success(PicturePuzzle[] picturePuzzleTemp, Response response) {
-                if(picturePuzzleTemp[0]!= null){
+                if (picturePuzzleTemp[0] != null) {
                     pp = picturePuzzleTemp[0];
 
-                    Log.d(LOG_TAG,QuestioHelper.getImgLink(pp.getImageUrl()));
+                    Log.d(LOG_TAG, QuestioHelper.getImgLink(pp.getImageUrl()));
                     Glide.with(PicturePuzzleAction.this)
                             .load(QuestioHelper.getImgLink(pp.getImageUrl()))
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(picturePuzzleQuestion);
-
                     picturePuzzleHint.setHint(pp.getHelperAnswer());
-
-                    picturePuzzleAnswer.addTextChangedListener(new TextWatcher() {
-
-                        @Override
-                        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable editable) {
-                            currentAnswer = picturePuzzleAnswer.getText().toString();
-                            if (currentAnswer.equalsIgnoreCase(pp.getCorrectAnswer())) {
-                                picturePuzzleAnswer.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
-                                updateQuestStatus(QuestioConstants.QUEST_CORRECT);
-                                disableAll();
-                            }
-                        }
-                    });
-
+                    picturePuzzleAnswer.addTextChangedListener(PicturePuzzleAction.this);
                     topLeft.setOnClickListener(PicturePuzzleAction.this);
                     topMiddle.setOnClickListener(PicturePuzzleAction.this);
                     topRight.setOnClickListener(PicturePuzzleAction.this);
@@ -223,8 +229,10 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                     bottomLeft.setOnClickListener(PicturePuzzleAction.this);
                     bottomMiddle.setOnClickListener(PicturePuzzleAction.this);
                     bottomRight.setOnClickListener(PicturePuzzleAction.this);
-                }else{
-                    Log.d(LOG_TAG,"Picture Puzzle is null");
+                    requestQuestProgress();
+
+                } else {
+                    Log.d(LOG_TAG, "Picture Puzzle is null");
                 }
             }
 
@@ -233,31 +241,86 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
             public void failure(RetrofitError retrofitError) {
                 Log.d(LOG_TAG, "Fail: " + retrofitError.toString());
                 Log.d(LOG_TAG, "Fail: " + retrofitError.getUrl());
-                Log.d(LOG_TAG, "Fail: " + retrofitError.getStackTrace());
             }
         });
     }
 
-    private void requestProgressData() {
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(QuestioConstants.ENDPOINT)
-                .build();
-        api = adapter.create(QuestioAPIService.class);
-//        api.getQuestProgressByQuestIdAndAdventurerId(questId, adventurerId, new Callback<Response>() {
-//            @Override
-//            public void success(Response response, Response response2) {
-//                if (QuestioHelper.responseToString(response).equalsIgnoreCase("null")){
-        Log.d(LOG_TAG, "No Progress in Quest");
-        api.addQuestProgressNonQuiz(qid, adventurerId, zid, 3, new Callback<Response>() {
+
+    private void requestQuestProgress(){
+        api.getQuestProgressByQuestIdAndAdventurerId(qid, adventurerId, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
-                String questioStatus = QuestioHelper.responseToString(response);
-                Log.d(LOG_TAG, "Add Quest Progress: " + qid + " " + questioStatus);
+                if (QuestioHelper.responseToString(response).equalsIgnoreCase("null")) {
+                    insertProgressData();
+                    insertPuzzleProgress();
+                } else {
+                    String statusStr = QuestioHelper.getJSONStringValueByTag("statusid", response);
+                    int status = Integer.parseInt(statusStr);
+                    if(status==QuestioConstants.QUEST_FINISHED){
+                        topLeft.setVisibility(View.INVISIBLE);
+                        topRight.setVisibility(View.INVISIBLE);
+                        topMiddle.setVisibility(View.INVISIBLE);
+                        middleLeft.setVisibility(View.INVISIBLE);
+                        middleMiddle.setVisibility(View.INVISIBLE);
+                        middleRight.setVisibility(View.INVISIBLE);
+                        bottomLeft.setVisibility(View.INVISIBLE);
+                        bottomMiddle.setVisibility(View.INVISIBLE);
+                        bottomRight.setVisibility(View.INVISIBLE);
+                        disableAll();
+                        picturePuzzleHint.setVisibility(View.INVISIBLE);
 
+                        picturePuzzleAnswer.setText(pp.getCorrectAnswer());
+                    }else{
+                        api.getPuzzleProgressByRef(ref, new Callback<Response>() {
+                            @Override
+                            public void success(Response response, Response response2) {
+                                /*
+                                topleftopened
+                                topmidopened
+                                toprightopened
+                                midleftopened
+                                midmidopened
+                                midrightopened
+                                bottomleftopened
+                                bottommidopened
+                                bottomrightopened
+                                 */
+                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("topleftopened", response))==1){
+                                    topLeft.setVisibility(View.INVISIBLE);
+                                }
+                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("topmidopened", response))==1){
+                                    topMiddle.setVisibility(View.INVISIBLE);
+                                }
+                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("toprightopened", response))==1){
+                                    topRight.setVisibility(View.INVISIBLE);
+                                }
+                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("midleftopened", response))==1){
+                                    middleLeft.setVisibility(View.INVISIBLE);
+                                }
+                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("midmidopened", response))==1){
+                                    middleMiddle.setVisibility(View.INVISIBLE);
+                                }
+                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("midrightopened", response))==1){
+                                    middleRight.setVisibility(View.INVISIBLE);
+                                }
+                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("bottomleftopened", response))==1){
+                                    bottomLeft.setVisibility(View.INVISIBLE);
+                                }
+                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("bottommidopened", response))==1){
+                                    bottomMiddle.setVisibility(View.INVISIBLE);
+                                }
+                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("bottomrightopened", response))==1){
+                                    bottomRight.setVisibility(View.INVISIBLE);
+                                }
+                            }
 
-//                } else {
-//                    Log.d(LOG_TAG, "Add Quest Progress Failed: " + questioStatus);
-//                }
+                            @Override
+                            public void failure(RetrofitError error) {
+
+                            }
+                        });
+                    }
+                }
             }
 
             @Override
@@ -265,23 +328,39 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
 
             }
         });
-//                }else{
-//                    Log.d(LOG_TAG, "Quiz Progress Exists");
-//                }
+    }
+    private void insertProgressData() {
+        Log.d(LOG_TAG, "No Progress in Quest");
+        api.addQuestProgress(qid, adventurerId, ref, zid, 3, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                String questioStatus = QuestioHelper.responseToString(response);
+                Log.d(LOG_TAG, "Add Quest Progress: " + qid + " " + questioStatus);
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+            }
+        });
     }
 
-//            @Override
-//            public void failure(RetrofitError error) {
-//
-//            }
-//        });
-//    }
+    private void insertPuzzleProgress() {
+        api.addPuzzleProgress(ref, qid, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
 
-    private void updateQuestStatus(int status){
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(QuestioConstants.ENDPOINT)
-                .build();
-        api = adapter.create(QuestioAPIService.class);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    private void updateQuestStatus(int status) {
+        Log.d(LOG_TAG, "updateQuestStatus: called");
         api.updateStatusQuestProgressByQuestIdAndAdventurerId(status, qid, adventurerId, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
@@ -295,7 +374,20 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         });
     }
 
-    private void disableAll(){
+    private void updateScore(){
+        api.updateScoreQuestProgressByQuestIdAndAdventurerId(points, qid, adventurerId, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                Log.d(LOG_TAG, "updateScore: success with points = " + points);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(LOG_TAG, "updateScore: failed");
+            }
+        });
+    }
+    private void disableAll() {
         topRight.setClickable(false);
         topMiddle.setClickable(false);
         topLeft.setClickable(false);
@@ -314,5 +406,67 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         middleRight.setEnabled(false);
         middleMiddle.setEnabled(false);
         middleLeft.setEnabled(false);
+    }
+
+
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        currentAnswer = picturePuzzleAnswer.getText().toString();
+        if (currentAnswer.equalsIgnoreCase(pp.getCorrectAnswer())) {
+            onCorrect();
+        }
+    }
+
+    private void onCorrect() {
+        picturePuzzleAnswer.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
+        updateQuestStatus(QuestioConstants.QUEST_FINISHED);
+        updateScore();
+        topLeft.setVisibility(View.INVISIBLE);
+        topRight.setVisibility(View.INVISIBLE);
+        topMiddle.setVisibility(View.INVISIBLE);
+        middleLeft.setVisibility(View.INVISIBLE);
+        middleMiddle.setVisibility(View.INVISIBLE);
+        middleRight.setVisibility(View.INVISIBLE);
+        bottomLeft.setVisibility(View.INVISIBLE);
+        bottomMiddle.setVisibility(View.INVISIBLE);
+        bottomRight.setVisibility(View.INVISIBLE);
+        disableAll();
+    }
+
+
+    private void getCurrentPoints(){
+        api.getCurrentPointsByRef(ref, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                points = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("points", QuestioHelper.responseToString(response)));
+                pointTV.setText(Integer.toString(points));
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    @Override
+    public void success(Response response, Response response2) {
+
+    }
+
+    @Override
+    public void failure(RetrofitError error) {
+
     }
 }

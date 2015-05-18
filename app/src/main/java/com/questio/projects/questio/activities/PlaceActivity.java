@@ -102,6 +102,7 @@ public class PlaceActivity extends ActionBarActivity {
 
 
         setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(0xFFFFFFFF);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

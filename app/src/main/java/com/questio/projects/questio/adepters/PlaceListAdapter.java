@@ -2,6 +2,7 @@ package com.questio.projects.questio.adepters;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.questio.projects.questio.R;
  */
 public class PlaceListAdapter extends CursorAdapter {
     public static final String LOG_TAG = PlaceListAdapter.class.getSimpleName();
+    Typeface tf;
 
     public static class ViewHolder {
         public final ImageView iconView;
@@ -25,6 +27,7 @@ public class PlaceListAdapter extends CursorAdapter {
         public final TextView place_detail;
         public final TextView placeLat;
         public final TextView placeLng;
+
 
         public ViewHolder(View view) {
 
@@ -39,6 +42,7 @@ public class PlaceListAdapter extends CursorAdapter {
 
     public PlaceListAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
+        tf = Typeface.createFromAsset(context.getAssets(), "fonts/supermarket.ttf");
     }
 
     @Override
@@ -46,16 +50,20 @@ public class PlaceListAdapter extends CursorAdapter {
         View view = LayoutInflater.from(context).inflate(R.layout.list_item_place, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         view.setTag(viewHolder);
+
+
         return view;
     }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
+
         String placeIdString = cursor.getString(0);
         viewHolder.placeId.setText(placeIdString);
         String placeNameString = cursor.getString(1);
         viewHolder.placeName.setText(placeNameString);
+        viewHolder.placeName.setTypeface(tf);
         String placeFullNameString = cursor.getString(2);
         viewHolder.place_detail.setText(placeFullNameString);
         String placeLatString = cursor.getString(5);

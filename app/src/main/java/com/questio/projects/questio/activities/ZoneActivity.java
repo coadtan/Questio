@@ -1,11 +1,13 @@
 package com.questio.projects.questio.activities;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -37,8 +39,8 @@ public class ZoneActivity extends ActionBarActivity {
     ArrayList<Quest> quests;
     private ListView quest_action_listview;
     Zone zone;
-    ImageView quest_action_picture;
-    ImageView quest_action_minimap;
+    ImageView questActionImg;
+    ImageView questActionMiniImg;
     //    TextView zonename;
     TextView item;
     TextView reward;
@@ -56,8 +58,8 @@ public class ZoneActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quest_action);
 
-        quest_action_picture = (ImageView) findViewById(R.id.quest_action_picture);
-        quest_action_minimap = (ImageView) findViewById(R.id.quest_action_minimap);
+        questActionImg = (ImageView) findViewById(R.id.quest_action_picture);
+        questActionMiniImg = (ImageView) findViewById(R.id.quest_action_minimap);
 //        zonename = (TextView) findViewById(R.id.zonename);
         item = (TextView) findViewById(R.id.item);
         reward = (TextView) findViewById(R.id.reward);
@@ -66,6 +68,7 @@ public class ZoneActivity extends ActionBarActivity {
 
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(0xFFFFFFFF);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("กำลังโหลด....");
 
@@ -111,7 +114,8 @@ public class ZoneActivity extends ActionBarActivity {
                 switch (Integer.parseInt(questTypeInvisible.getText().toString())) {
                     case 1:
 //                        Intent intentToQuiz = new Intent(ZoneActivity.this, QuizAction.class);
-                        Intent intentToQuiz = new Intent(ZoneActivity.this, QuizActivity.class);
+//                        Intent intentToQuiz = new Intent(ZoneActivity.this, QuizActivity.class);
+                        Intent intentToQuiz = new Intent(ZoneActivity.this, DoQuizActivity.class);
                         intentToQuiz.putExtra(QuestioConstants.QUEST_ID, questIdForIntent);
                         intentToQuiz.putExtra(QuestioConstants.QUEST_NAME, questNameForIntent);
                         intentToQuiz.putExtra(QuestioConstants.QUEST_ZONE_ID, zoneIdForIntent);
@@ -184,13 +188,32 @@ public class ZoneActivity extends ActionBarActivity {
                         Glide.with(ZoneActivity.this)
                                 .load(QuestioHelper.getImgLink(zone.getImageUrl()))
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .into(quest_action_picture);
+                                .into(questActionImg);
                     }
                     if (!(zone.getMiniMapUrl() == null)) {
                         Glide.with(ZoneActivity.this)
                                 .load(QuestioHelper.getImgLink(zone.getMiniMapUrl()))
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .into(quest_action_minimap);
+                                .into(questActionMiniImg);
+
+                        questActionMiniImg.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final Dialog nagDialog = new Dialog(ZoneActivity.this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+                                nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                nagDialog.setCancelable(true);
+                                nagDialog.setContentView(R.layout.mini_map_full_screen);
+                                ImageView imgPreview = (ImageView) nagDialog.findViewById(R.id.mini_map_full_view);
+                                imgPreview.setBackgroundDrawable(questActionMiniImg.getDrawable());
+                                imgPreview.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        nagDialog.dismiss();
+                                    }
+                                });
+                                nagDialog.show();
+                            }
+                        });
                     }
                 } else {
                     Log.d(LOG_TAG, "Zone is null");

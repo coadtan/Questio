@@ -1,6 +1,8 @@
 package com.questio.projects.questio.adepters;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +20,9 @@ import java.util.ArrayList;
  */
 public class QuestInActionAdapter extends ArrayAdapter<Quest> {
 
-    public static final String LOG_TAG = NewsListAdapter.class.getSimpleName();
+    public static final String LOG_TAG = QuestInActionAdapter.class.getSimpleName();
+    private Context mContext;
+    private Typeface tf;
 
     private static class ViewHolder {
         private ImageView questtype;
@@ -48,20 +52,27 @@ public class QuestInActionAdapter extends ArrayAdapter<Quest> {
 
     public QuestInActionAdapter(Context context, ArrayList<Quest> feed) {
         super(context, 0, feed);
+        mContext = context;
+        tf = Typeface.createFromAsset(context.getAssets(), "fonts/CSPraJad.otf");
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         Quest items = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_quest, parent, false);
         }
         ViewHolder viewHolder = new ViewHolder(convertView);
         viewHolder.questid.setText(Integer.toString(items.getQuestId()));
+        viewHolder.questid.setTypeface(tf);
         viewHolder.questname.setText(items.getQuestName());
+        viewHolder.questname.setTypeface(tf);
         viewHolder.questdetails.setText(items.getQuestDetails());
         viewHolder.questTypeInvisible.setText(Integer.toString(items.getQuestTypeId()));
         viewHolder.zoneid.setText(Integer.toString(items.getZoneId()));
+
+        Log.d(LOG_TAG, "getView: questname = " + items.getQuestName());
         switch (items.getQuestTypeId()) {
             case 1:
                 viewHolder.questtype.setImageResource(R.drawable.ic_icon_quiz);
@@ -74,6 +85,23 @@ public class QuestInActionAdapter extends ArrayAdapter<Quest> {
                 break;
         }
 
+        switch (items.getDiffId()){
+            case 1:
+                viewHolder.difficulty.setBackgroundColor(mContext.getResources().getColor(R.color.quest_veryeasy));
+                break;
+            case 2:
+                viewHolder.difficulty.setBackgroundColor(mContext.getResources().getColor(R.color.quest_easy));
+                break;
+            case 3:
+                viewHolder.difficulty.setBackgroundColor(mContext.getResources().getColor(R.color.quest_normal));
+                break;
+            case 4:
+                viewHolder.difficulty.setBackgroundColor(mContext.getResources().getColor(R.color.quest_hard));
+                break;
+            case 5:
+                viewHolder.difficulty.setBackgroundColor(mContext.getResources().getColor(R.color.quest_veryhard));
+                break;
+        }
 
 //        viewHolder.questtype.setImageDrawable();
 //        viewHolder.difficulty.setImageDrawable();
