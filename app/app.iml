@@ -96,8 +96,8 @@
     <orderEntry type="library" exported="" name="recyclerview-v7-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="gson-2.3.1" level="project" />
     <orderEntry type="library" exported="" name="RiddleForRetrofit" level="project" />
-    <orderEntry type="library" exported="" name="stated-fragment-support-v4-0.9.1" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-22.0.0" level="project" />
+    <orderEntry type="library" exported="" name="estimote-sdk-preview" level="project" />
     <orderEntry type="library" exported="" name="glide-3.5.2" level="project" />
     <orderEntry type="library" exported="" name="maskededittext" level="project" />
     <orderEntry type="library" exported="" name="okhttp-2.0.0" level="project" />

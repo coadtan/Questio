@@ -3,11 +3,15 @@ package com.questio.projects.questio.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import com.estimote.sdk.Beacon;
+import com.estimote.sdk.BeaconManager;
+import com.estimote.sdk.Region;
 import com.questio.projects.questio.QuestioApplication;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.libraries.slidingtabs.SlidingTabsBasicFragment;
@@ -17,6 +21,7 @@ import com.questio.projects.questio.utilities.PlaceSync;
 import com.questio.projects.questio.utilities.QuestioConstants;
 import com.questio.projects.questio.utilities.QuestioHelper;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /*
@@ -25,6 +30,15 @@ import java.util.concurrent.ExecutionException;
  */
 public class MainActivity extends ActionBarActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
+
+
+    // Estimote zone
+    private static final String ESTIMOTE_PROXIMITY_UUID = "b9407f30-f5f8-466e-aff9-25556b57fe6d";
+    private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMOTE_PROXIMITY_UUID, 28521, 47387);
+    private BeaconManager beaconManager = new BeaconManager(this);
+    static final Region region = new Region("myRegion",ESTIMOTE_PROXIMITY_UUID,28521,47387);
+
+
     Toolbar toolbar;
 
     @Override
@@ -71,5 +85,77 @@ public class MainActivity extends ActionBarActivity {
             transaction.commit();
         }
         Log.d(LOG_TAG, "count: " + place.getPlaceCount());
+
+
+        // Estimote zone
+        if(beaconManager.hasBluetooth()) {
+            beaconManager.setRangingListener(new BeaconManager.RangingListener() {
+                @Override public void onBeaconsDiscovered(Region region, List<Beacon> beacons) {
+                    Log.d(LOG_TAG, "Ranged beacons: " + beacons);
+                }
+            });
+
+            try {
+                beaconManager.setMonitoringListener(new BeaconManager.MonitoringListener() {
+                    @Override
+                    public void onEnteredRegion(Region region, List<Beacon> beacons) {
+                        Beacon beacon = beacons.get(0);
+                        Log.d("Beacon", beacon.getMajor() + ": " + beacon.getMinor());
+                    }
+
+                    @Override
+                    public void onExitedRegion(Region region) {
+                        Log.d("Beacon", "exit Region");
+                    }
+                });
+                beaconManager.startMonitoring(region);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Should be invoked in #onStart.
+        if(beaconManager.hasBluetooth()) {
+            beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
+                @Override
+                public void onServiceReady() {
+                    try {
+                        beaconManager.startRanging(ALL_ESTIMOTE_BEACONS);
+                    } catch (RemoteException e) {
+                        Log.e(LOG_TAG, "Cannot start ranging", e);
+                    }
+                }
+            });
+
+        }
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Should be invoked in #onStop.
+        if(beaconManager.hasBluetooth()) {
+            try {
+                beaconManager.stopRanging(ALL_ESTIMOTE_BEACONS);
+            } catch (RemoteException e) {
+                Log.e(LOG_TAG, "Cannot stop but it does not matter now", e);
+            }
+
+        }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(beaconManager.hasBluetooth()) {
+            beaconManager.disconnect();
+        }
     }
 }

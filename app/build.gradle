@@ -21,7 +21,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.0.0'
     compile 'com.google.android.gms:play-services:6.5.87'
     compile 'com.android.support:cardview-v7:21.0.+'
@@ -34,5 +34,6 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.0.0'
     compile files('lib/zbar.jar')
     compile files('libs/RiddleForRetrofit.jar')
+    compile files('libs/estimote-sdk-preview.jar')
 }
 
