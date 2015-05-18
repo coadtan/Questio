@@ -93,7 +93,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
     public SlidingTabLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        this.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
+//        this.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
+        this.setBackgroundColor(context.getResources().getColor(R.color.colorTab));
         // Disable the Scroll Bar
         this.setHorizontalScrollBarEnabled(false);
         // Make sure that the Tab Strips fills this View
