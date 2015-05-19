@@ -176,31 +176,31 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         pointTV.setText(Integer.toString(points));
         switch (position) {
             case 1:
-                api.updatePuzzleProgressTopLeftPieceByRef(ref, this);
+                api.updatePuzzleProgressTopLeftPieceByRef(adventurerId, qid, this);
                 break;
             case 2:
-                api.updatePuzzleProgressTopMidPieceByRef(ref, this);
+                api.updatePuzzleProgressTopMidPieceByRef(adventurerId, qid, this);
                 break;
             case 3:
-                api.updatePuzzleProgressTopRightPieceByRef(ref, this);
+                api.updatePuzzleProgressTopRightPieceByRef(adventurerId, qid, this);
                 break;
             case 4:
-                api.updatePuzzleProgressMidLeftPieceByRef(ref, this);
+                api.updatePuzzleProgressMidLeftPieceByRef(adventurerId, qid, this);
                 break;
             case 5:
-                api.updatePuzzleProgressMidMidPieceByRef(ref, this);
+                api.updatePuzzleProgressMidMidPieceByRef(adventurerId, qid, this);
                 break;
             case 6:
-                api.updatePuzzleProgressMidRightPieceByRef(ref, this);
+                api.updatePuzzleProgressMidRightPieceByRef(adventurerId, qid, this);
                 break;
             case 7:
-                api.updatePuzzleProgressBottomLeftPieceByRef(ref, this);
+                api.updatePuzzleProgressBottomLeftPieceByRef(adventurerId, qid, this);
                 break;
             case 8:
-                api.updatePuzzleProgressBottomMidPieceByRef(ref, this);
+                api.updatePuzzleProgressBottomMidPieceByRef(adventurerId, qid, this);
                 break;
             case 9:
-                api.updatePuzzleProgressBottomRightPieceByRef(ref, this);
+                api.updatePuzzleProgressBottomRightPieceByRef(adventurerId, qid, this);
                 break;
 
         }
@@ -252,7 +252,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
             public void success(Response response, Response response2) {
                 if (QuestioHelper.responseToString(response).equalsIgnoreCase("null")) {
                     insertProgressData();
-                    insertPuzzleProgress();
+
                 } else {
                     String statusStr = QuestioHelper.getJSONStringValueByTag("statusid", response);
                     int status = Integer.parseInt(statusStr);
@@ -270,8 +270,11 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                         picturePuzzleHint.setVisibility(View.INVISIBLE);
 
                         picturePuzzleAnswer.setText(pp.getCorrectAnswer());
+                        picturePuzzleAnswer.setEnabled(false);
+                        picturePuzzleAnswer.setClickable(false);
+
                     }else{
-                        api.getPuzzleProgressByRef(ref, new Callback<Response>() {
+                        api.getPuzzleProgressByRef(adventurerId, qid, new Callback<Response>() {
                             @Override
                             public void success(Response response, Response response2) {
                                 /*
@@ -316,7 +319,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
 
                             @Override
                             public void failure(RetrofitError error) {
-
+                                Log.d(LOG_TAG, error.getMessage());
                             }
                         });
                     }
@@ -331,12 +334,12 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     }
     private void insertProgressData() {
         Log.d(LOG_TAG, "No Progress in Quest");
-        api.addQuestProgress(qid, adventurerId, ref, zid, 3, new Callback<Response>() {
+        api.addQuestProgress(qid, adventurerId, zid, 3, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 String questioStatus = QuestioHelper.responseToString(response);
                 Log.d(LOG_TAG, "Add Quest Progress: " + qid + " " + questioStatus);
-
+                insertPuzzleProgress();
             }
 
             @Override
@@ -346,10 +349,12 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     }
 
     private void insertPuzzleProgress() {
-        api.addPuzzleProgress(ref, qid, new Callback<Response>() {
+        Log.d(LOG_TAG, "No Progress in Puzzle");
+        api.addPuzzleProgress(adventurerId, qid, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
-
+                String questioStatus = QuestioHelper.responseToString(response);
+                Log.d(LOG_TAG, "Add Quest Progress: " + qid + " " + questioStatus);
             }
 
             @Override
@@ -442,11 +447,13 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         bottomMiddle.setVisibility(View.INVISIBLE);
         bottomRight.setVisibility(View.INVISIBLE);
         disableAll();
+        picturePuzzleAnswer.setEnabled(false);
+        picturePuzzleAnswer.setClickable(false);
     }
 
 
     private void getCurrentPoints(){
-        api.getCurrentPointsByRef(ref, new Callback<Response>() {
+        api.getCurrentPointsByRef(adventurerId, qid, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 points = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("points", QuestioHelper.responseToString(response)));

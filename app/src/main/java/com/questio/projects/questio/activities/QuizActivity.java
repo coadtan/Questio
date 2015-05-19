@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.questio.projects.questio.R;
@@ -29,11 +28,8 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 /**
- * Created by coad4u4ever on 05-May-15.
- * This Class will act as Quiz Manager
+ * Created by coad4u4ever on 16-May-15.
  */
-
-
 public class QuizActivity extends ActionBarActivity implements View.OnClickListener {
     private static final String LOG_TAG = QuizActivity.class.getSimpleName();
     private static final int I_DO_NOT_CARE_JUST_CHANGE_IT_IMMEDIATELY_TO_CORRECT = 1;
@@ -52,10 +48,14 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
     TextView score;
     TextView quizQuestion;
     TextView quizSequence;
+    TextView quizCurrentTv;
+    TextView quizTotalNumberTv;
     Button quizChoice1;
     Button quizChoice2;
     Button quizChoice3;
     Button quizChoice4;
+    Button quizPreBtn;
+    Button quizNextBtn;
 
     // Misc
     private final int FIRST_QUIZ = 0;
@@ -74,37 +74,20 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
     HashMap<Integer, AnswerState> answerStatesMap;
     Quiz q;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.quiz_activity);
+        setContentView(R.layout.doquiz_activity);
         handleToolbar();
         handleView();
         handleInstanceState(savedInstanceState);
+
         adapter = new RestAdapter.Builder().setEndpoint(QuestioConstants.ENDPOINT).build();
         api = adapter.create(QuestioAPIService.class);
         currentQuiz = 0;
         currentScore = 0;
         requestQuizData(questId);
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.quiz_choice_1:
-                onAnswer(1);
-                break;
-            case R.id.quiz_choice_2:
-                onAnswer(2);
-                break;
-            case R.id.quiz_choice_3:
-                onAnswer(3);
-                break;
-            case R.id.quiz_choice_4:
-                onAnswer(4);
-                break;
-        }
     }
 
 
@@ -116,10 +99,16 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
         quizChoice2 = (Button) findViewById(R.id.quiz_choice_2);
         quizChoice3 = (Button) findViewById(R.id.quiz_choice_3);
         quizChoice4 = (Button) findViewById(R.id.quiz_choice_4);
+        quizPreBtn = (Button) findViewById(R.id.quiz_pre_btn);
+        quizNextBtn = (Button) findViewById(R.id.quiz_next_btn);
+        quizCurrentTv = (TextView) findViewById(R.id.quiz_current_tv);
+        quizTotalNumberTv = (TextView) findViewById(R.id.quiz_total_number_tv);
         quizChoice1.setOnClickListener(this);
         quizChoice2.setOnClickListener(this);
         quizChoice3.setOnClickListener(this);
         quizChoice4.setOnClickListener(this);
+        quizPreBtn.setOnClickListener(this);
+        quizNextBtn.setOnClickListener(this);
     }
 
     private void handleInstanceState(Bundle savedInstanceState) {
@@ -149,6 +138,8 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
         this.questId = Integer.parseInt(questId);
         zid = Integer.parseInt(zoneId);
         ref = Integer.parseInt(Integer.toString(this.questId) + (int) adventurerId);
+        // set title of toolbar to questname
+        getSupportActionBar().setTitle(questName);
     }
 
     private void handleToolbar() {
@@ -162,10 +153,45 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
                 onBackPressed();
             }
         });
+
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.quiz_choice_1:
+                onAnswer(1);
+                break;
+            case R.id.quiz_choice_2:
+                onAnswer(2);
+                break;
+            case R.id.quiz_choice_3:
+                onAnswer(3);
+                break;
+            case R.id.quiz_choice_4:
+                onAnswer(4);
+                break;
+            case R.id.quiz_pre_btn:
+                currentSeq--;
+                if (currentSeq >= 0) {
+                    populateQuiz(currentSeq);
+                } else {
+                    populateQuiz(totalQuiz - 1);
+                }
+                break;
+            case R.id.quiz_next_btn:
+                currentSeq++;
+                if (currentSeq == (totalQuiz)) {
+                    populateQuiz(FIRST_QUIZ);
+                } else {
+                    populateQuiz(currentSeq);
+                }
+                break;
+        }
     }
 
     private void requestQuizData(int qid) {
-
         api.getAllQuizByQuestId(qid, new Callback<ArrayList<Quiz>>() {
             @Override
             public void success(ArrayList<Quiz> quizsTemp, Response response) {
@@ -173,30 +199,6 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
                     quizs = quizsTemp;
                     totalQuiz = quizs.size();
                     requestQuizProgresses();
-                    LinearLayout quizActionProgressLinerSection = (LinearLayout) findViewById(R.id.quiz_progress_bar);
-                    quizActionProgressLinerSection.setWeightSum(totalQuiz);
-                    int buttonId = 0;
-                    for (int i = 0; i < totalQuiz; i++) {
-                        Button button = new Button(QuizActivity.this);
-                        if (i == 0) {
-                            //   button.setBackgroundColor(getResources().getColor(R.color.yellow_quiz_unanswered));
-                            button.setBackground(getResources().getDrawable(R.drawable.corners_button_yellow));
-                            button.setText("?");
-                        }
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
-                        button.setTextColor(getResources().getColor(R.color.black));
-                        //  button.setBackgroundColor(getResources().getColor(R.color.grey_700));
-                        button.setBackground(getResources().getDrawable(R.drawable.corners_button));
-                        params.setMargins(5, 5, 5, 5);
-                        button.setId(buttonId);
-                        button.setContentDescription(Integer.toString(quizs.get(i).getQuizId()));
-                        button.setOnClickListener(new ButtonProgressListener(buttonId));
-                        button.setLayoutParams(params);
-                        quizActionProgressLinerSection.addView(button);
-                        buttonId++;
-                    }
-                    populateQuiz(FIRST_QUIZ);
-
                 } else {
                     Log.d(LOG_TAG, "Quiz is null");
                 }
@@ -212,9 +214,135 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
         });
     }
 
+    void populateQuiz(int i) {
+        q = quizs.get(i);
+        currentSeq = i;
+        quizCurrentTv.setText(Integer.toString(i + 1));
+        quizTotalNumberTv.setText(Integer.toString(quizs.size()));
+
+        // clear old background
+//        quizChoice1.setBackground(getResources().getDrawable(R.drawable.answer_button));
+//        quizChoice2.setBackground(getResources().getDrawable(R.drawable.answer_button));
+//        quizChoice3.setBackground(getResources().getDrawable(R.drawable.answer_button));
+//        quizChoice4.setBackground(getResources().getDrawable(R.drawable.answer_button));
+        quizChoice1.setBackground(getResources().getDrawable(R.drawable.quiz_btn));
+        quizChoice2.setBackground(getResources().getDrawable(R.drawable.quiz_btn));
+        quizChoice3.setBackground(getResources().getDrawable(R.drawable.quiz_btn));
+        quizChoice4.setBackground(getResources().getDrawable(R.drawable.quiz_btn));
+        enableAllChoices();
+        if (answerStatesMap != null) {
+            AnswerState as = answerStatesMap.get(q.getQuizId());
+            Log.d(LOG_TAG, "answerstate: " + as.toString());
+            if (as.getStatus() == QuestioConstants.QUEST_FINISHED) {
+                disableAllChoices();
+                switch (Integer.parseInt(q.getAnswerId())) {
+                    case 1:
+                        quizChoice1.setBackground(getResources().getDrawable(R.drawable.corners_button_green));
+                        break;
+                    case 2:
+                        quizChoice2.setBackground(getResources().getDrawable(R.drawable.corners_button_green));
+                        break;
+                    case 3:
+                        quizChoice3.setBackground(getResources().getDrawable(R.drawable.corners_button_green));
+                        break;
+                    case 4:
+                        quizChoice4.setBackground(getResources().getDrawable(R.drawable.corners_button_green));
+                        break;
+                }
+            } else if (as.getStatus() == QuestioConstants.QUEST_FAILED) {
+                disableAllChoices();
+                switch (Integer.parseInt(q.getAnswerId())) {
+                    case 1:
+                        quizChoice1.setBackground(getResources().getDrawable(R.drawable.corners_button_yellow));
+                        break;
+                    case 2:
+                        quizChoice2.setBackground(getResources().getDrawable(R.drawable.corners_button_yellow));
+                        break;
+                    case 3:
+                        quizChoice3.setBackground(getResources().getDrawable(R.drawable.corners_button_yellow));
+                        break;
+                    case 4:
+                        quizChoice4.setBackground(getResources().getDrawable(R.drawable.corners_button_yellow));
+                        break;
+                }
+            } else {
+                if (as.isA()) {
+                    disableButtonAnswer(quizChoice1);
+                }
+                if (as.isB()) {
+                    disableButtonAnswer(quizChoice2);
+                }
+                if (as.isC()) {
+                    disableButtonAnswer(quizChoice3);
+                }
+                if (as.isD()) {
+                    disableButtonAnswer(quizChoice4);
+                }
+            }
+        }
+
+        quizQuestion.setText(q.getQuestion());
+        quizSequence.setText(Integer.toString(q.getSeqId()));
+        quizChoice1.setText(q.getChoiceA());
+        quizChoice2.setText(q.getChoiceB());
+        quizChoice3.setText(q.getChoiceC());
+        quizChoice4.setText(q.getChoiceD());
+        currentQuiz = q.getQuizId();
+    }
+
+    private AnswerState createAnswerState(QuizProgress qp) {
+        AnswerState as = new AnswerState();
+        as.setQuizId(qp.getQuizId());
+        if (qp.getaAnswered() == 1) {
+            as.setA(true);
+        }
+        if (qp.getbAnswered() == 1) {
+            as.setB(true);
+        }
+        if (qp.getcAnswered() == 1) {
+            as.setC(true);
+        }
+        if (qp.getdAnswered() == 1) {
+            as.setD(true);
+        }
+        return as;
+    }
+
+    private void requestQuizProgresses() {
+        Log.d(LOG_TAG, "requestQuizProgress: called");
+        api.getQuizProgressByRef(adventurerId, questId, new Callback<ArrayList<QuizProgress>>() {
+            @Override
+            public void success(ArrayList<QuizProgress> quizProgressesTemp, Response response) {
+                quizProgresses = quizProgressesTemp;
+                Log.d(LOG_TAG, "requestQuizProgress: success");
+                if (quizProgresses == null || quizProgresses.size() != totalQuiz) {
+                    Log.d(LOG_TAG, "requestQuizProgress: success but quizProgresses is null");
+                    insertProgressData();
+                    populateQuiz(FIRST_QUIZ);
+                } else {
+                    answerStatesMap = new HashMap<>();
+                    for (QuizProgress qp : quizProgresses) {
+                        AnswerState as = createAnswerState(qp);
+                        if (qp.getStatusId() == QuestioConstants.QUEST_FINISHED) {
+                            as.setStatus(QuestioConstants.QUEST_FINISHED);
+                        } else if (qp.getStatusId() == QuestioConstants.QUEST_FAILED) {
+                            as.setStatus(QuestioConstants.QUEST_FAILED);
+                        }
+                        answerStatesMap.put(qp.getQuizId(), as);
+                    }
+                    populateQuiz(FIRST_QUIZ);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(LOG_TAG, "requestQuizProgress: failure");
+            }
+        });
+    }
 
     private void insertProgressData() {
-        api.addQuestProgress(questId, adventurerId, ref, zid, 1, new Callback<Response>() {
+        api.addQuestProgress(questId, adventurerId, zid, 1, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 String questioStatus = QuestioHelper.responseToString(response);
@@ -222,9 +350,10 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
                 answerStatesMap = new HashMap<>();
                 for (Quiz q : quizs) {
                     answerStatesMap.put(q.getQuizId(), new AnswerState());
-                    api.addQuizProgress(ref, q.getQuizId(), new Callback<Response>() {
+                    api.addQuizProgress(adventurerId, questId, q.getQuizId(), new Callback<Response>() {
                         @Override
                         public void success(Response response, Response response2) {
+                            Log.d(LOG_TAG, QuestioHelper.responseToString(response));
                             String questioStatus = QuestioHelper.responseToString(response);
                             if (QuestioHelper.getJSONStringValueByTag("status", questioStatus).equalsIgnoreCase("1")) {
                                 Log.d(LOG_TAG, "Add Quiz Progress Successful");
@@ -248,226 +377,14 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
         });
     }
 
-    void populateQuiz(int i) {
-        q = quizs.get(i);
-        currentSeq = i;
-        quizQuestion.setText(q.getQuestion());
-        quizSequence.setText(Integer.toString(q.getSeqId()));
-        quizChoice1.setText(q.getChoiceA());
-        quizChoice2.setText(q.getChoiceB());
-        quizChoice3.setText(q.getChoiceC());
-        quizChoice4.setText(q.getChoiceD());
-        currentQuiz = q.getQuizId();
-        swapButtonColorByState(Integer.parseInt(q.getAnswerId()), 0);
-    }
 
-    private void swapButtonColorByState(int answerPosition, int flag) {
-        Log.d(LOG_TAG, "swapButtonColorByState: called");
-        Log.d(LOG_TAG, "swapButtonColorByState: answerPosition = " + answerPosition);
-        quizChoice1.setBackground(getResources().getDrawable(R.drawable.answer_button));
-        quizChoice2.setBackground(getResources().getDrawable(R.drawable.answer_button));
-        quizChoice3.setBackground(getResources().getDrawable(R.drawable.answer_button));
-        quizChoice4.setBackground(getResources().getDrawable(R.drawable.answer_button));
-        if (flag == I_DO_NOT_CARE_JUST_CHANGE_IT_IMMEDIATELY_TO_CORRECT) {
-            if (answerStatesMap != null) {
-                AnswerState as = answerStatesMap.get(q.getQuizId());
-                as.setStatus(QuestioConstants.QUEST_FINISHED);
-                answerStatesMap.put(q.getQuizId(), as);
-            } else {
-                Log.d(LOG_TAG, "swapButtonColorByState: answerStatesMap is null");
-            }
-        } else if (flag == I_DO_NOT_CARE_JUST_CHANGE_IT_IMMEDIATELY_TO_INCORRECT) {
-            if (answerStatesMap != null) {
-                AnswerState as = answerStatesMap.get(q.getQuizId());
-                as.setStatus(QuestioConstants.QUEST_FAILED);
-                answerStatesMap.put(q.getQuizId(), as);
-            }
-        }
-        if (answerStatesMap != null) {
-            AnswerState as = answerStatesMap.get(q.getQuizId());
-            if (as.getStatus() == QuestioConstants.QUEST_FINISHED) {
-                quizChoice1.setEnabled(false);
-                quizChoice1.setClickable(false);
-                quizChoice2.setEnabled(false);
-                quizChoice2.setClickable(false);
-                quizChoice3.setEnabled(false);
-                quizChoice3.setClickable(false);
-                quizChoice4.setEnabled(false);
-                quizChoice4.setClickable(false);
-                switch (answerPosition) {
-                    case 1:
-                        //quizChoice1.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
-                        quizChoice1.setBackground(getResources().getDrawable(R.drawable.answer_button_correct));
-                        break;
-                    case 2:
-                        //quizChoice2.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
-                        quizChoice2.setBackground(getResources().getDrawable(R.drawable.answer_button_correct));
-                        break;
-                    case 3:
-                        //quizChoice3.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
-                        quizChoice3.setBackground(getResources().getDrawable(R.drawable.answer_button_correct));
-                        break;
-                    case 4:
-                        //quizChoice4.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
-                        quizChoice4.setBackground(getResources().getDrawable(R.drawable.answer_button_correct));
-                        break;
-                }
-            } else if (as.getStatus() == QuestioConstants.QUEST_FAILED) {
-                quizChoice1.setEnabled(false);
-                quizChoice1.setClickable(false);
-                quizChoice2.setEnabled(false);
-                quizChoice2.setClickable(false);
-                quizChoice3.setEnabled(false);
-                quizChoice3.setClickable(false);
-                quizChoice4.setEnabled(false);
-                quizChoice4.setClickable(false);
-                switch (answerPosition) {
-                    case 1:
-                        quizChoice1.setBackground(getResources().getDrawable(R.drawable.corners_button_yellow));
-                        break;
-                    case 2:
-                        quizChoice2.setBackground(getResources().getDrawable(R.drawable.corners_button_yellow));
-                        break;
-                    case 3:
-                        quizChoice3.setBackground(getResources().getDrawable(R.drawable.corners_button_yellow));
-                        break;
-                    case 4:
-                        quizChoice4.setBackground(getResources().getDrawable(R.drawable.corners_button_yellow));
-                        break;
-                }
-            } else {
-                Log.d(LOG_TAG, "swapButtonColorByState: QuestioConstants is not QUEST_FINISHED");
-                if (as.isA()) {
-                    disableButtonAnswer(quizChoice1);
-                } else {
-                    enableButtonAnswer(quizChoice1);
-                }
-                if (as.isB()) {
-                    disableButtonAnswer(quizChoice2);
-                } else {
-                    enableButtonAnswer(quizChoice2);
-                }
-                if (as.isC()) {
-                    disableButtonAnswer(quizChoice3);
-                } else {
-                    enableButtonAnswer(quizChoice3);
-                }
-                if (as.isD()) {
-                    disableButtonAnswer(quizChoice4);
-                } else {
-                    enableButtonAnswer(quizChoice4);
-                }
-            }
-        } else {
-            Log.d(LOG_TAG, "swapButtonColorByState: answerStatesMap is null");
-        }
-    }
-
-
-    public void changeButtonIndicator(int selected) {
-        View v = findViewById(android.R.id.content);
-        Button b;
-        for (int i = 0; i < quizs.size(); i++) {
-            b = (Button) v.findViewById(i);
-            if (i == selected) {
-                // b.setTextColor(getResources().getColor(R.color.white));
-                b.setText("?");
-            } else {
-                b.setText("");
-            }
-        }
-    }
-
-
-    private void requestQuizProgresses() {
-        Log.d(LOG_TAG, "requestQuizProgress: called");
-        api.getQuizProgressByRef(ref, new Callback<ArrayList<QuizProgress>>() {
-            @Override
-            public void success(ArrayList<QuizProgress> quizProgressesTemp, Response response) {
-                quizProgresses = quizProgressesTemp;
-                Log.d(LOG_TAG, "requestQuizProgress: success");
-                if (quizProgresses == null || quizProgresses.size() != totalQuiz) {
-                    Log.d(LOG_TAG, "requestQuizProgress: success but quizProgresses is null");
-                    insertProgressData();
-                } else {
-                    answerStatesMap = new HashMap<>();
-                    for (QuizProgress qp : quizProgresses) {
-                        AnswerState as = createAnswerState(qp);
-                        if (qp.getStatusId() == QuestioConstants.QUEST_FINISHED) {
-                            as.setStatus(QuestioConstants.QUEST_FINISHED);
-                        } else if (qp.getStatusId() == QuestioConstants.QUEST_FAILED) {
-                            as.setStatus(QuestioConstants.QUEST_FAILED);
-                        }
-                        answerStatesMap.put(qp.getQuizId(), as);
-                    }
-                    swapButtonColorByState(Integer.parseInt(quizs.get(FIRST_QUIZ).getAnswerId()), 0);
-                    changeButtonProgressColor();
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.d(LOG_TAG, "requestQuizProgress: failure");
-            }
-        });
-    }
-
-    private AnswerState createAnswerState(QuizProgress qp) {
-        AnswerState as = new AnswerState();
-        as.setQuizId(qp.getQuizId());
-        if (qp.getaAnswered() == 1) {
-            as.setA(true);
-        }
-        if (qp.getbAnswered() == 1) {
-            as.setB(true);
-        }
-        if (qp.getcAnswered() == 1) {
-            as.setC(true);
-        }
-        if (qp.getdAnswered() == 1) {
-            as.setD(true);
-        }
-        return as;
-    }
-
-    private void changeButtonProgressColor() {
-        View v = findViewById(android.R.id.content);
-        Button b;
-        for (int i = 0; i < quizs.size(); i++) {
-            b = (Button) v.findViewById(i);
-            int quizIDFromButton = Integer.parseInt(b.getContentDescription().toString());
-            for (QuizProgress qp : quizProgresses) {
-                if (qp.getQuizId() == quizIDFromButton) {
-                    switch (qp.getStatusId()) {
-                        case 1:
-                            // do nothing
-                            break;
-                        case 2:
-                            //b.setBackgroundColor(getResources().getColor(R.color.yellow_quiz_unanswered));
-                            b.setBackground(getResources().getDrawable(R.drawable.corners_button_yellow));
-                            break;
-                        case 3:
-
-                            //b.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
-                            b.setBackground(getResources().getDrawable(R.drawable.corners_button_green));
-                            break;
-                        case 4:
-                            //b.setBackgroundColor(getResources().getColor(R.color.red_quiz_wrong));
-                            b.setBackground(getResources().getDrawable(R.drawable.corners_button_red));
-                            break;
-                    }
-                }
-            }
-        }
-    }
-
-    void onAnswer(final int answer) {
+    void onAnswer(final int choiceSelected) {
         final Dialog dialog = new Dialog(QuizActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.confirm_dialog);
         dialog.setCancelable(true);
         TextView answerTV = (TextView) dialog.findViewById(R.id.confirm_answer);
-        switch (answer) {
+        switch (choiceSelected) {
             case 1:
                 answerTV.setText(q.getChoiceA());
                 break;
@@ -492,15 +409,16 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
         btnYes.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                if (answerStatesMap.get(q.getQuizId()).getAnswerTime() > 2) {
-                    onLimitAnswer(q.getSeqId());
+                if (answerStatesMap.get(q.getQuizId()).getAnswerTime() > 1) {
+                    onLimitAnswer(q.getSeqId(), q.getQuizId());
                 } else {
-                    updateStateAnswerButton(answer, q.getQuizId());
-                    if (q.getAnswerId().equalsIgnoreCase(Integer.toString(answer))) {
-                        onCorrect(q.getSeqId(), q.getQuizId());
+                    updateStateAnswerButton(choiceSelected, q.getQuizId());
+
+                    if (q.getAnswerId().equalsIgnoreCase(Integer.toString(choiceSelected))) {
+                        onCorrect(q.getSeqId(), q.getQuizId(), choiceSelected);
 
                     } else {
-                        onIncorrect(q.getSeqId(), answer);
+                        onIncorrect(q.getSeqId(), q.getQuizId(), choiceSelected);
                     }
                 }
 
@@ -511,15 +429,43 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
         dialog.show();
     }
 
-    void onCorrect(int seqId, int quizId) {
+    void onCorrect(int seqId, int quizId, int choiceSelected) {
         Log.d(LOG_TAG, "onCorrect: called");
-        Button b = (Button) findViewById(seqId - 1);
-        int answerTime = answerStatesMap.get(quizId).getAnswerTime();
-        int score = 3;
+        AnswerState as = answerStatesMap.get(quizId);
+        int answerTime = as.getAnswerTime();
+        int score = 2;
         for (int i = 0; i < answerTime; i++) {
             score--;
         }
-        api.updateScoreQuizProgressByRefAndQuizId(score, ref, Integer.parseInt(b.getContentDescription().toString()),
+
+        as.setStatus(3);
+        answerStatesMap.put(quizId, as);
+        disableAllChoices();
+        switch (choiceSelected) {
+            case 1:
+                as.setA(true);
+                answerStatesMap.put(quizId, as);
+                quizChoice1.setBackground(getResources().getDrawable(R.drawable.corners_button_green));
+                break;
+            case 2:
+                as.setB(true);
+                answerStatesMap.put(quizId, as);
+                quizChoice2.setBackground(getResources().getDrawable(R.drawable.corners_button_green));
+                break;
+            case 3:
+                as.setC(true);
+                answerStatesMap.put(quizId, as);
+                quizChoice3.setBackground(getResources().getDrawable(R.drawable.corners_button_green));
+                break;
+            case 4:
+                as.setD(true);
+                answerStatesMap.put(quizId, as);
+                quizChoice4.setBackground(getResources().getDrawable(R.drawable.corners_button_green));
+                break;
+        }
+
+
+        api.updateScoreQuizProgressByRefAndQuizId(score, adventurerId, questId, quizId,
                 new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
@@ -534,17 +480,16 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
 
 
         updateQuizProgressStatus(QuestioConstants.QUEST_FINISHED, quizId);
+        populateQuiz(getPossibleNextQuizSeqFromCurrentSeq(seqId - 1));
         Log.d(LOG_TAG, "onCorrect: seqId = " + seqId);
-        swapButtonColorByState(Integer.parseInt(quizs.get(seqId - 1).getAnswerId()), I_DO_NOT_CARE_JUST_CHANGE_IT_IMMEDIATELY_TO_CORRECT);
+        checkQuestFinish();
     }
 
-    void onIncorrect(int seqId, int answer) {
+    void onIncorrect(int seqId, int quizId, int choiceSelected) {
 
-        Button b = (Button) findViewById(seqId - 1);
-        int quizId = Integer.parseInt(b.getContentDescription().toString());
         AnswerState as = answerStatesMap.get(quizId);
 
-        switch (answer) {
+        switch (choiceSelected) {
             case 1:
                 as.setA(true);
                 answerStatesMap.put(quizId, as);
@@ -566,37 +511,58 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
                 disableButtonAnswer(quizChoice4);
                 break;
         }
-
         int answerTime = as.getAnswerTime();
         Log.d(LOG_TAG, "onIncorrect: answerTime = " + answerTime);
-        if (answerTime >= 3) {
-            api.updateScoreQuizProgressByRefAndQuizId(0, ref, Integer.parseInt(b.getContentDescription().toString()),
-                    new Callback<Response>() {
-                        @Override
-                        public void success(Response response, Response response2) {
-
-                        }
-
-                        @Override
-                        public void failure(RetrofitError error) {
-
-                        }
-                    });
-            updateQuizProgressStatus(QuestioConstants.QUEST_FAILED, quizId);
-            Log.d(LOG_TAG, "onCorrect: seqId = " + seqId);
-            swapButtonColorByState(Integer.parseInt(quizs.get(seqId - 1).getAnswerId()), I_DO_NOT_CARE_JUST_CHANGE_IT_IMMEDIATELY_TO_INCORRECT);
-
+        if (answerTime >= 2) {
+            onLimitAnswer(seqId, quizId);
         }
-
-//        Log.d(LOG_TAG, "Before minus 1: " + seqId);
-//        Button b = (Button) findViewById(seqId - 1);
-//        b.setBackgroundColor(getResources().getColor(R.color.red_quiz_wrong));
-
+        checkQuestFinish();
     }
 
 
-    void onLimitAnswer(int seqId) {
+    void onLimitAnswer(int seqId, int quizId) {
+        disableAllChoices();
+        AnswerState as = answerStatesMap.get(quizId);
+        as.setStatus(QuestioConstants.QUEST_FAILED);
+        answerStatesMap.put(quizId, as);
+        api.updateScoreQuizProgressByRefAndQuizId(0, adventurerId, questId, quizId,
+                new Callback<Response>() {
+                    @Override
+                    public void success(Response response, Response response2) {
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+        updateQuizProgressStatus(QuestioConstants.QUEST_FAILED, quizId);
         Log.d(LOG_TAG, "onLimitAnswer: called");
+
+        populateQuiz(getPossibleNextQuizSeqFromCurrentSeq(seqId - 1));
+        checkQuestFinish();
+    }
+
+
+    int getPossibleNextQuizSeqFromCurrentSeq(int currentSeq) {
+        Log.d(LOG_TAG, "getPossibleNextQuizSeqFromCurrentSeq: called");
+        Log.d(LOG_TAG, "getPossibleNextQuizSeqFromCurrentSeq: ");
+
+        AnswerState as;
+        int i = 0;
+        for (Quiz q : quizs) {
+            as = answerStatesMap.get(q.getQuizId());
+            if (as.getStatus() == QuestioConstants.QUEST_FINISHED || as.getStatus() == QuestioConstants.QUEST_FAILED || i == currentSeq) {
+                i++;
+                continue;
+            }
+
+            Log.d(LOG_TAG, "getPossibleNextQuizSeqFromCurrentSeq: return: " + i);
+            return i;
+        }
+        Log.d(LOG_TAG, "getPossibleNextQuizSeqFromCurrentSeq: return: " + 0);
+        return 0;
     }
 
     void updateQuizProgressStatus(int status, int quizId) {
@@ -604,11 +570,11 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
         Log.d(LOG_TAG, "updateQuizProgressStatus status: " + status);
         Log.d(LOG_TAG, "updateQuizProgressStatus ref: " + ref);
         Log.d(LOG_TAG, "updateQuizProgressStatus quizId: " + quizId);
-
-        api.updateStatusQuizProgressByRefAndQuizId(status, ref, quizId, new Callback<Response>() {
+        api.updateStatusQuizProgressByRefAndQuizId(status, adventurerId, questId, quizId, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 Log.d(LOG_TAG, "updateQuizProgressStatus: success");
+
             }
 
             @Override
@@ -626,19 +592,36 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
         b.setClickable(false);
     }
 
-    void enableButtonAnswer(Button b) {
-        b.setBackground(getResources().getDrawable(R.drawable.answer_button));
-        b.setTextColor(getResources().getColor(R.color.grey_900));
-        b.setEnabled(true);
-        b.setClickable(true);
+    void disableAllChoices() {
+        quizChoice1.setEnabled(false);
+        quizChoice1.setClickable(false);
+        quizChoice2.setEnabled(false);
+        quizChoice2.setClickable(false);
+        quizChoice3.setEnabled(false);
+        quizChoice3.setClickable(false);
+        quizChoice4.setEnabled(false);
+        quizChoice4.setClickable(false);
+
     }
+
+    void enableAllChoices() {
+        quizChoice1.setEnabled(true);
+        quizChoice1.setClickable(true);
+        quizChoice2.setEnabled(true);
+        quizChoice2.setClickable(true);
+        quizChoice3.setEnabled(true);
+        quizChoice3.setClickable(true);
+        quizChoice4.setEnabled(true);
+        quizChoice4.setClickable(true);
+    }
+
 
     private void updateStateAnswerButton(int answer, int qid) {
         Log.d(LOG_TAG, "updateStateAnswerButton: called");
         Log.d(LOG_TAG, "updateStateAnswerButton: " + "ref: " + ref + " quizid: " + qid);
         switch (answer) {
             case 1:
-                api.updateStatusChoiceAQuizByRefAndQuizId(ref, qid, new Callback<Response>() {
+                api.updateStatusChoiceAQuizByRefAndQuizId(adventurerId, questId, qid, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
                         Log.d(LOG_TAG, "updateStateAnswerButton success: " + QuestioHelper.responseToString(response));
@@ -651,7 +634,7 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
                 });
                 break;
             case 2:
-                api.updateStatusChoiceBQuizByRefAndQuizId(ref, qid, new Callback<Response>() {
+                api.updateStatusChoiceBQuizByRefAndQuizId(adventurerId, questId, qid, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
                         Log.d(LOG_TAG, "updateStateAnswerButton success: " + QuestioHelper.responseToString(response));
@@ -665,7 +648,7 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
                 });
                 break;
             case 3:
-                api.updateStatusChoiceCQuizByRefAndQuizId(ref, qid, new Callback<Response>() {
+                api.updateStatusChoiceCQuizByRefAndQuizId(adventurerId, questId, qid, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
                         Log.d(LOG_TAG, "updateStateAnswerButton success: " + QuestioHelper.responseToString(response));
@@ -678,7 +661,7 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
                 });
                 break;
             case 4:
-                api.updateStatusChoiceDQuizByRefAndQuizId(ref, qid, new Callback<Response>() {
+                api.updateStatusChoiceDQuizByRefAndQuizId(adventurerId, questId, qid, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
                         Log.d(LOG_TAG, "updateStateAnswerButton success: " + QuestioHelper.responseToString(response));
@@ -693,28 +676,41 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
         }
     }
 
-    private class ButtonProgressListener implements Button.OnClickListener {
-        int pos;
+    private void updateProgressStatusAndScore(int status) {
 
-        public ButtonProgressListener(int position) {
-            pos = position;
-        }
+        Log.d(LOG_TAG, "updateProgressStatusAndScore: called");
+        api.updateQuestProgressAutoScoreQuiz(questId, adventurerId, status, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
 
-        @Override
-        public void onClick(View v) {
-            populateQuiz(v.getId());
-            changeButtonIndicator(v.getId());
-            currentQuiz = q.getQuizId();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+
+    void checkQuestFinish() {
+        if(isAllQuizFinish()){
+            updateProgressStatusAndScore(QuestioConstants.QUEST_FINISHED);
         }
     }
 
-    // check if user finish every quiz in quest; return true if it is, false if it was not.
-    private boolean isQuestFinish(){
-        boolean finish = false;
-        // step 1: check all quiz by ref + quest id if all of those status is not 0
-        // if it is then return true
+    boolean isAllQuizFinish() {
+        AnswerState as;
 
-        return finish;
+        for (int i = 0; i < quizs.size(); i++) {
+            as = answerStatesMap.get(quizs.get(i).getQuizId());
+            if (as.getStatus() != QuestioConstants.QUEST_FINISHED &&
+                    as.getStatus() != QuestioConstants.QUEST_FAILED) {
+                return false;
+            }
+
+        }
+        return true;
     }
 
     private class AnswerState {
@@ -799,5 +795,16 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
             return i;
         }
 
+        @Override
+        public String toString() {
+            return "AnswerState{" +
+                    "status=" + status +
+                    ", quizId=" + quizId +
+                    ", a=" + a +
+                    ", b=" + b +
+                    ", c=" + c +
+                    ", d=" + d +
+                    '}';
+        }
     }
 }

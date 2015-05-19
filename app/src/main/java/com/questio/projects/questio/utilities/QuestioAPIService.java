@@ -89,7 +89,8 @@ public interface QuestioAPIService {
 
     @GET("/select_all_quizprogress_by_ref.php")
     void getQuizProgressByRef(
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             Callback<ArrayList<QuizProgress>> response);
 
     @GET("/update_score_questprogress_by_questid_and_adventurerid.php")
@@ -109,38 +110,44 @@ public interface QuestioAPIService {
     @GET("/update_status_quizprogress_by_ref_and_quizid.php")
     void updateStatusQuizProgressByRefAndQuizId(
             @Query("statusid") int status,
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             @Query("quizid") int quizid,
             Callback<Response> response);
 
     @GET("/update_score_quizprogress_by_ref_and_quizid.php")
     void updateScoreQuizProgressByRefAndQuizId(
             @Query("score") int score,
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             @Query("quizid") int quizid,
             Callback<Response> response);
 
     @GET("/update_statuschoicea_quizprogress_by_ref_and_quizid.php")
     void updateStatusChoiceAQuizByRefAndQuizId(
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             @Query("quizid") int quizid,
             Callback<Response> response);
 
     @GET("/update_statuschoiceb_quizprogress_by_ref_and_quizid.php")
     void updateStatusChoiceBQuizByRefAndQuizId(
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             @Query("quizid") int quizid,
             Callback<Response> response);
 
     @GET("/update_statuschoicec_quizprogress_by_ref_and_quizid.php")
     void updateStatusChoiceCQuizByRefAndQuizId(
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             @Query("quizid") int quizid,
             Callback<Response> response);
 
     @GET("/update_statuschoiced_quizprogress_by_ref_and_quizid.php")
     void updateStatusChoiceDQuizByRefAndQuizId(
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             @Query("quizid") int quizid,
             Callback<Response> response);
 
@@ -148,7 +155,6 @@ public interface QuestioAPIService {
     void addQuestProgress(
             @Query("questid") int qid,
             @Query("adventurerid") long aid,
-            @Query("ref") int ref,
             @Query("zoneid") int zid,
             @Query("questtypeid") int qtid,
             Callback<Response> response);
@@ -163,130 +169,149 @@ public interface QuestioAPIService {
 
     @GET("/insert_quizprogress.php")
     void addQuizProgress(
-            @Query("ref") int ref,
-            @Query("quizid") int aid,
+            @Query("adventurerid") long aid,
+            @Query("questid") int quid,
+            @Query("quizid") int qid,
             Callback<Response> response);
 
     @GET("/select_count_quizprogress_by_ref_finished.php")
     void getCountQuizProgressFinishedByRef(
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             Callback<Response> response);
 
     @GET("/update_puzzleprogress_tlpiece_by_ref.php")
     void updatePuzzleProgressTopLeftPieceByRef(
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             Callback<Response> response
     );
 
     @GET("/update_puzzleprogress_tmpiece_by_ref.php")
     void updatePuzzleProgressTopMidPieceByRef(
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             Callback<Response> response
     );
 
     @GET("/update_puzzleprogress_trpiece_by_ref.php")
     void updatePuzzleProgressTopRightPieceByRef(
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             Callback<Response> response
     );
 
     @GET("/update_puzzleprogress_mlpiece_by_ref.php")
     void updatePuzzleProgressMidLeftPieceByRef(
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             Callback<Response> response
     );
 
     @GET("/update_puzzleprogress_mmpiece_by_ref.php")
     void updatePuzzleProgressMidMidPieceByRef(
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             Callback<Response> response
     );
 
     @GET("/update_puzzleprogress_mrpiece_by_ref.php")
     void updatePuzzleProgressMidRightPieceByRef(
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             Callback<Response> response
     );
 
     @GET("/update_puzzleprogress_blpiece_by_ref.php")
     void updatePuzzleProgressBottomLeftPieceByRef(
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             Callback<Response> response
     );
 
     @GET("/update_puzzleprogress_bmpiece_by_ref.php")
     void updatePuzzleProgressBottomMidPieceByRef(
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             Callback<Response> response
     );
 
     @GET("/update_puzzleprogress_brpiece_by_ref.php")
     void updatePuzzleProgressBottomRightPieceByRef(
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             Callback<Response> response
     );
 
     @GET("/select_all_puzzleprogress_by_ref.php")
     void getPuzzleProgressByRef(
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             Callback<Response> response
     );
 
     @GET("/insert_puzzleprogress.php")
     void addPuzzleProgress(
-            @Query("ref") int ref,
-            @Query("puzzleid") int puzzleid,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             Callback<Response> response
     );
 
     @GET("/select_all_riddleprogress_by_ref.php")
     void getRiddleProgressByRef(
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             Callback<Response> response
     );
 
     @GET("/update_riddleprogress_scanlimit_by_ref.php")
     void updateRiddleProgressScanLimitByRef(
             @Query("scanlimit") int scanLimit,
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             Callback<Response> response
     );
 
 
     @GET("/select_current_points_puzzle_progress_by_ref.php")
     void getCurrentPointsByRef(
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             Callback<Response> response
     );
 
     @GET("/select_current_points_riddle_progress_by_ref.php")
     void getCurrentRiddlePointByRef(
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             Callback<Response> response
     );
 
     @GET("/insert_riddleprogress.php")
     void addRiddleProgress(
-            @Query("ref") int ref,
-            @Query("riddleid") int riddleId,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             Callback<Response> response
     );
 
     @GET("/update_riddleprogress_hint1_by_ref.php")
     void updateRiddleProgressHint1ByRef(
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             Callback<Response> response
     );
 
     @GET("/update_riddleprogress_hint2_by_ref.php")
     void updateRiddleProgressHint2ByRef(
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             Callback<Response> response
     );
 
     @GET("/update_riddleprogress_hint3_by_ref.php")
     void updateRiddleProgressHint3ByRef(
-            @Query("ref") int ref,
+            @Query("adventurerid") long adventurerId,
+            @Query("questid") int questId,
             Callback<Response> response
     );
 

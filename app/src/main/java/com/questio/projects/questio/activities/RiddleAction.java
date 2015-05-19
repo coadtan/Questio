@@ -137,15 +137,21 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
                 break;
             case R.id.riddle_hint1Btn:
                 hintReveal1.setText(r.getHint1());
-                api.updateRiddleProgressHint1ByRef(ref, this);
+                hint1Btn.setEnabled(false);
+                hint1Btn.setClickable(false);
+                api.updateRiddleProgressHint1ByRef(adventurerId, qid, this);
                 break;
             case R.id.riddle_hint2Btn:
                 hintReveal2.setText(r.getHint2());
-                api.updateRiddleProgressHint2ByRef(ref, this);
+                hint2Btn.setEnabled(false);
+                hint2Btn.setClickable(false);
+                api.updateRiddleProgressHint2ByRef(adventurerId, qid, this);
                 break;
             case R.id.riddle_hint3Btn:
                 hintReveal3.setText(r.getHint3());
-                api.updateRiddleProgressHint3ByRef(ref, this);
+                hint3Btn.setEnabled(false);
+                hint3Btn.setClickable(false);
+                api.updateRiddleProgressHint3ByRef(adventurerId, qid, this);
                 break;
         }
 
@@ -158,7 +164,9 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
         Log.d(LOG_TAG, "requestCode: " + requestCode);
         Log.d(LOG_TAG, "Activity.RESULT_OK: " + Activity.RESULT_OK);
         if (resultCode == Activity.RESULT_OK) {
+
             String[] qr = QuestioHelper.getDeQRCode(data.getStringExtra(ZBarConstants.SCAN_RESULT));
+            Log.d(LOG_TAG, "qr[0] = " + qr[0] + "qr[1] = " + qr[1]);
             if (qr[0].equalsIgnoreCase(QuestioConstants.QRTYPE_RIDDLE_ANSWER)) {
                 onAnswer(qr[1]);
             }
@@ -174,16 +182,14 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
                 riddle.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
                 updateQuestStatus(QuestioConstants.QUEST_FINISHED);
                 updateScoreToQuestProgress();
-                scanHere.setEnabled(false);
-                scanHere.setClickable(false);
+                onQuestFinish();
             } else {
                 scanLimit--;
                 scanTV.setText(Integer.toString(scanLimit));
-                api.updateRiddleProgressScanLimitByRef(scanLimit, ref, this);
+                api.updateRiddleProgressScanLimitByRef(scanLimit, adventurerId, qid, this);
                 if (scanLimit == 0) {
                     updateQuestStatus(QuestioConstants.QUEST_FAILED);
-                    scanHere.setEnabled(false);
-                    scanHere.setClickable(false);
+                    onQuestFinish();
                 }
             }
         }
@@ -191,7 +197,7 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
     }
 
     private void updateScoreToQuestProgress() {
-        api.getCurrentRiddlePointByRef(ref, new Callback<Response>() {
+        api.getCurrentRiddlePointByRef(adventurerId, qid, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 Log.d(LOG_TAG, "updateScoreToQuestProgressTest: response = " + QuestioHelper.responseToString(response));
@@ -288,23 +294,23 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
                 } else {
                     String statusStr = QuestioHelper.getJSONStringValueByTag("statusid", response);
                     int status = Integer.parseInt(statusStr);
-                    if (status == QuestioConstants.QUEST_FINISHED) {
-                        scanHere.setEnabled(false);
-                        scanHere.setClickable(false);
+                    if (status == QuestioConstants.QUEST_FINISHED || status == QuestioConstants.QUEST_FAILED) {
+                        onQuestFinish();
+
                     } else {
-                        api.getRiddleProgressByRef(ref, new Callback<Response>() {
+                        api.getRiddleProgressByRef(adventurerId, qid, new Callback<Response>() {
                             @Override
                             public void success(Response response, Response response2) {
                                 String scanLimitStr = QuestioHelper.getJSONStringValueByTag("scanlimit", response);
                                 scanLimit = Integer.parseInt(scanLimitStr);
                                 scanTV.setText(Integer.toString(scanLimit));
-                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hint1opened", response))==1){
+                                if (Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hint1opened", response)) == 1) {
                                     hint1Btn.performClick();
                                 }
-                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hint2opened", response))==1){
+                                if (Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hint2opened", response)) == 1) {
                                     hint2Btn.performClick();
                                 }
-                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hint3opened", response))==1){
+                                if (Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hint3opened", response)) == 1) {
                                     hint3Btn.performClick();
                                 }
                             }
@@ -328,7 +334,7 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
     }
 
     private void insertProgressData() {
-        api.addQuestProgress(qid, adventurerId, ref, zid, 2, new Callback<Response>() {
+        api.addQuestProgress(qid, adventurerId, zid, 2, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 String questioStatus = QuestioHelper.responseToString(response);
@@ -347,7 +353,7 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
     }
 
     private void insertRiddleProgress() {
-        api.addRiddleProgress(ref, qid, new Callback<Response>() {
+        api.addRiddleProgress(adventurerId, qid, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
 
@@ -384,5 +390,19 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
     @Override
     public void failure(RetrofitError error) {
 
+    }
+
+    private void onQuestFinish(){
+        scanHere.setEnabled(false);
+        scanHere.setClickable(false);
+        hintReveal1.setText(r.getHint1());
+        hintReveal2.setText(r.getHint2());
+        hintReveal3.setText(r.getHint3());
+        hint1Btn.setEnabled(false);
+        hint1Btn.setClickable(false);
+        hint2Btn.setEnabled(false);
+        hint2Btn.setClickable(false);
+        hint3Btn.setEnabled(false);
+        hint3Btn.setClickable(false);
     }
 }

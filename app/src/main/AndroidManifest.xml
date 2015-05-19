@@ -44,9 +44,7 @@
         <activity android:name=".activities.PlaceActivity" />
         <activity android:name=".activities.PlaceInfo" />'
         <activity android:name=".activities.ZoneActivity" />
-        <activity android:name=".activities.QuizAction" />
         <activity android:name=".activities.QuizActivity" />
-        <activity android:name=".activities.DoQuizActivity" />
         <activity android:name=".activities.PicturePuzzleAction" />
         <activity android:name=".activities.RiddleAction" />
         <activity android:name=".activities.LoginActivity" />
