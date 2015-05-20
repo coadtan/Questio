@@ -9,8 +9,10 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -38,7 +40,8 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     private ImageView bottomMiddle;
     private ImageView bottomRight;
     private EditText picturePuzzleAnswer;
-    private EditText picturePuzzleHint;
+   // private EditText picturePuzzleHint;
+    private ImageButton picturePuzzleShowHintBtn;
     String currentAnswer;
     TextView pointTV;
     Toolbar toolbar;
@@ -79,8 +82,8 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         bottomMiddle = (ImageView) findViewById(R.id.bottomMiddle);
         bottomRight = (ImageView) findViewById(R.id.bottomRight);
         picturePuzzleAnswer = (EditText) findViewById(R.id.picture_puzzle_answer);
-        picturePuzzleHint = (EditText) findViewById(R.id.picture_puzzle_hint);
-
+      //  picturePuzzleHint = (EditText) findViewById(R.id.picture_puzzle_hint);
+        picturePuzzleShowHintBtn = (ImageButton) findViewById(R.id.picture_puzzle_showhint_btn);
 
         String questId;
         String questName;
@@ -167,6 +170,9 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                 bottomRight.setVisibility(View.INVISIBLE);
                 onUnMask(9);
                 break;
+            case R.id.picture_puzzle_showhint_btn:
+                Toast.makeText(this, pp.getHelperAnswer() , Toast.LENGTH_LONG).show();
+                break;
         }
 
     }
@@ -218,7 +224,8 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                             .load(QuestioHelper.getImgLink(pp.getImageUrl()))
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(picturePuzzleQuestion);
-                    picturePuzzleHint.setHint(pp.getHelperAnswer());
+              //      picturePuzzleHint.setHint(pp.getHelperAnswer());
+                    picturePuzzleShowHintBtn.setOnClickListener(PicturePuzzleAction.this);
                     picturePuzzleAnswer.addTextChangedListener(PicturePuzzleAction.this);
                     topLeft.setOnClickListener(PicturePuzzleAction.this);
                     topMiddle.setOnClickListener(PicturePuzzleAction.this);
@@ -267,7 +274,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                         bottomMiddle.setVisibility(View.INVISIBLE);
                         bottomRight.setVisibility(View.INVISIBLE);
                         disableAll();
-                        picturePuzzleHint.setVisibility(View.INVISIBLE);
+                  //      picturePuzzleHint.setVisibility(View.INVISIBLE);
 
                         picturePuzzleAnswer.setText(pp.getCorrectAnswer());
                         picturePuzzleAnswer.setEnabled(false);

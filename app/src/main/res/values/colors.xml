@@ -3,11 +3,11 @@
 
     <color name="colorPrimary">#fff4bc25</color>
     <color name="colorTab">#ffe0c06a</color>
-    <color name="colorPrimaryDark">#fff47100</color>
+    <color name="colorPrimaryDark">#fff9871e</color>
     <color name="textColorPrimary">#ffefffd2</color>
     <color name="windowBackground">#ffb5c6b7</color>
 
-
+    <color name="brown">#ff8f6641</color>
     <color name="white">#FFFFFF</color>
     <color name="grey">#cccccc</color>
     <color name="grey_500">#ff8b9797</color>

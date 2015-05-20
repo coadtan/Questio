@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_questio"
     android:orientation="vertical">
 
     <include
         android:id="@+id/app_bar"
         layout="@layout/toolbar_puzzle_layout" />
 
-
-
     <FrameLayout
+
+        android:id="@+id/puzzle_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/relativeLayout"
+        android:layout_centerVertical="true"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="20dp"
-        android:background="@color/black"
+        android:background="@color/colorPrimaryDark"
         android:padding="10dp">
-
 
         <RelativeLayout
             android:layout_width="300dp"
@@ -98,34 +99,56 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:src="@drawable/picture_puzzle_mask" />
+
         </RelativeLayout>
 
     </FrameLayout>
 
-    <RelativeLayout
+
+    <LinearLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp">
-
-        <EditText
-            android:id="@+id/picture_puzzle_hint"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:focusable="false"
-            android:gravity="center"
-            android:hint="กำลังโหลด"
-            android:textSize="30sp" />
+        android:layout_marginRight="30dp"
+        android:layout_below="@+id/puzzle_box"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:weightSum="10">
 
 
         <EditText
+            android:background="@drawable/answer_button"
             android:id="@+id/picture_puzzle_answer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:gravity="center"
-            android:textSize="30sp" />
-    </RelativeLayout>
-</LinearLayout>
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:layout_weight="8"/>
+
+        <ImageButton
+            android:id="@+id/picture_puzzle_showhint_btn"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1.5"
+            android:backgroundTint="@color/white"
+            android:background="@drawable/answer_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:src="@drawable/ic_action_placedetail"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/app_bar"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/puzzle_tropic"
+        android:layout_marginTop="10dp"/>
+</RelativeLayout>

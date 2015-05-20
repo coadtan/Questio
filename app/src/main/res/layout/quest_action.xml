@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/comfort_orange"
+    android:background="@drawable/bg_questio"
     android:orientation="vertical">
 
     <include
@@ -19,13 +19,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:background="@drawable/box_map">
+            android:background="@drawable/show_quiz_map">
 
 
             <ImageView
                 android:id="@+id/quest_action_picture"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
+                android:layout_margin="15dp"
                 android:layout_gravity="center_horizontal|top"
                 android:alpha="0.5"
                 android:src="@drawable/loading" />
@@ -35,7 +36,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_gravity="end|bottom"
-                android:layout_margin="10dp"
+                android:layout_margin="15dp"
                 android:src="@drawable/loading" />
 
         </FrameLayout>
