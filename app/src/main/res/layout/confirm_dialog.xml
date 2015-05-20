@@ -2,20 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#ffd56511"
+    android:background="@drawable/decision_popup"
     android:orientation="vertical"
     android:padding="20dp">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:gravity="center"
-        android:text="@string/dialog_confirm"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:layout_marginBottom="20dp"/>
 
 
     <TextView
@@ -27,39 +16,39 @@
         android:text="@string/test_dialog_answer"
         android:textSize="15sp"
         android:textColor="@color/white"
+        android:layout_marginTop="40dp"
         android:layout_marginBottom="20dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
+        android:layout_marginTop="34dp"
         android:gravity="center">
 
         <FrameLayout
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@drawable/confirm_box_border"
             android:layout_marginRight="30dp"
             >
             <ImageButton
                 android:id="@+id/confirm_no"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:src="@drawable/ic_logo_incorrect"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/cancel_btn"/>
 
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@drawable/confirm_box_border">
             <ImageButton
                 android:id="@+id/confirm_yes"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:src="@drawable/ic_logo_correct"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/yes_btn"/>
         </FrameLayout>
 
 
