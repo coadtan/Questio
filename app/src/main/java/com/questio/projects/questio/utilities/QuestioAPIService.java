@@ -324,4 +324,12 @@ public interface QuestioAPIService {
             @Query("statusid") int statusid,
             Callback<Response> response
     );
+
+    //http://52.74.64.61/api/select_quest_status_and_score_by_zoneandadventurerid.php?zoneid=1&adventurerid=2
+    @GET("/select_quest_status_and_score_by_zoneandadventurerid.php")
+    void getQuestStatusAndScoreByZoneAdventurerid(
+            @Query("zoneid") int zoneid,
+            @Query("adventurerid") long adventurerid,
+            Callback<Response> response
+    );
 }

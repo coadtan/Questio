@@ -8,10 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.models.Quest;
+import com.questio.projects.questio.models.QuestStatusAndScore;
+import com.questio.projects.questio.utilities.QuestioConstants;
 
 import java.util.ArrayList;
 
@@ -23,12 +26,13 @@ public class QuestInActionAdapter extends ArrayAdapter<Quest> {
     public static final String LOG_TAG = QuestInActionAdapter.class.getSimpleName();
     private Context mContext;
     private Typeface tf;
+    ArrayList<QuestStatusAndScore> statusList;
 
     private static class ViewHolder {
         private ImageView questtype;
         private ImageView difficulty;
         private ImageView status;
-
+        private LinearLayout questListItem;
         private TextView zoneid;
         private TextView questname;
         private TextView questid;
@@ -44,14 +48,15 @@ public class QuestInActionAdapter extends ArrayAdapter<Quest> {
             questdetails = (TextView) view.findViewById(R.id.questdetails);
             questid = (TextView) view.findViewById(R.id.questid);
             zoneid = (TextView) view.findViewById(R.id.quest_zoneId);
-
+            questListItem = (LinearLayout) view.findViewById(R.id.quest_list_item);
 
         }
 
     }
 
-    public QuestInActionAdapter(Context context, ArrayList<Quest> feed) {
-        super(context, 0, feed);
+    public QuestInActionAdapter(Context context, ArrayList<Quest> quests, ArrayList<QuestStatusAndScore> statusList) {
+        super(context, 0, quests);
+        this.statusList = statusList;
         mContext = context;
         tf = Typeface.createFromAsset(context.getAssets(), "fonts/CSPraJad.otf");
     }
@@ -63,6 +68,8 @@ public class QuestInActionAdapter extends ArrayAdapter<Quest> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_quest, parent, false);
         }
+
+
         ViewHolder viewHolder = new ViewHolder(convertView);
         viewHolder.questid.setText(Integer.toString(items.getQuestId()));
         viewHolder.questid.setTypeface(tf);
@@ -71,6 +78,17 @@ public class QuestInActionAdapter extends ArrayAdapter<Quest> {
         viewHolder.questdetails.setText(items.getQuestDetails());
         viewHolder.questTypeInvisible.setText(Integer.toString(items.getQuestTypeId()));
         viewHolder.zoneid.setText(Integer.toString(items.getZoneId()));
+
+        if (statusList != null) {
+            for (QuestStatusAndScore q : statusList) {
+                if (items.getQuestId() == q.getQuestId()) {
+                    if (q.getStatus() == QuestioConstants.QUEST_FINISHED || q.getStatus() == QuestioConstants.QUEST_FAILED) {
+                        viewHolder.questListItem.setBackgroundColor(mContext.getResources().getColor(R.color.grey_500));
+                        viewHolder.status.setImageResource(R.drawable.ic_quest_finish);
+                    }
+                }
+            }
+        }
 
         Log.d(LOG_TAG, "getView: questname = " + items.getQuestName());
         switch (items.getQuestTypeId()) {
@@ -85,7 +103,7 @@ public class QuestInActionAdapter extends ArrayAdapter<Quest> {
                 break;
         }
 
-        switch (items.getDiffId()){
+        switch (items.getDiffId()) {
             case 1:
                 viewHolder.difficulty.setBackgroundColor(mContext.getResources().getColor(R.color.quest_veryeasy));
                 break;
@@ -107,5 +125,12 @@ public class QuestInActionAdapter extends ArrayAdapter<Quest> {
 //        viewHolder.difficulty.setImageDrawable();
 //        viewHolder.status.setImageDrawable();
         return convertView;
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        Log.d(LOG_TAG, "notifyDataSetChanged: called");
+
+        super.notifyDataSetChanged();
     }
 }

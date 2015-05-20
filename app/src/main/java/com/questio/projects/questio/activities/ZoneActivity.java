@@ -2,6 +2,7 @@ package com.questio.projects.questio.activities;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +12,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -18,6 +20,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.adepters.QuestInActionAdapter;
 import com.questio.projects.questio.models.Quest;
+import com.questio.projects.questio.models.QuestStatusAndScore;
 import com.questio.projects.questio.models.Zone;
 import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
@@ -30,22 +33,27 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-/**
- * Created by ning jittima on 4/4/2558.
- */
 public class ZoneActivity extends ActionBarActivity {
     private static final String LOG_TAG = ZoneActivity.class.getSimpleName();
     Toolbar toolbar;
-    ArrayList<Quest> quests;
-    private ListView quest_action_listview;
+    ArrayList<Quest> questsList;
+    ArrayList<QuestStatusAndScore> statusList;
+    private ListView questListview;
+    int zoneId;
     Zone zone;
     ImageView questActionImg;
     ImageView questActionMiniImg;
-    //    TextView zonename;
     TextView item;
     TextView reward;
     TextView zonetype;
     String qrcode;
+    RestAdapter adapter;
+    QuestioAPIService api;
+    long adventurerId;
+    QuestInActionAdapter adapterQuestList = null;
+    ProgressBar questActionQuizfinishProgressbar;
+    ProgressBar questActionScoreGainProgressbar;
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -57,51 +65,22 @@ public class ZoneActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quest_action);
-
-        questActionImg = (ImageView) findViewById(R.id.quest_action_picture);
-        questActionMiniImg = (ImageView) findViewById(R.id.quest_action_minimap);
-//        zonename = (TextView) findViewById(R.id.zonename);
-        item = (TextView) findViewById(R.id.item);
-        reward = (TextView) findViewById(R.id.reward);
-        zonetype = (TextView) findViewById(R.id.zonetype);
-        quest_action_listview = (ListView) findViewById(R.id.quest_action_listview);
-
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitleTextColor(0xFFFFFFFF);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("กำลังโหลด....");
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        if (savedInstanceState == null) {
-            Log.d(LOG_TAG, "savedInstanceState: null");
-            Bundle extras = getIntent().getExtras();
-
-            if (extras == null) {
-                qrcode = null;
-            } else {
-                qrcode = extras.getString("qrcode");
-            }
-        } else {
-            Log.d(LOG_TAG, "savedInstanceState: !null");
-            //qrcode = (String) savedInstanceState.getSerializable("qrcode");
-            qrcode = savedInstanceState.getString("qrcode");
-        }
-        Log.d(LOG_TAG, "qrcode: " + qrcode);
-        Log.d(LOG_TAG, "savedInstanceState: " + savedInstanceState);
+        handleView();
+        handleToolbar();
+        handleInstanceState(savedInstanceState);
+        adapter = new RestAdapter.Builder()
+                .setEndpoint(QuestioConstants.ENDPOINT)
+                .build();
+        api = adapter.create(QuestioAPIService.class);
         int zoneIdFromQRCode = Zone.findZoneIdByQRCode(Integer.parseInt(qrcode));
+        SharedPreferences prefs = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
+        adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
+
+        zoneId = zoneIdFromQRCode;
         requestZoneData(zoneIdFromQRCode);
-
-
         requestQuestData(zoneIdFromQRCode);
 
-        quest_action_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        questListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TextView questId = (TextView) view.findViewById(R.id.questid);
@@ -113,13 +92,10 @@ public class ZoneActivity extends ActionBarActivity {
                 String zoneIdForIntent = zoneId.getText().toString();
                 switch (Integer.parseInt(questTypeInvisible.getText().toString())) {
                     case 1:
-//                        Intent intentToQuiz = new Intent(ZoneActivity.this, QuizAction.class);
-//                        Intent intentToQuiz = new Intent(ZoneActivity.this, QuizActivity.class);
                         Intent intentToQuiz = new Intent(ZoneActivity.this, QuizActivity.class);
                         intentToQuiz.putExtra(QuestioConstants.QUEST_ID, questIdForIntent);
                         intentToQuiz.putExtra(QuestioConstants.QUEST_NAME, questNameForIntent);
                         intentToQuiz.putExtra(QuestioConstants.QUEST_ZONE_ID, zoneIdForIntent);
-
                         startActivity(intentToQuiz);
                         break;
                     case 2:
@@ -145,17 +121,88 @@ public class ZoneActivity extends ActionBarActivity {
 
     }
 
-    private void requestQuestData(int id) {
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(QuestioConstants.ENDPOINT)
-                .build();
-        QuestioAPIService api = adapter.create(QuestioAPIService.class);
+    private void handleView() {
+        questActionImg = (ImageView) findViewById(R.id.quest_action_picture);
+        questActionMiniImg = (ImageView) findViewById(R.id.quest_action_minimap);
+        item = (TextView) findViewById(R.id.item);
+        reward = (TextView) findViewById(R.id.reward);
+        zonetype = (TextView) findViewById(R.id.zonetype);
+        questListview = (ListView) findViewById(R.id.quest_action_listview);
+        questActionQuizfinishProgressbar = (ProgressBar)findViewById(R.id.quest_action_quizfinish_progressbar);
+        questActionScoreGainProgressbar = (ProgressBar)findViewById(R.id.quest_action_scoregain_progressbar);
+    }
+
+    private void handleToolbar() {
+
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(0xFFFFFFFF);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("กำลังโหลดข้อมูล");
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+    }
+
+
+    private void handleInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            Log.d(LOG_TAG, "savedInstanceState: null");
+            Bundle extras = getIntent().getExtras();
+
+            if (extras == null) {
+                qrcode = null;
+            } else {
+                qrcode = extras.getString("qrcode");
+            }
+        } else {
+            Log.d(LOG_TAG, "savedInstanceState: !null");
+            //qrcode = (String) savedInstanceState.getSerializable("qrcode");
+            qrcode = savedInstanceState.getString("qrcode");
+        }
+        Log.d(LOG_TAG, "qrcode: " + qrcode);
+        Log.d(LOG_TAG, "savedInstanceState: " + savedInstanceState);
+    }
+
+    private void requestQuestData(final int id) {
         api.getAllQuestByZoneId(id, new Callback<ArrayList<Quest>>() {
             @Override
-            public void success(ArrayList<Quest> quests, Response response) {
+            public void success(final ArrayList<Quest> quests, Response response) {
                 if (quests != null) {
-                    QuestInActionAdapter adapter = new QuestInActionAdapter(ZoneActivity.this, quests);
-                    quest_action_listview.setAdapter(adapter);
+                    questsList = quests;
+                    api.getQuestStatusAndScoreByZoneAdventurerid(id, adventurerId, new Callback<Response>() {
+                        @Override
+                        public void success(Response response, Response response2) {
+                            statusList = QuestStatusAndScore.createStatusList(response);
+                            if(statusList!=null){
+                                int questFinished = 0;
+                                int scoreGain=0;
+                                for(QuestStatusAndScore q: statusList){
+                                    if(q.getStatus()==QuestioConstants.QUEST_FINISHED || q.getStatus() == QuestioConstants.QUEST_FAILED){
+                                        questFinished++;
+                                        scoreGain += q.getScore();
+                                    }
+                                }
+                                double totalQuestInZone = questsList.size();
+                                questActionQuizfinishProgressbar.setProgress(QuestioHelper.getPercentFrom2ValueAsInt(questFinished, totalQuestInZone));
+                                questActionScoreGainProgressbar.setProgress(QuestioHelper.getPercentFrom2ValueAsInt(scoreGain, totalQuestInZone*10));
+                            }
+
+                            adapterQuestList = new QuestInActionAdapter(ZoneActivity.this, questsList,statusList );
+                            questListview.setAdapter(adapterQuestList);
+                            adapterQuestList.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+
+                        }
+                    });
                 } else {
                     Log.d(LOG_TAG, "quests: is null");
                 }
@@ -169,21 +216,15 @@ public class ZoneActivity extends ActionBarActivity {
     }
 
     private void requestZoneData(int id) {
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(QuestioConstants.ENDPOINT)
-                .build();
-        QuestioAPIService api = adapter.create(QuestioAPIService.class);
         api.getZoneByZoneId(id, new Callback<Zone[]>() {
             @Override
             public void success(Zone[] zones, Response response) {
                 if (zones != null) {
                     zone = zones[0];
-//                    zonename.setText(zone.getZoneName());
                     getSupportActionBar().setTitle(zone.getZoneName());
                     item.setText(zone.getItemSet());
                     reward.setText(Integer.toString(zone.getRewardId()));
                     zonetype.setText(Integer.toString(zone.getZoneTypeId()));
-
                     if (!(zone.getImageUrl() == null)) {
                         Glide.with(ZoneActivity.this)
                                 .load(QuestioHelper.getImgLink(zone.getImageUrl()))
@@ -195,7 +236,6 @@ public class ZoneActivity extends ActionBarActivity {
                                 .load(QuestioHelper.getImgLink(zone.getMiniMapUrl()))
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(questActionMiniImg);
-
                         questActionMiniImg.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -216,9 +256,8 @@ public class ZoneActivity extends ActionBarActivity {
                         });
                     }
                 } else {
-                    Log.d(LOG_TAG, "Zone is null");
+                    Log.d(LOG_TAG, "Zone data is null");
                 }
-
             }
 
             @Override
@@ -228,5 +267,42 @@ public class ZoneActivity extends ActionBarActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        Log.d(LOG_TAG, "onResume: called");
+        if (adapterQuestList != null) {
+            api.getQuestStatusAndScoreByZoneAdventurerid(zoneId, adventurerId, new Callback<Response>() {
+                @Override
+                public void success(Response response, Response response2) {
+                    statusList = QuestStatusAndScore.createStatusList(response);
+                    if(statusList!=null){
+                        int questFinished = 0;
+                        int scoreGain=0;
+                        for(QuestStatusAndScore q: statusList){
+                            if(q.getStatus()==QuestioConstants.QUEST_FINISHED || q.getStatus() == QuestioConstants.QUEST_FAILED){
+                                questFinished++;
+                                scoreGain += q.getScore();
+                            }
+                        }
+                        double totalQuestInZone = questsList.size();
+                        questActionQuizfinishProgressbar.setProgress(QuestioHelper.getPercentFrom2ValueAsInt(questFinished, totalQuestInZone));
+                        questActionScoreGainProgressbar.setProgress(QuestioHelper.getPercentFrom2ValueAsInt(scoreGain, totalQuestInZone*10));
 
+                    }
+                    adapterQuestList = new QuestInActionAdapter(ZoneActivity.this, questsList,statusList );
+                    questListview.setAdapter(adapterQuestList);
+                    adapterQuestList.notifyDataSetChanged();
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+
+                }
+            });
+        }else{
+            Log.d(LOG_TAG, "onResume: is null");
+        }
+
+        super.onResume();
+    }
 }

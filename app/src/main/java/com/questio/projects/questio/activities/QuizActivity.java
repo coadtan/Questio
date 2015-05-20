@@ -40,7 +40,7 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
     // These 4 values have value after handleInstanceState() called
     int questId;
     int zid;
-    int ref;
+    //int ref;
     long adventurerId;
 
 
@@ -137,7 +137,7 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
         adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
         this.questId = Integer.parseInt(questId);
         zid = Integer.parseInt(zoneId);
-        ref = Integer.parseInt(Integer.toString(this.questId) + (int) adventurerId);
+        //ref = Integer.parseInt(Integer.toString(this.questId) + (int) adventurerId);
         // set title of toolbar to questname
         getSupportActionBar().setTitle(questName);
     }
@@ -568,7 +568,7 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
     void updateQuizProgressStatus(int status, int quizId) {
         Log.d(LOG_TAG, "updateQuizProgressStatus: called");
         Log.d(LOG_TAG, "updateQuizProgressStatus status: " + status);
-        Log.d(LOG_TAG, "updateQuizProgressStatus ref: " + ref);
+        //Log.d(LOG_TAG, "updateQuizProgressStatus ref: " + ref);
         Log.d(LOG_TAG, "updateQuizProgressStatus quizId: " + quizId);
         api.updateStatusQuizProgressByRefAndQuizId(status, adventurerId, questId, quizId, new Callback<Response>() {
             @Override
@@ -618,7 +618,7 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
 
     private void updateStateAnswerButton(int answer, int qid) {
         Log.d(LOG_TAG, "updateStateAnswerButton: called");
-        Log.d(LOG_TAG, "updateStateAnswerButton: " + "ref: " + ref + " quizid: " + qid);
+        //Log.d(LOG_TAG, "updateStateAnswerButton: " + "ref: " + ref + " quizid: " + qid);
         switch (answer) {
             case 1:
                 api.updateStatusChoiceAQuizByRefAndQuizId(adventurerId, questId, qid, new Callback<Response>() {

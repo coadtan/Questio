@@ -212,4 +212,14 @@ public class QuestioHelper {
 
         return dif < 10800;
     }
+
+    public static int getPercentFrom2ValueAsInt(double a, double b){
+        double temp = a/b*100;
+        Log.d(LOG_TAG, "getPercentFrom2ValueAsInt: " + (int)temp);
+        if(a==b){
+            Log.d(LOG_TAG, "getPercentFrom2ValueAsInt: " + 100);
+            return 100;
+        }
+        return (int)temp;
+    }
 }
