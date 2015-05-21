@@ -30,7 +30,7 @@
             android:layout_gravity="center_vertical"
             android:gravity="center"
             android:text="@string/dialog_confirm_name"
-            android:textColor="@color/wallet_primary_text_holo_light"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="25sp" />
 
     </LinearLayout>
@@ -47,14 +47,12 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="30dp"
             android:background="@drawable/confirm_box_border">
-
             <ImageButton
                 android:id="@+id/confirm_no"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/cancel_btn"
                 android:scaleType="fitCenter" />
-
         </FrameLayout>
 
         <FrameLayout

@@ -4,6 +4,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -78,6 +81,8 @@ public class AvatarSection extends Fragment {
             final Dialog dialog = new Dialog(getActivity());
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.confirm_signout_dialog);
+            Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
+            dialog.getWindow().setBackgroundDrawable(transparentDrawable);
             dialog.setCancelable(true);
             TextView TVConfirmName = (TextView) dialog.findViewById(R.id.dialog_confirm_name);
             ImageView imageViewConfirmPicture = (ImageView) dialog.findViewById(R.id.dialog_confirm_picture);
