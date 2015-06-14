@@ -2,6 +2,9 @@ package com.questio.projects.questio.activities;
 
 import android.app.Dialog;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -383,6 +386,8 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
         final Dialog dialog = new Dialog(QuizActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.confirm_dialog);
+        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
+        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
         dialog.setCancelable(true);
         TextView answerTV = (TextView) dialog.findViewById(R.id.confirm_answer);
         switch (choiceSelected) {
