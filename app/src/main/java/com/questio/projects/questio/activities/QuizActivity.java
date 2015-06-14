@@ -103,12 +103,6 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
         quizNextBtn = (Button) findViewById(R.id.quiz_next_btn);
         quizCurrentTv = (TextView) findViewById(R.id.quiz_current_tv);
         quizTotalNumberTv = (TextView) findViewById(R.id.quiz_total_number_tv);
-        quizChoice1.setOnClickListener(this);
-        quizChoice2.setOnClickListener(this);
-        quizChoice3.setOnClickListener(this);
-        quizChoice4.setOnClickListener(this);
-        quizPreBtn.setOnClickListener(this);
-        quizNextBtn.setOnClickListener(this);
     }
 
     private void handleInstanceState(Bundle savedInstanceState) {
@@ -332,6 +326,12 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
                     }
                     populateQuiz(FIRST_QUIZ);
                 }
+                quizChoice1.setOnClickListener(QuizActivity.this);
+                quizChoice2.setOnClickListener(QuizActivity.this);
+                quizChoice3.setOnClickListener(QuizActivity.this);
+                quizChoice4.setOnClickListener(QuizActivity.this);
+                quizPreBtn.setOnClickListener(QuizActivity.this);
+                quizNextBtn.setOnClickListener(QuizActivity.this);
             }
 
             @Override
@@ -339,6 +339,7 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
                 Log.d(LOG_TAG, "requestQuizProgress: failure");
             }
         });
+
     }
 
     private void insertProgressData() {
