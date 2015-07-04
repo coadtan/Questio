@@ -19,8 +19,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.adepters.QuestInActionAdapter;
+import com.questio.projects.questio.models.Item;
 import com.questio.projects.questio.models.Quest;
 import com.questio.projects.questio.models.QuestStatusAndScore;
+import com.questio.projects.questio.models.Reward;
 import com.questio.projects.questio.models.Zone;
 import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
@@ -43,8 +45,8 @@ public class ZoneActivity extends ActionBarActivity {
     Zone zone;
     ImageView questActionImg;
     ImageView questActionMiniImg;
-    TextView item;
-    TextView reward;
+    ImageView itemPic;
+    ImageView rewardPic;
     TextView zonetype;
     String qrcode;
     RestAdapter adapter;
@@ -53,6 +55,8 @@ public class ZoneActivity extends ActionBarActivity {
     QuestInActionAdapter adapterQuestList = null;
     ProgressBar questActionQuizfinishProgressbar;
     ProgressBar questActionScoreGainProgressbar;
+    Item item;
+    Reward reward;
 
 
     @Override
@@ -121,11 +125,51 @@ public class ZoneActivity extends ActionBarActivity {
 
     }
 
+    private void requestRewardData(int id) {
+        api.getRewardByZoneId(id, new Callback<Reward[]>() {
+            @Override
+            public void success(Reward[] rewards, Response response) {
+                if (rewards != null) {
+                    Log.d(LOG_TAG, rewards[0].toString());
+                } else {
+                    Log.d(LOG_TAG, "Item: null");
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(LOG_TAG, "requestItemData: failure");
+                Log.d(LOG_TAG, error.getMessage());
+                Log.d(LOG_TAG, error.getUrl());
+            }
+        });
+    }
+
+    private void requestItemData(int id) {
+        api.getItemByZoneId(id, new Callback<Item[]>() {
+            @Override
+            public void success(Item[] items, Response response) {
+                if(items != null){
+                    Log.d(LOG_TAG, items[0].toString());
+                }else{
+                    Log.d(LOG_TAG, "Item: null");
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(LOG_TAG, "requestItemData: failure");
+                Log.d(LOG_TAG, error.getMessage());
+                Log.d(LOG_TAG, error.getUrl());
+            }
+        });
+    }
+
     private void handleView() {
         questActionImg = (ImageView) findViewById(R.id.quest_action_picture);
         questActionMiniImg = (ImageView) findViewById(R.id.quest_action_minimap);
-        item = (TextView) findViewById(R.id.item);
-        reward = (TextView) findViewById(R.id.reward);
+        //itemPic = (ImageView) findViewById(R.id.quest_action_item_picture);
+        //rewardPic = (ImageView) findViewById(R.id.quest_action_reward_picture);
         zonetype = (TextView) findViewById(R.id.zonetype);
         questListview = (ListView) findViewById(R.id.quest_action_listview);
         questActionQuizfinishProgressbar = (ProgressBar)findViewById(R.id.quest_action_quizfinish_progressbar);
@@ -215,15 +259,15 @@ public class ZoneActivity extends ActionBarActivity {
         });
     }
 
-    private void requestZoneData(int id) {
+    private void requestZoneData(final int id) {
         api.getZoneByZoneId(id, new Callback<Zone[]>() {
             @Override
             public void success(Zone[] zones, Response response) {
                 if (zones != null) {
                     zone = zones[0];
                     getSupportActionBar().setTitle(zone.getZoneName());
-                    item.setText(zone.getItemSet());
-                    reward.setText(Integer.toString(zone.getRewardId()));
+                    //item.setText(zone.getItemSet());
+                    //reward.setText(Integer.toString(zone.getRewardId()));
                     zonetype.setText(Integer.toString(zone.getZoneTypeId()));
                     if (!(zone.getImageUrl() == null)) {
                         Glide.with(ZoneActivity.this)
@@ -254,6 +298,8 @@ public class ZoneActivity extends ActionBarActivity {
                                 nagDialog.show();
                             }
                         });
+                        requestItemData(id);
+                        requestRewardData(id);
                     }
                 } else {
                     Log.d(LOG_TAG, "Zone data is null");

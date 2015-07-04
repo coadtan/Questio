@@ -1,11 +1,13 @@
 package com.questio.projects.questio.utilities;
 
+import com.questio.projects.questio.models.Item;
 import com.questio.projects.questio.models.PicturePuzzle;
 import com.questio.projects.questio.models.PlaceDetail;
 import com.questio.projects.questio.models.PlaceNews;
 import com.questio.projects.questio.models.Quest;
 import com.questio.projects.questio.models.Quiz;
 import com.questio.projects.questio.models.QuizProgress;
+import com.questio.projects.questio.models.Reward;
 import com.questio.projects.questio.models.Riddle;
 import com.questio.projects.questio.models.Zone;
 
@@ -331,5 +333,19 @@ public interface QuestioAPIService {
             @Query("zoneid") int zoneid,
             @Query("adventurerid") long adventurerid,
             Callback<Response> response
+    );
+
+    //http://52.74.64.61/api/select_all_reward_by_zoneid.php?zoneid=1
+    @GET("/select_all_reward_by_zoneid.php")
+    void getRewardByZoneId(
+            @Query("zoneid") int zoneid,
+            Callback<Reward[]> reward
+    );
+
+    //http://52.74.64.61/api/select_all_item_by_zoneid.php?zoneid=1
+    @GET("/select_all_item_by_zoneid.php")
+    void getItemByZoneId(
+            @Query("zoneid") int zoneid,
+            Callback<Item[]> item
     );
 }
