@@ -93,14 +93,11 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
     public SlidingTabLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-//        this.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
-//        this.setBackgroundColor(context.getResources().getColor(R.color.colorTab));
         this.setBackground(context.getResources().getDrawable(R.drawable.tab_color));
         // Disable the Scroll Bar
         this.setHorizontalScrollBarEnabled(false);
-        // Make sure that the Tab Strips fills this View
         setFillViewport(true);
-
+        this.setContentDescription("topSectionForTab");
         mTitleOffset = (int) (TITLE_OFFSET_DIPS * getResources().getDisplayMetrics().density);
 
         mTabStrip = new SlidingTabStrip(context);
@@ -243,6 +240,13 @@ public class SlidingTabLayout extends HorizontalScrollView {
 //                R.mipmap.ic_action_quest, R.mipmap.ic_action_hof, R.mipmap.ic_action_avatar};
         Integer[] iconResourceArray = {R.drawable.ic_icon_ranking, R.drawable.ic_icon_search,
                 R.drawable.ic_icon_quest, R.drawable.ic_icon_hallofframe, R.drawable.ic_icon_profile};
+        String[] tabDescription = new String[5];
+        tabDescription[0] = "rankingTab";
+        tabDescription[1] = "searchTab";
+        tabDescription[2] = "questTab";
+        tabDescription[3] = "hofTab";
+        tabDescription[4] = "profileTab";
+
         for (int i = 0; i < adapter.getCount(); i++) {
             View tabView = null;
             tabView = LayoutInflater.from(getContext()).inflate(R.layout.section_tab, mTabStrip,
@@ -251,6 +255,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
             //tabView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             ImageView iconImageView = (ImageView) tabView.findViewById(R.id.tab_layout_icon);
             iconImageView.setImageDrawable(getContext().getResources().getDrawable(iconResourceArray[i]));
+            tabView.setContentDescription(tabDescription[i]);
             tabView.setOnClickListener(tabClickListener);
             mTabStrip.addView(tabView);
         }
