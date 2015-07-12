@@ -1,4 +1,4 @@
-package com.questio.projects.questio;
+package com.questio.projects.questio.TestHelper;
 
 /*
  * Copyright (C) 2015 Jake Wharton
