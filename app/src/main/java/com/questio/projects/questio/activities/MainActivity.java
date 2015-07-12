@@ -52,11 +52,6 @@ public class MainActivity extends ActionBarActivity {
         Log.d(LOG_TAG, "displayName: " + displayName + " id: " + id);
 
 
-        if (!QuestioApplication.isLogin()) {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
-        }
-
 
         Place place = new Place(getApplicationContext());
         try {

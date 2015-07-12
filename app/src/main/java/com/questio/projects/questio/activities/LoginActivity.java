@@ -28,13 +28,10 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-/**
- * Created by coad4u4ever on 16-Apr-15.
- */
 public class LoginActivity extends ActionBarActivity implements View.OnClickListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private static final String LOG_TAG = LoginActivity.class.getSimpleName();
-//    Toolbar toolbar;
+    //    Toolbar toolbar;
     private static final int RC_SIGN_IN = 0;
     private GoogleApiClient mGoogleApiClient;
     private boolean mIntentInProgress;
@@ -50,28 +47,16 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
-//        toolbar = (Toolbar) findViewById(R.id.app_bar);
-//        setSupportActionBar(toolbar);
+
+//
+//        if (!QuestioApplication.isLogin()) {
+//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//            startActivity(intent);
+//        }
+
         btnSignIn = (SignInButton) findViewById(R.id.sign_in_button);
-//        btnSignOut = (Button) findViewById(R.id.sign_out_button);
-//        btnRevoke = (Button) findViewById(R.id.revoke_button);
 
         btnSignIn.setOnClickListener(this);
-//        btnSignOut.setOnClickListener(this);
-//        btnRevoke.setOnClickListener(this);
-
-//        mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                .addConnectionCallbacks(this)
-//                .addOnConnectionFailedListener(this).addApi(Plus.API, null)
-//                .addScope(Plus.SCOPE_PLUS_LOGIN).build();
-
-//        mGoogleApiClient = new GoogleApiClient.Builder(this,this,this)
-//                .addApi(Plus.API)
-//                .addScope(Plus.SCOPE_PLUS_LOGIN)
-//                .addConnectionCallbacks(this)
-//                .addOnConnectionFailedListener(this)
-//                .build();
-
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -89,9 +74,6 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
 
     protected void onStop() {
         super.onStop();
-//        if (mGoogleApiClient.isConnected()) {
-//            mGoogleApiClient.disconnect();
-//        }
     }
 
 
@@ -99,17 +81,8 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_in_button:
-                // Signin button clicked
                 signInWithGplus();
                 break;
-//            case R.id.sign_out_button:
-//                // Signout button clicked
-//                signOutFromGplus();
-//                break;
-//            case R.id.revoke_button:
-//                // Revoke access button clicked
-//                revokeGplusAccess();
-//                break;
         }
     }
 
@@ -119,7 +92,6 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
             resolveSignInError();
         }
     }
-
 
 
     private void resolveSignInError() {
@@ -154,7 +126,6 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                         + ", Image: " + personPhotoUrl);
                 Log.d(LOG_TAG, "" + currentPerson.getId());
                 Log.d(LOG_TAG, "" + currentPerson.getBirthday());
-
 
 
                 // step 1: isNewAdventurer
@@ -271,7 +242,10 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
 
         QuestioApplication.setLogin(true);
 
-        btnSignIn.setVisibility(View.INVISIBLE);
+       // btnSignIn.setVisibility(View.INVISIBLE);
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+
         finish();
     }
 
@@ -332,6 +306,7 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                     });
         }
     }
+
     private void signOutFromGplus() {
         if (mGoogleApiClient.isConnected()) {
             Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
