@@ -35,11 +35,6 @@
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".activities.PlaceActivity" />
         <activity android:name=".activities.PlaceInfo" />'
@@ -47,7 +42,12 @@
         <activity android:name=".activities.QuizActivity" />
         <activity android:name=".activities.PicturePuzzleAction" />
         <activity android:name=".activities.RiddleAction" />
-        <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activities.FloorActivity" />
         <activity android:name=".libraries.zbarscanner.ZBarScannerActivity"/>
         <service android:name="com.estimote.sdk.service.BeaconService"

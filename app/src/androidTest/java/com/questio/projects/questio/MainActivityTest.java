@@ -14,6 +14,8 @@ import android.view.View;
 import com.questio.projects.questio.activities.MainActivity;
 
 import org.hamcrest.Matcher;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,33 +35,46 @@ import static com.questio.projects.questio.TestHelper.WaitForId.waitId;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
+    public static final String LOG_TAG = MainActivityTest.class.getSimpleName();
     @Rule
     public final ActivityTestRule<MainActivity> main = new ActivityTestRule<>(MainActivity.class);
 
-    @Test
+
+    @Before
     public void setUp() {
-        if (!QuestioApplication.isLogin()) {
-            onView(withId(R.id.sign_in_button))
-                    .perform(click());
-        }
+        Log.d(LOG_TAG, "Test was set up!");
+    }
+
+    @After
+    public void tearDown() {
+        Log.d(LOG_TAG, "Test was torn down!");
     }
 
     @Test
     public void shouldBeAbleToLaunchMainScreen() {
-        if (!QuestioApplication.isLogin()) {
-            onView(withId(R.id.sign_in_button))
-                    .check(matches(isDisplayed()));
-        } else {
-            onView(withId(R.id.ranking_section))
-                    .check(matches(isDisplayed()));
-        }
+        onView(withId(R.id.ranking_section))
+                .check(matches(isDisplayed()));
     }
 
     // Test Navigate Tab
     @Test
+    public void shouldGoToRankingSectionWhenClickRankingIcon() {
+
+        onView(withContentDescription("rankingTab"))
+                .perform(click());
+        onView(isRoot())
+                .perform(waitId(R.id.ranking_section, 5000));
+        onView(withId(R.id.ranking_section))
+                .check(matches(isDisplayed()));
+
+    }
+
+    @Test
     public void shouldGoToSearchSectionWhenClickSeachIcon() {
         onView(withContentDescription("searchTab"))
                 .perform(click());
+        onView(isRoot())
+                .perform(waitId(R.id.search_section, 5000));
         onView(withId(R.id.search_section))
                 .check(matches(isDisplayed()));
 
@@ -69,15 +84,19 @@ public class MainActivityTest {
     public void shouldGoToQuestSectionWhenClickQuestIcon() {
         onView(withContentDescription("questTab"))
                 .perform(click());
+        onView(isRoot())
+                .perform(waitId(R.id.quest_section, 5000));
         onView(withId(R.id.quest_section))
                 .check(matches(isDisplayed()));
-
     }
 
     @Test
     public void shouldGoToHOFSectionWhenClickHOFIcon() {
         onView(withContentDescription("hofTab"))
                 .perform(click());
+        onView(isRoot())
+                .perform(waitId(R.id.hof_section, 5000));
+
         onView(withId(R.id.hof_section))
                 .check(matches(isDisplayed()));
 
@@ -88,21 +107,12 @@ public class MainActivityTest {
 
         onView(withContentDescription("profileTab"))
                 .perform(click());
+        onView(isRoot())
+                .perform(waitId(R.id.profile_section, 5000));
         onView(withId(R.id.profile_section))
                 .check(matches(isDisplayed()));
 
     }
-
-    @Test
-    public void shouldGoToRankingSectionWhenClickRankingIcon() {
-
-        onView(withContentDescription("rankingTab"))
-                .perform(click());
-        onView(withId(R.id.ranking_section))
-                .check(matches(isDisplayed()));
-
-    }
-
     // End of navigate tab
 
     @Test
