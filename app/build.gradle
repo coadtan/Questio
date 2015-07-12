@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId "com.questio.projects.questio"
-        minSdkVersion 17
+        minSdkVersion 18
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -48,5 +48,6 @@ dependencies {
     androidTestCompile 'com.android.support.test:runner:0.3'
     androidTestCompile 'com.android.support.test:rules:0.3'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2'
+        androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.0'
 }
 
