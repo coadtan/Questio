@@ -151,6 +151,10 @@ public class ZoneActivity extends ActionBarActivity {
             public void success(Item[] items, Response response) {
                 if(items != null){
                     Log.d(LOG_TAG, items[0].toString());
+                    Glide.with(ZoneActivity.this)
+                            .load("http://52.74.64.61" + items[0].getItemPicPath())
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(itemPic);
                 }else{
                     Log.d(LOG_TAG, "Item: null");
                 }
@@ -168,7 +172,7 @@ public class ZoneActivity extends ActionBarActivity {
     private void handleView() {
         questActionImg = (ImageView) findViewById(R.id.quest_action_picture);
         questActionMiniImg = (ImageView) findViewById(R.id.quest_action_minimap);
-        //itemPic = (ImageView) findViewById(R.id.quest_action_item_picture);
+        itemPic = (ImageView) findViewById(R.id.quest_action_item_picture);
         //rewardPic = (ImageView) findViewById(R.id.quest_action_reward_picture);
         zonetype = (TextView) findViewById(R.id.zonetype);
         questListview = (ListView) findViewById(R.id.quest_action_listview);

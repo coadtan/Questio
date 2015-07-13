@@ -1,43 +1,29 @@
 package com.questio.projects.questio;
 
-import android.support.test.espresso.IdlingPolicies;
-import android.support.test.espresso.PerformException;
-import android.support.test.espresso.UiController;
-import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.test.espresso.util.HumanReadables;
-import android.support.test.espresso.util.TreeIterables;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
-import android.util.Log;
-import android.view.View;
 
 import com.questio.projects.questio.activities.MainActivity;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarScannerActivity;
 
-import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.questio.projects.questio.TestHelper.WaitForId.waitId;
 import static junit.framework.Assert.assertTrue;
 
 
@@ -91,7 +77,7 @@ public class MainActivityTest {
     public void shouldGoToHOFSectionWhenClickHOFIcon() {
         onView(withContentDescription("hofTab"))
                 .perform(click());
-        onView(withId(R.id.hof_section))
+        onView(withId(R.id.inventory_section))
                 .check(matches(isDisplayed()));
 
     }

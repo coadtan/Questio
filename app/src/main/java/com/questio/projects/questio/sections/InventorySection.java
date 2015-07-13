@@ -11,11 +11,11 @@ import com.questio.projects.questio.R;
 /**
  * Created by coad4u4ever on 01-Apr-15.
  */
-public class HOFSection extends Fragment {
+public class InventorySection extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.section_halloffame, container, false);
+        View rootView = inflater.inflate(R.layout.section_inventory, container, false);
         Bundle args = getArguments();
 
         return rootView;
