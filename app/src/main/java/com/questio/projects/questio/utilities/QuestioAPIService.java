@@ -348,4 +348,19 @@ public interface QuestioAPIService {
             @Query("zoneid") int zoneid,
             Callback<Item[]> item
     );
+    //http://52.74.64.61/api/insert_inventory.php?adventurerid=1&itemid=1
+    @GET("/insert_inventory.php")
+    void addInventory(
+            @Query("adventurerid") long adventurerid,
+            @Query("itemid") int itemid,
+            Callback<Response> response
+    );
+
+    //http://52.74.64.61/api/select_count_inventory_by_adventurerid_and_itemid.php?adventurerid=1&itemid=1
+    @GET("/select_count_inventory_by_adventurerid_and_itemid.php")
+    void getCountInventoryByAdventurerIdAndItemId(
+            @Query("adventurerid") long adventurerid,
+            @Query("itemid") int itemid,
+            Callback<Response> response
+    );
 }
