@@ -12,6 +12,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -78,6 +79,8 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
     Button enterPlaceBtn;
+    Runnable runnable;
+    Handler handler;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +92,14 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
         //editor = this.getActivity().getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, Context.MODE_PRIVATE).edit();
         prefs = this.getActivity().getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, Context.MODE_PRIVATE);
         editor = this.getActivity().getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, Context.MODE_PRIVATE).edit();
+        handler = new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                enterPlaceBtn.setVisibility(View.GONE);
+                location = null;
+            }
+        };
     }
 
     @Override
@@ -249,6 +260,7 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
                         startActivity(intent);
                     }
                 });
+                handler.postDelayed(runnable, 3*60*60*1000);
             }
 
         }

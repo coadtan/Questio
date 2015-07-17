@@ -58,7 +58,6 @@ public class PlaceListAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
-
         String placeIdString = cursor.getString(0);
         viewHolder.placeId.setText(placeIdString);
         String placeNameString = cursor.getString(1);
@@ -74,6 +73,7 @@ public class PlaceListAdapter extends CursorAdapter {
         if (!placeType.equalsIgnoreCase("null")) {
             viewHolder.iconView.setImageResource(R.drawable.ic_logo_museum);
         }
+        view.setContentDescription(viewHolder.placeName.getText());
 
 
     }

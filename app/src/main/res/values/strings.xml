@@ -57,4 +57,12 @@
     <string name="quiz_total_number">3</string>
     <string name="wait">wait</string>
 
+    <string name="itemget">ไอเทมที่ได้รับ</string>
+
+    <string name="dialog_item_name">ชื่อไอเทม</string>
+    <string name="dialog_item_collection">ชุดไอเทม</string>
+    <string name="test_item_name">Heart</string>
+    <string name="test_item_collection">Kantai</string>
+    <string name="dialog_item_close">ปิด</string>
+
 </resources>

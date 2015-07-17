@@ -1,6 +1,7 @@
 package com.questio.projects.questio.utilities;
 
 import com.questio.projects.questio.models.Item;
+import com.questio.projects.questio.models.ItemInInventory;
 import com.questio.projects.questio.models.PicturePuzzle;
 import com.questio.projects.questio.models.PlaceDetail;
 import com.questio.projects.questio.models.PlaceNews;
@@ -347,5 +348,27 @@ public interface QuestioAPIService {
     void getItemByZoneId(
             @Query("zoneid") int zoneid,
             Callback<Item[]> item
+    );
+    //http://52.74.64.61/api/insert_inventory.php?adventurerid=1&itemid=1
+    @GET("/insert_inventory.php")
+    void addInventory(
+            @Query("adventurerid") long adventurerid,
+            @Query("itemid") int itemid,
+            Callback<Response> response
+    );
+
+    //http://52.74.64.61/api/select_count_inventory_by_adventurerid_and_itemid.php?adventurerid=1&itemid=1
+    @GET("/select_count_inventory_by_adventurerid_and_itemid.php")
+    void getCountInventoryByAdventurerIdAndItemId(
+            @Query("adventurerid") long adventurerid,
+            @Query("itemid") int itemid,
+            Callback<Response> response
+    );
+
+    //http://52.74.64.61/api/select_all_item_inventory_by_adventurerid.php?adventurerid=2
+    @GET("/select_all_item_inventory_by_adventurerid.php")
+    void getAllItemInInventoryByAdventurerId(
+            @Query("adventurerid") long adventurerid,
+            Callback<ArrayList<ItemInInventory>> response
     );
 }

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -150,7 +151,12 @@ public class ZoneActivity extends ActionBarActivity {
             @Override
             public void success(Item[] items, Response response) {
                 if(items != null){
-                    Log.d(LOG_TAG, items[0].toString());
+                    item = items[0];
+                    Log.d(LOG_TAG, item.toString());
+                    Glide.with(ZoneActivity.this)
+                            .load("http://52.74.64.61" + item.getItemPicPath())
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(itemPic);
                 }else{
                     Log.d(LOG_TAG, "Item: null");
                 }
@@ -168,7 +174,7 @@ public class ZoneActivity extends ActionBarActivity {
     private void handleView() {
         questActionImg = (ImageView) findViewById(R.id.quest_action_picture);
         questActionMiniImg = (ImageView) findViewById(R.id.quest_action_minimap);
-        //itemPic = (ImageView) findViewById(R.id.quest_action_item_picture);
+        itemPic = (ImageView) findViewById(R.id.quest_action_item_picture);
         //rewardPic = (ImageView) findViewById(R.id.quest_action_reward_picture);
         zonetype = (TextView) findViewById(R.id.zonetype);
         questListview = (ListView) findViewById(R.id.quest_action_listview);
@@ -333,6 +339,35 @@ public class ZoneActivity extends ActionBarActivity {
                         double totalQuestInZone = questsList.size();
                         questActionQuizfinishProgressbar.setProgress(QuestioHelper.getPercentFrom2ValueAsInt(questFinished, totalQuestInZone));
                         questActionScoreGainProgressbar.setProgress(QuestioHelper.getPercentFrom2ValueAsInt(scoreGain, totalQuestInZone*10));
+                        if(questFinished == totalQuestInZone){
+                            api.getCountInventoryByAdventurerIdAndItemId(adventurerId, item.getItemId(), new Callback<Response>() {
+                                @Override
+                                public void success(Response response, Response response2) {
+                                    int itemCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("inventorycount", response));
+                                    Log.d(LOG_TAG, "Item count: " + itemCount);
+                                    if (itemCount == 0) {
+                                        Toast.makeText(ZoneActivity.this, "GET ITEM!: " + item.getItemName(), Toast.LENGTH_LONG).show();
+                                        api.addInventory(adventurerId, item.getItemId(), new Callback<Response>() {
+                                            @Override
+                                            public void success(Response response, Response response2) {
+
+                                            }
+
+                                            @Override
+                                            public void failure(RetrofitError error) {
+
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override
+                                public void failure(RetrofitError error) {
+                                    Log.d(LOG_TAG, "checkItemData: failure");
+                                }
+                            });
+
+                        }
 
                     }
                     adapterQuestList = new QuestInActionAdapter(ZoneActivity.this, questsList,statusList );
