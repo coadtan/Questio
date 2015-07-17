@@ -124,7 +124,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginTop="7dp"
             android:layout_weight="2"
-            android:contentDescription="ไอเทมที่ได้รับ"/>
+            android:contentDescription="@string/itemget"/>
 
         <TextView
             android:layout_width="wrap_content"

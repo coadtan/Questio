@@ -1,6 +1,7 @@
 package com.questio.projects.questio.utilities;
 
 import com.questio.projects.questio.models.Item;
+import com.questio.projects.questio.models.ItemInInventory;
 import com.questio.projects.questio.models.PicturePuzzle;
 import com.questio.projects.questio.models.PlaceDetail;
 import com.questio.projects.questio.models.PlaceNews;
@@ -362,5 +363,12 @@ public interface QuestioAPIService {
             @Query("adventurerid") long adventurerid,
             @Query("itemid") int itemid,
             Callback<Response> response
+    );
+
+    //http://52.74.64.61/api/select_all_item_inventory_by_adventurerid.php?adventurerid=2
+    @GET("/select_all_item_inventory_by_adventurerid.php")
+    void getAllItemInInventoryByAdventurerId(
+            @Query("adventurerid") long adventurerid,
+            Callback<ArrayList<ItemInInventory>> response
     );
 }
