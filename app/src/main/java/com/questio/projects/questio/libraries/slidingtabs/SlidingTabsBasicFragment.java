@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.questio.projects.questio.R;
-import com.questio.projects.questio.sections.AvatarSection;
+import com.questio.projects.questio.sections.ProfileSection;
 import com.questio.projects.questio.sections.HOFSection;
 import com.questio.projects.questio.sections.PlaceSection;
 import com.questio.projects.questio.sections.RankingSection;
@@ -88,7 +88,7 @@ public class SlidingTabsBasicFragment extends Fragment {
                     fragment = new HOFSection();
                     break;
                 default:
-                    fragment = new AvatarSection();
+                    fragment = new ProfileSection();
                     break;
             }
 

@@ -30,11 +30,8 @@ import com.questio.projects.questio.R;
 import com.questio.projects.questio.activities.LoginActivity;
 import com.questio.projects.questio.utilities.QuestioConstants;
 
-/**
- * Created by coad4u4ever on 01-Apr-15.
- */
-public class AvatarSection extends Fragment {
-    private static final String LOG_TAG = AvatarSection.class.getSimpleName();
+public class ProfileSection extends Fragment {
+    private static final String LOG_TAG = ProfileSection.class.getSimpleName();
 
 
     @Override
@@ -47,7 +44,7 @@ public class AvatarSection extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.section_avatar, container, false);
+        View rootView = inflater.inflate(R.layout.section_profile, container, false);
         Bundle args = getArguments();
 
         return rootView;

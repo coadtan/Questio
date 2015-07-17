@@ -188,64 +188,23 @@ public class SlidingTabLayout extends HorizontalScrollView {
     }
 
     private void populateTabStrip() {
-//        final PagerAdapter adapter = mViewPager.getAdapter();
-//        final View.OnClickListener tabClickListener = new TabClickListener();
-//        Integer[] iconResourceArray = {R.drawable.ic_icon_ranking, R.drawable.ic_icon_search,
-//                R.drawable.ic_icon_quest, R.drawable.ic_icon_hallofframe, R.drawable.ic_icon_profile};
-//
-//        for (int i = 0; i < adapter.getCount(); i++) {
-//            View tabView = null;
-//            TextView tabTitleView = null;
-//
-//            if (mTabViewLayoutId != 0) {
-//                // If there is a custom tab view layout id set, try and inflate it
-//                tabView = LayoutInflater.from(getContext()).inflate(mTabViewLayoutId, mTabStrip,
-//                        false);
-//                tabTitleView = (TextView) tabView.findViewById(mTabViewTextViewId);
-//            }
-//
-//            if (tabView == null) {
-//                tabView = createDefaultTabView(getContext());
-//            }
-//
-//            if (tabTitleView == null && TextView.class.isInstance(tabView)) {
-//                tabTitleView = (TextView) tabView;
-//            }
-//
-//            if (mDistributeEvenly) {
-//                LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) tabView.getLayoutParams();
-//                lp.width = 0;
-//                lp.weight = 1;
-//            }
-//
-//            //tabTitleView.setText(adapter.getPageTitle(i));
-//            tabView.setOnClickListener(tabClickListener);
-//            String desc = mContentDescriptions.get(i, null);
-//            if (desc != null) {
-//                tabView.setContentDescription(desc);
-//            }
-//
-//            ImageView iconImageView = (ImageView) tabView.findViewById(R.id.tab_layout_icon);
-//            iconImageView.setImageDrawable(getContext().getResources().getDrawable(iconResourceArray[i]));
-//            mTabStrip.addView(tabView);
-//            if (i == mViewPager.getCurrentItem()) {
-//                tabView.setSelected(true);
-//            }
-//        }
         final PagerAdapter adapter = mViewPager.getAdapter();
         final View.OnClickListener tabClickListener = new TabClickListener();
 
 
-//        Integer[] iconResourceArray = {R.mipmap.ic_action_ranking, R.mipmap.ic_action_search,
-//                R.mipmap.ic_action_quest, R.mipmap.ic_action_hof, R.mipmap.ic_action_avatar};
-        Integer[] iconResourceArray = {R.drawable.ic_icon_ranking, R.drawable.ic_icon_search,
-                R.drawable.ic_icon_quest, R.drawable.ic_icon_hallofframe, R.drawable.ic_icon_profile};
+        Integer[] iconResourceArray = new Integer[5];
+        iconResourceArray[0] = R.drawable.ic_icon_ranking;
+        iconResourceArray[1] = R.drawable.ic_icon_search;
+        iconResourceArray[2] = R.drawable.ic_icon_quest;
+        iconResourceArray[3] = R.drawable.ic_icon_hallofframe;
+        iconResourceArray[4] = R.drawable.ic_icon_profile;
+
         String[] tabDescription = new String[5];
-        tabDescription[0] = "rankingTab";
-        tabDescription[1] = "searchTab";
-        tabDescription[2] = "questTab";
-        tabDescription[3] = "hofTab";
-        tabDescription[4] = "profileTab";
+        tabDescription[0] = "go to ranking section tab";
+        tabDescription[1] = "go to search section tab";
+        tabDescription[2] = "go to quest section tab";
+        tabDescription[3] = "go to hall of frame section tab";
+        tabDescription[4] = "go to profile section tab";
 
         for (int i = 0; i < adapter.getCount(); i++) {
             View tabView = null;

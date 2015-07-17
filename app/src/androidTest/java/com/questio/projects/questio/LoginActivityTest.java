@@ -14,6 +14,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -27,9 +28,12 @@ public class LoginActivityTest {
 
     @Test
     public void shouldBeAbleToLaunchLoginScreen() {
+        onView(withId(R.id.login_layout))
+                .check(matches(isDisplayed()));
         onView(withId(R.id.sign_in_button))
                 .check(matches(isDisplayed()));
     }
+
 
 }
 
