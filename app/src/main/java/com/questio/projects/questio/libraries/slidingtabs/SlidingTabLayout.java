@@ -203,7 +203,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
         tabDescription[0] = "go to ranking section tab";
         tabDescription[1] = "go to search section tab";
         tabDescription[2] = "go to quest section tab";
-        tabDescription[3] = "go to hall of frame section tab";
+        tabDescription[3] = "go to inventory section tab";
         tabDescription[4] = "go to profile section tab";
 
         for (int i = 0; i < adapter.getCount(); i++) {

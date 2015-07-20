@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,16 +34,15 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-/**
- * Created by coad4u4ever on 01-Apr-15.
- */
-public class InventorySection extends Fragment {
+
+public class InventorySection extends Fragment implements AdapterView.OnItemClickListener {
+    private final String LOG_TAG = InventorySection.class.getSimpleName();
     Context mContext;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
     View rootView;
     GridView inventory;
-    InventoryAdapter inventoryAdapter;
+    InventoryAdapter inventoryAdapter = null;
     ArrayList<ItemInInventory> itemsInv;
     long adventurerId;
     RestAdapter adapter;
@@ -66,15 +66,9 @@ public class InventorySection extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.section_inventory, container, false);
         inventory = (GridView) rootView.findViewById(R.id.inventory);
-        Bundle args = getArguments();
         requestItemInventoryData(adventurerId);
 
-        inventory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                showDialog(position);
-            }
-        });
+        inventory.setOnItemClickListener(this);
 
 
         return rootView;
@@ -85,9 +79,9 @@ public class InventorySection extends Fragment {
             @Override
             public void success(ArrayList<ItemInInventory> itemInInventories, Response response) {
                 itemsInv = itemInInventories;
-                inventoryAdapter = new InventoryAdapter(mContext, itemsInv);
+                inventoryAdapter = new InventoryAdapter(mContext, itemInInventories);
                 inventory.setAdapter(inventoryAdapter);
-
+                inventoryAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -97,7 +91,8 @@ public class InventorySection extends Fragment {
         });
     }
 
-    private void showDialog(int position){
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         ItemInInventory item = itemsInv.get(position);
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -114,7 +109,7 @@ public class InventorySection extends Fragment {
         String itemCollection = item.getItemCollection();
 
         Glide.with(mContext)
-                .load("http://52.74.64.61" + item.getItemPicPath())
+                .load(QuestioConstants.BASE_URL + item.getItemPicPath())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(itemImage);
         tvItemName.setText(itemName);
@@ -126,5 +121,6 @@ public class InventorySection extends Fragment {
                 dialog.cancel();
             }
         });
+        dialog.show();
     }
 }

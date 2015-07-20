@@ -65,4 +65,7 @@
     <string name="test_item_collection">Kantai</string>
     <string name="dialog_item_close">ปิด</string>
 
+    <string name="go_to_your_inventory">go to your inventory</string>
+
+
 </resources>

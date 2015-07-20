@@ -32,20 +32,31 @@ import com.questio.projects.questio.utilities.QuestioConstants;
 
 public class ProfileSection extends Fragment {
     private static final String LOG_TAG = ProfileSection.class.getSimpleName();
-
+    private ImageView profilePicture;
+    View rootView;
+    Person currentPerson;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        currentPerson = Plus.PeopleApi
+                .getCurrentPerson(QuestioApplication.mGoogleApiClient);
+    }
 
+    public void init() {
+        profilePicture = (ImageView) rootView.findViewById(R.id.profile_picture);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.section_profile, container, false);
-        Bundle args = getArguments();
+        rootView = inflater.inflate(R.layout.section_profile, container, false);
+        init();
+        Glide.with(this)
+                .load(currentPerson.getImage().getUrl())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(profilePicture);
 
         return rootView;
     }
@@ -55,7 +66,6 @@ public class ProfileSection extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_logout:
-                Log.d(LOG_TAG, "action_logout clicked");
                 signOutFromGplus();
                 return true;
         }
@@ -71,9 +81,6 @@ public class ProfileSection extends Fragment {
         SharedPreferences.Editor editor = getActivity().getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, Context.MODE_PRIVATE).edit();
         editor.clear();
         editor.apply();
-
-
-
         if (QuestioApplication.mGoogleApiClient.isConnected()) {
             final Dialog dialog = new Dialog(getActivity());
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -85,8 +92,6 @@ public class ProfileSection extends Fragment {
             ImageView imageViewConfirmPicture = (ImageView) dialog.findViewById(R.id.dialog_confirm_picture);
 
 
-            Person currentPerson = Plus.PeopleApi
-                    .getCurrentPerson(QuestioApplication.mGoogleApiClient);
             String personName = currentPerson.getDisplayName();
             Glide.with(this)
                     .load(currentPerson.getImage().getUrl())
@@ -114,10 +119,6 @@ public class ProfileSection extends Fragment {
             });
 
             dialog.show();
-
-
-        } else {
-            Log.d(LOG_TAG, "not connected");
         }
     }
 }

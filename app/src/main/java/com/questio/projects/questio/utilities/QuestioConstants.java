@@ -1,9 +1,8 @@
 package com.questio.projects.questio.utilities;
 
-/**
- * Created by coad4u4ever on 01-Apr-15.
- */
+
 public class QuestioConstants {
+    public static final String BASE_URL = "http://52.74.64.61";
     public static final String ENDPOINT = "http://52.74.64.61/api";
     public static final String TAG_PLACE_ID = "placeid";
     public static final String TAG_PLACE_NAME = "placename";
