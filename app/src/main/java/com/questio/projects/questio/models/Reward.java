@@ -27,6 +27,9 @@ public class Reward {
     @SerializedName("rewardtype")
     private int rewardType;
 
+    @SerializedName("rewardpic")
+    private String rewardPic;
+
     public int getRewardId() {
         return rewardId;
     }
@@ -59,13 +62,22 @@ public class Reward {
         this.rewardType = rewardType;
     }
 
+    public String getRewardPic() {
+        return rewardPic;
+    }
+
+    public void setRewardPic(String rewardPic) {
+        this.rewardPic = rewardPic;
+    }
+
     @Override
     public String toString() {
         return "Reward{" +
-                "rewardId=" + rewardId +
+                "description='" + description + '\'' +
+                ", rewardId=" + rewardId +
                 ", rewardName='" + rewardName + '\'' +
-                ", description='" + description + '\'' +
                 ", rewardType=" + rewardType +
+                ", rewardPic='" + rewardPic + '\'' +
                 '}';
     }
 }

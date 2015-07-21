@@ -371,4 +371,11 @@ public interface QuestioAPIService {
             @Query("adventurerid") long adventurerid,
             Callback<ArrayList<ItemInInventory>> response
     );
+
+    //http://52.74.64.61/api/select_all_rewards_halloffame_by_adventurerid.php?adventurerid=2
+    @GET("/select_all_item_inventory_by_adventurerid.php")
+    void getAllRewardsInHalloffameByAdventurerId(
+            @Query("adventurerid") long adventurerid,
+            Callback<ArrayList<ItemInInventory>> response
+    );
 }

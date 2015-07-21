@@ -131,7 +131,12 @@ public class ZoneActivity extends ActionBarActivity {
             @Override
             public void success(Reward[] rewards, Response response) {
                 if (rewards != null) {
+                    reward = rewards[0];
                     Log.d(LOG_TAG, rewards[0].toString());
+                    Glide.with(ZoneActivity.this)
+                            .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(rewardPic);
                 } else {
                     Log.d(LOG_TAG, "Item: null");
                 }
@@ -154,7 +159,7 @@ public class ZoneActivity extends ActionBarActivity {
                     item = items[0];
                     Log.d(LOG_TAG, item.toString());
                     Glide.with(ZoneActivity.this)
-                            .load("http://52.74.64.61" + item.getItemPicPath())
+                            .load(QuestioConstants.BASE_URL + item.getItemPicPath())
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(itemPic);
                 }else{
@@ -175,7 +180,7 @@ public class ZoneActivity extends ActionBarActivity {
         questActionImg = (ImageView) findViewById(R.id.quest_action_picture);
         questActionMiniImg = (ImageView) findViewById(R.id.quest_action_minimap);
         itemPic = (ImageView) findViewById(R.id.quest_action_item_picture);
-        //rewardPic = (ImageView) findViewById(R.id.quest_action_reward_picture);
+        rewardPic = (ImageView) findViewById(R.id.quest_action_reward_picture);
         zonetype = (TextView) findViewById(R.id.zonetype);
         questListview = (ListView) findViewById(R.id.quest_action_listview);
         questActionQuizfinishProgressbar = (ProgressBar)findViewById(R.id.quest_action_quizfinish_progressbar);
