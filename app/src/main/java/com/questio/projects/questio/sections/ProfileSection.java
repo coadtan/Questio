@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,24 +29,53 @@ import com.google.android.gms.plus.model.people.Person;
 import com.questio.projects.questio.QuestioApplication;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.activities.LoginActivity;
+import com.questio.projects.questio.adepters.RewardsAdapter;
+import com.questio.projects.questio.models.RewardHOF;
+import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
+
+import java.util.ArrayList;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class ProfileSection extends Fragment {
     private static final String LOG_TAG = ProfileSection.class.getSimpleName();
+    Context mContext;
     private ImageView profilePicture;
     View rootView;
     Person currentPerson;
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
+    RestAdapter adapter;
+    long adventurerId;
+    QuestioAPIService api;
+    GridView hallOfFame;
+    ArrayList<RewardHOF> rewards;
+    RewardsAdapter rewardsAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = getActivity();
         setHasOptionsMenu(true);
+        prefs = this.getActivity().getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, Context.MODE_PRIVATE);
+        editor = this.getActivity().getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, Context.MODE_PRIVATE).edit();
+        adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
         currentPerson = Plus.PeopleApi
                 .getCurrentPerson(QuestioApplication.mGoogleApiClient);
+        adapter = new RestAdapter.Builder()
+                .setEndpoint(QuestioConstants.ENDPOINT)
+                .build();
+        api = adapter.create(QuestioAPIService.class);
     }
 
     public void init() {
         profilePicture = (ImageView) rootView.findViewById(R.id.profile_picture);
+        hallOfFame = (GridView) rootView.findViewById(R.id.halloffame);
+        requestRewardsHOFData(adventurerId);
     }
 
     @Override
@@ -120,5 +150,22 @@ public class ProfileSection extends Fragment {
 
             dialog.show();
         }
+    }
+
+    private void requestRewardsHOFData(long id){
+        api.getAllRewardsInHalloffameByAdventurerId(id, new Callback<ArrayList<RewardHOF>>() {
+            @Override
+            public void success(ArrayList<RewardHOF> rewardHOFs, Response response) {
+                rewards = rewardHOFs;
+                rewardsAdapter = new RewardsAdapter(mContext, rewardHOFs);
+                hallOfFame.setAdapter(rewardsAdapter);
+                rewardsAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
     }
 }
