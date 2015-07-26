@@ -213,6 +213,7 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
 
     void populateQuiz(int i) {
         q = quizs.get(i);
+        Log.d(LOG_TAG, q.toString());
         currentSeq = i;
         quizCurrentTv.setText(Integer.toString(i + 1));
         quizTotalNumberTv.setText(Integer.toString(quizs.size()));
@@ -486,7 +487,8 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
 
 
         updateQuizProgressStatus(QuestioConstants.QUEST_FINISHED, quizId);
-        populateQuiz(getPossibleNextQuizSeqFromCurrentSeq(seqId - 1));
+        //populateQuiz(getPossibleNextQuizSeqFromCurrentSeq(seqId - 1));
+        showCorrectAnswer(seqId, true);
         Log.d(LOG_TAG, "onCorrect: seqId = " + seqId);
         checkQuestFinish();
     }
@@ -546,7 +548,7 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
         updateQuizProgressStatus(QuestioConstants.QUEST_FAILED, quizId);
         Log.d(LOG_TAG, "onLimitAnswer: called");
 
-        populateQuiz(getPossibleNextQuizSeqFromCurrentSeq(seqId - 1));
+        showCorrectAnswer(seqId, false);
         checkQuestFinish();
     }
 
@@ -812,5 +814,41 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
                     ", d=" + d +
                     '}';
         }
+    }
+
+    void showCorrectAnswer(final int seqId, boolean isCorrect){
+        final Dialog dialog = new Dialog(QuizActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.correct_answer_layout);
+        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
+        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
+        dialog.setCancelable(true);
+        TextView correctMsg = (TextView)dialog.findViewById(R.id.dialog_correctanswer_msg);
+        TextView correctAns = (TextView)dialog.findViewById(R.id.dialog_correctanswer_answer);
+        if(q.getAnswerId().equalsIgnoreCase("1")){
+            correctAns.setText(q.getChoiceA());
+        }else if(q.getAnswerId().equalsIgnoreCase("2")){
+            correctAns.setText(q.getChoiceB());
+        }else if(q.getAnswerId().equalsIgnoreCase("3")){
+            correctAns.setText(q.getChoiceC());
+        }else if(q.getAnswerId().equalsIgnoreCase("4")){
+            correctAns.setText(q.getChoiceD());
+        }
+
+        if(isCorrect){
+            correctMsg.setText("ถูกต้องนะครับ");
+        }else{
+            correctMsg.setText("ผิดครับ");
+        }
+        Button nextQuestion = (Button)dialog.findViewById(R.id.button_correctanswer_next_question);
+        nextQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                populateQuiz(getPossibleNextQuizSeqFromCurrentSeq(seqId - 1));
+                dialog.cancel();
+            }
+
+        });
+        dialog.show();
     }
 }

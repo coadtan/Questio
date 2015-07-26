@@ -71,6 +71,11 @@
     <string name="dialog_reward_daterecieved">วันที่ได้รับ</string>
     <string name="test_reward_datereceived">21/12/2012</string>
 
+    <string name="dialog_correctanswer_test_msg">ถูกต้องนะคร้าบบบบบบ</string>
+    <string name="dialog_correctanswer_msg">คำตอบที่ถูกต้องคือ</string>
+    <string name="dialog_correctanswer_testanswer">AAAAAAAAAAA</string>
+    <string name="dialog_correctanswer_proceed">ไปยังข้อถัดไป</string>
+
     <string name="go_to_your_inventory">go to your inventory</string>
 
 

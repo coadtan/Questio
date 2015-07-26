@@ -82,6 +82,7 @@ public class ZoneActivity extends ActionBarActivity {
         adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
 
         zoneId = zoneIdFromQRCode;
+        Log.d(LOG_TAG, "zoneIdFromQRCode is " + zoneIdFromQRCode);
         requestZoneData(zoneIdFromQRCode);
         requestQuestData(zoneIdFromQRCode);
 
@@ -145,8 +146,11 @@ public class ZoneActivity extends ActionBarActivity {
             @Override
             public void failure(RetrofitError error) {
                 Log.d(LOG_TAG, "requestItemData: failure");
-                Log.d(LOG_TAG, error.getMessage());
-                Log.d(LOG_TAG, error.getUrl());
+                if(error != null){
+                    Log.d(LOG_TAG, error.getMessage());
+                    Log.d(LOG_TAG, error.getUrl());
+                }
+
             }
         });
     }
@@ -155,14 +159,14 @@ public class ZoneActivity extends ActionBarActivity {
         api.getItemByZoneId(id, new Callback<Item[]>() {
             @Override
             public void success(Item[] items, Response response) {
-                if(items != null){
+                if (items != null) {
                     item = items[0];
                     Log.d(LOG_TAG, item.toString());
                     Glide.with(ZoneActivity.this)
                             .load(QuestioConstants.BASE_URL + item.getItemPicPath())
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(itemPic);
-                }else{
+                } else {
                     Log.d(LOG_TAG, "Item: null");
                 }
             }
@@ -170,8 +174,10 @@ public class ZoneActivity extends ActionBarActivity {
             @Override
             public void failure(RetrofitError error) {
                 Log.d(LOG_TAG, "requestItemData: failure");
-                Log.d(LOG_TAG, error.getMessage());
-                Log.d(LOG_TAG, error.getUrl());
+                if ( error != null){
+                    Log.d(LOG_TAG, error.getMessage());
+                    Log.d(LOG_TAG, error.getUrl());
+                }
             }
         });
     }
@@ -183,8 +189,8 @@ public class ZoneActivity extends ActionBarActivity {
         rewardPic = (ImageView) findViewById(R.id.quest_action_reward_picture);
         zonetype = (TextView) findViewById(R.id.zonetype);
         questListview = (ListView) findViewById(R.id.quest_action_listview);
-        questActionQuizfinishProgressbar = (ProgressBar)findViewById(R.id.quest_action_quizfinish_progressbar);
-        questActionScoreGainProgressbar = (ProgressBar)findViewById(R.id.quest_action_scoregain_progressbar);
+        questActionQuizfinishProgressbar = (ProgressBar) findViewById(R.id.quest_action_quizfinish_progressbar);
+        questActionScoreGainProgressbar = (ProgressBar) findViewById(R.id.quest_action_scoregain_progressbar);
     }
 
     private void handleToolbar() {
@@ -225,37 +231,39 @@ public class ZoneActivity extends ActionBarActivity {
     }
 
     private void requestQuestData(final int id) {
+        Log.d(LOG_TAG, "requestQuestData called");
         api.getAllQuestByZoneId(id, new Callback<ArrayList<Quest>>() {
             @Override
             public void success(final ArrayList<Quest> quests, Response response) {
+                Log.d(LOG_TAG, "requestQuestData success");
                 if (quests != null) {
                     questsList = quests;
                     api.getQuestStatusAndScoreByZoneAdventurerid(id, adventurerId, new Callback<Response>() {
                         @Override
                         public void success(Response response, Response response2) {
                             statusList = QuestStatusAndScore.createStatusList(response);
-                            if(statusList!=null){
+                            if (statusList != null) {
                                 int questFinished = 0;
-                                int scoreGain=0;
-                                for(QuestStatusAndScore q: statusList){
-                                    if(q.getStatus()==QuestioConstants.QUEST_FINISHED || q.getStatus() == QuestioConstants.QUEST_FAILED){
+                                int scoreGain = 0;
+                                for (QuestStatusAndScore q : statusList) {
+                                    if (q.getStatus() == QuestioConstants.QUEST_FINISHED || q.getStatus() == QuestioConstants.QUEST_FAILED) {
                                         questFinished++;
                                         scoreGain += q.getScore();
                                     }
                                 }
                                 double totalQuestInZone = questsList.size();
                                 questActionQuizfinishProgressbar.setProgress(QuestioHelper.getPercentFrom2ValueAsInt(questFinished, totalQuestInZone));
-                                questActionScoreGainProgressbar.setProgress(QuestioHelper.getPercentFrom2ValueAsInt(scoreGain, totalQuestInZone*10));
+                                questActionScoreGainProgressbar.setProgress(QuestioHelper.getPercentFrom2ValueAsInt(scoreGain, totalQuestInZone * 10));
                             }
 
-                            adapterQuestList = new QuestInActionAdapter(ZoneActivity.this, questsList,statusList );
+                            adapterQuestList = new QuestInActionAdapter(ZoneActivity.this, questsList, statusList);
                             questListview.setAdapter(adapterQuestList);
                             adapterQuestList.notifyDataSetChanged();
                         }
 
                         @Override
                         public void failure(RetrofitError error) {
-
+                            Log.d(LOG_TAG, "requestQuestData failure");
                         }
                     });
                 } else {
@@ -332,19 +340,19 @@ public class ZoneActivity extends ActionBarActivity {
                 @Override
                 public void success(Response response, Response response2) {
                     statusList = QuestStatusAndScore.createStatusList(response);
-                    if(statusList!=null){
+                    if (statusList != null) {
                         int questFinished = 0;
-                        int scoreGain=0;
-                        for(QuestStatusAndScore q: statusList){
-                            if(q.getStatus()==QuestioConstants.QUEST_FINISHED || q.getStatus() == QuestioConstants.QUEST_FAILED){
+                        int scoreGain = 0;
+                        for (QuestStatusAndScore q : statusList) {
+                            if (q.getStatus() == QuestioConstants.QUEST_FINISHED || q.getStatus() == QuestioConstants.QUEST_FAILED) {
                                 questFinished++;
                                 scoreGain += q.getScore();
                             }
                         }
                         double totalQuestInZone = questsList.size();
                         questActionQuizfinishProgressbar.setProgress(QuestioHelper.getPercentFrom2ValueAsInt(questFinished, totalQuestInZone));
-                        questActionScoreGainProgressbar.setProgress(QuestioHelper.getPercentFrom2ValueAsInt(scoreGain, totalQuestInZone*10));
-                        if(questFinished == totalQuestInZone){
+                        questActionScoreGainProgressbar.setProgress(QuestioHelper.getPercentFrom2ValueAsInt(scoreGain, totalQuestInZone * 10));
+                        if (questFinished == totalQuestInZone) {
                             api.getCountInventoryByAdventurerIdAndItemId(adventurerId, item.getItemId(), new Callback<Response>() {
                                 @Override
                                 public void success(Response response, Response response2) {
@@ -375,7 +383,7 @@ public class ZoneActivity extends ActionBarActivity {
                         }
 
                     }
-                    adapterQuestList = new QuestInActionAdapter(ZoneActivity.this, questsList,statusList );
+                    adapterQuestList = new QuestInActionAdapter(ZoneActivity.this, questsList, statusList);
                     questListview.setAdapter(adapterQuestList);
                     adapterQuestList.notifyDataSetChanged();
                 }
@@ -385,7 +393,7 @@ public class ZoneActivity extends ActionBarActivity {
 
                 }
             });
-        }else{
+        } else {
             Log.d(LOG_TAG, "onResume: is null");
         }
 
