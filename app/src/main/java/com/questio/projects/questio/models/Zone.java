@@ -51,6 +51,9 @@ public class Zone {
     @SerializedName("rewardid")
     private int rewardId;
 
+    @SerializedName("zonetypeimage")
+    private String zoneTypeImage;
+
     public int getZoneId() {
         return zoneId;
     }
@@ -139,11 +142,19 @@ public class Zone {
         this.rewardId = rewardId;
     }
 
+    public String getZoneTypeImage() {
+        return zoneTypeImage;
+    }
+
+    public void setZoneTypeImage(String zoneTypeImage) {
+        this.zoneTypeImage = zoneTypeImage;
+    }
+
     @Override
     public String toString() {
         return "Zone{" +
-                "zoneId=" + zoneId +
-                ", floorId=" + floorId +
+                "floorId=" + floorId +
+                ", zoneId=" + zoneId +
                 ", zoneTypeId=" + zoneTypeId +
                 ", zoneName='" + zoneName + '\'' +
                 ", zoneDetails='" + zoneDetails + '\'' +
@@ -153,9 +164,9 @@ public class Zone {
                 ", miniMapUrl='" + miniMapUrl + '\'' +
                 ", itemSet='" + itemSet + '\'' +
                 ", rewardId=" + rewardId +
+                ", zoneTypeImage='" + zoneTypeImage + '\'' +
                 '}';
     }
-
 
     /*public static ArrayList<Zone> getAllZoneByFoorId(int floorId) {
         ArrayList<Zone> al = null;

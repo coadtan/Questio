@@ -52,7 +52,7 @@ public class ZoneActivity extends ActionBarActivity {
     ImageView questActionMiniImg;
     ImageView itemPic;
     ImageView rewardPic;
-    TextView zonetype;
+    ImageView zonetype;
     String qrcode;
     RestAdapter adapter;
     QuestioAPIService api;
@@ -183,7 +183,7 @@ public class ZoneActivity extends ActionBarActivity {
         questActionMiniImg = (ImageView) findViewById(R.id.quest_action_minimap);
         itemPic = (ImageView) findViewById(R.id.quest_action_item_picture);
         rewardPic = (ImageView) findViewById(R.id.quest_action_reward_picture);
-        zonetype = (TextView) findViewById(R.id.zonetype);
+        zonetype = (ImageView) findViewById(R.id.quest_action_zonetype_picture);
         questListview = (ListView) findViewById(R.id.quest_action_listview);
         questActionQuizfinishProgressbar = (ProgressBar) findViewById(R.id.quest_action_quizfinish_progressbar);
         questActionScoreGainProgressbar = (ProgressBar) findViewById(R.id.quest_action_scoregain_progressbar);
@@ -283,7 +283,7 @@ public class ZoneActivity extends ActionBarActivity {
                     getSupportActionBar().setTitle(zone.getZoneName());
                     //item.setText(zone.getItemSet());
                     //reward.setText(Integer.toString(zone.getRewardId()));
-                    zonetype.setText(Integer.toString(zone.getZoneTypeId()));
+
                     if (!(zone.getImageUrl() == null)) {
                         Glide.with(ZoneActivity.this)
                                 .load(QuestioHelper.getImgLink(zone.getImageUrl()))
@@ -295,6 +295,13 @@ public class ZoneActivity extends ActionBarActivity {
                                 .load(QuestioHelper.getImgLink(zone.getMiniMapUrl()))
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(questActionMiniImg);
+                    }
+                    if (!(zone.getZoneTypeImage() == null)) {
+                        Glide.with(ZoneActivity.this)
+                                .load(QuestioHelper.getImgLink(zone.getZoneTypeImage()))
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(zonetype);
+                    }
                         questActionMiniImg.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -315,7 +322,7 @@ public class ZoneActivity extends ActionBarActivity {
                         });
                         requestItemData(id);
                         requestRewardData(id);
-                    }
+
                 } else {
                     Log.d(LOG_TAG, "Zone data is null");
                 }

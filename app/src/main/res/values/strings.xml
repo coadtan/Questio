@@ -59,6 +59,7 @@
 
     <string name="itemget">ไอเทมที่ได้รับ</string>
     <string name="rewardget">รางวัลที่ได้รับ</string>
+    <string name="zonetype">ประเภทของโซน</string>
 
     <string name="dialog_item_name">ชื่อไอเทม</string>
     <string name="dialog_item_collection">ชุดไอเทม</string>
