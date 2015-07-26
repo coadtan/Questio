@@ -17,6 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -30,6 +32,7 @@ import com.questio.projects.questio.QuestioApplication;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.activities.LoginActivity;
 import com.questio.projects.questio.adepters.RewardsAdapter;
+import com.questio.projects.questio.models.ItemInInventory;
 import com.questio.projects.questio.models.RewardHOF;
 import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
@@ -41,7 +44,7 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class ProfileSection extends Fragment {
+public class ProfileSection extends Fragment implements AdapterView.OnItemClickListener{
     private static final String LOG_TAG = ProfileSection.class.getSimpleName();
     Context mContext;
     private ImageView profilePicture;
@@ -76,6 +79,7 @@ public class ProfileSection extends Fragment {
         profilePicture = (ImageView) rootView.findViewById(R.id.profile_picture);
         hallOfFame = (GridView) rootView.findViewById(R.id.halloffame);
         requestRewardsHOFData(adventurerId);
+        hallOfFame.setOnItemClickListener(this);
     }
 
     @Override
@@ -87,6 +91,7 @@ public class ProfileSection extends Fragment {
                 .load(currentPerson.getImage().getUrl())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(profilePicture);
+
 
         return rootView;
     }
@@ -160,6 +165,7 @@ public class ProfileSection extends Fragment {
                 rewardsAdapter = new RewardsAdapter(mContext, rewardHOFs);
                 hallOfFame.setAdapter(rewardsAdapter);
                 rewardsAdapter.notifyDataSetChanged();
+
             }
 
             @Override
@@ -167,5 +173,40 @@ public class ProfileSection extends Fragment {
 
             }
         });
+    }
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        RewardHOF reward = rewards.get(position);
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.reward_description_dialog);
+        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
+        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
+        dialog.setCancelable(true);
+        TextView tvRewardName = (TextView) dialog.findViewById(R.id.dialog_reward_name);
+        TextView tvRewardDesc = (TextView) dialog.findViewById(R.id.dialog_reward_desc);
+        TextView tvRewardDate = (TextView) dialog.findViewById(R.id.dialog_reward_datereceived);
+        ImageView rewardImage = (ImageView) dialog.findViewById(R.id.dialog_reward_picture);
+        Button closeBtn = (Button) dialog.findViewById(R.id.button_reward_close);
+
+        String rewardName = reward.getRewardName();
+        String rewardDesc = reward.getDescription();
+        String rewardDate = reward.getDateReceived();
+
+        Glide.with(mContext)
+                .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(rewardImage);
+        tvRewardName.setText(rewardName);
+        tvRewardDesc.setText(rewardDesc);
+        tvRewardDate.setText(rewardDate);
+
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+        dialog.show();
     }
 }

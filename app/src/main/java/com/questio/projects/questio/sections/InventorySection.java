@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,7 +95,7 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
         ItemInInventory item = itemsInv.get(position);
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.item_description_layout);
+        dialog.setContentView(R.layout.item_description_dialog);
         Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
         dialog.getWindow().setBackgroundDrawable(transparentDrawable);
         dialog.setCancelable(true);

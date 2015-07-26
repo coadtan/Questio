@@ -490,7 +490,7 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
         //populateQuiz(getPossibleNextQuizSeqFromCurrentSeq(seqId - 1));
         showCorrectAnswer(seqId, true);
         Log.d(LOG_TAG, "onCorrect: seqId = " + seqId);
-        checkQuestFinish();
+
     }
 
     void onIncorrect(int seqId, int quizId, int choiceSelected) {
@@ -524,7 +524,7 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
         if (answerTime >= 2) {
             onLimitAnswer(seqId, quizId);
         }
-        checkQuestFinish();
+
     }
 
 
@@ -549,7 +549,6 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
         Log.d(LOG_TAG, "onLimitAnswer: called");
 
         showCorrectAnswer(seqId, false);
-        checkQuestFinish();
     }
 
 
@@ -704,6 +703,7 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
     void checkQuestFinish() {
         if(isAllQuizFinish()){
             updateProgressStatusAndScore(QuestioConstants.QUEST_FINISHED);
+            onBackPressed();
         }
     }
 
@@ -819,7 +819,7 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
     void showCorrectAnswer(final int seqId, boolean isCorrect){
         final Dialog dialog = new Dialog(QuizActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.correct_answer_layout);
+        dialog.setContentView(R.layout.correct_answer_dialog);
         Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
         dialog.getWindow().setBackgroundDrawable(transparentDrawable);
         dialog.setCancelable(true);
@@ -841,14 +841,26 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
             correctMsg.setText("ผิดครับ");
         }
         Button nextQuestion = (Button)dialog.findViewById(R.id.button_correctanswer_next_question);
-        nextQuestion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                populateQuiz(getPossibleNextQuizSeqFromCurrentSeq(seqId - 1));
-                dialog.cancel();
-            }
+        if(!isAllQuizFinish()) {
+            nextQuestion.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    populateQuiz(getPossibleNextQuizSeqFromCurrentSeq(seqId - 1));
+                    dialog.cancel();
+                }
 
-        });
+            });
+        }else{
+            nextQuestion.setText("กลับไปยังหน้าจอภารกิจ");
+            nextQuestion.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    checkQuestFinish();
+                    dialog.cancel();
+                }
+
+            });
+        }
         dialog.show();
     }
 }

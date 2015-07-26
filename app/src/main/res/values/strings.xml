@@ -76,7 +76,9 @@
     <string name="dialog_correctanswer_testanswer">AAAAAAAAAAA</string>
     <string name="dialog_correctanswer_proceed">ไปยังข้อถัดไป</string>
 
-    <string name="go_to_your_inventory">go to your inventory</string>
+    <string name="dialog_test_obtain_type">ได้รับ Item</string>
+    <string name="dialog_test_obtain_name">หัวใจจักรวาล</string>
 
+    <string name="go_to_your_inventory">go to your inventory</string>
 
 </resources>

@@ -3,6 +3,9 @@ package com.questio.projects.questio.activities;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -146,10 +150,6 @@ public class ZoneActivity extends ActionBarActivity {
             @Override
             public void failure(RetrofitError error) {
                 Log.d(LOG_TAG, "requestItemData: failure");
-                if(error != null){
-                    Log.d(LOG_TAG, error.getMessage());
-                    Log.d(LOG_TAG, error.getUrl());
-                }
 
             }
         });
@@ -174,10 +174,6 @@ public class ZoneActivity extends ActionBarActivity {
             @Override
             public void failure(RetrofitError error) {
                 Log.d(LOG_TAG, "requestItemData: failure");
-                if ( error != null){
-                    Log.d(LOG_TAG, error.getMessage());
-                    Log.d(LOG_TAG, error.getUrl());
-                }
             }
         });
     }
@@ -359,7 +355,7 @@ public class ZoneActivity extends ActionBarActivity {
                                     int itemCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("inventorycount", response));
                                     Log.d(LOG_TAG, "Item count: " + itemCount);
                                     if (itemCount == 0) {
-                                        Toast.makeText(ZoneActivity.this, "GET ITEM!: " + item.getItemName(), Toast.LENGTH_LONG).show();
+                                        showObtainDialog(QuestioConstants.OBTAIN_TYPE_ITEM);
                                         api.addInventory(adventurerId, item.getItemId(), new Callback<Response>() {
                                             @Override
                                             public void success(Response response, Response response2) {
@@ -398,5 +394,46 @@ public class ZoneActivity extends ActionBarActivity {
         }
 
         super.onResume();
+    }
+
+    void showObtainDialog(int obtainType){
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.item_reward_obtain_dialog);
+        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
+        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
+        dialog.setCancelable(true);
+        ImageView tvObtainedPicture = (ImageView) dialog.findViewById(R.id.dialog_obtain_picture);
+        TextView tvObtainedName = (TextView) dialog.findViewById(R.id.dialog_obtain_name);
+        TextView tvObtainedType = (TextView) dialog.findViewById(R.id.dialog_obtain_type);
+        Button closeBtn = (Button) dialog.findViewById(R.id.button_obtain_close);
+
+        String obtainedType = "";
+        String obtainedName = "";
+        if(obtainType == QuestioConstants.OBTAIN_TYPE_ITEM){
+            obtainedType = "ได้รับไอเทม";
+            obtainedName = item.getItemName();
+            Glide.with(this)
+                    .load(QuestioConstants.BASE_URL + item.getItemPicPath())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(tvObtainedPicture);
+        }else if(obtainType == QuestioConstants.OBTAIN_TYPE_REWARD){
+            obtainedType = "ได้รับรางวัล";
+            obtainedName = reward.getRewardName();
+            Glide.with(this)
+                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(tvObtainedPicture);
+        }
+        tvObtainedType.setText(obtainedType);
+        tvObtainedName.setText(obtainedName);
+
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+        dialog.show();
     }
 }
