@@ -66,6 +66,11 @@
     <string name="test_item_collection">Kantai</string>
     <string name="dialog_item_close">ปิด</string>
 
+    <string name="test_reward_name">Change the world</string>
+    <string name="test_reward_desc">สำหรับผู้ที่เปลี่ยนแปลงโลกใบนี้ได้</string>
+    <string name="dialog_reward_daterecieved">วันที่ได้รับ</string>
+    <string name="test_reward_datereceived">21/12/2012</string>
+
     <string name="go_to_your_inventory">go to your inventory</string>
 
 
