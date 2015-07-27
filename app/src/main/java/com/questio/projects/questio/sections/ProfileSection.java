@@ -44,7 +44,7 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class ProfileSection extends Fragment implements AdapterView.OnItemClickListener{
+public class ProfileSection extends Fragment implements AdapterView.OnItemClickListener {
     private static final String LOG_TAG = ProfileSection.class.getSimpleName();
     Context mContext;
     private ImageView profilePicture;
@@ -157,14 +157,16 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
         }
     }
 
-    private void requestRewardsHOFData(long id){
+    private void requestRewardsHOFData(long id) {
         api.getAllRewardsInHalloffameByAdventurerId(id, new Callback<ArrayList<RewardHOF>>() {
             @Override
             public void success(ArrayList<RewardHOF> rewardHOFs, Response response) {
-                rewards = rewardHOFs;
-                rewardsAdapter = new RewardsAdapter(mContext, rewardHOFs);
-                hallOfFame.setAdapter(rewardsAdapter);
-                rewardsAdapter.notifyDataSetChanged();
+                if (rewardHOFs != null) {
+                    rewards = rewardHOFs;
+                    rewardsAdapter = new RewardsAdapter(mContext, rewardHOFs);
+                    hallOfFame.setAdapter(rewardsAdapter);
+                    rewardsAdapter.notifyDataSetChanged();
+                }
 
             }
 
@@ -174,6 +176,7 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
             }
         });
     }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         RewardHOF reward = rewards.get(position);

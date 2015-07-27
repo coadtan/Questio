@@ -77,10 +77,12 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
         api.getAllItemInInventoryByAdventurerId(id, new Callback<ArrayList<ItemInInventory>>() {
             @Override
             public void success(ArrayList<ItemInInventory> itemInInventories, Response response) {
-                itemsInv = itemInInventories;
-                inventoryAdapter = new InventoryAdapter(mContext, itemInInventories);
-                inventory.setAdapter(inventoryAdapter);
-                inventoryAdapter.notifyDataSetChanged();
+                if (itemInInventories != null) {
+                    itemsInv = itemInInventories;
+                    inventoryAdapter = new InventoryAdapter(mContext, itemInInventories);
+                    inventory.setAdapter(inventoryAdapter);
+                    inventoryAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
