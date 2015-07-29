@@ -1,13 +1,18 @@
 package com.questio.projects.questio.activities;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -189,6 +194,7 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
                 api.updateRiddleProgressScanLimitByRef(scanLimit, adventurerId, qid, this);
                 if (scanLimit == 0) {
                     updateQuestStatus(QuestioConstants.QUEST_FAILED);
+                    showCompleteDialog(points);
                     onQuestFinish();
                 }
             }
@@ -207,7 +213,7 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
 
 
                 points = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("points", response));
-
+                showCompleteDialog(points);
                 api.updateScoreQuestProgressByQuestIdAndAdventurerId(points, qid, adventurerId, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
@@ -404,5 +410,26 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
         hint2Btn.setClickable(false);
         hint3Btn.setEnabled(false);
         hint3Btn.setClickable(false);
+    }
+
+    void showCompleteDialog(int score){
+        final Dialog dialog = new Dialog(RiddleAction.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.quest_finished_riddle_dialog);
+        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
+        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
+        dialog.setCancelable(true);
+        TextView puzzleScoreTV = (TextView)dialog.findViewById(R.id.dialog_riddle_score);
+        Button goBack = (Button)dialog.findViewById(R.id.button_riddle_goback);
+        String puzzleScore = Integer.toString(score) + " แต้ม";
+        puzzleScoreTV.setText(puzzleScore);
+        goBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+                dialog.cancel();
+            }
+        });
+        dialog.show();
     }
 }

@@ -83,8 +83,9 @@
     <string name="go_to_your_inventory">go to your inventory</string>
 
     <string name="dialog_puzzle_finished">ภารกิจ Puzzle สำเร็จ!</string>
-    <string name="dialog_puzzle_score">คะแนนที่ได้รับ</string>
-    <string name="dialog_puzzle_test_score">10 แต้ม</string>
+    <string name="dialog_riddle_finished">ภารกิจ Riddle สำเร็จ!</string>
+    <string name="dialog_puzzle_riddle_score">คะแนนที่ได้รับ</string>
+    <string name="dialog_puzzle_riddle_test_score">10 แต้ม</string>
     <string name="dialog_puzzle_riddle_goback">กลับไปยังหน้าจอภารกิจ</string>
 
 </resources>

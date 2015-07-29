@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
-                android:text="@string/dialog_puzzle_finished"
+                android:text="@string/dialog_riddle_finished"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="25sp" />
             <TextView
@@ -36,7 +36,7 @@
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="25sp" />
             <TextView
-                android:id="@+id/dialog_puzzle_score"
+                android:id="@+id/dialog_riddle_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -52,7 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
-            android:id="@+id/button_puzzle_goback"
+            android:id="@+id/button_riddle_goback"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/dialog_puzzle_riddle_goback"/>
