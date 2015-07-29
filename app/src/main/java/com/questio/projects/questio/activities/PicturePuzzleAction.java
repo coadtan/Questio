@@ -1,6 +1,10 @@
 package com.questio.projects.questio.activities;
 
+import android.app.Dialog;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -8,6 +12,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -224,7 +230,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                             .load(QuestioHelper.getImgLink(pp.getImageUrl()))
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(picturePuzzleQuestion);
-              //      picturePuzzleHint.setHint(pp.getHelperAnswer());
+                    //      picturePuzzleHint.setHint(pp.getHelperAnswer());
                     picturePuzzleShowHintBtn.setOnClickListener(PicturePuzzleAction.this);
                     picturePuzzleAnswer.addTextChangedListener(PicturePuzzleAction.this);
                     topLeft.setOnClickListener(PicturePuzzleAction.this);
@@ -263,7 +269,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                 } else {
                     String statusStr = QuestioHelper.getJSONStringValueByTag("statusid", response);
                     int status = Integer.parseInt(statusStr);
-                    if(status==QuestioConstants.QUEST_FINISHED){
+                    if (status == QuestioConstants.QUEST_FINISHED) {
                         topLeft.setVisibility(View.INVISIBLE);
                         topRight.setVisibility(View.INVISIBLE);
                         topMiddle.setVisibility(View.INVISIBLE);
@@ -274,13 +280,13 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                         bottomMiddle.setVisibility(View.INVISIBLE);
                         bottomRight.setVisibility(View.INVISIBLE);
                         disableAll();
-                  //      picturePuzzleHint.setVisibility(View.INVISIBLE);
+                        //      picturePuzzleHint.setVisibility(View.INVISIBLE);
 
                         picturePuzzleAnswer.setText(pp.getCorrectAnswer());
                         picturePuzzleAnswer.setEnabled(false);
                         picturePuzzleAnswer.setClickable(false);
 
-                    }else{
+                    } else {
                         api.getPuzzleProgressByRef(adventurerId, qid, new Callback<Response>() {
                             @Override
                             public void success(Response response, Response response2) {
@@ -295,31 +301,31 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                                 bottommidopened
                                 bottomrightopened
                                  */
-                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("topleftopened", response))==1){
+                                if (Integer.parseInt(QuestioHelper.getJSONStringValueByTag("topleftopened", response)) == 1) {
                                     topLeft.setVisibility(View.INVISIBLE);
                                 }
-                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("topmidopened", response))==1){
+                                if (Integer.parseInt(QuestioHelper.getJSONStringValueByTag("topmidopened", response)) == 1) {
                                     topMiddle.setVisibility(View.INVISIBLE);
                                 }
-                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("toprightopened", response))==1){
+                                if (Integer.parseInt(QuestioHelper.getJSONStringValueByTag("toprightopened", response)) == 1) {
                                     topRight.setVisibility(View.INVISIBLE);
                                 }
-                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("midleftopened", response))==1){
+                                if (Integer.parseInt(QuestioHelper.getJSONStringValueByTag("midleftopened", response)) == 1) {
                                     middleLeft.setVisibility(View.INVISIBLE);
                                 }
-                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("midmidopened", response))==1){
+                                if (Integer.parseInt(QuestioHelper.getJSONStringValueByTag("midmidopened", response)) == 1) {
                                     middleMiddle.setVisibility(View.INVISIBLE);
                                 }
-                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("midrightopened", response))==1){
+                                if (Integer.parseInt(QuestioHelper.getJSONStringValueByTag("midrightopened", response)) == 1) {
                                     middleRight.setVisibility(View.INVISIBLE);
                                 }
-                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("bottomleftopened", response))==1){
+                                if (Integer.parseInt(QuestioHelper.getJSONStringValueByTag("bottomleftopened", response)) == 1) {
                                     bottomLeft.setVisibility(View.INVISIBLE);
                                 }
-                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("bottommidopened", response))==1){
+                                if (Integer.parseInt(QuestioHelper.getJSONStringValueByTag("bottommidopened", response)) == 1) {
                                     bottomMiddle.setVisibility(View.INVISIBLE);
                                 }
-                                if(Integer.parseInt(QuestioHelper.getJSONStringValueByTag("bottomrightopened", response))==1){
+                                if (Integer.parseInt(QuestioHelper.getJSONStringValueByTag("bottomrightopened", response)) == 1) {
                                     bottomRight.setVisibility(View.INVISIBLE);
                                 }
                             }
@@ -456,6 +462,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         disableAll();
         picturePuzzleAnswer.setEnabled(false);
         picturePuzzleAnswer.setClickable(false);
+        showCompleteDialog(points);
     }
 
 
@@ -482,5 +489,26 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     @Override
     public void failure(RetrofitError error) {
 
+    }
+
+    void showCompleteDialog(int score){
+        final Dialog dialog = new Dialog(PicturePuzzleAction.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.quest_finished_puzzle_dialog);
+        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
+        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
+        dialog.setCancelable(true);
+        TextView puzzleScoreTV = (TextView)dialog.findViewById(R.id.dialog_puzzle_score);
+        Button goBack = (Button)dialog.findViewById(R.id.button_puzzle_goback);
+        String puzzleScore = Integer.toString(score) + " แต้ม";
+        puzzleScoreTV.setText(puzzleScore);
+        goBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+                dialog.cancel();
+            }
+        });
+        dialog.show();
     }
 }
