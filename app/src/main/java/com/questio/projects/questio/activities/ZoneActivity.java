@@ -53,6 +53,8 @@ public class ZoneActivity extends ActionBarActivity {
     ImageView itemPic;
     ImageView rewardPic;
     ImageView zonetype;
+    ImageView iconQuestProgress;
+    ImageView iconScoreProgress;
     String qrcode;
     RestAdapter adapter;
     QuestioAPIService api;
@@ -128,6 +130,20 @@ public class ZoneActivity extends ActionBarActivity {
             }
         });
 
+        iconQuestProgress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(ZoneActivity.this, "This is your zone progress", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        iconScoreProgress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(ZoneActivity.this, "Your current point in this zone", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
     }
 
@@ -181,6 +197,8 @@ public class ZoneActivity extends ActionBarActivity {
     private void handleView() {
         questActionImg = (ImageView) findViewById(R.id.quest_action_picture);
         questActionMiniImg = (ImageView) findViewById(R.id.quest_action_minimap);
+        iconQuestProgress = (ImageView) findViewById(R.id.icon_quest_finish);
+        iconScoreProgress = (ImageView) findViewById(R.id.icon_score_progress);
         itemPic = (ImageView) findViewById(R.id.quest_action_item_picture);
         rewardPic = (ImageView) findViewById(R.id.quest_action_reward_picture);
         zonetype = (ImageView) findViewById(R.id.quest_action_zonetype_picture);
