@@ -6,14 +6,15 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,6 +29,10 @@ import com.questio.projects.questio.utilities.QuestioConstants;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -39,10 +44,18 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
     Context mContext;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
-    View rootView;
+    View view;
+
+    @Bind(R.id.inventory)
     GridView inventory;
-    InventoryAdapter inventoryAdapter = null;
+    @Bind(R.id.inventory_filter_name)
+    EditText inventoryFilterName;
+    @Bind(R.id.inventory_filter_button)
+    Button inventoryFilterButton;
+
     ArrayList<ItemInInventory> itemsInv;
+    ArrayList<ItemInInventory> itemsInvForShow;
+    InventoryAdapter inventoryAdapter = null;
     long adventurerId;
     RestAdapter adapter;
     QuestioAPIService api;
@@ -61,25 +74,38 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.section_inventory, container, false);
-        inventory = (GridView) rootView.findViewById(R.id.inventory);
+    public View onCreateView(
+            LayoutInflater inflater,
+            ViewGroup container,
+            Bundle savedInstanceState
+    ) {
+        view = inflater.inflate(R.layout.section_inventory, container, false);
+        ButterKnife.bind(this, view);
         requestItemInventoryData(adventurerId);
-
         inventory.setOnItemClickListener(this);
 
-
-        return rootView;
+        return view;
     }
 
-    private void requestItemInventoryData(long id){
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
+    @OnClick(R.id.inventory_filter_button)
+    public void filterClicked() {
+
+    }
+
+    private void requestItemInventoryData(long id) {
         api.getAllItemInInventoryByAdventurerId(id, new Callback<ArrayList<ItemInInventory>>() {
             @Override
             public void success(ArrayList<ItemInInventory> itemInInventories, Response response) {
                 if (itemInInventories != null) {
                     itemsInv = itemInInventories;
-                    inventoryAdapter = new InventoryAdapter(mContext, itemInInventories);
+                    itemsInvForShow = new ArrayList<>(itemInInventories);
+                    inventoryAdapter = new InventoryAdapter(mContext, itemsInvForShow);
                     inventory.setAdapter(inventoryAdapter);
                     inventoryAdapter.notifyDataSetChanged();
                 }
@@ -92,9 +118,29 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
         });
     }
 
+
+    @OnTextChanged(R.id.inventory_filter_name)
+    void onTextChanged(CharSequence text) {
+        if (itemsInv != null) {
+            itemsInvForShow.clear();
+            inventoryAdapter.notifyDataSetChanged();
+            if (text.toString().equalsIgnoreCase("")) {
+                itemsInvForShow.addAll(itemsInv);
+                inventoryAdapter.notifyDataSetChanged();
+            } else {
+                for (ItemInInventory each : itemsInv) {
+                    if (each.getItemName().contains(text)) {
+                        itemsInvForShow.add(each);
+                        inventoryAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        ItemInInventory item = itemsInv.get(position);
+        ItemInInventory item = itemsInvForShow.get(position);
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.item_description_dialog);
@@ -124,4 +170,6 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
         });
         dialog.show();
     }
+
+
 }
