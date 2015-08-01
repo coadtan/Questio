@@ -1,6 +1,7 @@
 package com.questio.projects.questio.adepters;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +14,16 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.models.ItemInInventory;
 import com.questio.projects.questio.models.RewardHOF;
+import com.questio.projects.questio.utilities.QuestioConstants;
 import com.questio.projects.questio.utilities.QuestioHelper;
 
 import java.util.ArrayList;
+
+import jp.wasabeef.glide.transformations.ColorFilterTransformation;
+import jp.wasabeef.glide.transformations.GrayscaleTransformation;
+import jp.wasabeef.glide.transformations.gpu.BrightnessFilterTransformation;
+import jp.wasabeef.glide.transformations.gpu.ContrastFilterTransformation;
+import jp.wasabeef.glide.transformations.gpu.SepiaFilterTransformation;
 
 public class RewardsAdapter extends BaseAdapter {
     public static final String LOG_TAG = RewardsAdapter.class.getSimpleName();
@@ -59,10 +67,32 @@ public class RewardsAdapter extends BaseAdapter {
         }
 
         ViewHolder viewHolder = new ViewHolder(convertView);
-        Glide.with(mContext)
-                .load(QuestioHelper.getImgLink(reward.getRewardPic()))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(viewHolder.rewardsImage);
+
+        if(reward.getRankId() == QuestioConstants.REWARD_RANK_BRONZE){
+            Glide.with(mContext)
+                    .load(QuestioHelper.getImgLink(reward.getRewardPic()))
+                    .bitmapTransform(new SepiaFilterTransformation(mContext, Glide.get(mContext).getBitmapPool()))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(viewHolder.rewardsImage);
+        }else if(reward.getRankId() == QuestioConstants.REWARD_RANK_SILVER){
+            Glide.with(mContext)
+                    .load(QuestioHelper.getImgLink(reward.getRewardPic()))
+                    .bitmapTransform(new GrayscaleTransformation(Glide.get(mContext).getBitmapPool()))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(viewHolder.rewardsImage);
+        }else if(reward.getRankId() == QuestioConstants.REWARD_RANK_GOLD){
+            Glide.with(mContext)
+                    .load(QuestioHelper.getImgLink(reward.getRewardPic()))
+                    .bitmapTransform(new BrightnessFilterTransformation(mContext, Glide.get(mContext).getBitmapPool(), 0.5f))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(viewHolder.rewardsImage);
+        }else{
+            Glide.with(mContext)
+                    .load(QuestioHelper.getImgLink(reward.getRewardPic()))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(viewHolder.rewardsImage);
+        }
+
 
         return convertView;
 

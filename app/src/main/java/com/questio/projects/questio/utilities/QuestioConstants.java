@@ -31,6 +31,8 @@ public class QuestioConstants {
     public static final int QUEST_NOT_FINISHED = 2;
     public static final int QUEST_FINISHED = 3;
     public static final int QUEST_FAILED = 4;
-    public static final int OBTAIN_TYPE_ITEM = 1;
-    public static final int OBTAIN_TYPE_REWARD = 2;
+    public static final int REWARD_RANK_NORMAL = 1;
+    public static final int REWARD_RANK_BRONZE = 2;
+    public static final int REWARD_RANK_SILVER = 3;
+    public static final int REWARD_RANK_GOLD = 4;
 }

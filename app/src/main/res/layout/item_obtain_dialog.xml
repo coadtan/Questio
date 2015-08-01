@@ -15,7 +15,7 @@
         android:layout_marginBottom="20dp">
 
         <ImageView
-            android:id="@+id/dialog_obtain_picture"
+            android:id="@+id/dialog_obtain_item_picture"
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:background="@color/colorPrimaryDark"
@@ -26,16 +26,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
-                android:id="@+id/dialog_obtain_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
-                android:text="@string/dialog_test_obtain_type"
+                android:text="@string/dialog_test_obtain_item"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="35sp" />
             <TextView
-                android:id="@+id/dialog_obtain_name"
+                android:id="@+id/dialog_obtain_item_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -51,7 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
-            android:id="@+id/button_obtain_close"
+            android:id="@+id/button_obtain_item_close"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/dialog_item_close"/>

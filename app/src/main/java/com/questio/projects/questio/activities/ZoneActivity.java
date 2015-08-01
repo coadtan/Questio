@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -354,26 +356,26 @@ public class ZoneActivity extends ActionBarActivity {
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(zonetype);
                     }
-                        questActionMiniImg.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                final Dialog nagDialog = new Dialog(ZoneActivity.this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
-                                nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                nagDialog.setCancelable(true);
-                                nagDialog.setContentView(R.layout.mini_map_full_screen);
-                                ImageView imgPreview = (ImageView) nagDialog.findViewById(R.id.mini_map_full_view);
-                                imgPreview.setBackgroundDrawable(questActionMiniImg.getDrawable());
-                                imgPreview.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        nagDialog.dismiss();
-                                    }
-                                });
-                                nagDialog.show();
-                            }
-                        });
-                        requestItemData(id);
-                        requestRewardData(id);
+                    questActionMiniImg.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final Dialog nagDialog = new Dialog(ZoneActivity.this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+                            nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            nagDialog.setCancelable(true);
+                            nagDialog.setContentView(R.layout.mini_map_full_screen);
+                            ImageView imgPreview = (ImageView) nagDialog.findViewById(R.id.mini_map_full_view);
+                            imgPreview.setBackgroundDrawable(questActionMiniImg.getDrawable());
+                            imgPreview.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    nagDialog.dismiss();
+                                }
+                            });
+                            nagDialog.show();
+                        }
+                    });
+                    requestItemData(id);
+                    requestRewardData(id);
 
                 } else {
                     Log.d(LOG_TAG, "Zone data is null");
@@ -414,7 +416,7 @@ public class ZoneActivity extends ActionBarActivity {
                                     int itemCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("inventorycount", response));
                                     Log.d(LOG_TAG, "Item count: " + itemCount);
                                     if (itemCount == 0) {
-                                        showObtainDialog(QuestioConstants.OBTAIN_TYPE_ITEM);
+                                        showObtainItemDialog();
                                         api.addInventory(adventurerId, item.getItemId(), new Callback<Response>() {
                                             @Override
                                             public void success(Response response, Response response2) {
@@ -434,6 +436,26 @@ public class ZoneActivity extends ActionBarActivity {
                                     Log.d(LOG_TAG, "checkItemData: failure");
                                 }
                             });
+
+                            api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), new Callback<Response>() {
+                                @Override
+                                public void success(Response response, Response response2) {
+                                    int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
+                                    Log.d(LOG_TAG, "Reward count: " + rewardCount);
+                                    if (rewardCount == 0) {
+                                        int rank = calculateZoneReward();
+                                        showObtainRewardDialog(rank);
+                                        addRewardHOF(reward.getRewardId(), rank);
+                                    }
+                                }
+
+                                @Override
+                                public void failure(RetrofitError error) {
+                                    Log.d(LOG_TAG, "checkRewardData: failure");
+                                }
+                            });
+
+
 
                         }
 
@@ -455,37 +477,24 @@ public class ZoneActivity extends ActionBarActivity {
         super.onResume();
     }
 
-    void showObtainDialog(int obtainType){
+    void showObtainItemDialog(){
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.item_reward_obtain_dialog);
+        dialog.setContentView(R.layout.item_obtain_dialog);
         Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
         dialog.getWindow().setBackgroundDrawable(transparentDrawable);
         dialog.setCancelable(true);
-        ImageView tvObtainedPicture = (ImageView) dialog.findViewById(R.id.dialog_obtain_picture);
-        TextView tvObtainedName = (TextView) dialog.findViewById(R.id.dialog_obtain_name);
-        TextView tvObtainedType = (TextView) dialog.findViewById(R.id.dialog_obtain_type);
-        Button closeBtn = (Button) dialog.findViewById(R.id.button_obtain_close);
+        ImageView tvItemPicture = (ImageView) dialog.findViewById(R.id.dialog_obtain_item_picture);
+        TextView tvItemName = (TextView) dialog.findViewById(R.id.dialog_obtain_item_name);
+        Button closeBtn = (Button) dialog.findViewById(R.id.button_obtain_item_close);
 
-        String obtainedType = "";
-        String obtainedName = "";
-        if(obtainType == QuestioConstants.OBTAIN_TYPE_ITEM){
-            obtainedType = "ได้รับไอเทม";
-            obtainedName = item.getItemName();
+        String obtainedName = item.getItemName();
             Glide.with(this)
                     .load(QuestioConstants.BASE_URL + item.getItemPicPath())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(tvObtainedPicture);
-        }else if(obtainType == QuestioConstants.OBTAIN_TYPE_REWARD){
-            obtainedType = "ได้รับรางวัล";
-            obtainedName = reward.getRewardName();
-            Glide.with(this)
-                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(tvObtainedPicture);
-        }
-        tvObtainedType.setText(obtainedType);
-        tvObtainedName.setText(obtainedName);
+                    .into(tvItemPicture);
+
+        tvItemName.setText(obtainedName);
 
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -494,5 +503,77 @@ public class ZoneActivity extends ActionBarActivity {
             }
         });
         dialog.show();
+    }
+
+    void showObtainRewardDialog(int rank){
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.reward_obtain_dialog);
+        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
+        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
+        dialog.setCancelable(true);
+        ImageView rewardPicture = (ImageView) dialog.findViewById(R.id.dialog_obtain_reward_picture);
+        TextView tvRewardName = (TextView) dialog.findViewById(R.id.dialog_obtain_reward_name);
+        TextView tvRewardRank = (TextView) dialog.findViewById(R.id.dialog_obtain_reward_rank);
+        Button closeBtn = (Button) dialog.findViewById(R.id.button_obtain_reward_close);
+
+        String rewardName = reward.getRewardName();
+        Glide.with(this)
+                .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(rewardPicture);
+
+        tvRewardName.setText(rewardName);
+        String rewardRank = "";
+        if(rank == QuestioConstants.REWARD_RANK_NORMAL){
+            rewardRank = "ระดับปกติ";
+        }else if(rank == QuestioConstants.REWARD_RANK_BRONZE){
+            rewardRank = "ระดับทองแดง";
+            rewardPicture.setColorFilter(R.color.reward_bronze, PorterDuff.Mode.ADD);
+        }else if(rank == QuestioConstants.REWARD_RANK_SILVER){
+            rewardRank = "ระดับเงิน";
+            rewardPicture.setColorFilter(R.color.reward_silver, PorterDuff.Mode.ADD);
+        }else if(rank == QuestioConstants.REWARD_RANK_GOLD){
+            rewardRank = "ระดับทอง";
+            rewardPicture.setColorFilter(R.color.reward_gold, PorterDuff.Mode.ADD);
+        }
+
+        tvRewardRank.setText(rewardRank);
+
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+        dialog.show();
+    }
+
+    public int calculateZoneReward(){
+        int scoreGain = questActionScoreGainProgressbar.getProgress();
+        if(scoreGain <= 30){
+            return QuestioConstants.REWARD_RANK_NORMAL;
+        }else if (scoreGain > 30 && scoreGain <= 60){
+            return QuestioConstants.REWARD_RANK_BRONZE;
+        }else if (scoreGain > 60 && scoreGain <= 90){
+            return QuestioConstants.REWARD_RANK_SILVER;
+        }else{
+            return QuestioConstants.REWARD_RANK_GOLD;
+        }
+
+    }
+
+    public void addRewardHOF(int rewardId, int rank){
+        api.addRewards(adventurerId, rewardId, rank, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
     }
 }

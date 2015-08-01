@@ -27,6 +27,9 @@
     <color name="quest_hard">#ffffce44</color>
     <color name="quest_veryhard">#ffff9022</color>
     <color name="quest_unknown">#ff362913</color>
+    <color name="reward_bronze">#cd7f32</color>
+    <color name="reward_silver">#c0c0c0</color>
+    <color name="reward_gold">#ffd700</color>
 
 
 </resources>

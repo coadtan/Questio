@@ -323,60 +323,77 @@ public interface QuestioAPIService {
 
     @GET("/update_questprogress_autoscore_quiz.php")
     void updateQuestProgressAutoScoreQuiz(
-            @Query("questid") int questid,
-            @Query("adventurerid") long adventurerid,
-            @Query("statusid") int statusid,
+            @Query("questid") int questId,
+            @Query("adventurerid") long adventurerId,
+            @Query("statusid") int statusId,
             Callback<Response> response
     );
 
     //http://52.74.64.61/api/select_quest_status_and_score_by_zoneandadventurerid.php?zoneid=1&adventurerid=2
     @GET("/select_quest_status_and_score_by_zoneandadventurerid.php")
     void getQuestStatusAndScoreByZoneAdventurerid(
-            @Query("zoneid") int zoneid,
-            @Query("adventurerid") long adventurerid,
+            @Query("zoneid") int zoneId,
+            @Query("adventurerid") long adventurerId,
             Callback<Response> response
     );
 
     //http://52.74.64.61/api/select_all_reward_by_zoneid.php?zoneid=1
     @GET("/select_all_reward_by_zoneid.php")
     void getRewardByZoneId(
-            @Query("zoneid") int zoneid,
+            @Query("zoneid") int zoneId,
             Callback<Reward[]> reward
     );
 
     //http://52.74.64.61/api/select_all_item_by_zoneid.php?zoneid=1
     @GET("/select_all_item_by_zoneid.php")
     void getItemByZoneId(
-            @Query("zoneid") int zoneid,
+            @Query("zoneid") int zoneId,
             Callback<Item[]> item
     );
     //http://52.74.64.61/api/insert_inventory.php?adventurerid=1&itemid=1
     @GET("/insert_inventory.php")
     void addInventory(
-            @Query("adventurerid") long adventurerid,
-            @Query("itemid") int itemid,
+            @Query("adventurerid") long adventurerId,
+            @Query("itemid") int itemId,
             Callback<Response> response
     );
 
     //http://52.74.64.61/api/select_count_inventory_by_adventurerid_and_itemid.php?adventurerid=1&itemid=1
     @GET("/select_count_inventory_by_adventurerid_and_itemid.php")
     void getCountInventoryByAdventurerIdAndItemId(
-            @Query("adventurerid") long adventurerid,
-            @Query("itemid") int itemid,
+            @Query("adventurerid") long adventurerId,
+            @Query("itemid") int itemId,
+            Callback<Response> response
+    );
+
+    //http://52.74.64.61/api/select_count_hof_by_adventurerid_and_rewardid.php?adventurerid=2&rewardid=1
+    @GET("/select_count_hof_by_adventurerid_and_rewardid.php")
+    void getCountHOFByAdventurerIdAndRewardId(
+            @Query("adventurerid") long adventurerId,
+            @Query("rewardid") int rewardId,
             Callback<Response> response
     );
 
     //http://52.74.64.61/api/select_all_item_inventory_by_adventurerid.php?adventurerid=2
     @GET("/select_all_item_inventory_by_adventurerid.php")
     void getAllItemInInventoryByAdventurerId(
-            @Query("adventurerid") long adventurerid,
+            @Query("adventurerid") long adventurerId,
             Callback<ArrayList<ItemInInventory>> response
     );
 
     //http://52.74.64.61/api/select_all_rewards_halloffame_by_adventurerid.php?adventurerid=2
     @GET("/select_all_rewards_halloffame_by_adventurerid.php")
     void getAllRewardsInHalloffameByAdventurerId(
-            @Query("adventurerid") long adventurerid,
+            @Query("adventurerid") long adventurerId,
             Callback<ArrayList<RewardHOF>> response
+    );
+
+    //http://52.74.64.61/api/insert_rewards.php?adventurerid=2&rewardid=1&rankid=4
+    @GET("/insert_rewards.php")
+    void addRewards(
+            @Query("adventurerid") long adventurerId,
+            @Query("rewardid") int rewardId,
+            @Query("rankid") int rankId,
+            Callback<Response> response
     );
 }
