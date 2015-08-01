@@ -37,6 +37,9 @@ import com.questio.projects.questio.utilities.QuestioHelper;
 
 import java.util.ArrayList;
 
+import jp.wasabeef.glide.transformations.GrayscaleTransformation;
+import jp.wasabeef.glide.transformations.gpu.BrightnessFilterTransformation;
+import jp.wasabeef.glide.transformations.gpu.SepiaFilterTransformation;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -518,24 +521,37 @@ public class ZoneActivity extends ActionBarActivity {
         Button closeBtn = (Button) dialog.findViewById(R.id.button_obtain_reward_close);
 
         String rewardName = reward.getRewardName();
-        Glide.with(this)
-                .load(QuestioConstants.BASE_URL + reward.getRewardPic())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(rewardPicture);
+
 
         tvRewardName.setText(rewardName);
         String rewardRank = "";
         if(rank == QuestioConstants.REWARD_RANK_NORMAL){
             rewardRank = "ระดับปกติ";
+            Glide.with(this)
+                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(rewardPicture);
         }else if(rank == QuestioConstants.REWARD_RANK_BRONZE){
             rewardRank = "ระดับทองแดง";
-            rewardPicture.setColorFilter(R.color.reward_bronze, PorterDuff.Mode.ADD);
+            Glide.with(this)
+                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .bitmapTransform(new SepiaFilterTransformation(this, Glide.get(this).getBitmapPool()))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(rewardPicture);
         }else if(rank == QuestioConstants.REWARD_RANK_SILVER){
             rewardRank = "ระดับเงิน";
-            rewardPicture.setColorFilter(R.color.reward_silver, PorterDuff.Mode.ADD);
+            Glide.with(this)
+                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .bitmapTransform(new GrayscaleTransformation(Glide.get(this).getBitmapPool()))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(rewardPicture);
         }else if(rank == QuestioConstants.REWARD_RANK_GOLD){
             rewardRank = "ระดับทอง";
-            rewardPicture.setColorFilter(R.color.reward_gold, PorterDuff.Mode.ADD);
+            Glide.with(this)
+                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .bitmapTransform(new BrightnessFilterTransformation(this, Glide.get(this).getBitmapPool(), 0.5f))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(rewardPicture);
         }
 
         tvRewardRank.setText(rewardRank);
