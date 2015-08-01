@@ -28,6 +28,8 @@ import com.questio.projects.questio.utilities.QuestioHelper;
 
 import net.sourceforge.zbar.Symbol;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -35,21 +37,39 @@ import retrofit.client.Response;
 
 public class RiddleAction extends ActionBarActivity implements View.OnClickListener, Callback<Response> {
     private static final String LOG_TAG = RiddleAction.class.getSimpleName();
+
+    @Bind(R.id.app_bar)
     Toolbar toolbar;
+
+    @Bind(R.id.riddle_riddle)
     TextView riddle;
+
+    @Bind(R.id.riddle_hint1Btn)
     Button hint1Btn;
+
+    @Bind(R.id.riddle_hint2Btn)
     Button hint2Btn;
+
+    @Bind(R.id.riddle_hint3Btn)
     Button hint3Btn;
+
+    @Bind(R.id.riddle_scanHere)
     ImageButton scanHere;
+
+    @Bind(R.id.riddle_hintReveal1)
     TextView hintReveal1;
+
+    @Bind(R.id.riddle_hintReveal2)
     TextView hintReveal2;
+
+    @Bind(R.id.riddle_hintReveal3)
     TextView hintReveal3;
 
-    int points;
-
+    @Bind(R.id.toolbar_limit)
     TextView scanTV;
-    int scanLimit;
 
+    int points;
+    int scanLimit;
     int qid;
     int zid;
     long adventurerId;
@@ -63,40 +83,21 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.riddle_action);
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(0xFFFFFFFF);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-        scanTV = (TextView) toolbar.findViewById(R.id.toolbar_limit);
-
-        riddle = (TextView) findViewById(R.id.riddle_riddle);
-        hint1Btn = (Button) findViewById(R.id.riddle_hint1Btn);
-        hint2Btn = (Button) findViewById(R.id.riddle_hint2Btn);
-        hint3Btn = (Button) findViewById(R.id.riddle_hint3Btn);
-        scanHere = (ImageButton) findViewById(R.id.riddle_scanHere);
-        hintReveal1 = (TextView) findViewById(R.id.riddle_hintReveal1);
-        hintReveal2 = (TextView) findViewById(R.id.riddle_hintReveal2);
-        hintReveal3 = (TextView) findViewById(R.id.riddle_hintReveal3);
-
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-
-
         String questId;
         String questName;
         String zoneId;
-
-
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
-
             if (extras == null) {
                 questId = null;
                 questName = null;
@@ -159,8 +160,6 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
                 api.updateRiddleProgressHint3ByRef(adventurerId, qid, this);
                 break;
         }
-
-
     }
 
     @Override
@@ -181,7 +180,6 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
     }
 
     void onAnswer(String answer) {
-
         if (scanLimit != 0) {
             if (answer.equalsIgnoreCase(Long.toString(r.getQrCode()))) {
                 riddle.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
@@ -199,7 +197,6 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
                 }
             }
         }
-
     }
 
     private void updateScoreToQuestProgress() {
@@ -278,7 +275,6 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
                 } else {
                     Log.d(LOG_TAG, "Riddle is null");
                 }
-
             }
 
             @Override
@@ -302,7 +298,6 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
                     int status = Integer.parseInt(statusStr);
                     if (status == QuestioConstants.QUEST_FINISHED || status == QuestioConstants.QUEST_FAILED) {
                         onQuestFinish();
-
                     } else {
                         api.getRiddleProgressByRef(adventurerId, qid, new Callback<Response>() {
                             @Override
@@ -335,8 +330,6 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
 
             }
         });
-
-
     }
 
     private void insertProgressData() {
@@ -345,10 +338,7 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
             public void success(Response response, Response response2) {
                 String questioStatus = QuestioHelper.responseToString(response);
                 Log.d(LOG_TAG, "Add Quest Progress: " + qid + " " + questioStatus);
-
-
                 insertRiddleProgress();
-
             }
 
             @Override
@@ -398,7 +388,7 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
 
     }
 
-    private void onQuestFinish(){
+    private void onQuestFinish() {
         scanHere.setEnabled(false);
         scanHere.setClickable(false);
         hintReveal1.setText(r.getHint1());
@@ -412,15 +402,15 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
         hint3Btn.setClickable(false);
     }
 
-    void showCompleteDialog(int score){
+    void showCompleteDialog(int score) {
         final Dialog dialog = new Dialog(RiddleAction.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.quest_finished_riddle_dialog);
         Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
         dialog.getWindow().setBackgroundDrawable(transparentDrawable);
         dialog.setCancelable(true);
-        TextView puzzleScoreTV = (TextView)dialog.findViewById(R.id.dialog_riddle_score);
-        Button goBack = (Button)dialog.findViewById(R.id.button_riddle_goback);
+        TextView puzzleScoreTV = (TextView) dialog.findViewById(R.id.dialog_riddle_score);
+        Button goBack = (Button) dialog.findViewById(R.id.button_riddle_goback);
         String puzzleScore = Integer.toString(score) + " แต้ม";
         puzzleScoreTV.setText(puzzleScore);
         goBack.setOnClickListener(new View.OnClickListener() {

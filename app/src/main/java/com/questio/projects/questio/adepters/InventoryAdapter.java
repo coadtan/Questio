@@ -16,16 +16,20 @@ import com.questio.projects.questio.utilities.QuestioHelper;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class InventoryAdapter extends BaseAdapter {
     public static final String LOG_TAG = InventoryAdapter.class.getSimpleName();
     private Context mContext;
     ArrayList<ItemInInventory> itemInvList;
 
-    private static class ViewHolder {
-        private ImageView itemImage;
+    public static class ViewHolder {
+        @Bind(R.id.item_inventory)
+        ImageView itemImage;
 
         public ViewHolder(View view) {
-            itemImage = (ImageView) view.findViewById(R.id.item_inventory);
+            ButterKnife.bind(this, view);
         }
     }
 

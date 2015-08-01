@@ -31,14 +31,12 @@ import retrofit.client.Response;
 public class LoginActivity extends ActionBarActivity implements View.OnClickListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private static final String LOG_TAG = LoginActivity.class.getSimpleName();
-    //    Toolbar toolbar;
     private static final int RC_SIGN_IN = 0;
-    private GoogleApiClient mGoogleApiClient;
-    private boolean mIntentInProgress;
-    private boolean mSignInClicked;
-    private ConnectionResult mConnectionResult;
-    private SignInButton btnSignIn;
-    //Button btnSignOut, btnRevoke;
+    GoogleApiClient mGoogleApiClient;
+    boolean mIntentInProgress;
+    boolean mSignInClicked;
+    ConnectionResult mConnectionResult;
+    SignInButton btnSignIn;
     Person currentPerson;
     QuestioAPIService api;
     Long aId;
@@ -47,25 +45,14 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
-
-//
-//        if (!QuestioApplication.isLogin()) {
-//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//            startActivity(intent);
-//        }
-
         btnSignIn = (SignInButton) findViewById(R.id.sign_in_button);
-
         btnSignIn.setOnClickListener(this);
-
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this).addApi(Plus.API)
                 .addScope(Plus.SCOPE_PLUS_LOGIN).build();
-
         QuestioApplication.mGoogleApiClient = mGoogleApiClient;
     }
-
 
     protected void onStart() {
         super.onStart();
@@ -75,7 +62,6 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
     protected void onStop() {
         super.onStop();
     }
-
 
     @Override
     public void onClick(View v) {
@@ -92,7 +78,6 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
             resolveSignInError();
         }
     }
-
 
     private void resolveSignInError() {
         if (mConnectionResult.hasResolution()) {
@@ -239,10 +224,8 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
             e.printStackTrace();
         }
 
-
         QuestioApplication.setLogin(true);
 
-       // btnSignIn.setVisibility(View.INVISIBLE);
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
 
@@ -318,47 +301,3 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
 
 
 }
-
-
-/*
-
-                                @Override
-                                public void success(Long[] longs, Response response) {
-                                    Log.d(LOG_TAG, "s:getCountAdventurer");
-                                    aId = longs[0]+1;
-
-                                    api.addAdventurerDetails(aId, currentPerson.getDisplayName(), currentPerson.getDisplayName()
-                                    , "0888022222" , new Callback<String[]>() {
-                                        @Override
-                                        public void success(String[] strings, Response response) {
-
-                                            Log.d(LOG_TAG, "s:addAdventurerDetails");
-                                            api.addAdventurer(aId, currentPerson.getId(), Plus.AccountApi.getAccountName(mGoogleApiClient),
-                                                    aId, aId, new Callback<String[]>() {
-                                                        @Override
-                                                        public void success(String[] strings, Response response) {
-                                                            Log.d(LOG_TAG, "s:addAdventurer");
-                                                        }
-
-                                                        @Override
-                                                        public void failure(RetrofitError error) {
-                                                            Log.d(LOG_TAG, "f:addAdventurer");
-                                                        }
-                                                    });
-                                        }
-                                        @Override
-                                        public void failure(RetrofitError error) {
-                                            Log.d(LOG_TAG, "f:addAdventurerDetails");
-                                        }
-                                    });
-                                }
-                                @Override
-                                public void failure(RetrofitError error) {
-                                    Log.d(LOG_TAG, "f:getCountAdventurer");
-                                    Log.d(LOG_TAG, "f:getCountAdventurer " + error.getStackTrace().toString());
-                                    Log.d(LOG_TAG, "f:getCountAdventurer " + error.getUrl());
-                                    Log.d(LOG_TAG, "f:getCountAdventurer " + error.getBody());
-
-                                }
-
- */

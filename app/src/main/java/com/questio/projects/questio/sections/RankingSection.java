@@ -1,8 +1,8 @@
 package com.questio.projects.questio.sections;
 
-import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,7 +20,7 @@ import net.sourceforge.zbar.Symbol;
 public class RankingSection extends Fragment {
     private static final String LOG_TAG = RankingSection.class.getSimpleName();
     private int i;
-
+    View view;
 
 
     @Override
@@ -33,10 +33,10 @@ public class RankingSection extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.section_ranking, container, false);
+        view = inflater.inflate(R.layout.section_ranking, container, false);
         Bundle args = getArguments();
 
-        return rootView;
+        return view;
     }
 
 

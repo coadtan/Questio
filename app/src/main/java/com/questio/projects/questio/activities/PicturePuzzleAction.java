@@ -28,6 +28,8 @@ import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
 import com.questio.projects.questio.utilities.QuestioHelper;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -35,22 +37,47 @@ import retrofit.client.Response;
 
 public class PicturePuzzleAction extends ActionBarActivity implements View.OnClickListener, TextWatcher, Callback<Response> {
     private static final String LOG_TAG = PicturePuzzleAction.class.getSimpleName();
-    private ImageView picturePuzzleQuestion;
-    private ImageView topLeft;
-    private ImageView topMiddle;
-    private ImageView topRight;
-    private ImageView middleLeft;
-    private ImageView middleMiddle;
-    private ImageView middleRight;
-    private ImageView bottomLeft;
-    private ImageView bottomMiddle;
-    private ImageView bottomRight;
-    private EditText picturePuzzleAnswer;
-   // private EditText picturePuzzleHint;
-    private ImageButton picturePuzzleShowHintBtn;
-    String currentAnswer;
-    TextView pointTV;
+    @Bind(R.id.picture_puzzle_question)
+    ImageView picturePuzzleQuestion;
+
+    @Bind(R.id.topLeft)
+    ImageView topLeft;
+
+    @Bind(R.id.topMiddle)
+    ImageView topMiddle;
+
+    @Bind(R.id.topRight)
+    ImageView topRight;
+
+    @Bind(R.id.middleLeft)
+    ImageView middleLeft;
+
+    @Bind(R.id.middleMiddle)
+    ImageView middleMiddle;
+
+    @Bind(R.id.middleRight)
+    ImageView middleRight;
+
+    @Bind(R.id.bottomLeft)
+    ImageView bottomLeft;
+
+    @Bind(R.id.bottomMiddle)
+    ImageView bottomMiddle;
+
+    @Bind(R.id.bottomRight)
+    ImageView bottomRight;
+
+    @Bind(R.id.picture_puzzle_answer)
+    EditText picturePuzzleAnswer;
+
+    @Bind(R.id.picture_puzzle_showhint_btn)
+    ImageButton picturePuzzleShowHintBtn;
+
+    @Bind(R.id.app_bar)
     Toolbar toolbar;
+
+    TextView pointTV;
+    String currentAnswer;
     PicturePuzzle pp;
     int points;
     int ref;
@@ -66,39 +93,23 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.puzzle_action);
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(0xFFFFFFFF);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        pointTV = (TextView) toolbar.findViewById(R.id.toolbar_points);
+        pointTV = ButterKnife.findById(toolbar, R.id.toolbar_points);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-        picturePuzzleQuestion = (ImageView) findViewById(R.id.picture_puzzle_question);
-        topLeft = (ImageView) findViewById(R.id.topLeft);
-        topMiddle = (ImageView) findViewById(R.id.topMiddle);
-        topRight = (ImageView) findViewById(R.id.topRight);
-        middleLeft = (ImageView) findViewById(R.id.middleLeft);
-        middleMiddle = (ImageView) findViewById(R.id.middleMiddle);
-        middleRight = (ImageView) findViewById(R.id.middleRight);
-        bottomLeft = (ImageView) findViewById(R.id.bottomLeft);
-        bottomMiddle = (ImageView) findViewById(R.id.bottomMiddle);
-        bottomRight = (ImageView) findViewById(R.id.bottomRight);
-        picturePuzzleAnswer = (EditText) findViewById(R.id.picture_puzzle_answer);
-      //  picturePuzzleHint = (EditText) findViewById(R.id.picture_puzzle_hint);
-        picturePuzzleShowHintBtn = (ImageButton) findViewById(R.id.picture_puzzle_showhint_btn);
-
         String questId;
         String questName;
         String zoneId;
 
-
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
-
             if (extras == null) {
                 questId = null;
                 questName = null;
@@ -115,14 +126,12 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         }
         Log.d(LOG_TAG, "questid: " + questId + " questName: " + questName);
 
-
         getSupportActionBar().setTitle(questName);
 
         adapter = new RestAdapter.Builder()
                 .setEndpoint(QuestioConstants.ENDPOINT)
                 .build();
         api = adapter.create(QuestioAPIService.class);
-
 
         requestPicturePuzzleData(Integer.parseInt(questId));
 
@@ -134,7 +143,6 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
 
         ref = Integer.parseInt(Integer.toString(qid) + (int) adventurerId);
         getCurrentPoints();
-
     }
 
     @Override
@@ -177,7 +185,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                 onUnMask(9);
                 break;
             case R.id.picture_puzzle_showhint_btn:
-                Toast.makeText(this, pp.getHelperAnswer() , Toast.LENGTH_LONG).show();
+                Toast.makeText(this, pp.getHelperAnswer(), Toast.LENGTH_LONG).show();
                 break;
         }
 
@@ -230,7 +238,6 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                             .load(QuestioHelper.getImgLink(pp.getImageUrl()))
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(picturePuzzleQuestion);
-                    //      picturePuzzleHint.setHint(pp.getHelperAnswer());
                     picturePuzzleShowHintBtn.setOnClickListener(PicturePuzzleAction.this);
                     picturePuzzleAnswer.addTextChangedListener(PicturePuzzleAction.this);
                     topLeft.setOnClickListener(PicturePuzzleAction.this);
@@ -243,12 +250,10 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                     bottomMiddle.setOnClickListener(PicturePuzzleAction.this);
                     bottomRight.setOnClickListener(PicturePuzzleAction.this);
                     requestQuestProgress();
-
                 } else {
                     Log.d(LOG_TAG, "Picture Puzzle is null");
                 }
             }
-
 
             @Override
             public void failure(RetrofitError retrofitError) {
@@ -258,14 +263,12 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         });
     }
 
-
-    private void requestQuestProgress(){
+    private void requestQuestProgress() {
         api.getQuestProgressByQuestIdAndAdventurerId(qid, adventurerId, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 if (QuestioHelper.responseToString(response).equalsIgnoreCase("null")) {
                     insertProgressData();
-
                 } else {
                     String statusStr = QuestioHelper.getJSONStringValueByTag("statusid", response);
                     int status = Integer.parseInt(statusStr);
@@ -280,27 +283,13 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                         bottomMiddle.setVisibility(View.INVISIBLE);
                         bottomRight.setVisibility(View.INVISIBLE);
                         disableAll();
-                        //      picturePuzzleHint.setVisibility(View.INVISIBLE);
-
                         picturePuzzleAnswer.setText(pp.getCorrectAnswer());
                         picturePuzzleAnswer.setEnabled(false);
                         picturePuzzleAnswer.setClickable(false);
-
                     } else {
                         api.getPuzzleProgressByRef(adventurerId, qid, new Callback<Response>() {
                             @Override
                             public void success(Response response, Response response2) {
-                                /*
-                                topleftopened
-                                topmidopened
-                                toprightopened
-                                midleftopened
-                                midmidopened
-                                midrightopened
-                                bottomleftopened
-                                bottommidopened
-                                bottomrightopened
-                                 */
                                 if (Integer.parseInt(QuestioHelper.getJSONStringValueByTag("topleftopened", response)) == 1) {
                                     topLeft.setVisibility(View.INVISIBLE);
                                 }
@@ -345,6 +334,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
             }
         });
     }
+
     private void insertProgressData() {
         Log.d(LOG_TAG, "No Progress in Quest");
         api.addQuestProgress(qid, adventurerId, zid, 3, new Callback<Response>() {
@@ -392,7 +382,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         });
     }
 
-    private void updateScore(){
+    private void updateScore() {
         api.updateScoreQuestProgressByQuestIdAndAdventurerId(points, qid, adventurerId, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
@@ -405,6 +395,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
             }
         });
     }
+
     private void disableAll() {
         topRight.setClickable(false);
         topMiddle.setClickable(false);
@@ -425,8 +416,6 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         middleMiddle.setEnabled(false);
         middleLeft.setEnabled(false);
     }
-
-
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -465,8 +454,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         showCompleteDialog(points);
     }
 
-
-    private void getCurrentPoints(){
+    private void getCurrentPoints() {
         api.getCurrentPointsByRef(adventurerId, qid, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
@@ -491,15 +479,15 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
 
     }
 
-    void showCompleteDialog(int score){
+    void showCompleteDialog(int score) {
         final Dialog dialog = new Dialog(PicturePuzzleAction.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.quest_finished_puzzle_dialog);
         Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
         dialog.getWindow().setBackgroundDrawable(transparentDrawable);
         dialog.setCancelable(true);
-        TextView puzzleScoreTV = (TextView)dialog.findViewById(R.id.dialog_puzzle_score);
-        Button goBack = (Button)dialog.findViewById(R.id.button_puzzle_goback);
+        TextView puzzleScoreTV = (TextView) dialog.findViewById(R.id.dialog_puzzle_score);
+        Button goBack = (Button) dialog.findViewById(R.id.button_puzzle_goback);
         String puzzleScore = Integer.toString(score) + " แต้ม";
         puzzleScoreTV.setText(puzzleScore);
         goBack.setOnClickListener(new View.OnClickListener() {

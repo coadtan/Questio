@@ -39,8 +39,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.questio.projects.questio.R;
-import com.questio.projects.questio.activities.ZoneActivity;
 import com.questio.projects.questio.activities.PlaceActivity;
+import com.questio.projects.questio.activities.ZoneActivity;
 import com.questio.projects.questio.adepters.PlaceListAdapter;
 import com.questio.projects.questio.libraries.AndroidGoogleDirectionAndPlaceLibrary.AndroidGoogleDirectionAndPlaceLibrary.GoogleDirection;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarConstants;
@@ -55,9 +55,10 @@ import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 
-/**
- * Created by coad4u4ever on 01-Apr-15.
- */
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+
 public class PlaceSection extends Fragment implements LocationListener, GoogleMap.OnCameraChangeListener {
     private static final String LOG_TAG = PlaceSection.class.getSimpleName();
     Context mContext;
@@ -71,14 +72,24 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
     final float MIN_DISTANCE_CHANGE_FOR_UPDATES = 0;
     double currentLat = 0;
     double currentLng = 0;
+
+    @Bind(R.id.map)
     MapView mMapView;
+
+    @Bind(R.id.enter_place)
+    Button enterPlaceBtn;
+
+    @Bind(R.id.listview_place)
+    ListView listViewPlace;
+
     View rootView;
     GoogleMap googleMap;
     ArrayList<Place> placeListForDistance;
     Marker mMarker;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
-    Button enterPlaceBtn;
+
+
     Runnable runnable;
     Handler handler;
     @Override
@@ -108,8 +119,7 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
 
         rootView = inflater.inflate(R.layout.section_place, container, false);
         Bundle args = getArguments();
-        mMapView = (MapView) rootView.findViewById(R.id.map);
-        enterPlaceBtn = (Button)rootView.findViewById(R.id.enter_place);
+        ButterKnife.bind(this, rootView);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
         try {
@@ -126,13 +136,12 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
         Cursor cursor = place.getAllPlacesCursor();
 
         PlaceListAdapter placeListAdapter = new PlaceListAdapter(mContext, cursor, 0);
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_place);
-        listView.setAdapter(placeListAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listViewPlace.setAdapter(placeListAdapter);
+        listViewPlace.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView tvLat = (TextView) view.findViewById(R.id.placeLat);
-                TextView tvLng = (TextView) view.findViewById(R.id.placeLng);
+                TextView tvLat = ButterKnife.findById(view, R.id.placeLat);
+                TextView tvLng = ButterKnife.findById(view, R.id.placeLng);
                 LatLng fromPosition = new LatLng(currentLat, currentLng);
                 LatLng toPosition = new LatLng(Double.parseDouble(tvLat.getText().toString()), Double.parseDouble(tvLng.getText().toString()));
                 googleMap.clear();
@@ -162,6 +171,11 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
         return rootView;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
     public Location getLocation() {
         try {
             locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);

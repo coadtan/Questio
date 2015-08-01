@@ -14,9 +14,8 @@ import com.questio.projects.questio.utilities.QuestListRowHolder;
 import java.util.ArrayList;
 
 public class QuestRecycleViewAdapter extends RecyclerView.Adapter<QuestListRowHolder> {
-
     private ArrayList<Quest> questItemList;
-    private Context mContext;
+    Context mContext;
 
     public QuestRecycleViewAdapter(Context context, ArrayList<Quest> questItemList) {
         this.questItemList = questItemList;
@@ -26,8 +25,7 @@ public class QuestRecycleViewAdapter extends RecyclerView.Adapter<QuestListRowHo
     @Override
     public QuestListRowHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cardview_list_quest, null);
-        QuestListRowHolder qr = new QuestListRowHolder(v);
-        return qr;
+        return new QuestListRowHolder(v);
     }
 
     @Override
@@ -37,27 +35,21 @@ public class QuestRecycleViewAdapter extends RecyclerView.Adapter<QuestListRowHo
         switch (questItem.getDiffId()) {
             case 1:
                 questListRowHolder.cardview_quest.setCardBackgroundColor(Color.parseColor("#ff76ff53"));
-               // questListRowHolder.cardview_quest.setRadius(40);
                 break;
             case 2:
                 questListRowHolder.cardview_quest.setCardBackgroundColor(Color.parseColor("#CCFF99"));
-                //questListRowHolder.cardview_quest.setRadius(40);
                 break;
             case 3:
                 questListRowHolder.cardview_quest.setCardBackgroundColor(Color.parseColor("#fffbff61"));
-              //  questListRowHolder.cardview_quest.setRadius(40);
                 break;
             case 4:
                 questListRowHolder.cardview_quest.setCardBackgroundColor(Color.parseColor("#ffffce44"));
-             //   questListRowHolder.cardview_quest.setRadius(40);
                 break;
             case 5:
                 questListRowHolder.cardview_quest.setCardBackgroundColor(Color.parseColor("#ffff9022"));
-              //  questListRowHolder.cardview_quest.setRadius(40);
                 break;
             default:
                 questListRowHolder.cardview_quest.setCardBackgroundColor(Color.parseColor("#ff362913"));
-              //  questListRowHolder.cardview_quest.setRadius(40);
                 break;
         }
 

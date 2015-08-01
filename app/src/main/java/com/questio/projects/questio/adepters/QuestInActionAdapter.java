@@ -1,7 +1,5 @@
 package com.questio.projects.questio.adepters;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -17,6 +15,11 @@ import com.questio.projects.questio.models.Quest;
 import com.questio.projects.questio.models.QuestStatusAndScore;
 import com.questio.projects.questio.utilities.QuestioConstants;
 
+import java.util.ArrayList;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 
 public class QuestInActionAdapter extends BaseAdapter {
     public static final String LOG_TAG = QuestInActionAdapter.class.getSimpleName();
@@ -25,28 +28,36 @@ public class QuestInActionAdapter extends BaseAdapter {
     ArrayList<QuestStatusAndScore> statusList;
     ArrayList<Quest> quests;
 
-    private static class ViewHolder {
-        private ImageView questtype;
-        private ImageView difficulty;
-        private ImageView status;
-        private LinearLayout questListItem;
-        private TextView zoneid;
-        private TextView questname;
-        private TextView questid;
-        private TextView questdetails;
-        private TextView questTypeInvisible;
+    public static class ViewHolder {
+        @Bind(R.id.questtype)
+        ImageView questtype;
+
+        @Bind(R.id.difficulty)
+        ImageView difficulty;
+
+        @Bind(R.id.status)
+        ImageView status;
+
+        @Bind(R.id.quest_list_item)
+        LinearLayout questListItem;
+
+        @Bind(R.id.quest_zoneId)
+        TextView zoneid;
+
+        @Bind(R.id.questname)
+        TextView questname;
+
+        @Bind(R.id.questid)
+        TextView questid;
+
+        @Bind(R.id.questdetails)
+        TextView questdetails;
+
+        @Bind(R.id.questTypeInvisible)
+        TextView questTypeInvisible;
 
         public ViewHolder(View view) {
-            questTypeInvisible = (TextView) view.findViewById(R.id.questTypeInvisible);
-            questtype = (ImageView) view.findViewById(R.id.questtype);
-            difficulty = (ImageView) view.findViewById(R.id.difficulty);
-            status = (ImageView) view.findViewById(R.id.status);
-            questname = (TextView) view.findViewById(R.id.questname);
-            questdetails = (TextView) view.findViewById(R.id.questdetails);
-            questid = (TextView) view.findViewById(R.id.questid);
-            zoneid = (TextView) view.findViewById(R.id.quest_zoneId);
-            questListItem = (LinearLayout) view.findViewById(R.id.quest_list_item);
-
+            ButterKnife.bind(this, view);
         }
 
         @Override

@@ -6,7 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -25,20 +25,18 @@ import com.questio.projects.questio.utilities.QuestioHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-/**
- * Created by coad4u4ever on 16-May-15.
- */
-public class QuizActivity extends ActionBarActivity implements View.OnClickListener {
+
+public class QuizActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String LOG_TAG = QuizActivity.class.getSimpleName();
     private static final int I_DO_NOT_CARE_JUST_CHANGE_IT_IMMEDIATELY_TO_CORRECT = 1;
     private static final int I_DO_NOT_CARE_JUST_CHANGE_IT_IMMEDIATELY_TO_INCORRECT = 2;
-    Toolbar toolbar;
-
 
     // These 4 values have value after handleInstanceState() called
     int questId;
@@ -46,18 +44,41 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
     //int ref;
     long adventurerId;
 
-
     // View Zone
+    @Bind(R.id.app_bar)
+    Toolbar toolbar;
+
+    @Bind(R.id.quiz_score)
     TextView score;
+
+    @Bind(R.id.quiz_question)
     TextView quizQuestion;
+
+    @Bind(R.id.quiz_sequence)
     TextView quizSequence;
+
+    @Bind(R.id.quiz_current_tv)
     TextView quizCurrentTv;
+
+    @Bind(R.id.quiz_total_number_tv)
     TextView quizTotalNumberTv;
+
+    @Bind(R.id.quiz_choice_1)
     Button quizChoice1;
+
+    @Bind(R.id.quiz_choice_2)
     Button quizChoice2;
+
+    @Bind(R.id.quiz_choice_3)
     Button quizChoice3;
+
+    @Bind(R.id.quiz_choice_4)
     Button quizChoice4;
+
+    @Bind(R.id.quiz_pre_btn)
     Button quizPreBtn;
+
+    @Bind(R.id.quiz_next_btn)
     Button quizNextBtn;
 
     // Misc
@@ -82,8 +103,16 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.doquiz_activity);
-        handleToolbar();
-        handleView();
+        ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(0xFFFFFFFF);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         handleInstanceState(savedInstanceState);
 
         adapter = new RestAdapter.Builder().setEndpoint(QuestioConstants.ENDPOINT).build();
@@ -91,21 +120,6 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
         currentQuiz = 0;
         currentScore = 0;
         requestQuizData(questId);
-    }
-
-
-    private void handleView() {
-        quizQuestion = (TextView) findViewById(R.id.quiz_question);
-        quizSequence = (TextView) findViewById(R.id.quiz_sequence);
-        score = (TextView) findViewById(R.id.quiz_score);
-        quizChoice1 = (Button) findViewById(R.id.quiz_choice_1);
-        quizChoice2 = (Button) findViewById(R.id.quiz_choice_2);
-        quizChoice3 = (Button) findViewById(R.id.quiz_choice_3);
-        quizChoice4 = (Button) findViewById(R.id.quiz_choice_4);
-        quizPreBtn = (Button) findViewById(R.id.quiz_pre_btn);
-        quizNextBtn = (Button) findViewById(R.id.quiz_next_btn);
-        quizCurrentTv = (TextView) findViewById(R.id.quiz_current_tv);
-        quizTotalNumberTv = (TextView) findViewById(R.id.quiz_total_number_tv);
     }
 
     private void handleInstanceState(Bundle savedInstanceState) {
@@ -132,27 +146,15 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
         Log.d(LOG_TAG, "questid: " + questId + " questName: " + questName);
         SharedPreferences prefs = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
         adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
-        this.questId = Integer.parseInt(questId);
-        zid = Integer.parseInt(zoneId);
-        //ref = Integer.parseInt(Integer.toString(this.questId) + (int) adventurerId);
-        // set title of toolbar to questname
+
+        if (questId != null) {
+            this.questId = Integer.parseInt(questId);
+        }
+        if (zoneId != null) {
+            zid = Integer.parseInt(zoneId);
+        }
         getSupportActionBar().setTitle(questName);
     }
-
-    private void handleToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitleTextColor(0xFFFFFFFF);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-    }
-
 
     @Override
     public void onClick(View v) {
@@ -218,11 +220,6 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
         quizCurrentTv.setText(Integer.toString(i + 1));
         quizTotalNumberTv.setText(Integer.toString(quizs.size()));
 
-        // clear old background
-//        quizChoice1.setBackground(getResources().getDrawable(R.drawable.answer_button));
-//        quizChoice2.setBackground(getResources().getDrawable(R.drawable.answer_button));
-//        quizChoice3.setBackground(getResources().getDrawable(R.drawable.answer_button));
-//        quizChoice4.setBackground(getResources().getDrawable(R.drawable.answer_button));
         quizChoice1.setBackground(getResources().getDrawable(R.drawable.quiz_btn));
         quizChoice2.setBackground(getResources().getDrawable(R.drawable.quiz_btn));
         quizChoice3.setBackground(getResources().getDrawable(R.drawable.quiz_btn));
@@ -701,7 +698,7 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
 
 
     void checkQuestFinish() {
-        if(isAllQuizFinish()){
+        if (isAllQuizFinish()) {
             updateProgressStatusAndScore(QuestioConstants.QUEST_FINISHED);
             onBackPressed();
         }
@@ -816,32 +813,32 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
         }
     }
 
-    void showCorrectAnswer(final int seqId, boolean isCorrect){
+    void showCorrectAnswer(final int seqId, boolean isCorrect) {
         final Dialog dialog = new Dialog(QuizActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.correct_answer_dialog);
         Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
         dialog.getWindow().setBackgroundDrawable(transparentDrawable);
         dialog.setCancelable(true);
-        TextView correctMsg = (TextView)dialog.findViewById(R.id.dialog_correctanswer_msg);
-        TextView correctAns = (TextView)dialog.findViewById(R.id.dialog_correctanswer_answer);
-        if(q.getAnswerId().equalsIgnoreCase("1")){
+        TextView correctMsg = (TextView) dialog.findViewById(R.id.dialog_correctanswer_msg);
+        TextView correctAns = (TextView) dialog.findViewById(R.id.dialog_correctanswer_answer);
+        if (q.getAnswerId().equalsIgnoreCase("1")) {
             correctAns.setText(q.getChoiceA());
-        }else if(q.getAnswerId().equalsIgnoreCase("2")){
+        } else if (q.getAnswerId().equalsIgnoreCase("2")) {
             correctAns.setText(q.getChoiceB());
-        }else if(q.getAnswerId().equalsIgnoreCase("3")){
+        } else if (q.getAnswerId().equalsIgnoreCase("3")) {
             correctAns.setText(q.getChoiceC());
-        }else if(q.getAnswerId().equalsIgnoreCase("4")){
+        } else if (q.getAnswerId().equalsIgnoreCase("4")) {
             correctAns.setText(q.getChoiceD());
         }
 
-        if(isCorrect){
+        if (isCorrect) {
             correctMsg.setText("ถูกต้องนะครับ");
-        }else{
+        } else {
             correctMsg.setText("ผิดครับ");
         }
-        Button nextQuestion = (Button)dialog.findViewById(R.id.button_correctanswer_next_question);
-        if(!isAllQuizFinish()) {
+        Button nextQuestion = (Button) dialog.findViewById(R.id.button_correctanswer_next_question);
+        if (!isAllQuizFinish()) {
             nextQuestion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -850,7 +847,7 @@ public class QuizActivity extends ActionBarActivity implements View.OnClickListe
                 }
 
             });
-        }else{
+        } else {
             nextQuestion.setText("กลับไปยังหน้าจอภารกิจ");
             nextQuestion.setOnClickListener(new View.OnClickListener() {
                 @Override

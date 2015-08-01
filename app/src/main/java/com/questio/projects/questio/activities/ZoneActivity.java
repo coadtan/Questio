@@ -4,8 +4,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -37,6 +35,8 @@ import com.questio.projects.questio.utilities.QuestioHelper;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.GrayscaleTransformation;
 import jp.wasabeef.glide.transformations.gpu.BrightnessFilterTransformation;
 import jp.wasabeef.glide.transformations.gpu.SepiaFilterTransformation;
@@ -45,31 +45,54 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+
 public class ZoneActivity extends ActionBarActivity {
     private static final String LOG_TAG = ZoneActivity.class.getSimpleName();
+
+    @Bind(R.id.app_bar)
     Toolbar toolbar;
+
+    @Bind(R.id.quest_action_picture)
+    ImageView questActionImg;
+
+    @Bind(R.id.quest_action_minimap)
+    ImageView questActionMiniImg;
+
+    @Bind(R.id.quest_action_item_picture)
+    ImageView itemPic;
+
+    @Bind(R.id.quest_action_reward_picture)
+    ImageView rewardPic;
+
+    @Bind(R.id.quest_action_zonetype_picture)
+    ImageView zonetype;
+
+    @Bind(R.id.icon_quest_finish)
+    ImageView iconQuestProgress;
+
+    @Bind(R.id.icon_score_progress)
+    ImageView iconScoreProgress;
+
+    @Bind(R.id.quest_action_quizfinish_progressbar)
+    ProgressBar questActionQuizfinishProgressbar;
+
+    @Bind(R.id.quest_action_scoregain_progressbar)
+    ProgressBar questActionScoreGainProgressbar;
+
+    @Bind(R.id.quest_action_listview)
+    ListView questListview;
+
     ArrayList<Quest> questsList;
     ArrayList<QuestStatusAndScore> statusList;
-    private ListView questListview;
     int zoneId;
     Zone zone;
-    ImageView questActionImg;
-    ImageView questActionMiniImg;
-    ImageView itemPic;
-    ImageView rewardPic;
-    ImageView zonetype;
-    ImageView iconQuestProgress;
-    ImageView iconScoreProgress;
     String qrcode;
     RestAdapter adapter;
     QuestioAPIService api;
     long adventurerId;
     QuestInActionAdapter adapterQuestList = null;
-    ProgressBar questActionQuizfinishProgressbar;
-    ProgressBar questActionScoreGainProgressbar;
     Item item;
     Reward reward;
-
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -81,8 +104,17 @@ public class ZoneActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quest_action);
-        handleView();
-        handleToolbar();
+        ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(0xFFFFFFFF);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("กำลังโหลดข้อมูล");
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         handleInstanceState(savedInstanceState);
         adapter = new RestAdapter.Builder()
                 .setEndpoint(QuestioConstants.ENDPOINT)
@@ -130,8 +162,6 @@ public class ZoneActivity extends ActionBarActivity {
                         startActivity(intentToPuzzle);
                         break;
                 }
-
-
             }
         });
 
@@ -236,39 +266,10 @@ public class ZoneActivity extends ActionBarActivity {
         });
     }
 
-    private void handleView() {
-        questActionImg = (ImageView) findViewById(R.id.quest_action_picture);
-        questActionMiniImg = (ImageView) findViewById(R.id.quest_action_minimap);
-        iconQuestProgress = (ImageView) findViewById(R.id.icon_quest_finish);
-        iconScoreProgress = (ImageView) findViewById(R.id.icon_score_progress);
-        itemPic = (ImageView) findViewById(R.id.quest_action_item_picture);
-        rewardPic = (ImageView) findViewById(R.id.quest_action_reward_picture);
-        zonetype = (ImageView) findViewById(R.id.quest_action_zonetype_picture);
-        questListview = (ListView) findViewById(R.id.quest_action_listview);
-        questActionQuizfinishProgressbar = (ProgressBar) findViewById(R.id.quest_action_quizfinish_progressbar);
-        questActionScoreGainProgressbar = (ProgressBar) findViewById(R.id.quest_action_scoregain_progressbar);
-    }
-
-    private void handleToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitleTextColor(0xFFFFFFFF);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("กำลังโหลดข้อมูล");
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-    }
-
-
     private void handleInstanceState(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             Log.d(LOG_TAG, "savedInstanceState: null");
             Bundle extras = getIntent().getExtras();
-
             if (extras == null) {
                 qrcode = null;
             } else {
@@ -276,7 +277,6 @@ public class ZoneActivity extends ActionBarActivity {
             }
         } else {
             Log.d(LOG_TAG, "savedInstanceState: !null");
-            //qrcode = (String) savedInstanceState.getSerializable("qrcode");
             qrcode = savedInstanceState.getString("qrcode");
         }
         Log.d(LOG_TAG, "qrcode: " + qrcode);
@@ -338,9 +338,6 @@ public class ZoneActivity extends ActionBarActivity {
                 if (zones != null) {
                     zone = zones[0];
                     getSupportActionBar().setTitle(zone.getZoneName());
-                    //item.setText(zone.getItemSet());
-                    //reward.setText(Integer.toString(zone.getRewardId()));
-
                     if (!(zone.getImageUrl() == null)) {
                         Glide.with(ZoneActivity.this)
                                 .load(QuestioHelper.getImgLink(zone.getImageUrl()))
@@ -457,11 +454,7 @@ public class ZoneActivity extends ActionBarActivity {
                                     Log.d(LOG_TAG, "checkRewardData: failure");
                                 }
                             });
-
-
-
                         }
-
                     }
                     adapterQuestList = new QuestInActionAdapter(ZoneActivity.this, questsList, statusList);
                     questListview.setAdapter(adapterQuestList);
@@ -480,7 +473,7 @@ public class ZoneActivity extends ActionBarActivity {
         super.onResume();
     }
 
-    void showObtainItemDialog(){
+    void showObtainItemDialog() {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.item_obtain_dialog);
@@ -492,10 +485,10 @@ public class ZoneActivity extends ActionBarActivity {
         Button closeBtn = (Button) dialog.findViewById(R.id.button_obtain_item_close);
 
         String obtainedName = item.getItemName();
-            Glide.with(this)
-                    .load(QuestioConstants.BASE_URL + item.getItemPicPath())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(tvItemPicture);
+        Glide.with(this)
+                .load(QuestioConstants.BASE_URL + item.getItemPicPath())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(tvItemPicture);
 
         tvItemName.setText(obtainedName);
 
@@ -508,44 +501,42 @@ public class ZoneActivity extends ActionBarActivity {
         dialog.show();
     }
 
-    void showObtainRewardDialog(int rank){
+    void showObtainRewardDialog(int rank) {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.reward_obtain_dialog);
         Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
         dialog.getWindow().setBackgroundDrawable(transparentDrawable);
         dialog.setCancelable(true);
-        ImageView rewardPicture = (ImageView) dialog.findViewById(R.id.dialog_obtain_reward_picture);
-        TextView tvRewardName = (TextView) dialog.findViewById(R.id.dialog_obtain_reward_name);
-        TextView tvRewardRank = (TextView) dialog.findViewById(R.id.dialog_obtain_reward_rank);
-        Button closeBtn = (Button) dialog.findViewById(R.id.button_obtain_reward_close);
+        ImageView rewardPicture = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_picture);
+        TextView tvRewardName = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_name);
+        TextView tvRewardRank = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_rank);
+        Button closeBtn = ButterKnife.findById(dialog, R.id.button_obtain_reward_close);
 
         String rewardName = reward.getRewardName();
-
-
         tvRewardName.setText(rewardName);
         String rewardRank = "";
-        if(rank == QuestioConstants.REWARD_RANK_NORMAL){
+        if (rank == QuestioConstants.REWARD_RANK_NORMAL) {
             rewardRank = "ระดับปกติ";
             Glide.with(this)
                     .load(QuestioConstants.BASE_URL + reward.getRewardPic())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
-        }else if(rank == QuestioConstants.REWARD_RANK_BRONZE){
+        } else if (rank == QuestioConstants.REWARD_RANK_BRONZE) {
             rewardRank = "ระดับทองแดง";
             Glide.with(this)
                     .load(QuestioConstants.BASE_URL + reward.getRewardPic())
                     .bitmapTransform(new SepiaFilterTransformation(this, Glide.get(this).getBitmapPool()))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
-        }else if(rank == QuestioConstants.REWARD_RANK_SILVER){
+        } else if (rank == QuestioConstants.REWARD_RANK_SILVER) {
             rewardRank = "ระดับเงิน";
             Glide.with(this)
                     .load(QuestioConstants.BASE_URL + reward.getRewardPic())
                     .bitmapTransform(new GrayscaleTransformation(Glide.get(this).getBitmapPool()))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
-        }else if(rank == QuestioConstants.REWARD_RANK_GOLD){
+        } else if (rank == QuestioConstants.REWARD_RANK_GOLD) {
             rewardRank = "ระดับทอง";
             Glide.with(this)
                     .load(QuestioConstants.BASE_URL + reward.getRewardPic())
@@ -565,21 +556,21 @@ public class ZoneActivity extends ActionBarActivity {
         dialog.show();
     }
 
-    public int calculateZoneReward(){
+    public int calculateZoneReward() {
         int scoreGain = questActionScoreGainProgressbar.getProgress();
-        if(scoreGain <= 30){
+        if (scoreGain <= 30) {
             return QuestioConstants.REWARD_RANK_NORMAL;
-        }else if (scoreGain > 30 && scoreGain <= 60){
+        } else if (scoreGain > 30 && scoreGain <= 60) {
             return QuestioConstants.REWARD_RANK_BRONZE;
-        }else if (scoreGain > 60 && scoreGain <= 90){
+        } else if (scoreGain > 60 && scoreGain <= 90) {
             return QuestioConstants.REWARD_RANK_SILVER;
-        }else{
+        } else {
             return QuestioConstants.REWARD_RANK_GOLD;
         }
 
     }
 
-    public void addRewardHOF(int rewardId, int rank){
+    public void addRewardHOF(int rewardId, int rank) {
         api.addRewards(adventurerId, rewardId, rank, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {

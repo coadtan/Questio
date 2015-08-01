@@ -1,6 +1,5 @@
 package com.questio.projects.questio.activities;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.RemoteException;
@@ -12,7 +11,6 @@ import android.util.Log;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
-import com.questio.projects.questio.QuestioApplication;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.libraries.slidingtabs.SlidingTabsBasicFragment;
 import com.questio.projects.questio.models.Place;
@@ -24,10 +22,10 @@ import com.questio.projects.questio.utilities.QuestioHelper;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-/*
- * Created by coad4u4ever on 01-Apr-15.
- * This will be the Main Class for the application.
- */
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+
 public class MainActivity extends ActionBarActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
@@ -36,22 +34,19 @@ public class MainActivity extends ActionBarActivity {
     private static final String ESTIMOTE_PROXIMITY_UUID = "b9407f30-f5f8-466e-aff9-25556b57fe6d";
     private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMOTE_PROXIMITY_UUID, 28521, 47387);
     private BeaconManager beaconManager = new BeaconManager(this);
-    static final Region region = new Region("myRegion",ESTIMOTE_PROXIMITY_UUID,28521,47387);
+    static final Region region = new Region("myRegion", ESTIMOTE_PROXIMITY_UUID, 28521, 47387);
 
 
+    @Bind(R.id.app_bar)
     Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         SharedPreferences prefs = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
         String displayName = prefs.getString(QuestioConstants.ADVENTURER_DISPLAYNAME, null);
         long id = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
-
         Log.d(LOG_TAG, "displayName: " + displayName + " id: " + id);
-
-
 
         Place place = new Place(getApplicationContext());
         try {
@@ -68,9 +63,8 @@ public class MainActivity extends ActionBarActivity {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-
         setContentView(R.layout.main_layout);
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(0xFFFFFFFF);
         if (savedInstanceState == null) {
@@ -81,11 +75,11 @@ public class MainActivity extends ActionBarActivity {
         }
         Log.d(LOG_TAG, "count: " + place.getPlaceCount());
 
-
         // Estimote zone
-        if(beaconManager.hasBluetooth()) {
+        if (beaconManager.hasBluetooth()) {
             beaconManager.setRangingListener(new BeaconManager.RangingListener() {
-                @Override public void onBeaconsDiscovered(Region region, List<Beacon> beacons) {
+                @Override
+                public void onBeaconsDiscovered(Region region, List<Beacon> beacons) {
                     Log.d(LOG_TAG, "Ranged beacons: " + beacons);
                 }
             });
@@ -115,7 +109,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onStart() {
         super.onStart();
         // Should be invoked in #onStart.
-        if(beaconManager.hasBluetooth()) {
+        if (beaconManager.hasBluetooth()) {
             beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
                 @Override
                 public void onServiceReady() {
@@ -135,7 +129,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onStop() {
         super.onStop();
         // Should be invoked in #onStop.
-        if(beaconManager.hasBluetooth()) {
+        if (beaconManager.hasBluetooth()) {
             try {
                 beaconManager.stopRanging(ALL_ESTIMOTE_BEACONS);
             } catch (RemoteException e) {
@@ -149,7 +143,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(beaconManager.hasBluetooth()) {
+        if (beaconManager.hasBluetooth()) {
             beaconManager.disconnect();
         }
     }

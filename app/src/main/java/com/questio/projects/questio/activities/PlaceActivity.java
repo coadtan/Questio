@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -41,30 +41,47 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 
-/**
- * Created by coad4u4ever on 01-Apr-15.
- */
-public class PlaceActivity extends ActionBarActivity {
+public class PlaceActivity extends AppCompatActivity {
+    @Bind(R.id.app_bar)
     Toolbar toolbar;
+
+    @Bind(R.id.place_building_spinner)
     Spinner buildingSpinner;
+
+    @Bind(R.id.place_floor_spinner)
     Spinner floorSpinner;
+
+    @Bind(R.id.place_zone_spinner)
     Spinner zoneSpinner;
+
+    @Bind(R.id.place_btn_triger_filter)
     Button placeBtnTrigerFilter;
+
+    @Bind(R.id.place_btn_triger_map)
     Button placeBtnTrigerMap;
+
+    @Bind(R.id.quest_browsing_picture)
+    ImageView questBrowsingPicture;
+
+    @Bind(R.id.place_activity_filter)
+    LinearLayout placeActivityFilter;
+
+    @Bind(R.id.quest_browsing_top_frame)
+    FrameLayout questBrowsingTopFrame;
+
     private Place place;
     private static final String LOG_TAG = PlaceActivity.class.getSimpleName();
     private ArrayList<Quest> quests;
     private ArrayList<Quest> questsTemp;
-    ImageView quest_browsing_picture;
-    LinearLayout place_activity_filter;
     boolean isFilterVisable = false;
-    FrameLayout quest_browsing_top_frame;
     boolean isMapVisable = true;
     String buildingItem = " ";
     String floorItem = " ";
@@ -90,17 +107,7 @@ public class PlaceActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quest_browsing);
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
-        quest_browsing_picture = (ImageView) findViewById(R.id.quest_browsing_picture);
-        buildingSpinner = (Spinner) findViewById(R.id.place_building_spinner);
-        floorSpinner = (Spinner) findViewById(R.id.place_floor_spinner);
-        zoneSpinner = (Spinner) findViewById(R.id.place_zone_spinner);
-        placeBtnTrigerFilter = (Button) findViewById(R.id.place_btn_triger_filter);
-        place_activity_filter = (LinearLayout) findViewById(R.id.place_activity_filter);
-        placeBtnTrigerMap = (Button) findViewById(R.id.place_btn_triger_map);
-        quest_browsing_top_frame = (FrameLayout) findViewById(R.id.quest_browsing_top_frame);
-
-
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(0xFFFFFFFF);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -110,13 +117,11 @@ public class PlaceActivity extends ActionBarActivity {
                 onBackPressed();
             }
         });
-
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/THSarabunNew.ttf");
         placeBtnTrigerFilter.setTypeface(custom_font);
         placeBtnTrigerMap.setTypeface(custom_font);
-
         place = (Place) getIntent().getSerializableExtra("place");
-        place_activity_filter.setVisibility(View.GONE);
+        placeActivityFilter.setVisibility(View.GONE);
         placeBtnTrigerFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,15 +132,13 @@ public class PlaceActivity extends ActionBarActivity {
                     isFilterVisable = false;
 
                     placeBtnTrigerFilter.setText("แสดงคัดกรอง ภารกิจ");
-                    place_activity_filter.setVisibility(View.GONE);
+                    placeActivityFilter.setVisibility(View.GONE);
                 } else {
                     isFilterVisable = true;
                     placeBtnTrigerFilter.setText("ซ่อนคัดกรอง ภารกิจ");
-                    place_activity_filter.setVisibility(View.VISIBLE);
-                    //   place_activity_filter.setAlpha(1.0f);
-                    place_activity_filter.startAnimation(fadeIn);
+                    placeActivityFilter.setVisibility(View.VISIBLE);
+                    placeActivityFilter.startAnimation(fadeIn);
                 }
-
             }
         });
 
@@ -148,13 +151,12 @@ public class PlaceActivity extends ActionBarActivity {
                 if (isMapVisable) {
                     isMapVisable = false;
                     placeBtnTrigerMap.setText("แสดง แผนที่");
-                    quest_browsing_top_frame.setVisibility(View.GONE);
+                    questBrowsingTopFrame.setVisibility(View.GONE);
                 } else {
                     isMapVisable = true;
                     placeBtnTrigerMap.setText("ซ่อน แผนที่");
-                    quest_browsing_top_frame.setVisibility(View.VISIBLE);
-                    //   place_activity_filter.setAlpha(1.0f);
-                    quest_browsing_top_frame.startAnimation(fadeIn);
+                    questBrowsingTopFrame.setVisibility(View.VISIBLE);
+                    questBrowsingTopFrame.startAnimation(fadeIn);
                 }
             }
         });
@@ -163,15 +165,13 @@ public class PlaceActivity extends ActionBarActivity {
             Glide.with(this)
                     .load("http://52.74.64.61" + place.getImageUrl())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(quest_browsing_picture);
+                    .into(questBrowsingPicture);
 
             requestQuestData(place.getPlaceId());
 
         } else {
             Log.d(LOG_TAG, "place: is null");
         }
-
-
     }
 
     @Override
@@ -211,7 +211,6 @@ public class PlaceActivity extends ActionBarActivity {
             public void success(final ArrayList<Quest> quests, Response response) {
                 if (quests != null) {
                     setQuests(quests);
-
                     final String[] buildingNames = Quest.getBuildingNamesArray("building", quests);
                     final String[] floorNames = Quest.getBuildingNamesArray("floor", quests);
                     String[] zoneNames = Quest.getBuildingNamesArray("zone", quests);
@@ -227,17 +226,12 @@ public class PlaceActivity extends ActionBarActivity {
                     final ArrayAdapter<String> adapterZone = new ArrayAdapter<>(PlaceActivity.this,
                             R.layout.spinner_item_list, zoneNames);
                     adapterBuilding.setDropDownViewResource(R.layout.spinner_item_list);
-
                     final HashSet<String> floorFilter = new HashSet<>();
                     final HashSet<String> zoneFilter = new HashSet<>();
-
                     buildingSpinner.setAdapter(adapterBuilding);
                     floorSpinner.setAdapter(adapterFloor);
                     zoneSpinner.setAdapter(adapterZone);
-
                     buildingSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-
                         @Override
                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                             buildingItem = buildingSpinner.getSelectedItem().toString();
@@ -255,7 +249,6 @@ public class PlaceActivity extends ActionBarActivity {
                                 ArrayAdapter<String> adapterFloorFiltered = new ArrayAdapter<>(PlaceActivity.this,
                                         R.layout.spinner_item_list, QuestioHelper.moveBackToFront(floorNameFilter));
                                 floorSpinner.setAdapter(adapterFloorFiltered);
-
                                 floorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                     @Override
                                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -275,7 +268,6 @@ public class PlaceActivity extends ActionBarActivity {
                                             ArrayAdapter<String> adapterZoneFiltered = new ArrayAdapter<>(PlaceActivity.this,
                                                     R.layout.spinner_item_list, QuestioHelper.moveBackToFront(zoneNameFilter));
                                             zoneSpinner.setAdapter(adapterZoneFiltered);
-
                                             zoneSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                 @Override
                                                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -325,7 +317,6 @@ public class PlaceActivity extends ActionBarActivity {
                                                 zoneFilter.clear();
                                                 zoneSpinner.setAdapter(adapterZone);
                                             }
-
                                         }
                                     }
 
@@ -334,7 +325,6 @@ public class PlaceActivity extends ActionBarActivity {
 
                                     }
                                 });
-
                             } else {
                                 reTempArray();
                                 floorFilter.clear();
@@ -396,7 +386,6 @@ public class PlaceActivity extends ActionBarActivity {
 
                                                     @Override
                                                     public void onNothingSelected(AdapterView<?> adapterView) {
-
                                                     }
                                                 });
                                             } else {
@@ -520,9 +509,7 @@ public class PlaceActivity extends ActionBarActivity {
         }
 
         // END OF CREATE NEW TEMP QUESTS
-
         QuestRecycleView fragment = (QuestRecycleView) getSupportFragmentManager().findFragmentById(R.id.quest_browsing_null);
         fragment.reCreateRecyclerView();
-
     }
 }

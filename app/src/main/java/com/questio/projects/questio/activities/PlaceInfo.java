@@ -28,46 +28,50 @@ import com.questio.projects.questio.utilities.QuestioHelper;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-/**
- * Created by coad4u4ever on 04-Apr-15.
- */
+
 public class PlaceInfo extends ActionBarActivity {
     private static final String LOG_TAG = PlaceInfo.class.getSimpleName();
-
+    @Bind(R.id.app_bar)
     Toolbar toolbar;
-    ImageView quest_info_picture;
-    ImageView place_detail;
-    TextView place_name;
-    TextView place_fullname;
-    TextView place_contact1;
-    TextView place_contact2;
-    TextView place_www;
-    TextView place_email;
-    Place place;
 
+    @Bind(R.id.place_info_picture)
+    ImageView placeInfoPicture;
+
+    @Bind(R.id.place_detail)
+    ImageView placeDetail;
+
+    @Bind(R.id.place_name)
+    TextView placeName;
+
+    @Bind(R.id.place_fullname)
+    TextView placeFullname;
+
+    @Bind(R.id.place_contact1)
+    TextView placeContact1;
+
+    @Bind(R.id.place_contact2)
+    TextView placeContact2;
+
+    @Bind(R.id.place_www)
+    TextView placeWww;
+
+    @Bind(R.id.place_email)
+    TextView placeEmail;
+
+    Place place;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.place_info);
-        // init
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
-        quest_info_picture = (ImageView) findViewById(R.id.quest_info_picture);
-        place_detail = (ImageView) findViewById(R.id.place_detail);
-        place_name = (TextView) findViewById(R.id.place_name);
-        place_fullname = (TextView) findViewById(R.id.place_fullname);
-        place_contact1 = (TextView) findViewById(R.id.place_contact1);
-        place_contact2 = (TextView) findViewById(R.id.place_contact2);
-        place_www = (TextView) findViewById(R.id.place_www);
-        place_email = (TextView) findViewById(R.id.place_email);
-
-        // init-end
-
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setTitleTextColor(0xFFFFFFFF);
@@ -81,13 +85,8 @@ public class PlaceInfo extends ActionBarActivity {
         place = (Place) getIntent().getSerializableExtra("place");
         requestPlaceInfoData(place.getPlaceId());
 
-
         // set value
-
-
         requestPlaceNewsData(place.getPlaceId());
-
-
         // set value-end
     }
 
@@ -124,13 +123,13 @@ public class PlaceInfo extends ActionBarActivity {
         api.getAllPlaceNewsByPlaceId(id, new Callback<ArrayList<PlaceNews>>() {
             @Override
             public void success(ArrayList<PlaceNews> placeNews, Response response) {
-                if(placeNews != null){
+                if (placeNews != null) {
                     ArrayList<PlaceNews> newsList = placeNews;
                     NewsListAdapter adapter = new NewsListAdapter(PlaceInfo.this, newsList);
                     ListView listView = (ListView) findViewById(R.id.place_list_feed);
                     listView.setAdapter(adapter);
-                }else{
-                    Log.d(LOG_TAG,"place news is null");
+                } else {
+                    Log.d(LOG_TAG, "place news is null");
                 }
 
             }
@@ -152,15 +151,15 @@ public class PlaceInfo extends ActionBarActivity {
         api.getPlaceDetailByPlaceId(id, new Callback<PlaceDetail[]>() {
             @Override
             public void success(PlaceDetail[] placeDetails, Response response) {
-                if(placeDetails[0]!= null){
+                if (placeDetails[0] != null) {
                     final PlaceDetail placeDetail = placeDetails[0];
-                    place_name.setText(place.getPlaceName());
-                    place_fullname.setText(place.getPlaceFullName());
-                    place_contact1.setText(placeDetail.getPhoneContact1());
-                    place_contact2.setText(placeDetail.getPhoneContact2());
-                    place_www.setText(placeDetail.getWebSite());
-                    place_email.setText(placeDetail.geteMail());
-                    place_detail.setOnClickListener(new View.OnClickListener() {
+                    placeName.setText(place.getPlaceName());
+                    placeFullname.setText(place.getPlaceFullName());
+                    placeContact1.setText(placeDetail.getPhoneContact1());
+                    placeContact2.setText(placeDetail.getPhoneContact2());
+                    placeWww.setText(placeDetail.getWebSite());
+                    placeEmail.setText(placeDetail.geteMail());
+                    PlaceInfo.this.placeDetail.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             AlertDialog.Builder builder1 = new AlertDialog.Builder(PlaceInfo.this);
@@ -179,9 +178,9 @@ public class PlaceInfo extends ActionBarActivity {
                     Glide.with(PlaceInfo.this)
                             .load(QuestioHelper.getImgLink(placeDetail.getImageUrl()))
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(quest_info_picture);
-                }else{
-                    Log.d(LOG_TAG,"Place details is null");
+                            .into(placeInfoPicture);
+                } else {
+                    Log.d(LOG_TAG, "Place details is null");
                 }
 
             }

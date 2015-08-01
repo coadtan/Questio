@@ -11,9 +11,7 @@ import com.questio.projects.questio.models.Floor;
 
 import java.util.ArrayList;
 
-/**
- * Created by coad4u4ever on 01-Apr-15.
- */
+
 public class FloorSpinnerAdapter extends ArrayAdapter<Floor> {
 
     private Context context;

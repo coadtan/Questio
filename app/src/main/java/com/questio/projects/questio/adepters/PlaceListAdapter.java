@@ -12,31 +12,36 @@ import android.widget.TextView;
 
 import com.questio.projects.questio.R;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
-/**
- * Created by coad4u4ever on 07-Mar-15.
- */
+
 public class PlaceListAdapter extends CursorAdapter {
     public static final String LOG_TAG = PlaceListAdapter.class.getSimpleName();
     Typeface tf;
 
     public static class ViewHolder {
-        public final ImageView iconView;
-        public final TextView placeId;
-        public final TextView placeName;
-        public final TextView place_detail;
-        public final TextView placeLat;
-        public final TextView placeLng;
+        @Bind(R.id.list_item_icon)
+        ImageView iconView;
+
+        @Bind(R.id.placeId)
+        TextView placeId;
+
+        @Bind(R.id.placeName)
+        TextView placeName;
+
+        @Bind(R.id.place_detail)
+        TextView placeDetail;
+
+        @Bind(R.id.placeLat)
+        TextView placeLat;
+
+        @Bind(R.id.placeLng)
+        TextView placeLng;
 
 
         public ViewHolder(View view) {
-
-            iconView = (ImageView) view.findViewById(R.id.list_item_icon);
-            placeId = (TextView) view.findViewById(R.id.placeId);
-            placeName = (TextView) view.findViewById(R.id.placeName);
-            place_detail = (TextView) view.findViewById(R.id.place_detail);
-            placeLat = (TextView) view.findViewById(R.id.placeLat);
-            placeLng = (TextView) view.findViewById(R.id.placeLng);
+            ButterKnife.bind(this, view);
         }
     }
 
@@ -64,7 +69,7 @@ public class PlaceListAdapter extends CursorAdapter {
         viewHolder.placeName.setText(placeNameString);
         viewHolder.placeName.setTypeface(tf);
         String placeFullNameString = cursor.getString(2);
-        viewHolder.place_detail.setText(placeFullNameString);
+        viewHolder.placeDetail.setText(placeFullNameString);
         String placeLatString = cursor.getString(5);
         viewHolder.placeLat.setText(placeLatString);
         String placeLngString = cursor.getString(6);

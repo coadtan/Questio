@@ -1,8 +1,8 @@
 package com.questio.projects.questio.fragments;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,9 +14,7 @@ import com.questio.projects.questio.R;
 import com.questio.projects.questio.activities.PlaceActivity;
 import com.questio.projects.questio.adepters.QuestRecycleViewAdapter;
 
-/**
- * Created by coad4u4ever on 05-Apr-15.
- */
+
 public class QuestRecycleView extends Fragment {
     private static final String LOG_TAG = QuestRecycleView.class.getSimpleName();
     RecyclerView questBrowsingRecyclerView;

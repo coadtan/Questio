@@ -9,7 +9,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,13 +31,14 @@ import com.questio.projects.questio.QuestioApplication;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.activities.LoginActivity;
 import com.questio.projects.questio.adepters.RewardsAdapter;
-import com.questio.projects.questio.models.ItemInInventory;
 import com.questio.projects.questio.models.RewardHOF;
 import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -47,15 +47,19 @@ import retrofit.client.Response;
 public class ProfileSection extends Fragment implements AdapterView.OnItemClickListener {
     private static final String LOG_TAG = ProfileSection.class.getSimpleName();
     Context mContext;
-    private ImageView profilePicture;
-    View rootView;
+    @Bind(R.id.profile_picture)
+    ImageView profilePicture;
+
+    @Bind(R.id.halloffame)
+    GridView hallOfFame;
+
+    View view;
     Person currentPerson;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
     RestAdapter adapter;
     long adventurerId;
     QuestioAPIService api;
-    GridView hallOfFame;
     ArrayList<RewardHOF> rewards;
     RewardsAdapter rewardsAdapter;
 
@@ -76,8 +80,6 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
     }
 
     public void init() {
-        profilePicture = (ImageView) rootView.findViewById(R.id.profile_picture);
-        hallOfFame = (GridView) rootView.findViewById(R.id.halloffame);
         requestRewardsHOFData(adventurerId);
         hallOfFame.setOnItemClickListener(this);
     }
@@ -85,7 +87,8 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.section_profile, container, false);
+        view = inflater.inflate(R.layout.section_profile, container, false);
+        ButterKnife.bind(this, view);
         init();
         Glide.with(this)
                 .load(currentPerson.getImage().getUrl())
@@ -93,9 +96,14 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
                 .into(profilePicture);
 
 
-        return rootView;
+        return view;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
