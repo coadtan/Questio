@@ -144,6 +144,43 @@ public class ZoneActivity extends ActionBarActivity {
             }
         });
 
+        zonetype.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int zoneTypeId = zone.getZoneTypeId();
+                String zoneTypeDetail = "";
+                switch (zoneTypeId) {
+                    case 1:
+                        zoneTypeDetail = "Thai";
+                        break;
+                    case 2:
+                        zoneTypeDetail = "Math";
+                        break;
+                    case 3:
+                        zoneTypeDetail = "Science";
+                        break;
+                    case 4:
+                        zoneTypeDetail = "Social Studies";
+                        break;
+                    case 5:
+                        zoneTypeDetail = "Health";
+                        break;
+                    case 6:
+                        zoneTypeDetail = "English";
+                        break;
+                    case 7:
+                        zoneTypeDetail = "Art";
+                        break;
+                    case 8:
+                        zoneTypeDetail = "Career and Technology";
+                        break;
+                    case 9:
+                        zoneTypeDetail = "Misc.";
+                        break;
+                }
+                Toast.makeText(ZoneActivity.this, "This zone is about " + zoneTypeDetail, Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -208,20 +245,17 @@ public class ZoneActivity extends ActionBarActivity {
     }
 
     private void handleToolbar() {
-
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(0xFFFFFFFF);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("กำลังโหลดข้อมูล");
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-
     }
 
 
