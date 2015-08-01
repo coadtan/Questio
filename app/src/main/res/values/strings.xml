@@ -88,5 +88,15 @@
     <string name="dialog_puzzle_riddle_test_score">10 แต้ม</string>
     <string name="dialog_puzzle_riddle_goback">กลับไปยังหน้าจอภารกิจ</string>
     <string name="filter">Filter</string>
+    <string name="text_head">Head</string>
+    <string name="text_background">Background</string>
+    <string name="text_neck">Neck</string>
+    <string name="text_body">Body</string>
+    <string name="text_left_hand">left Hand</string>
+    <string name="text_right_hand">Right Hand</string>
+    <string name="text_arm">Arm</string>
+    <string name="text_leg">Leg</string>
+    <string name="text_foot">Foot</string>
+    <string name="text_special">Special</string>
 
 </resources>

@@ -40,6 +40,8 @@ dependencies {
     compile files('lib/zbar.jar')
     compile files('libs/RiddleForRetrofit.jar')
     compile files('libs/estimote-sdk-preview.jar')
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.github.sd6352051.niftydialogeffects:niftydialogeffects:1.0.0@aar'
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.google.android.gms:play-services:7.5.0'
     compile 'com.jakewharton:butterknife:7.0.1'

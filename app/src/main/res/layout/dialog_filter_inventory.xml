@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_filter_inventory"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="30dp"
+    android:background="#FFE74C3C"
+    android:orientation="vertical"
+    android:padding="30dp">
+
+    <CheckBox
+        android:id="@+id/filter_type_head"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/text_head"
+        android:textColor="#FFFFFFFF"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/filter_type_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/text_background"
+        android:textColor="#FFFFFFFF"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/filter_type_neck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/text_neck"
+        android:textColor="#FFFFFFFF"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/filter_type_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/text_body"
+        android:textColor="#FFFFFFFF"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/filter_type_handleft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/text_left_hand"
+        android:textColor="#FFFFFFFF"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/filter_type_handright"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/text_right_hand"
+        android:textColor="#FFFFFFFF"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/filter_type_arm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/text_arm"
+        android:textColor="#FFFFFFFF"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/filter_type_leg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/text_leg"
+        android:textColor="#FFFFFFFF"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/filter_type_foot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/text_foot"
+        android:textColor="#FFFFFFFF"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/filter_type_special"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/text_special"
+        android:textColor="#FFFFFFFF"
+        android:textSize="20sp" />
+
+
+</LinearLayout>
