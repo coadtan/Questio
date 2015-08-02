@@ -167,41 +167,41 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
                 mapOfCheck.put("checkFoot", checkFoot.isChecked());
                 mapOfCheck.put("checkSpecial", checkSpecial.isChecked());
                 positionChecker = new Boolean[10];
-                if (itemsInv != null) {
-                    for (Map.Entry<String, Boolean> each : mapOfCheck.entrySet()) {
-                        switch (each.getKey()) {
-                            case "checkHead":
-                                positionChecker[0] = each.getValue();
-                                break;
-                            case "checkBackground":
-                                positionChecker[1] = each.getValue();
-                                break;
-                            case "checkNeck":
-                                positionChecker[2] = each.getValue();
-                                break;
-                            case "checkBody":
-                                positionChecker[3] = each.getValue();
-                                break;
-                            case "checkLeftHand":
-                                positionChecker[4] = each.getValue();
-                                break;
-                            case "checkRightHand":
-                                positionChecker[5] = each.getValue();
-                                break;
-                            case "checkArm":
-                                positionChecker[6] = each.getValue();
-                                break;
-                            case "checkLeg":
-                                positionChecker[7] = each.getValue();
-                                break;
-                            case "checkFoot":
-                                positionChecker[8] = each.getValue();
-                                break;
-                            case "checkSpecial":
-                                positionChecker[9] = each.getValue();
-                                break;
-                        }
+                for (Map.Entry<String, Boolean> each : mapOfCheck.entrySet()) {
+                    switch (each.getKey()) {
+                        case "checkHead":
+                            positionChecker[0] = each.getValue();
+                            break;
+                        case "checkBackground":
+                            positionChecker[1] = each.getValue();
+                            break;
+                        case "checkNeck":
+                            positionChecker[2] = each.getValue();
+                            break;
+                        case "checkBody":
+                            positionChecker[3] = each.getValue();
+                            break;
+                        case "checkLeftHand":
+                            positionChecker[4] = each.getValue();
+                            break;
+                        case "checkRightHand":
+                            positionChecker[5] = each.getValue();
+                            break;
+                        case "checkArm":
+                            positionChecker[6] = each.getValue();
+                            break;
+                        case "checkLeg":
+                            positionChecker[7] = each.getValue();
+                            break;
+                        case "checkFoot":
+                            positionChecker[8] = each.getValue();
+                            break;
+                        case "checkSpecial":
+                            positionChecker[9] = each.getValue();
+                            break;
                     }
+                }
+                if (itemsInv != null) {
                     itemsInvFilterType.clear();
                     itemsInvForShow.clear();
                     for (ItemInInventory each : itemsInv) {

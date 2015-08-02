@@ -5,9 +5,7 @@ import android.content.res.Configuration;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 
-/**
- * Created by coad4u4ever on 01-Apr-15.
- */
+
 public class QuestioApplication extends Application  {
     private static final String LOG_TAG = QuestioApplication.class.getSimpleName();
     private static QuestioApplication singleton;
