@@ -41,12 +41,9 @@ public class Quest {
     @SerializedName("buildingname")
     private String buildingName;
 
+    @SerializedName("rewardid")
+    private String rewardId;
 
-
-
-    public static String getLogTag() {
-        return LOG_TAG;
-    }
 
 
     public int getQuestId() {
@@ -121,21 +118,28 @@ public class Quest {
         this.buildingName = buildingName;
     }
 
+    public String getRewardId() {
+        return rewardId;
+    }
+
+    public void setRewardId(String rewardId) {
+        this.rewardId = rewardId;
+    }
+
     @Override
     public String toString() {
         return "Quest{" +
                 "buildingName='" + buildingName + '\'' +
-                ", floorName='" + floorName + '\'' +
-                ", zoneName='" + zoneName + '\'' +
-                ", diffId=" + diffId +
-                ", zoneId=" + zoneId +
-                ", questTypeId=" + questTypeId +
-                ", questDetails='" + questDetails + '\'' +
-                ", questName='" + questName + '\'' +
                 ", questId=" + questId +
+                ", questName='" + questName + '\'' +
+                ", questDetails='" + questDetails + '\'' +
+                ", questTypeId=" + questTypeId +
+                ", zoneId=" + zoneId +
+                ", zoneName='" + zoneName + '\'' +
+                ", floorName='" + floorName + '\'' +
+                ", rewardId='" + rewardId + '\'' +
                 '}';
     }
-
 
     public static int[] countAttribute(ArrayList<Quest> arrayList) {
         int[] count = new int[3];

@@ -396,4 +396,11 @@ public interface QuestioAPIService {
             @Query("rankid") int rankId,
             Callback<Response> response
     );
+
+    //http://52.74.64.61/api/select_all_reward_by_questid.php?questid=22
+    @GET("/select_all_reward_by_questid.php")
+    void getRewardByQuestId(
+            @Query("questid") int questId,
+            Callback<Reward[]> reward
+    );
 }
