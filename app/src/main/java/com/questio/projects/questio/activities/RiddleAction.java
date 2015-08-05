@@ -192,36 +192,6 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
             if (answer.equalsIgnoreCase(Long.toString(r.getQrCode()))) {
                 riddle.setBackgroundColor(getResources().getColor(R.color.green_quiz_correct));
                 updateQuestStatus(QuestioConstants.QUEST_FINISHED);
-                api.getRewardByQuestId(qid, new Callback<Reward[]>() {
-                    @Override
-                    public void success(Reward[] rewards, Response response) {
-                        if (rewards[0] != null) {
-                            reward = rewards[0];
-                            api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), new Callback<Response>() {
-                                @Override
-                                public void success(Response response, Response response2) {
-                                    int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
-                                    Log.d(LOG_TAG, "Reward count: " + rewardCount);
-                                    if (rewardCount == 0) {
-                                        showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL);
-                                        addRewardHOF(reward.getRewardId(), QuestioConstants.REWARD_RANK_NORMAL);
-                                    }
-                                }
-
-                                @Override
-                                public void failure(RetrofitError error) {
-                                    Log.d(LOG_TAG, "checkRewardData: failure");
-                                }
-                            });
-
-                        }
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-
-                    }
-                });
                 updateScoreToQuestProgress();
                 onQuestFinish();
             } else {
@@ -438,7 +408,7 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
         hint2Btn.setClickable(false);
         hint3Btn.setEnabled(false);
         hint3Btn.setClickable(false);
-        onBackPressed();
+
     }
 
     void showCompleteDialog(int score) {
@@ -456,6 +426,7 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 dialog.cancel();
+                checkRewards();
             }
         });
         dialog.show();
@@ -525,8 +496,46 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 dialog.cancel();
+                onBackPressed();
             }
         });
         dialog.show();
+    }
+
+    void checkRewards(){
+        api.getRewardByQuestId(qid, new Callback<Reward[]>() {
+            @Override
+            public void success(Reward[] rewards, Response response) {
+                if (rewards[0] != null) {
+                    reward = rewards[0];
+                    api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), new Callback<Response>() {
+                        @Override
+                        public void success(Response response, Response response2) {
+                            int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
+                            Log.d(LOG_TAG, "Reward count: " + rewardCount);
+                            if (rewardCount == 0) {
+                                addRewardHOF(reward.getRewardId(), QuestioConstants.REWARD_RANK_NORMAL);
+                                showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL);
+                            } else {
+                                onBackPressed();
+                            }
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+                            Log.d(LOG_TAG, "checkRewardData: failure");
+                        }
+                    });
+
+                } else {
+                    onBackPressed();
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
     }
 }

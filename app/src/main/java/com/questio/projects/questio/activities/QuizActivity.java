@@ -722,6 +722,8 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                                 if (rewardCount == 0) {
                                     showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL);
                                     addRewardHOF(reward.getRewardId(), QuestioConstants.REWARD_RANK_NORMAL);
+                                }else{
+                                    onBackPressed();
                                 }
                             }
 

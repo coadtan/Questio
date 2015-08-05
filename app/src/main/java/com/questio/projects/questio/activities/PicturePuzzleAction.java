@@ -467,8 +467,11 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                             int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
                             Log.d(LOG_TAG, "Reward count: " + rewardCount);
                             if (rewardCount == 0) {
-                                showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL);
                                 addRewardHOF(reward.getRewardId(), QuestioConstants.REWARD_RANK_NORMAL);
+                                showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL);
+
+                            }else{
+                                onBackPressed();
                             }
                         }
 
@@ -478,6 +481,8 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                         }
                     });
 
+                }else{
+                    onBackPressed();
                 }
             }
 
@@ -529,7 +534,6 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
             @Override
             public void onClick(View view) {
                 dialog.cancel();
-                onBackPressed();
             }
         });
         dialog.show();
@@ -599,6 +603,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
             @Override
             public void onClick(View view) {
                 dialog.cancel();
+                onBackPressed();
             }
         });
         dialog.show();
