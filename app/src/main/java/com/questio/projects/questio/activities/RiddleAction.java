@@ -15,12 +15,16 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarConstants;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarScannerActivity;
+import com.questio.projects.questio.models.Reward;
 import com.questio.projects.questio.models.Riddle;
 import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
@@ -30,6 +34,9 @@ import net.sourceforge.zbar.Symbol;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.GrayscaleTransformation;
+import jp.wasabeef.glide.transformations.gpu.BrightnessFilterTransformation;
+import jp.wasabeef.glide.transformations.gpu.SepiaFilterTransformation;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -76,6 +83,7 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
     RestAdapter adapter;
     QuestioAPIService api;
     int ref;
+    Reward reward;
 
     Riddle r;
 
@@ -400,6 +408,7 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
         hint2Btn.setClickable(false);
         hint3Btn.setEnabled(false);
         hint3Btn.setClickable(false);
+
     }
 
     void showCompleteDialog(int score) {
@@ -416,10 +425,117 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
                 dialog.cancel();
+                checkRewards();
             }
         });
         dialog.show();
+    }
+
+    public void addRewardHOF(int rewardId, int rank) {
+        api.addRewards(adventurerId, rewardId, rank, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    void showObtainRewardDialog(int rank) {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.reward_obtain_dialog);
+        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
+        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
+        dialog.setCancelable(true);
+        ImageView rewardPicture = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_picture);
+        TextView tvRewardName = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_name);
+        TextView tvRewardRank = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_rank);
+        Button closeBtn = ButterKnife.findById(dialog, R.id.button_obtain_reward_close);
+
+        String rewardName = reward.getRewardName();
+        tvRewardName.setText(rewardName);
+        String rewardRank = "";
+        if (rank == QuestioConstants.REWARD_RANK_NORMAL) {
+            rewardRank = "ระดับปกติ";
+            Glide.with(this)
+                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(rewardPicture);
+        } else if (rank == QuestioConstants.REWARD_RANK_BRONZE) {
+            rewardRank = "ระดับทองแดง";
+            Glide.with(this)
+                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .bitmapTransform(new SepiaFilterTransformation(this, Glide.get(this).getBitmapPool()))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(rewardPicture);
+        } else if (rank == QuestioConstants.REWARD_RANK_SILVER) {
+            rewardRank = "ระดับเงิน";
+            Glide.with(this)
+                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .bitmapTransform(new GrayscaleTransformation(Glide.get(this).getBitmapPool()))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(rewardPicture);
+        } else if (rank == QuestioConstants.REWARD_RANK_GOLD) {
+            rewardRank = "ระดับทอง";
+            Glide.with(this)
+                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .bitmapTransform(new BrightnessFilterTransformation(this, Glide.get(this).getBitmapPool(), 0.5f))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(rewardPicture);
+        }
+
+        tvRewardRank.setText(rewardRank);
+
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+                onBackPressed();
+            }
+        });
+        dialog.show();
+    }
+
+    void checkRewards(){
+        api.getRewardByQuestId(qid, new Callback<Reward[]>() {
+            @Override
+            public void success(Reward[] rewards, Response response) {
+                if (rewards[0] != null) {
+                    reward = rewards[0];
+                    api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), new Callback<Response>() {
+                        @Override
+                        public void success(Response response, Response response2) {
+                            int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
+                            Log.d(LOG_TAG, "Reward count: " + rewardCount);
+                            if (rewardCount == 0) {
+                                addRewardHOF(reward.getRewardId(), QuestioConstants.REWARD_RANK_NORMAL);
+                                showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL);
+                            } else {
+                                onBackPressed();
+                            }
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+                            Log.d(LOG_TAG, "checkRewardData: failure");
+                        }
+                    });
+
+                } else {
+                    onBackPressed();
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
     }
 }
