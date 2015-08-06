@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:flatui="http://schemas.android.com/apk/res-auto"
     android:id="@+id/inventory_section"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,23 +12,50 @@
         android:layout_gravity="center"
         android:orientation="horizontal">
 
-        <EditText
+        <!--<EditText-->
+        <!--android:id="@+id/inventory_filter_name"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_marginTop="6dp"-->
+        <!--android:layout_weight="8"-->
+        <!--android:hint="@string/filter" />-->
+        <com.cengalabs.flatui.views.FlatEditText
             android:id="@+id/inventory_filter_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginTop="6dp"
+            android:layout_margin="5dp"
             android:layout_weight="8"
-            android:hint="@string/filter" />
+            android:hint="@string/filter"
+            android:textColor="@color/white"
+            flatui:fl_backgroundColor="fl_main"
+            flatui:fl_fontWeight="bold"
+            flatui:fl_textColor="fl_light" />
 
-        <Button
+
+        <!--<Button-->
+        <!--android:id="@+id/inventory_filter_button"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_margin="5dp"-->
+        <!--android:layout_weight="2"-->
+        <!--android:background="@drawable/corners_button"-->
+        <!--android:text="@string/filter"-->
+        <!--android:textAllCaps="false" />-->
+
+        <com.cengalabs.flatui.views.FlatButton
             android:id="@+id/inventory_filter_button"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:layout_weight="2"
-            android:background="@drawable/corners_button"
             android:text="@string/filter"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            flatui:fl_blockButtonEffectHeight="3dp"
+            flatui:fl_textAppearance="fl_none"
+            flatui:fl_touchEffect="fl_ripple" />
+
     </LinearLayout>
 
     <GridView

@@ -16,13 +16,14 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.cengalabs.flatui.FlatUI;
+import com.cengalabs.flatui.views.FlatEditText;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.questio.projects.questio.R;
@@ -55,7 +56,7 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
     @Bind(R.id.inventory)
     GridView inventory;
     @Bind(R.id.inventory_filter_name)
-    EditText inventoryFilterName;
+    FlatEditText inventoryFilterName;
     @Bind(R.id.inventory_filter_button)
     Button inventoryFilterButton;
 
@@ -98,6 +99,8 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
             ViewGroup container,
             Bundle savedInstanceState
     ) {
+        FlatUI.initDefaultValues(getActivity());
+        FlatUI.setDefaultTheme(FlatUI.ORANGE);
         view = inflater.inflate(R.layout.section_inventory, container, false);
         ButterKnife.bind(this, view);
         requestItemInventoryData(adventurerId);

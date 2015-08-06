@@ -55,6 +55,7 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
+    compile 'com.github.eluleci:flatui:3.0.0'
     androidTestCompile('com.android.support.test:runner:0.3') {
         exclude module: 'support-annotations'
     }
