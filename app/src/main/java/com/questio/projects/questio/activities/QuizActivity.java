@@ -154,6 +154,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         Log.d(LOG_TAG, "questid: " + questId + " questName: " + questName);
         SharedPreferences prefs = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
         adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
+        reward = new Reward();
 
         if (questId != null) {
             this.questId = Integer.parseInt(questId);
@@ -712,7 +713,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
             api.getRewardByQuestId(questId, new Callback<Reward[]>() {
                 @Override
                 public void success(Reward[] rewards, Response response) {
-                    if (rewards[0] != null) {
+                    if (rewards != null) {
                         reward = rewards[0];
                         api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), new Callback<Response>() {
                             @Override
@@ -740,7 +741,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
                 @Override
                 public void failure(RetrofitError error) {
-
+                    Log.d(LOG_TAG, "checkRewardData: failure");
                 }
             });
         }
