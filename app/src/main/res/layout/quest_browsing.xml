@@ -16,8 +16,9 @@
         android:background="@color/colorPrimary"
         android:text="แสดง แผนที่"
         android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
     <FrameLayout
         android:id="@+id/quest_browsing_top_frame"
         android:layout_width="match_parent"
@@ -40,8 +41,8 @@
         android:background="@color/colorPrimary"
         android:text="คัดกรอง ภารกิจ"
         android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:id="@+id/place_activity_filter"
