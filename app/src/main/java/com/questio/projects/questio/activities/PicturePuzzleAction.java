@@ -459,7 +459,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         api.getRewardByQuestId(qid, new Callback<Reward[]>() {
             @Override
             public void success(Reward[] rewards, Response response) {
-                if (rewards[0] != null) {
+                if (rewards != null) {
                     reward = rewards[0];
                     api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), new Callback<Response>() {
                         @Override
