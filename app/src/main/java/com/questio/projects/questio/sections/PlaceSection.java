@@ -112,6 +112,7 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
 
     Runnable runnable;
     Handler handler;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -199,6 +200,7 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
+
     public Location getLocation() {
         try {
             locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
@@ -278,15 +280,51 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
                         .setPositiveButton("ยืนยัน!", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(mContext, PlaceActivity.class);
-                                intent.putExtra("place", p);
-                                startActivity(intent);
+                                api.getRewardByPlaceId(p.getPlaceId(), new Callback<Reward[]>() {
+                                    @Override
+                                    public void success(Reward[] rewards, Response response) {
+                                        if (rewards != null) {
+                                            reward = rewards[0];
+                                            api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), new Callback<Response>() {
+                                                @Override
+                                                public void success(Response response, Response response2) {
+                                                    int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
+                                                    Log.d(LOG_TAG, "Reward count: " + rewardCount);
+                                                    if (rewardCount == 0) {
+                                                        showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL, p);
+                                                    } else {
+                                                        Intent intent = new Intent(mContext, PlaceActivity.class);
+                                                        intent.putExtra("place", p);
+                                                        startActivity(intent);
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void failure(RetrofitError error) {
+                                                    Log.d(LOG_TAG, "checkRewardData: failure");
+                                                }
+                                            });
+
+
+                                        } else {
+                                            Intent intent = new Intent(mContext, PlaceActivity.class);
+                                            intent.putExtra("place", p);
+                                            startActivity(intent);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void failure(RetrofitError error) {
+
+                                    }
+                                });
+
                             }
 
                         })
                         .setNegativeButton("ไม่", null)
                         .show();
-            }else{
+            } else {
                 enterPlaceBtn.setVisibility(View.VISIBLE);
                 enterPlaceBtn.setText("ENTER TO " + p.getPlaceName());
                 enterPlaceBtn.setOnClickListener(new View.OnClickListener() {
@@ -304,7 +342,7 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
                                             Log.d(LOG_TAG, "Reward count: " + rewardCount);
                                             if (rewardCount == 0) {
                                                 showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL, p);
-                                            }else{
+                                            } else {
                                                 Intent intent = new Intent(mContext, PlaceActivity.class);
                                                 intent.putExtra("place", p);
                                                 startActivity(intent);
@@ -318,7 +356,7 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
                                     });
 
 
-                            }else{
+                                } else {
                                     Intent intent = new Intent(mContext, PlaceActivity.class);
                                     intent.putExtra("place", p);
                                     startActivity(intent);
