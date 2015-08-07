@@ -90,7 +90,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     long adventurerId;
     Reward reward;
 
-
+    int questStatus = QuestioConstants.QUEST_NOT_STARTED;
     QuestioAPIService api;
     RestAdapter adapter;
 
@@ -101,7 +101,9 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(0xFFFFFFFF);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         pointTV = ButterKnife.findById(toolbar, R.id.toolbar_points);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +114,10 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         String questId;
         String questName;
         String zoneId;
-
+        adapter = new RestAdapter.Builder()
+                .setEndpoint(QuestioConstants.ENDPOINT)
+                .build();
+        api = adapter.create(QuestioAPIService.class);
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if (extras == null) {
@@ -129,23 +134,15 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
             questName = (String) savedInstanceState.getSerializable(QuestioConstants.QUEST_NAME);
             zoneId = (String) savedInstanceState.getSerializable(QuestioConstants.QUEST_ZONE_ID);
         }
-        Log.d(LOG_TAG, "questid: " + questId + " questName: " + questName);
 
         getSupportActionBar().setTitle(questName);
-
-        adapter = new RestAdapter.Builder()
-                .setEndpoint(QuestioConstants.ENDPOINT)
-                .build();
-        api = adapter.create(QuestioAPIService.class);
-
+        assert questId != null;
         requestPicturePuzzleData(Integer.parseInt(questId));
-
         qid = Integer.parseInt(questId);
+        assert zoneId != null;
         zid = Integer.parseInt(zoneId);
-
         SharedPreferences prefs = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
         adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
-
         ref = Integer.parseInt(Integer.toString(qid) + (int) adventurerId);
         getCurrentPoints();
     }
@@ -237,12 +234,12 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
             public void success(PicturePuzzle[] picturePuzzleTemp, Response response) {
                 if (picturePuzzleTemp[0] != null) {
                     pp = picturePuzzleTemp[0];
-
                     Log.d(LOG_TAG, QuestioHelper.getImgLink(pp.getImageUrl()));
                     Glide.with(PicturePuzzleAction.this)
                             .load(QuestioHelper.getImgLink(pp.getImageUrl()))
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(picturePuzzleQuestion);
+                    requestQuestProgress();
                     picturePuzzleShowHintBtn.setOnClickListener(PicturePuzzleAction.this);
                     picturePuzzleAnswer.addTextChangedListener(PicturePuzzleAction.this);
                     topLeft.setOnClickListener(PicturePuzzleAction.this);
@@ -254,7 +251,6 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                     bottomLeft.setOnClickListener(PicturePuzzleAction.this);
                     bottomMiddle.setOnClickListener(PicturePuzzleAction.this);
                     bottomRight.setOnClickListener(PicturePuzzleAction.this);
-                    requestQuestProgress();
                 } else {
                     Log.d(LOG_TAG, "Picture Puzzle is null");
                 }
@@ -278,6 +274,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                     String statusStr = QuestioHelper.getJSONStringValueByTag("statusid", response);
                     int status = Integer.parseInt(statusStr);
                     if (status == QuestioConstants.QUEST_FINISHED) {
+                        questStatus = QuestioConstants.QUEST_FINISHED;
                         topLeft.setVisibility(View.INVISIBLE);
                         topRight.setVisibility(View.INVISIBLE);
                         topMiddle.setVisibility(View.INVISIBLE);
@@ -434,9 +431,11 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
 
     @Override
     public void afterTextChanged(Editable s) {
-        currentAnswer = picturePuzzleAnswer.getText().toString();
-        if (currentAnswer.equalsIgnoreCase(pp.getCorrectAnswer())) {
-            onCorrect();
+        if (questStatus != QuestioConstants.QUEST_FINISHED && questStatus != QuestioConstants.QUEST_FAILED) {
+            currentAnswer = picturePuzzleAnswer.getText().toString();
+            if (currentAnswer.equalsIgnoreCase(pp.getCorrectAnswer())) {
+                onCorrect();
+            }
         }
     }
 
@@ -469,10 +468,8 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                             if (rewardCount == 0) {
                                 addRewardHOF(reward.getRewardId(), QuestioConstants.REWARD_RANK_NORMAL);
                                 showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL);
-
-                            }else{
-                                onBackPressed();
                             }
+                            showCompleteDialog(points);
                         }
 
                         @Override
@@ -481,7 +478,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                         }
                     });
 
-                }else{
+                } else {
                     onBackPressed();
                 }
             }
@@ -491,7 +488,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
 
             }
         });
-        showCompleteDialog(points);
+
     }
 
     private void getCurrentPoints() {
@@ -533,7 +530,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.cancel();
+                dialog.dismiss();
             }
         });
         dialog.show();
@@ -602,7 +599,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.cancel();
+                dialog.dismiss();
                 onBackPressed();
             }
         });
