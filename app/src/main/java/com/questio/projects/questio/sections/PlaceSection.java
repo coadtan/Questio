@@ -2,12 +2,15 @@ package com.questio.projects.questio.sections;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -21,12 +24,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -46,6 +53,8 @@ import com.questio.projects.questio.libraries.AndroidGoogleDirectionAndPlaceLibr
 import com.questio.projects.questio.libraries.zbarscanner.ZBarConstants;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarScannerActivity;
 import com.questio.projects.questio.models.Place;
+import com.questio.projects.questio.models.Reward;
+import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
 import com.questio.projects.questio.utilities.QuestioHelper;
 
@@ -57,6 +66,13 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.GrayscaleTransformation;
+import jp.wasabeef.glide.transformations.gpu.BrightnessFilterTransformation;
+import jp.wasabeef.glide.transformations.gpu.SepiaFilterTransformation;
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class PlaceSection extends Fragment implements LocationListener, GoogleMap.OnCameraChangeListener {
@@ -72,6 +88,8 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
     final float MIN_DISTANCE_CHANGE_FOR_UPDATES = 0;
     double currentLat = 0;
     double currentLng = 0;
+    Reward reward;
+    long adventurerId;
 
     @Bind(R.id.map)
     MapView mMapView;
@@ -88,10 +106,13 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
     Marker mMarker;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
+    QuestioAPIService api;
+    RestAdapter adapter;
 
 
     Runnable runnable;
     Handler handler;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +132,9 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
                 location = null;
             }
         };
+        adapter = new RestAdapter.Builder().setEndpoint(QuestioConstants.ENDPOINT).build();
+        api = adapter.create(QuestioAPIService.class);
+        adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
     }
 
     @Override
@@ -176,6 +200,7 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
+
     public Location getLocation() {
         try {
             locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
@@ -255,27 +280,100 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
                         .setPositiveButton("ยืนยัน!", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(mContext, PlaceActivity.class);
-                                intent.putExtra("place", p);
-                                startActivity(intent);
+                                api.getRewardByPlaceId(p.getPlaceId(), new Callback<Reward[]>() {
+                                    @Override
+                                    public void success(Reward[] rewards, Response response) {
+                                        if (rewards != null) {
+                                            reward = rewards[0];
+                                            api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), new Callback<Response>() {
+                                                @Override
+                                                public void success(Response response, Response response2) {
+                                                    int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
+                                                    Log.d(LOG_TAG, "Reward count: " + rewardCount);
+                                                    if (rewardCount == 0) {
+                                                        showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL, p);
+                                                    } else {
+                                                        Intent intent = new Intent(mContext, PlaceActivity.class);
+                                                        intent.putExtra("place", p);
+                                                        startActivity(intent);
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void failure(RetrofitError error) {
+                                                    Log.d(LOG_TAG, "checkRewardData: failure");
+                                                }
+                                            });
+
+
+                                        } else {
+                                            Intent intent = new Intent(mContext, PlaceActivity.class);
+                                            intent.putExtra("place", p);
+                                            startActivity(intent);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void failure(RetrofitError error) {
+
+                                    }
+                                });
+
                             }
 
                         })
                         .setNegativeButton("ไม่", null)
                         .show();
-            }else{
+            } else {
                 enterPlaceBtn.setVisibility(View.VISIBLE);
                 enterPlaceBtn.setText("ENTER TO " + p.getPlaceName());
                 enterPlaceBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(mContext, PlaceActivity.class);
-                        intent.putExtra("place", p);
-                        startActivity(intent);
+                        api.getRewardByPlaceId(p.getPlaceId(), new Callback<Reward[]>() {
+                            @Override
+                            public void success(Reward[] rewards, Response response) {
+                                if (rewards != null) {
+                                    reward = rewards[0];
+                                    api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), new Callback<Response>() {
+                                        @Override
+                                        public void success(Response response, Response response2) {
+                                            int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
+                                            Log.d(LOG_TAG, "Reward count: " + rewardCount);
+                                            if (rewardCount == 0) {
+                                                showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL, p);
+                                            } else {
+                                                Intent intent = new Intent(mContext, PlaceActivity.class);
+                                                intent.putExtra("place", p);
+                                                startActivity(intent);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void failure(RetrofitError error) {
+                                            Log.d(LOG_TAG, "checkRewardData: failure");
+                                        }
+                                    });
+
+
+                                } else {
+                                    Intent intent = new Intent(mContext, PlaceActivity.class);
+                                    intent.putExtra("place", p);
+                                    startActivity(intent);
+                                }
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+
+                            }
+                        });
+
                     }
                 });
-                handler.postDelayed(runnable, 3*60*60*1000);
+                handler.postDelayed(runnable, 3 * 60 * 60 * 1000);
             }
+
 
         }
     }
@@ -381,5 +479,78 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
         } else if (resultCode == Activity.RESULT_CANCELED) {
             Toast.makeText(getActivity(), "Camera unavailable", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    void showObtainRewardDialog(int rank, final Place p) {
+        final Dialog dialog = new Dialog(mContext);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.reward_obtain_dialog);
+        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
+        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
+        dialog.setCancelable(true);
+        ImageView rewardPicture = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_picture);
+        TextView tvRewardName = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_name);
+        TextView tvRewardRank = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_rank);
+        Button closeBtn = ButterKnife.findById(dialog, R.id.button_obtain_reward_close);
+
+        String rewardName = reward.getRewardName();
+        tvRewardName.setText(rewardName);
+        String rewardRank = "";
+        if (rank == QuestioConstants.REWARD_RANK_NORMAL) {
+            rewardRank = "ระดับปกติ";
+            Glide.with(this)
+                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(rewardPicture);
+        } else if (rank == QuestioConstants.REWARD_RANK_BRONZE) {
+            rewardRank = "ระดับทองแดง";
+            Glide.with(this)
+                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .bitmapTransform(new SepiaFilterTransformation(mContext, Glide.get(mContext).getBitmapPool()))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(rewardPicture);
+        } else if (rank == QuestioConstants.REWARD_RANK_SILVER) {
+            rewardRank = "ระดับเงิน";
+            Glide.with(this)
+                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .bitmapTransform(new GrayscaleTransformation(Glide.get(mContext).getBitmapPool()))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(rewardPicture);
+        } else if (rank == QuestioConstants.REWARD_RANK_GOLD) {
+            rewardRank = "ระดับทอง";
+            Glide.with(this)
+                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .bitmapTransform(new BrightnessFilterTransformation(mContext, Glide.get(mContext).getBitmapPool(), 0.5f))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(rewardPicture);
+        }
+
+        tvRewardRank.setText(rewardRank);
+
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addRewardHOF(reward.getRewardId(), QuestioConstants.REWARD_RANK_NORMAL);
+                Intent intent = new Intent(mContext, PlaceActivity.class);
+                intent.putExtra("place", p);
+                startActivity(intent);
+                dialog.cancel();
+            }
+        });
+        dialog.show();
+    }
+
+    public void addRewardHOF(int rewardId, int rank) {
+        api.addRewards(adventurerId, rewardId, rank, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
     }
 }

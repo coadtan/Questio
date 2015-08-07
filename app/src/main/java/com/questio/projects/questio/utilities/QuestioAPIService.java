@@ -403,4 +403,11 @@ public interface QuestioAPIService {
             @Query("questid") int questId,
             Callback<Reward[]> reward
     );
+
+    //http://52.74.64.61/api/select_all_reward_by_placeid.php?placeid=1
+    @GET("/select_all_reward_by_placeid.php")
+    void getRewardByPlaceId(
+            @Query("placeid") int placeId,
+            Callback<Reward[]> reward
+    );
 }
