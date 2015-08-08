@@ -22,6 +22,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.cengalabs.flatui.FlatUI;
+import com.cengalabs.flatui.views.FlatEditText;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.models.PicturePuzzle;
 import com.questio.projects.questio.models.Reward;
@@ -72,7 +74,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     ImageView bottomRight;
 
     @Bind(R.id.picture_puzzle_answer)
-    EditText picturePuzzleAnswer;
+    FlatEditText picturePuzzleAnswer;
 
     @Bind(R.id.picture_puzzle_showhint_btn)
     ImageButton picturePuzzleShowHintBtn;
@@ -97,6 +99,8 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FlatUI.initDefaultValues(this);
+        FlatUI.setDefaultTheme(FlatUI.ORANGE);
         setContentView(R.layout.puzzle_action);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
@@ -470,7 +474,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                                 addRewardHOF(reward.getRewardId(), QuestioConstants.REWARD_RANK_NORMAL);
                                 showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL);
 
-                            }else{
+                            } else {
                                 onBackPressed();
                             }
                         }
@@ -481,7 +485,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                         }
                     });
 
-                }else{
+                } else {
                     onBackPressed();
                 }
             }
