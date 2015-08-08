@@ -8,7 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +21,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.cengalabs.flatui.FlatUI;
+import com.cengalabs.flatui.views.FlatButton;
+import com.cengalabs.flatui.views.FlatTextView;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarConstants;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarScannerActivity;
@@ -42,35 +45,35 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class RiddleAction extends ActionBarActivity implements View.OnClickListener, Callback<Response> {
+public class RiddleAction extends AppCompatActivity implements View.OnClickListener, Callback<Response> {
     private static final String LOG_TAG = RiddleAction.class.getSimpleName();
 
     @Bind(R.id.app_bar)
     Toolbar toolbar;
 
     @Bind(R.id.riddle_riddle)
-    TextView riddle;
+    FlatTextView riddle;
 
     @Bind(R.id.riddle_hint1Btn)
-    Button hint1Btn;
+    FlatButton hint1Btn;
 
     @Bind(R.id.riddle_hint2Btn)
-    Button hint2Btn;
+    FlatButton hint2Btn;
 
     @Bind(R.id.riddle_hint3Btn)
-    Button hint3Btn;
+    FlatButton hint3Btn;
 
     @Bind(R.id.riddle_scanHere)
     ImageButton scanHere;
 
     @Bind(R.id.riddle_hintReveal1)
-    TextView hintReveal1;
+    FlatTextView hintReveal1;
 
     @Bind(R.id.riddle_hintReveal2)
-    TextView hintReveal2;
+    FlatTextView hintReveal2;
 
     @Bind(R.id.riddle_hintReveal3)
-    TextView hintReveal3;
+    FlatTextView hintReveal3;
 
     @Bind(R.id.toolbar_limit)
     TextView scanTV;
@@ -90,11 +93,15 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FlatUI.initDefaultValues(this);
+        FlatUI.setDefaultTheme(FlatUI.ORANGE);
         setContentView(R.layout.riddle_action);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(0xFFFFFFFF);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -502,7 +509,7 @@ public class RiddleAction extends ActionBarActivity implements View.OnClickListe
         dialog.show();
     }
 
-    void checkRewards(){
+    void checkRewards() {
         api.getRewardByQuestId(qid, new Callback<Reward[]>() {
             @Override
             public void success(Reward[] rewards, Response response) {

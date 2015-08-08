@@ -43,8 +43,9 @@ public class Place implements Serializable {
     @SerializedName("imageurl")
     private String imageUrl;
 
-    @SerializedName("rewardid")
-    private String rewardId;
+    @SerializedName("enter_rewardid")
+    private String enter_RewardId;
+
 
     Context mContext;
 
@@ -135,18 +136,18 @@ public class Place implements Serializable {
         this.imageUrl = imageUrl;
     }
 
-    public String getRewardId() {
-        return rewardId;
+    public String getEnter_RewardId() {
+        return enter_RewardId;
     }
 
-    public void setRewardId(String rewardId) {
-        this.rewardId = rewardId;
+    public void setEnter_RewardId(String enter_RewardId) {
+        this.enter_RewardId = enter_RewardId;
     }
 
     @Override
     public String toString() {
         return "Place{" +
-                "imageUrl='" + imageUrl + '\'' +
+                "enter_RewardId='" + enter_RewardId + '\'' +
                 ", placeId=" + placeId +
                 ", placeName='" + placeName + '\'' +
                 ", placeFullName='" + placeFullName + '\'' +
@@ -156,7 +157,7 @@ public class Place implements Serializable {
                 ", longitude=" + longitude +
                 ", radius=" + radius +
                 ", placeType='" + placeType + '\'' +
-                ", rewardId='" + rewardId + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
 
