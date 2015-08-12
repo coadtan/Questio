@@ -23,6 +23,8 @@ import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
 import com.questio.projects.questio.utilities.QuestioHelper;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -36,7 +38,10 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
     boolean mIntentInProgress;
     boolean mSignInClicked;
     ConnectionResult mConnectionResult;
+
+    @Bind(R.id.sign_in_button)
     SignInButton btnSignIn;
+
     Person currentPerson;
     QuestioAPIService api;
     Long aId;
@@ -45,7 +50,8 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
-        btnSignIn = (SignInButton) findViewById(R.id.sign_in_button);
+        ButterKnife.bind(this);
+//        btnSignIn = (SignInButton) findViewById(R.id.sign_in_button);
         btnSignIn.setOnClickListener(this);
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)

@@ -18,44 +18,44 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <TextView
-                android:id="@+id/dialog_correctanswer_msg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:text="@string/dialog_correctanswer_test_msg"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="25sp" />
-            <TextView
+            <!--<TextView-->
+                <!--android:id="@+id/dialog_correctanswer_msg"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:gravity="center"-->
+                <!--android:text="@string/dialog_correctanswer_test_msg"-->
+                <!--android:textColor="@color/colorPrimaryDark"-->
+                <!--android:textSize="25sp" />-->
+            <!--<TextView-->
 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:text="@string/dialog_correctanswer_msg"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="25sp" />
-            <TextView
-                android:id="@+id/dialog_correctanswer_answer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:text="@string/dialog_correctanswer_testanswer"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="25sp" />
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:gravity="center"-->
+                <!--android:text="@string/dialog_correctanswer_msg"-->
+                <!--android:textColor="@color/colorPrimaryDark"-->
+                <!--android:textSize="25sp" />-->
+            <!--<TextView-->
+                <!--android:id="@+id/dialog_correctanswer_answer"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:gravity="center"-->
+                <!--android:text="@string/dialog_correctanswer_testanswer"-->
+                <!--android:textColor="@color/colorPrimaryDark"-->
+                <!--android:textSize="25sp" />-->
         </LinearLayout>
 
 
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/button_correctanswer_next_question"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/dialog_correctanswer_proceed"/>
-    </LinearLayout>
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+        <!--<Button-->
+            <!--android:id="@+id/button_correctanswer_next_question"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/dialog_correctanswer_proceed"/>-->
+    <!--</LinearLayout>-->
 </LinearLayout>

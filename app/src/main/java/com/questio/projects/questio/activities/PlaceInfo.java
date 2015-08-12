@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
+import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.adepters.NewsListAdapter;
 import com.questio.projects.questio.models.Place;
@@ -126,7 +128,7 @@ public class PlaceInfo extends ActionBarActivity {
                 if (placeNews != null) {
                     ArrayList<PlaceNews> newsList = placeNews;
                     NewsListAdapter adapter = new NewsListAdapter(PlaceInfo.this, newsList);
-                    ListView listView = (ListView) findViewById(R.id.place_list_feed);
+                    ListView listView = ButterKnife.findById(PlaceInfo.this, R.id.place_list_feed);
                     listView.setAdapter(adapter);
                 } else {
                     Log.d(LOG_TAG, "place news is null");
@@ -162,17 +164,36 @@ public class PlaceInfo extends ActionBarActivity {
                     PlaceInfo.this.placeDetail.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            AlertDialog.Builder builder1 = new AlertDialog.Builder(PlaceInfo.this);
-                            builder1.setTitle("ข้อมูลสถานที่");
-                            builder1.setMessage(placeDetail.getPlaceDetails());
-                            builder1.setCancelable(true);
-                            builder1.setNeutralButton("ขอบคุณ",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
+                            final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(PlaceInfo.this);
+                            dialog
+                                    .withTitle("ข้อมูลสถานที่")
+                                    .withTitleColor("#FFFFFF")
+                                    .withDividerColor("#11000000")
+                                    .withMessage(placeDetail.getPlaceDetails())
+                                    .withMessageColor("#FFFFFFFF")
+                                    .withDialogColor("#FFE74C3C")
+                                    .withDuration(300)
+                                    .withEffect(Effectstype.Slidetop)
+                                    .withButton1Text("ขอบคุณ")
+                                    .setButton1Click(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            dialog.dismiss();
                                         }
-                                    });
-                            builder1.show();
+                                    })
+                                    .isCancelableOnTouchOutside(true);
+                            dialog.show();
+//                            AlertDialog.Builder builder1 = new AlertDialog.Builder(PlaceInfo.this);
+//                            builder1.setTitle("ข้อมูลสถานที่");
+//                            builder1.setMessage(placeDetail.getPlaceDetails());
+//                            builder1.setCancelable(true);
+//                            builder1.setNeutralButton("ขอบคุณ",
+//                                    new DialogInterface.OnClickListener() {
+//                                        public void onClick(DialogInterface dialog, int id) {
+//                                            dialog.cancel();
+//                                        }
+//                                    });
+//                            builder1.show();
                         }
                     });
                     Glide.with(PlaceInfo.this)

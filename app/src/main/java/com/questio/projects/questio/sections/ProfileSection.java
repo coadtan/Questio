@@ -25,6 +25,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
+import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.questio.projects.questio.QuestioApplication;
@@ -131,8 +133,8 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
             Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
             dialog.getWindow().setBackgroundDrawable(transparentDrawable);
             dialog.setCancelable(true);
-            TextView TVConfirmName = (TextView) dialog.findViewById(R.id.dialog_confirm_name);
-            ImageView imageViewConfirmPicture = (ImageView) dialog.findViewById(R.id.dialog_confirm_picture);
+            TextView TVConfirmName = ButterKnife.findById(dialog, R.id.dialog_confirm_name);
+            ImageView imageViewConfirmPicture = ButterKnife.findById(dialog, R.id.dialog_confirm_picture);
 
 
             String personName = currentPerson.getDisplayName();
@@ -141,14 +143,14 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(imageViewConfirmPicture);
             TVConfirmName.setText(personName);
-            ImageButton btnNo = (ImageButton) dialog.findViewById(R.id.confirm_no);
+            ImageButton btnNo = ButterKnife.findById(dialog, R.id.confirm_no);
             btnNo.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     dialog.cancel();
                 }
             });
 
-            ImageButton btnYes = (ImageButton) dialog.findViewById(R.id.confirm_yes);
+            ImageButton btnYes = ButterKnife.findById(dialog, R.id.confirm_yes);
             btnYes.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
@@ -188,17 +190,29 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         RewardHOF reward = rewards.get(position);
-        final Dialog dialog = new Dialog(getActivity());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.reward_description_dialog);
-        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
-        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
-        dialog.setCancelable(true);
-        TextView tvRewardName = (TextView) dialog.findViewById(R.id.dialog_reward_name);
-        TextView tvRewardDesc = (TextView) dialog.findViewById(R.id.dialog_reward_desc);
-        TextView tvRewardDate = (TextView) dialog.findViewById(R.id.dialog_reward_datereceived);
-        ImageView rewardImage = (ImageView) dialog.findViewById(R.id.dialog_reward_picture);
-        Button closeBtn = (Button) dialog.findViewById(R.id.button_reward_close);
+        final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(mContext);
+        dialog
+                .withTitle("Reward Description")
+                .withTitleColor("#FFFFFF")
+                .withDividerColor("#11000000")
+                .withMessageColor("#FFFFFFFF")
+                .withDialogColor("#FFE74C3C")
+                .withDuration(300)
+                .withEffect(Effectstype.Slidetop)
+                .withButton1Text("Close")
+                .isCancelableOnTouchOutside(false)
+                .setButton1Click(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                })
+                .setCustomView(R.layout.reward_description_dialog, mContext);
+        TextView tvRewardName = ButterKnife.findById(dialog, R.id.dialog_reward_name);
+        TextView tvRewardDesc = ButterKnife.findById(dialog, R.id.dialog_reward_desc);
+        TextView tvRewardDate = ButterKnife.findById(dialog, R.id.dialog_reward_datereceived);
+        ImageView rewardImage = ButterKnife.findById(dialog, R.id.dialog_reward_picture);
+        //Button closeBtn = ButterKnife.findById(dialog, R.id.button_reward_close);
 
         String rewardName = reward.getRewardName();
         String rewardDesc = reward.getDescription();
@@ -212,12 +226,12 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
         tvRewardDesc.setText(rewardDesc);
         tvRewardDate.setText(rewardDate);
 
-        closeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.cancel();
-            }
-        });
+//        closeBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialog.cancel();
+//            }
+//        });
         dialog.show();
     }
 }

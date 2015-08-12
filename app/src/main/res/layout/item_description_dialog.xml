@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="#FFE74C3C"
     android:orientation="vertical"
     android:padding="20dp">
 
@@ -18,7 +18,7 @@
             android:id="@+id/dialog_item_picture"
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/white"
             android:layout_marginEnd="20dp"
             />
         <LinearLayout
@@ -32,7 +32,7 @@
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
                 android:text="@string/dialog_item_name"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/white"
                 android:textSize="25sp" />
             <TextView
                 android:id="@+id/dialog_item_name"
@@ -41,7 +41,7 @@
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
                 android:text="@string/test_item_name"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/white"
                 android:textSize="25sp" />
             <TextView
 
@@ -50,7 +50,7 @@
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
                 android:text="@string/dialog_item_collection"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/white"
                 android:textSize="25sp" />
             <TextView
                 android:id="@+id/dialog_item_collection"
@@ -59,7 +59,7 @@
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
                 android:text="@string/test_item_collection"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/white"
                 android:textSize="25sp" />
         </LinearLayout>
 
@@ -68,10 +68,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/button_item_close"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/dialog_item_close"/>
+        <!--<Button-->
+            <!--android:id="@+id/button_item_close"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/dialog_item_close"/>-->
     </LinearLayout>
 </LinearLayout>

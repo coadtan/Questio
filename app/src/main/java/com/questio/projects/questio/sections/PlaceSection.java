@@ -34,6 +34,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
+import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -273,13 +275,21 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
                 editor.putInt(QuestioConstants.CURRENT_PLACE, p.getPlaceId());
                 //editor.putLong(QuestioConstants.CURRENT_PLACE_TIMEOUT, QuestioHelper.getTimeNow());
                 editor.apply();
-                new AlertDialog.Builder(mContext)
-                        .setIcon(android.R.drawable.ic_dialog_info)
-                        .setTitle("เข้าสู่ " + p.getPlaceName() + "!")
-                        .setMessage("ยืนยันการเข้าสู่สถานที่แห่งนี้หรือไม่ครับ")
-                        .setPositiveButton("ยืนยัน!", new DialogInterface.OnClickListener() {
+                final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(mContext);
+                dialog
+                        .withTitle("เข้าสู่ " + p.getPlaceName() + "!")
+                        .withIcon(android.R.drawable.ic_dialog_info)
+                        .withTitleColor("#FFFFFF")
+                        .withDividerColor("#11000000")
+                        .withMessage("ยืนยันการเข้าสู่สถานที่แห่งนี้หรือไม่ครับ")
+                        .withMessageColor("#FFFFFFFF")
+                        .withDialogColor("#FFE74C3C")
+                        .withDuration(300)
+                        .withEffect(Effectstype.Slidetop)
+                        .withButton1Text("ยืนยัน!")
+                        .setButton1Click(new View.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                            public void onClick(View view) {
                                 api.getRewardByPlaceId(p.getPlaceId(), new Callback<Reward[]>() {
                                     @Override
                                     public void success(Reward[] rewards, Response response) {
@@ -318,12 +328,68 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
 
                                     }
                                 });
-
                             }
-
                         })
-                        .setNegativeButton("ไม่", null)
-                        .show();
+                        .withButton2Text("ไม่")
+                        .setButton2Click(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .isCancelableOnTouchOutside(true);
+                dialog.show();
+//                new AlertDialog.Builder(mContext)
+//                        .setIcon(android.R.drawable.ic_dialog_info)
+//                        .setTitle("เข้าสู่ " + p.getPlaceName() + "!")
+//                        .setMessage("ยืนยันการเข้าสู่สถานที่แห่งนี้หรือไม่ครับ")
+//                        .setPositiveButton("ยืนยัน!", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                api.getRewardByPlaceId(p.getPlaceId(), new Callback<Reward[]>() {
+//                                    @Override
+//                                    public void success(Reward[] rewards, Response response) {
+//                                        if (rewards != null) {
+//                                            reward = rewards[0];
+//                                            api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), new Callback<Response>() {
+//                                                @Override
+//                                                public void success(Response response, Response response2) {
+//                                                    int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
+//                                                    Log.d(LOG_TAG, "Reward count: " + rewardCount);
+//                                                    if (rewardCount == 0) {
+//                                                        showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL, p);
+//                                                    } else {
+//                                                        Intent intent = new Intent(mContext, PlaceActivity.class);
+//                                                        intent.putExtra("place", p);
+//                                                        startActivity(intent);
+//                                                    }
+//                                                }
+//
+//                                                @Override
+//                                                public void failure(RetrofitError error) {
+//                                                    Log.d(LOG_TAG, "checkRewardData: failure");
+//                                                }
+//                                            });
+//
+//
+//                                        } else {
+//                                            Intent intent = new Intent(mContext, PlaceActivity.class);
+//                                            intent.putExtra("place", p);
+//                                            startActivity(intent);
+//                                        }
+//                                    }
+//
+//                                    @Override
+//                                    public void failure(RetrofitError error) {
+//
+//                                    }
+//                                });
+//
+//                            }
+//
+//                        })
+//                        .setNegativeButton("ไม่", null)
+//                        .show();
             } else {
                 enterPlaceBtn.setVisibility(View.VISIBLE);
                 enterPlaceBtn.setText("ENTER TO " + p.getPlaceName());
@@ -482,16 +548,29 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
     }
 
     void showObtainRewardDialog(int rank, final Place p) {
-        final Dialog dialog = new Dialog(mContext);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.reward_obtain_dialog);
-        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
-        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
-        dialog.setCancelable(true);
+        final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(mContext);
+        dialog
+                .withTitle("Obtain Reward")
+                .withTitleColor("#FFFFFF")
+                .withDividerColor("#11000000")
+                .withMessage("You got reward:")
+                .withMessageColor("#FFFFFFFF")
+                .withDialogColor("#FFE74C3C")
+                .withDuration(300)
+                .withEffect(Effectstype.Slidetop)
+                .withButton1Text("Close")
+                .isCancelableOnTouchOutside(false)
+                .setCustomView(R.layout.reward_obtain_dialog, mContext);
+//        final Dialog dialog = new Dialog(this);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setContentView(R.layout.reward_obtain_dialog);
+//        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
+//        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
+//        dialog.setCancelable(true);
         ImageView rewardPicture = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_picture);
         TextView tvRewardName = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_name);
         TextView tvRewardRank = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_rank);
-        Button closeBtn = ButterKnife.findById(dialog, R.id.button_obtain_reward_close);
+        //Button closeBtn = ButterKnife.findById(dialog, R.id.button_obtain_reward_close);
 
         String rewardName = reward.getRewardName();
         tvRewardName.setText(rewardName);
@@ -527,16 +606,17 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
 
         tvRewardRank.setText(rewardRank);
 
-        closeBtn.setOnClickListener(new View.OnClickListener() {
+        dialog.setButton1Click(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addRewardHOF(reward.getRewardId(), QuestioConstants.REWARD_RANK_NORMAL);
                 Intent intent = new Intent(mContext, PlaceActivity.class);
                 intent.putExtra("place", p);
                 startActivity(intent);
-                dialog.cancel();
+                dialog.dismiss();
             }
         });
+
         dialog.show();
     }
 

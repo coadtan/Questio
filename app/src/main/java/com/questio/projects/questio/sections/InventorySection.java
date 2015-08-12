@@ -275,16 +275,34 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         ItemInInventory item = itemsInvForShow.get(position);
-        final Dialog dialog = new Dialog(getActivity());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.item_description_dialog);
-        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
-        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
-        dialog.setCancelable(true);
-        TextView tvItemName = (TextView) dialog.findViewById(R.id.dialog_item_name);
-        TextView tvItemCollection = (TextView) dialog.findViewById(R.id.dialog_item_collection);
-        ImageView itemImage = (ImageView) dialog.findViewById(R.id.dialog_item_picture);
-        Button closeBtn = (Button) dialog.findViewById(R.id.button_item_close);
+        final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(mContext);
+        dialog
+                .withTitle("Item Description")
+                .withTitleColor("#FFFFFF")
+                .withDividerColor("#11000000")
+                .withMessageColor("#FFFFFFFF")
+                .withDialogColor("#FFE74C3C")
+                .withDuration(300)
+                .withEffect(Effectstype.Slidetop)
+                .withButton1Text("Close")
+                .isCancelableOnTouchOutside(false)
+                .setButton1Click(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                })
+                .setCustomView(R.layout.item_description_dialog, mContext);
+//        final Dialog dialog = new Dialog(getActivity());
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setContentView(R.layout.item_description_dialog);
+//        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
+//        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
+//        dialog.setCancelable(true);
+        TextView tvItemName = ButterKnife.findById(dialog, R.id.dialog_item_name);
+        TextView tvItemCollection = ButterKnife.findById(dialog, R.id.dialog_item_collection);
+        ImageView itemImage = ButterKnife.findById(dialog, R.id.dialog_item_picture);
+//        Button closeBtn = (Button) dialog.findViewById(R.id.button_item_close);
 
         String itemName = item.getItemName();
         String itemCollection = item.getItemCollection();
@@ -296,12 +314,12 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
         tvItemName.setText(itemName);
         tvItemCollection.setText(itemCollection);
 
-        closeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.cancel();
-            }
-        });
+//        closeBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialog.cancel();
+//            }
+//        });
         dialog.show();
     }
 

@@ -22,6 +22,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
+import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.models.PicturePuzzle;
 import com.questio.projects.questio.models.Reward;
@@ -517,22 +519,39 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     }
 
     void showCompleteDialog(int score) {
-        final Dialog dialog = new Dialog(PicturePuzzleAction.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.quest_finished_puzzle_dialog);
-        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
-        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
-        dialog.setCancelable(true);
-        TextView puzzleScoreTV = (TextView) dialog.findViewById(R.id.dialog_puzzle_score);
-        Button goBack = (Button) dialog.findViewById(R.id.button_puzzle_goback);
-        String puzzleScore = Integer.toString(score) + " แต้ม";
-        puzzleScoreTV.setText(puzzleScore);
-        goBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
+        final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(this);
+        dialog
+                .withTitle("Puzzle Complete")
+                .withTitleColor("#FFFFFF")
+                .withDividerColor("#11000000")
+                .withMessageColor("#FFFFFFFF")
+                .withDialogColor("#FFE74C3C")
+                .withDuration(300)
+                .withEffect(Effectstype.Slidetop)
+                .withButton1Text("Close")
+                .setButton1Click(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                })
+                .isCancelableOnTouchOutside(false);
+//        final Dialog dialog = new Dialog(PicturePuzzleAction.this);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setContentView(R.layout.quest_finished_puzzle_dialog);
+//        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
+//        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
+//        dialog.setCancelable(true);
+//        TextView puzzleScoreTV = (TextView) dialog.findViewById(R.id.dialog_puzzle_score);
+        //Button goBack = (Button) dialog.findViewById(R.id.button_puzzle_goback);
+        String puzzleScore = "คุณได้รับ " + Integer.toString(score) + " แต้ม";
+        dialog.withMessage(puzzleScore);
+//        goBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialog.dismiss();
+//            }
+//        });
         dialog.show();
     }
 
@@ -551,16 +570,29 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     }
 
     void showObtainRewardDialog(int rank) {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.reward_obtain_dialog);
-        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
-        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
-        dialog.setCancelable(true);
+        final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(this);
+        dialog
+                .withTitle("Obtain Reward")
+                .withTitleColor("#FFFFFF")
+                .withDividerColor("#11000000")
+                .withMessage("You got reward:")
+                .withMessageColor("#FFFFFFFF")
+                .withDialogColor("#FFE74C3C")
+                .withDuration(300)
+                .withEffect(Effectstype.Slidetop)
+                .withButton1Text("Close")
+                .isCancelableOnTouchOutside(false)
+                .setCustomView(R.layout.reward_obtain_dialog, this);
+//        final Dialog dialog = new Dialog(this);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setContentView(R.layout.reward_obtain_dialog);
+//        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
+//        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
+//        dialog.setCancelable(true);
         ImageView rewardPicture = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_picture);
         TextView tvRewardName = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_name);
         TextView tvRewardRank = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_rank);
-        Button closeBtn = ButterKnife.findById(dialog, R.id.button_obtain_reward_close);
+        //Button closeBtn = ButterKnife.findById(dialog, R.id.button_obtain_reward_close);
 
         String rewardName = reward.getRewardName();
         tvRewardName.setText(rewardName);
@@ -596,13 +628,14 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
 
         tvRewardRank.setText(rewardRank);
 
-        closeBtn.setOnClickListener(new View.OnClickListener() {
+        dialog.setButton1Click(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
                 onBackPressed();
             }
         });
+
         dialog.show();
     }
 }
