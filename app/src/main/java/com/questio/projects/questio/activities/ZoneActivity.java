@@ -26,7 +26,10 @@ import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.adepters.QuestInActionAdapter;
+import com.questio.projects.questio.models.ExplorerProgress;
 import com.questio.projects.questio.models.Item;
+import com.questio.projects.questio.models.Place;
+import com.questio.projects.questio.models.PlaceProgress;
 import com.questio.projects.questio.models.Quest;
 import com.questio.projects.questio.models.QuestStatusAndScore;
 import com.questio.projects.questio.models.Reward;
@@ -95,6 +98,9 @@ public class ZoneActivity extends ActionBarActivity {
     QuestInActionAdapter adapterQuestList = null;
     Item item;
     Reward reward;
+    Reward exploreReward;
+    int exploreCount;
+    int zoneCount;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -135,9 +141,9 @@ public class ZoneActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TextView questId = ButterKnife.findById(view, R.id.questid);
-                TextView questName = ButterKnife.findById(view,R.id.questname);
-                TextView questTypeInvisible = ButterKnife.findById(view,R.id.questTypeInvisible);
-                TextView zoneId = ButterKnife.findById(view,R.id.quest_zoneId);
+                TextView questName = ButterKnife.findById(view, R.id.questname);
+                TextView questTypeInvisible = ButterKnife.findById(view, R.id.questTypeInvisible);
+                TextView zoneId = ButterKnife.findById(view, R.id.quest_zoneId);
                 String questIdForIntent = questId.getText().toString();
                 String questNameForIntent = questName.getText().toString();
                 String zoneIdForIntent = zoneId.getText().toString();
@@ -218,6 +224,8 @@ public class ZoneActivity extends ActionBarActivity {
                 Toast.makeText(ZoneActivity.this, "This zone is about " + zoneTypeDetail, Toast.LENGTH_SHORT).show();
             }
         });
+
+        updateExploreProgress();
 
     }
 
@@ -446,7 +454,7 @@ public class ZoneActivity extends ActionBarActivity {
                                     Log.d(LOG_TAG, "Reward count: " + rewardCount);
                                     if (rewardCount == 0) {
                                         int rank = calculateZoneReward();
-                                        showObtainRewardDialog(rank);
+                                        showObtainRewardDialog(reward, rank);
                                         addRewardHOF(reward.getRewardId(), rank);
                                     }
                                 }
@@ -516,7 +524,7 @@ public class ZoneActivity extends ActionBarActivity {
         dialog.show();
     }
 
-    void showObtainRewardDialog(int rank) {
+    void showObtainRewardDialog(Reward reward, int rank) {
         final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(this);
         dialog
                 .withTitle("Obtain Reward")
@@ -612,4 +620,141 @@ public class ZoneActivity extends ActionBarActivity {
             }
         });
     }
+
+    public void updateExploreProgress(){
+        api.getAllPlaceByZoneId(zoneId, new Callback<Place[]>() {
+            @Override
+            public void success(Place[] places, Response response) {
+                if(places != null){
+                    final Place p = places[0];
+                        api.getExplorerProgressByAdventurerIdPlaceIdAndZoneId(adventurerId, p.getPlaceId(), zoneId, new Callback<ExplorerProgress[]>() {
+                            @Override
+                            public void success(ExplorerProgress[] explorerProgresses, Response response) {
+                                if (explorerProgresses != null) {
+                                    ExplorerProgress ep = explorerProgresses[0];
+                                    if (ep.getIsEntered() == 0) {
+                                        api.updateExplorerProgressByAdventurerIdPlaceIdAndZoneId(adventurerId, p.getPlaceId(), zoneId, new Callback<Response>() {
+                                            @Override
+                                            public void success(Response response, Response response2) {
+
+                                            }
+
+                                            @Override
+                                            public void failure(RetrofitError error) {
+
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+
+                            }
+                        });
+
+
+
+
+                    api.getCountExplorerProgressByAdventurerIdAndPlaceId(adventurerId, p.getPlaceId(), new Callback<Response>() {
+                        @Override
+                        public void success(Response response, Response response2) {
+                            exploreCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("explorecount", response));
+                            Log.d(LOG_TAG, "Explorecount = " + Integer.toString(exploreCount));
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+
+                        }
+                    });
+                    api.getCountZoneByPlaceId(p.getPlaceId(), new Callback<Response>() {
+                        @Override
+                        public void success(Response response, Response response2) {
+                            zoneCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("zonecount", response));
+                            Log.d(LOG_TAG, "Zonecount = " + Integer.toString(zoneCount));
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+
+                        }
+                    });
+                    api.getAllExploreRewardByPlaceId(p.getPlaceId(), new Callback<Reward[]>() {
+                        @Override
+                        public void success(Reward[] rewards, Response response) {
+                            if(rewards != null){
+                                Log.d(LOG_TAG, "explorer reward - success");
+                                exploreReward = rewards[0];
+                                Log.d(LOG_TAG,exploreReward.toString());
+                                if (exploreCount == zoneCount) {
+                                    api.getAllPlaceProgressByAdventurerIdAndPlaceId(adventurerId, p.getPlaceId(), new Callback<PlaceProgress[]>() {
+                                        @Override
+                                        public void success(PlaceProgress[] placeProgresses, Response response) {
+                                            if (placeProgresses != null) {
+                                                Log.d(LOG_TAG, "PlaceProgress - success");
+                                                PlaceProgress pp = placeProgresses[0];
+                                                if (pp.getQuestStatus() != QuestioConstants.QUEST_FINISHED) {
+                                                    api.getCountHOFByAdventurerIdAndRewardId(adventurerId, exploreReward.getRewardId(), new Callback<Response>() {
+                                                        @Override
+                                                        public void success(Response response, Response response2) {
+                                                            int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
+                                                            Log.d(LOG_TAG, "Reward count: " + rewardCount);
+                                                            if (rewardCount == 0) {
+                                                                addRewardHOF(exploreReward.getRewardId(), QuestioConstants.REWARD_RANK_NORMAL);
+                                                                showObtainRewardDialog(exploreReward, QuestioConstants.REWARD_RANK_NORMAL);
+                                                                api.updatePlaceProgressByAdventurerIdAndPlaceId(adventurerId, p.getPlaceId(), new Callback<Response>() {
+                                                                    @Override
+                                                                    public void success(Response response, Response response2) {
+
+                                                                    }
+
+                                                                    @Override
+                                                                    public void failure(RetrofitError error) {
+
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void failure(RetrofitError error) {
+
+                                                        }
+                                                    });
+                                                }
+                                            } else {
+                                                Log.d(LOG_TAG, "PlaceProgress - null");
+                                            }
+                                        }
+
+                                        @Override
+                                        public void failure(RetrofitError error) {
+                                            Log.d(LOG_TAG, "PlaceProgress - fail");
+                                        }
+                                    });
+                                }
+                            }else{
+                                Log.d(LOG_TAG, "explorer reward - null");
+                            }
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+                            Log.d(LOG_TAG, "explorer reward - fail");
+                        }
+                    });
+
+
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
 }
