@@ -56,6 +56,7 @@ import com.questio.projects.questio.libraries.zbarscanner.ZBarConstants;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarScannerActivity;
 import com.questio.projects.questio.models.Place;
 import com.questio.projects.questio.models.Reward;
+import com.questio.projects.questio.models.Zone;
 import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
 import com.questio.projects.questio.utilities.QuestioHelper;
@@ -303,9 +304,7 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
                                                     if (rewardCount == 0) {
                                                         showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL, p);
                                                     } else {
-                                                        Intent intent = new Intent(mContext, PlaceActivity.class);
-                                                        intent.putExtra("place", p);
-                                                        startActivity(intent);
+                                                        insertExplorerProgress(p);
                                                     }
                                                 }
 
@@ -317,9 +316,7 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
 
 
                                         } else {
-                                            Intent intent = new Intent(mContext, PlaceActivity.class);
-                                            intent.putExtra("place", p);
-                                            startActivity(intent);
+                                            insertExplorerProgress(p);
                                         }
                                     }
 
@@ -409,9 +406,7 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
                                             if (rewardCount == 0) {
                                                 showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL, p);
                                             } else {
-                                                Intent intent = new Intent(mContext, PlaceActivity.class);
-                                                intent.putExtra("place", p);
-                                                startActivity(intent);
+                                                insertExplorerProgress(p);
                                             }
                                         }
 
@@ -423,9 +418,7 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
 
 
                                 } else {
-                                    Intent intent = new Intent(mContext, PlaceActivity.class);
-                                    intent.putExtra("place", p);
-                                    startActivity(intent);
+                                    insertExplorerProgress(p);
                                 }
                             }
 
@@ -610,9 +603,7 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
             @Override
             public void onClick(View view) {
                 addRewardHOF(reward.getRewardId(), QuestioConstants.REWARD_RANK_NORMAL);
-                Intent intent = new Intent(mContext, PlaceActivity.class);
-                intent.putExtra("place", p);
-                startActivity(intent);
+                insertExplorerProgress(p);
                 dialog.dismiss();
             }
         });
@@ -633,4 +624,48 @@ public class PlaceSection extends Fragment implements LocationListener, GoogleMa
             }
         });
     }
+
+    public void insertExplorerProgress(final Place p){
+        api.addPlaceProgress(adventurerId, p.getPlaceId(), new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+        api.getZoneByPlaceId(p.getPlaceId(), new Callback<ArrayList<Zone>>() {
+            @Override
+            public void success(ArrayList<Zone> zones, Response response) {
+                if(!zones.isEmpty()){
+                    for(Zone z: zones){
+                        api.addExplorerProgress(adventurerId, p.getPlaceId(), z.getZoneId(), new Callback<Response>() {
+                            @Override
+                            public void success(Response response, Response response2) {
+
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+
+                            }
+                        });
+                    }
+
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+        Intent intent = new Intent(mContext, PlaceActivity.class);
+        intent.putExtra("place", p);
+        startActivity(intent);
+    }
+
 }
