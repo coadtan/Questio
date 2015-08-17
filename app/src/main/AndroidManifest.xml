@@ -52,7 +52,7 @@
         </activity>
         <activity android:name=".activities.FloorActivity" />
         <activity android:name=".libraries.zbarscanner.ZBarScannerActivity" />
-
+        <activity android:name=".activities.InventoryActivity" />
         <service
             android:name="com.estimote.sdk.service.BeaconService"
             android:exported="false" />

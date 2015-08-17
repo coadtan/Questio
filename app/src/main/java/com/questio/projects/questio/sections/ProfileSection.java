@@ -31,6 +31,7 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.questio.projects.questio.QuestioApplication;
 import com.questio.projects.questio.R;
+import com.questio.projects.questio.activities.InventoryActivity;
 import com.questio.projects.questio.activities.LoginActivity;
 import com.questio.projects.questio.adepters.RewardsAdapter;
 import com.questio.projects.questio.models.RewardHOF;
@@ -41,6 +42,7 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -51,6 +53,9 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
     Context mContext;
     @Bind(R.id.profile_picture)
     ImageView profilePicture;
+
+    @Bind(R.id.profile_inventory)
+    ImageButton profileInventory;
 
     @Bind(R.id.halloffame)
     GridView hallOfFame;
@@ -233,5 +238,11 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
 //            }
 //        });
         dialog.show();
+    }
+
+    @OnClick(R.id.profile_inventory)
+    void onClick() {
+        Intent intent = new Intent(getActivity(), InventoryActivity.class);
+        startActivity(intent);
     }
 }
