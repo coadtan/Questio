@@ -101,6 +101,8 @@ public class ZoneActivity extends ActionBarActivity {
     Reward exploreReward;
     int exploreCount;
     int zoneCount;
+    Place place;
+    PlaceProgress placeProgress;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -134,9 +136,9 @@ public class ZoneActivity extends ActionBarActivity {
 
         zoneId = zoneIdFromQRCode;
         Log.d(LOG_TAG, "zoneIdFromQRCode is " + zoneIdFromQRCode);
+        getPlace();
         requestZoneData(zoneIdFromQRCode);
         requestQuestData(zoneIdFromQRCode);
-
         questListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -224,8 +226,6 @@ public class ZoneActivity extends ActionBarActivity {
                 Toast.makeText(ZoneActivity.this, "This zone is about " + zoneTypeDetail, Toast.LENGTH_SHORT).show();
             }
         });
-
-        updateExploreProgress();
 
     }
 
@@ -621,133 +621,60 @@ public class ZoneActivity extends ActionBarActivity {
         });
     }
 
-    public void updateExploreProgress(){
-        api.getAllPlaceByZoneId(zoneId, new Callback<Place[]>() {
+    public void updateExploreProgress(final Place p) {
+        api.getExplorerProgressByAdventurerIdPlaceIdAndZoneId(adventurerId, p.getPlaceId(), zoneId, new Callback<ExplorerProgress[]>() {
             @Override
-            public void success(Place[] places, Response response) {
-                if(places != null){
-                    final Place p = places[0];
-                        api.getExplorerProgressByAdventurerIdPlaceIdAndZoneId(adventurerId, p.getPlaceId(), zoneId, new Callback<ExplorerProgress[]>() {
+            public void success(ExplorerProgress[] explorerProgresses, Response response) {
+                if (explorerProgresses != null) {
+                    ExplorerProgress ep = explorerProgresses[0];
+                    if (ep.getIsEntered() == 0) {
+                        api.updateExplorerProgressByAdventurerIdPlaceIdAndZoneId(adventurerId, p.getPlaceId(), zoneId, new Callback<Response>() {
                             @Override
-                            public void success(ExplorerProgress[] explorerProgresses, Response response) {
-                                if (explorerProgresses != null) {
-                                    ExplorerProgress ep = explorerProgresses[0];
-                                    if (ep.getIsEntered() == 0) {
-                                        api.updateExplorerProgressByAdventurerIdPlaceIdAndZoneId(adventurerId, p.getPlaceId(), zoneId, new Callback<Response>() {
-                                            @Override
-                                            public void success(Response response, Response response2) {
-
-                                            }
-
-                                            @Override
-                                            public void failure(RetrofitError error) {
-
-                                            }
-                                        });
-                                    }
-                                }
+                            public void success(Response response, Response response2) {
+                                Log.d(LOG_TAG, "Update Explore Progress Success");
+                                getCountProgress(place);
                             }
 
                             @Override
                             public void failure(RetrofitError error) {
-
+                                Log.d(LOG_TAG, "Update Explore Progress Fail");
                             }
                         });
-
-
-
-
-                    api.getCountExplorerProgressByAdventurerIdAndPlaceId(adventurerId, p.getPlaceId(), new Callback<Response>() {
-                        @Override
-                        public void success(Response response, Response response2) {
-                            exploreCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("explorecount", response));
-                            Log.d(LOG_TAG, "Explorecount = " + Integer.toString(exploreCount));
-                        }
-
-                        @Override
-                        public void failure(RetrofitError error) {
-
-                        }
-                    });
-                    api.getCountZoneByPlaceId(p.getPlaceId(), new Callback<Response>() {
-                        @Override
-                        public void success(Response response, Response response2) {
-                            zoneCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("zonecount", response));
-                            Log.d(LOG_TAG, "Zonecount = " + Integer.toString(zoneCount));
-                        }
-
-                        @Override
-                        public void failure(RetrofitError error) {
-
-                        }
-                    });
-                    api.getAllExploreRewardByPlaceId(p.getPlaceId(), new Callback<Reward[]>() {
-                        @Override
-                        public void success(Reward[] rewards, Response response) {
-                            if(rewards != null){
-                                Log.d(LOG_TAG, "explorer reward - success");
-                                exploreReward = rewards[0];
-                                Log.d(LOG_TAG,exploreReward.toString());
-                                if (exploreCount == zoneCount) {
-                                    api.getAllPlaceProgressByAdventurerIdAndPlaceId(adventurerId, p.getPlaceId(), new Callback<PlaceProgress[]>() {
-                                        @Override
-                                        public void success(PlaceProgress[] placeProgresses, Response response) {
-                                            if (placeProgresses != null) {
-                                                Log.d(LOG_TAG, "PlaceProgress - success");
-                                                PlaceProgress pp = placeProgresses[0];
-                                                if (pp.getQuestStatus() != QuestioConstants.QUEST_FINISHED) {
-                                                    api.getCountHOFByAdventurerIdAndRewardId(adventurerId, exploreReward.getRewardId(), new Callback<Response>() {
-                                                        @Override
-                                                        public void success(Response response, Response response2) {
-                                                            int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
-                                                            Log.d(LOG_TAG, "Reward count: " + rewardCount);
-                                                            if (rewardCount == 0) {
-                                                                addRewardHOF(exploreReward.getRewardId(), QuestioConstants.REWARD_RANK_NORMAL);
-                                                                showObtainRewardDialog(exploreReward, QuestioConstants.REWARD_RANK_NORMAL);
-                                                                api.updatePlaceProgressByAdventurerIdAndPlaceId(adventurerId, p.getPlaceId(), new Callback<Response>() {
-                                                                    @Override
-                                                                    public void success(Response response, Response response2) {
-
-                                                                    }
-
-                                                                    @Override
-                                                                    public void failure(RetrofitError error) {
-
-                                                                    }
-                                                                });
-                                                            }
-                                                        }
-
-                                                        @Override
-                                                        public void failure(RetrofitError error) {
-
-                                                        }
-                                                    });
-                                                }
-                                            } else {
-                                                Log.d(LOG_TAG, "PlaceProgress - null");
-                                            }
-                                        }
-
-                                        @Override
-                                        public void failure(RetrofitError error) {
-                                            Log.d(LOG_TAG, "PlaceProgress - fail");
-                                        }
-                                    });
-                                }
-                            }else{
-                                Log.d(LOG_TAG, "explorer reward - null");
-                            }
-                        }
-
-                        @Override
-                        public void failure(RetrofitError error) {
-                            Log.d(LOG_TAG, "explorer reward - fail");
-                        }
-                    });
-
-
+                    }
+                }else{
+                    Log.d(LOG_TAG, "Explore Progress Null");
                 }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(LOG_TAG, "Get Explore Progress Fail");
+            }
+        });
+
+    }
+
+    public void getCountProgress(final Place p){
+        api.getCountExplorerProgressByAdventurerIdAndPlaceId(adventurerId, p.getPlaceId(), new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                exploreCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("explorecount", response));
+                Log.d(LOG_TAG, "Explorecount = " + Integer.toString(exploreCount));
+                api.getCountZoneByPlaceId(p.getPlaceId(), new Callback<Response>() {
+                    @Override
+                    public void success(Response response, Response response2) {
+                        zoneCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("zonecount", response));
+                        Log.d(LOG_TAG, "Zonecount = " + Integer.toString(zoneCount));
+                        if(exploreCount == zoneCount){
+                            getPlaceProgress(p);
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
             }
 
             @Override
@@ -756,5 +683,110 @@ public class ZoneActivity extends ActionBarActivity {
             }
         });
     }
+
+    public void getPlace(){
+        api.getAllPlaceByZoneId(zoneId, new Callback<Place[]>() {
+            @Override
+            public void success(Place[] places, Response response) {
+                if (places != null) {
+                    Log.d(LOG_TAG, "place get success");
+                    place = places[0];
+                    updateExploreProgress(place);
+                }else{
+                    Log.d(LOG_TAG, "place null");
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(LOG_TAG, "place failed");
+            }
+        });
+    }
+
+    public void getExploreReward(final Place p){
+        api.getAllExploreRewardByPlaceId(p.getPlaceId(), new Callback<Reward[]>() {
+            @Override
+            public void success(Reward[] rewards, Response response) {
+                if (rewards != null) {
+                    Log.d(LOG_TAG, "explorer reward - success");
+                    exploreReward = rewards[0];
+                    Log.d(LOG_TAG, exploreReward.toString());
+                    addExplorerReward(p);
+
+                } else {
+                    Log.d(LOG_TAG, "explorer reward - null");
+                }
+            }
+
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(LOG_TAG, "explorer reward - fail");
+            }
+        });
+    }
+
+    public void addExplorerReward(final Place p){
+                if (placeProgress.getQuestStatus() != QuestioConstants.QUEST_FINISHED) {
+                    api.getCountHOFByAdventurerIdAndRewardId(adventurerId, exploreReward.getRewardId(), new Callback<Response>() {
+                        @Override
+                        public void success(Response response, Response response2) {
+                            int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
+                            Log.d(LOG_TAG, "Reward count: " + rewardCount);
+                            if (rewardCount == 0) {
+                                addRewardHOF(exploreReward.getRewardId(), QuestioConstants.REWARD_RANK_NORMAL);
+                                showObtainRewardDialog(exploreReward, QuestioConstants.REWARD_RANK_NORMAL);
+                                api.updatePlaceProgressByAdventurerIdAndPlaceId(adventurerId, p.getPlaceId(), new Callback<Response>() {
+                                    @Override
+                                    public void success(Response response, Response response2) {
+
+                                    }
+
+                                    @Override
+                                    public void failure(RetrofitError error) {
+
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+
+                        }
+                    });
+                }
+
+            }
+
+
+
+
+
+    public void getPlaceProgress(final Place p) {
+        api.getAllPlaceProgressByAdventurerIdAndPlaceId(adventurerId, p.getPlaceId(), new Callback<PlaceProgress[]>() {
+
+                    @Override
+                    public void success(PlaceProgress[] placeProgresses, Response response) {
+                        if (placeProgresses != null) {
+                            Log.d(LOG_TAG, "PlaceProgress - success");
+                            placeProgress = placeProgresses[0];
+                            getExploreReward(p);
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.d(LOG_TAG, "PlaceProgress - fail");
+                    }
+
+
+                }
+        );
+    }
+
+
+
 
 }
