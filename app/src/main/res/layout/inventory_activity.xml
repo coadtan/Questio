@@ -48,20 +48,21 @@
                 android:background="@drawable/textview_search_corner"
                 android:hint="@string/filter"
                 android:paddingBottom="10dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="10dp"
+                android:paddingEnd="10dp"
+                android:paddingStart="15dp"
                 android:paddingTop="10dp"
                 android:textColorHint="@color/grey_500"
                 android:textSize="20sp" />
 
             <ImageButton
-                android:id="@+id/button1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_margin="10dp"
-                android:text="Button" />
+                android:id="@+id/inventory_filter_button2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignBottom="@+id/inventory_filter_name2"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_filter" />
 
         </RelativeLayout>
 

@@ -29,7 +29,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyD4aHDODbX7CxabLM8Av6Fgmw2GIzhheHQ" />
+            android:value="AIzaSyC32SIKa3xbeyLFSEP9vgRklXLdyZ1igCc" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -59,7 +59,7 @@
     </application>
 
 </manifest><!--
-coad : key for pc: AIzaSyBCs14O9VYKFPVrmtI7VmbKUQcj1PPXR1g
+coad : key for pc: AIzaSyC32SIKa3xbeyLFSEP9vgRklXLdyZ1igCc
 coad : key for notebook windows 10: AIzaSyAcT2dXFVhKPJcPZCOTbzrOzKoUz3xU0Vw
 ningsama key for notebook: AIzaSyD4aHDODbX7CxabLM8Av6Fgmw2GIzhheHQ
 parin-key: AIzaSyBzW5I7dfACRvqQo9C1Vx4jVlxaCEghSH0
