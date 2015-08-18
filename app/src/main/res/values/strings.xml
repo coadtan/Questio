@@ -89,7 +89,7 @@
     <string name="dialog_puzzle_riddle_score">คะแนนที่ได้รับ</string>
     <string name="dialog_puzzle_riddle_test_score">10 แต้ม</string>
     <string name="dialog_puzzle_riddle_goback">กลับไปยังหน้าจอภารกิจ</string>
-    <string name="filter">Filter</string>
+    <string name="filter">Start typing an item name</string>
     <string name="text_head">Head</string>
     <string name="text_background">Background</string>
     <string name="text_neck">Neck</string>
@@ -101,5 +101,6 @@
     <string name="text_foot">Foot</string>
     <string name="text_special">Special</string>
     <string name="touch_here_to_scan">touch here to scan qr code</string>
+    <string name="inventory_header">Inventory</string>
 
 </resources>
