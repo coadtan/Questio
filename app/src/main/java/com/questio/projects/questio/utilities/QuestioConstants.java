@@ -35,4 +35,6 @@ public class QuestioConstants {
     public static final int REWARD_RANK_BRONZE = 2;
     public static final int REWARD_RANK_SILVER = 3;
     public static final int REWARD_RANK_GOLD = 4;
+    public static final int LOCATION_INTERVAL_TIME_IN_MILLISEC = 5000;
+    public static final String LOCATION_UPDATE_ACTION = "location.update";
 }
