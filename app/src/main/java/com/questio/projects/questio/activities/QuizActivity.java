@@ -18,6 +18,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
+import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.models.Quiz;
 import com.questio.projects.questio.models.QuizProgress;
@@ -396,7 +398,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
         dialog.getWindow().setBackgroundDrawable(transparentDrawable);
         dialog.setCancelable(true);
-        TextView answerTV = (TextView) dialog.findViewById(R.id.confirm_answer);
+        TextView answerTV = ButterKnife.findById(dialog, R.id.confirm_answer);
         switch (choiceSelected) {
             case 1:
                 answerTV.setText(q.getChoiceA());
@@ -411,14 +413,14 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 answerTV.setText(q.getChoiceD());
                 break;
         }
-        ImageButton btnNo = (ImageButton) dialog.findViewById(R.id.confirm_no);
+        ImageButton btnNo = ButterKnife.findById(dialog, R.id.confirm_no);
         btnNo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 dialog.cancel();
             }
         });
 
-        ImageButton btnYes = (ImageButton) dialog.findViewById(R.id.confirm_yes);
+        ImageButton btnYes = ButterKnife.findById(dialog, R.id.confirm_yes);
         btnYes.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
@@ -857,45 +859,55 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     void showCorrectAnswer(final int seqId, boolean isCorrect) {
-        final Dialog dialog = new Dialog(QuizActivity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.correct_answer_dialog);
-        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
-        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
-        dialog.setCancelable(true);
-        TextView correctMsg = (TextView) dialog.findViewById(R.id.dialog_correctanswer_msg);
-        TextView correctAns = (TextView) dialog.findViewById(R.id.dialog_correctanswer_answer);
+        final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(this);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setContentView(R.layout.correct_answer_dialog);
+//        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
+//        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
+//        dialog.setCancelable(true);
+        dialog
+                .withTitleColor("#FFFFFF")
+                .withDividerColor("#11000000")
+                .withMessage("You got reward:")
+                .withMessageColor("#FFFFFFFF")
+                .withDialogColor("#FFE74C3C")
+                .withDuration(300)
+                .withEffect(Effectstype.Slidetop)
+                .isCancelableOnTouchOutside(false);
+//        TextView correctMsg = ButterKnife.findById(dialog, R.id.dialog_correctanswer_msg);
+//        TextView correctAns = ButterKnife.findById(dialog, R.id.dialog_correctanswer_answer);
         if (q.getAnswerId().equalsIgnoreCase("1")) {
-            correctAns.setText(q.getChoiceA());
+            dialog.withMessage("คำตอบที่ถูกต้องคือ" + q.getChoiceA());
         } else if (q.getAnswerId().equalsIgnoreCase("2")) {
-            correctAns.setText(q.getChoiceB());
+            dialog.withMessage("คำตอบที่ถูกต้องคือ" + q.getChoiceB());
         } else if (q.getAnswerId().equalsIgnoreCase("3")) {
-            correctAns.setText(q.getChoiceC());
+            dialog.withMessage("คำตอบที่ถูกต้องคือ" + q.getChoiceC());
         } else if (q.getAnswerId().equalsIgnoreCase("4")) {
-            correctAns.setText(q.getChoiceD());
+            dialog.withMessage("คำตอบที่ถูกต้องคือ" + q.getChoiceD());
         }
 
         if (isCorrect) {
-            correctMsg.setText("ถูกต้องนะครับ");
+            dialog.withTitle("ถูกต้องนะครับ");
         } else {
-            correctMsg.setText("ผิดครับ");
+            dialog.withTitle("ผิดครับ");
         }
-        Button nextQuestion = (Button) dialog.findViewById(R.id.button_correctanswer_next_question);
+        //Button nextQuestion = ButterKnife.findById(dialog, R.id.button_correctanswer_next_question);
         if (!isAllQuizFinish()) {
-            nextQuestion.setOnClickListener(new View.OnClickListener() {
+            dialog.withButton1Text("ไปยังข้อถัดไป");
+            dialog.setButton1Click(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     populateQuiz(getPossibleNextQuizSeqFromCurrentSeq(seqId - 1));
-                    dialog.cancel();
+                    dialog.dismiss();
                 }
 
             });
         } else {
-            nextQuestion.setText("กลับไปยังหน้าจอภารกิจ");
-            nextQuestion.setOnClickListener(new View.OnClickListener() {
+            dialog.withButton1Text("กลับไปยังหน้าจอภารกิจ");
+            dialog.setButton1Click(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    dialog.cancel();
+                    dialog.dismiss();
                     checkQuestFinish();
                 }
 
@@ -919,16 +931,29 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     void showObtainRewardDialog(int rank) {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.reward_obtain_dialog);
-        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
-        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
-        dialog.setCancelable(true);
+        final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(this);
+        dialog
+                .withTitle("Obtain Reward")
+                .withTitleColor("#FFFFFF")
+                .withDividerColor("#11000000")
+                .withMessage("You got reward:")
+                .withMessageColor("#FFFFFFFF")
+                .withDialogColor("#FFE74C3C")
+                .withDuration(300)
+                .withEffect(Effectstype.Slidetop)
+                .withButton1Text("Close")
+                .isCancelableOnTouchOutside(false)
+                .setCustomView(R.layout.reward_obtain_dialog, this);
+//        final Dialog dialog = new Dialog(this);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setContentView(R.layout.reward_obtain_dialog);
+//        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
+//        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
+//        dialog.setCancelable(true);
         ImageView rewardPicture = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_picture);
         TextView tvRewardName = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_name);
         TextView tvRewardRank = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_rank);
-        Button closeBtn = ButterKnife.findById(dialog, R.id.button_obtain_reward_close);
+        //Button closeBtn = ButterKnife.findById(dialog, R.id.button_obtain_reward_close);
 
         String rewardName = reward.getRewardName();
         tvRewardName.setText(rewardName);
@@ -964,13 +989,14 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
         tvRewardRank.setText(rewardRank);
 
-        closeBtn.setOnClickListener(new View.OnClickListener() {
+        dialog.setButton1Click(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.cancel();
+                dialog.dismiss();
                 onBackPressed();
             }
         });
+
         dialog.show();
     }
 

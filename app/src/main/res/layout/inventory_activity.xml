@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_global"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/inventory_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/textview_corner"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="@string/inventory_header"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/background_frame"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp">
+
+            <EditText
+                android:id="@+id/inventory_filter_name2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/textview_search_corner"
+                android:hint="@string/filter"
+                android:paddingBottom="10dp"
+                android:paddingEnd="10dp"
+                android:paddingStart="15dp"
+                android:paddingTop="10dp"
+                android:textColorHint="@color/grey_500"
+                android:textSize="20sp" />
+
+            <ImageButton
+                android:id="@+id/inventory_filter_button2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignBottom="@+id/inventory_filter_name2"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_filter" />
+
+        </RelativeLayout>
+
+        <GridView
+            android:id="@+id/item_inventory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorPrimary"
+            android:gravity="center"
+            android:horizontalSpacing="2dp"
+            android:numColumns="4"
+            android:verticalSpacing="2dp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

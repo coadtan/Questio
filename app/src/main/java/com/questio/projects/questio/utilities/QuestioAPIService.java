@@ -1,10 +1,13 @@
 package com.questio.projects.questio.utilities;
 
+import com.questio.projects.questio.models.ExplorerProgress;
 import com.questio.projects.questio.models.Item;
 import com.questio.projects.questio.models.ItemInInventory;
 import com.questio.projects.questio.models.PicturePuzzle;
+import com.questio.projects.questio.models.Place;
 import com.questio.projects.questio.models.PlaceDetail;
 import com.questio.projects.questio.models.PlaceNews;
+import com.questio.projects.questio.models.PlaceProgress;
 import com.questio.projects.questio.models.Quest;
 import com.questio.projects.questio.models.Quiz;
 import com.questio.projects.questio.models.QuizProgress;
@@ -407,6 +410,91 @@ public interface QuestioAPIService {
     //http://52.74.64.61/api/select_all_reward_by_placeid.php?placeid=1
     @GET("/select_all_reward_by_placeid.php")
     void getRewardByPlaceId(
+            @Query("placeid") int placeId,
+            Callback<Reward[]> reward
+    );
+
+    //http://52.74.64.61/api/insert_explorerprogress.php?adventurerid=2&placeid=1&zoneid=1
+    @GET("/insert_explorerprogress.php")
+    void addExplorerProgress(
+            @Query("adventurerid") long adventurerId,
+            @Query("placeid") int placeId,
+            @Query("zoneid") int zoneId,
+            Callback<Response> response
+    );
+
+    //http://52.74.64.61/api/select_count_all_zone_by_placeid.php?placeid=1
+    @GET("/select_count_all_zone_by_placeid.php")
+    void getCountZoneByPlaceId(
+            @Query("placeid") int placeId,
+            Callback<Response> response
+    );
+    //http://52.74.64.61/api/select_count_explorerprogress_by_placeid_and_adventurerid.php?placeid=1&adventurerid=1
+    @GET("/select_count_explorerprogress_by_placeid_and_adventurerid.php")
+    void getCountExplorerProgressByAdventurerIdAndPlaceId(
+            @Query("adventurerid") long adventurerId,
+            @Query("placeid") int placeId,
+            Callback<Response> response
+    );
+    //http://52.74.64.61/api/select_all_explorerprogress_by_adventurerid_placeid_and_zoneid.php?adventurerid=1&placeid=1&zoneid=1
+    @GET("/select_all_explorerprogress_by_adventurerid_placeid_and_zoneid.php")
+    void getExplorerProgressByAdventurerIdPlaceIdAndZoneId(
+            @Query("adventurerid") long adventurerId,
+            @Query("placeid") int placeId,
+            @Query("zoneid") int zoneId,
+            Callback<ExplorerProgress[]> response
+    );
+
+    //http://52.74.64.61/api/select_all_zone_by_placeid.php?placeid=1
+    @GET("/select_all_zone_by_placeid.php")
+    void getZoneByPlaceId(
+            @Query("placeid") int placeId,
+            Callback<ArrayList<Zone>> response
+    );
+
+    //http://52.74.64.61/api/update_explorerprogress_by_adventurerid_and_placeid_and_zoneid.php?adventurerid=2&placeid=1&zoneid=1
+    @GET("/update_explorerprogress_by_adventurerid_and_placeid_and_zoneid.php")
+    void updateExplorerProgressByAdventurerIdPlaceIdAndZoneId(
+            @Query("adventurerid") long adventurerId,
+            @Query("placeid") int placeId,
+            @Query("zoneid") int zoneId,
+            Callback<Response> response
+    );
+
+    //http://52.74.64.61/api/insert_placeprogress.php?adventurerid=1&placeid=1
+    @GET("/insert_placeprogress.php")
+    void addPlaceProgress(
+            @Query("adventurerid") long adventurerId,
+            @Query("placeid") int placeId,
+            Callback<Response> response
+    );
+
+    //http://52.74.64.61/api/update_placeprogress_by_adventurerid_and_placeid.php?adventurerid=1&placeid=1
+    @GET("/update_placeprogress_by_adventurerid_and_placeid.php")
+    void updatePlaceProgressByAdventurerIdAndPlaceId(
+            @Query("adventurerid") long adventurerId,
+            @Query("placeid") int placeId,
+            Callback<Response> response
+    );
+
+    //http://52.74.64.61/api/select_all_placeprogress_by_adventurerid_and_placeid.php?adventurerid=1&placeid=1
+    @GET("/select_all_placeprogress_by_adventurerid_and_placeid.php")
+    void getAllPlaceProgressByAdventurerIdAndPlaceId(
+            @Query("adventurerid") long adventurerId,
+            @Query("placeid") int placeId,
+            Callback<PlaceProgress[]> response
+    );
+
+    //http://52.74.64.61/api/select_all_place_by_zoneid.php?zoneid=1
+    @GET("/select_all_place_by_zoneid.php")
+    void getAllPlaceByZoneId(
+            @Query("zoneid") int zoneId,
+            Callback<Place[]> response
+    );
+
+    //http://52.74.64.61/api/select_all_explore_reward_by_placeid.php?placeid=1
+    @GET("/select_all_explore_reward_by_placeid.php")
+    void getAllExploreRewardByPlaceId(
             @Query("placeid") int placeId,
             Callback<Reward[]> reward
     );

@@ -1,29 +1,23 @@
-package com.questio.projects.questio.sections;
+package com.questio.projects.questio.activities;
 
-import android.app.Dialog;
+
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.cengalabs.flatui.FlatUI;
-import com.cengalabs.flatui.views.FlatEditText;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.questio.projects.questio.R;
@@ -46,19 +40,24 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 
-public class InventorySection extends Fragment implements AdapterView.OnItemClickListener {
-    private final String LOG_TAG = InventorySection.class.getSimpleName();
+public class InventoryActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+    private final String LOG_TAG = InventoryActivity.class.getSimpleName();
     Context mContext;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
     View view;
 
-    @Bind(R.id.inventory)
+    @Bind(R.id.inventory_toolbar)
+    Toolbar toolbar;
+
+    @Bind(R.id.inventory_filter_name2)
+    EditText filterName;
+
+    @Bind(R.id.inventory_filter_button2)
+    ImageButton filterBtn;
+
+    @Bind(R.id.item_inventory)
     GridView inventory;
-    @Bind(R.id.inventory_filter_name)
-    FlatEditText inventoryFilterName;
-    @Bind(R.id.inventory_filter_button)
-    Button inventoryFilterButton;
 
     ArrayList<ItemInInventory> itemsInv;
     ArrayList<ItemInInventory> itemsInvFilterType;
@@ -71,11 +70,24 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
     QuestioAPIService api;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext = getActivity();
-        prefs = this.getActivity().getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, Context.MODE_PRIVATE);
-        editor = this.getActivity().getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, Context.MODE_PRIVATE).edit();
+        setContentView(R.layout.inventory_activity);
+        ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(0xFFFFFFFF);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        mContext = this;
+        prefs = this.getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, Context.MODE_PRIVATE);
+        editor = this.getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, Context.MODE_PRIVATE).edit();
         adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
         adapter = new RestAdapter.Builder()
                 .setEndpoint(QuestioConstants.ENDPOINT)
@@ -91,33 +103,14 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
         mapOfCheck.put("checkLeg", true);
         mapOfCheck.put("checkFoot", true);
         mapOfCheck.put("checkSpecial", true);
-    }
 
-    @Override
-    public View onCreateView(
-            LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        FlatUI.initDefaultValues(getActivity());
-        FlatUI.setDefaultTheme(FlatUI.ORANGE);
-        view = inflater.inflate(R.layout.section_inventory, container, false);
-        ButterKnife.bind(this, view);
         requestItemInventoryData(adventurerId);
         inventory.setOnItemClickListener(this);
-
-        return view;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
-    }
-
-    @OnClick(R.id.inventory_filter_button)
-    public void onClick() {
-        final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(getActivity());
+    @OnClick(R.id.inventory_filter_button2)
+    public void showFilterOption(View view) {
+        final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(this);
         dialogBuilder
                 .withTitle("Filter")
                 .withTitleColor("#FFFFFF")
@@ -214,7 +207,7 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
                         }
                     }
                     itemsInvForShow.addAll(itemsInvFilterType);
-                    onTextChanged(inventoryFilterName.getText());
+                    onTextChanged(filterName.getText());
 
                 }
 
@@ -228,7 +221,6 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
             }
         });
         dialogBuilder.show();
-
     }
 
     private void requestItemInventoryData(long id) {
@@ -252,8 +244,7 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
         });
     }
 
-
-    @OnTextChanged(R.id.inventory_filter_name)
+    @OnTextChanged(R.id.inventory_filter_name2)
     void onTextChanged(CharSequence text) {
         if (itemsInvFilterType != null) {
             itemsInvForShow.clear();
@@ -293,16 +284,9 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
                     }
                 })
                 .setCustomView(R.layout.item_description_dialog, mContext);
-//        final Dialog dialog = new Dialog(getActivity());
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        dialog.setContentView(R.layout.item_description_dialog);
-//        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
-//        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
-//        dialog.setCancelable(true);
         TextView tvItemName = ButterKnife.findById(dialog, R.id.dialog_item_name);
         TextView tvItemCollection = ButterKnife.findById(dialog, R.id.dialog_item_collection);
         ImageView itemImage = ButterKnife.findById(dialog, R.id.dialog_item_picture);
-//        Button closeBtn = (Button) dialog.findViewById(R.id.button_item_close);
 
         String itemName = item.getItemName();
         String itemCollection = item.getItemCollection();
@@ -313,15 +297,6 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
                 .into(itemImage);
         tvItemName.setText(itemName);
         tvItemCollection.setText(itemCollection);
-
-//        closeBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                dialog.cancel();
-//            }
-//        });
         dialog.show();
     }
-
-
 }

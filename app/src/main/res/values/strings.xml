@@ -48,7 +48,7 @@
 
     <string name="riddle_riddle">กำลังโหลด....</string>
     <string name="riddle_scan">เปิดการแสกน QR Code</string>
-    <string name="riddle_unrevealed">"??????????????????????????????????"</string>
+    <string name="riddle_unrevealed">"?"</string>
 
     <string name="quiz_pre">&lt;</string>
     <string name="quiz_next">&gt;</string>
@@ -100,5 +100,7 @@
     <string name="text_leg">Leg</string>
     <string name="text_foot">Foot</string>
     <string name="text_special">Special</string>
-
+    <string name="touch_here_to_scan">touch here to scan qr code</string>
+    <string name="inventory_header">Inventory</string>
+    
 </resources>

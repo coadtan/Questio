@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="#FFE74C3C"
     android:orientation="vertical"
     android:padding="20dp">
 
@@ -18,7 +18,7 @@
             android:id="@+id/dialog_reward_picture"
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/white"
             android:layout_marginEnd="20dp"
             />
         <LinearLayout
@@ -32,7 +32,7 @@
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
                 android:text="@string/test_reward_name"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/white"
                 android:textSize="30sp" />
             <TextView
                 android:id="@+id/dialog_reward_desc"
@@ -41,7 +41,7 @@
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
                 android:text="@string/test_reward_desc"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/white"
                 android:textSize="18sp" />
             <TextView
 
@@ -50,7 +50,7 @@
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
                 android:text="@string/dialog_reward_daterecieved"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/white"
                 android:textSize="20sp" />
             <TextView
                 android:id="@+id/dialog_reward_datereceived"
@@ -59,19 +59,19 @@
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
                 android:text="@string/test_reward_datereceived"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/white"
                 android:textSize="20sp" />
         </LinearLayout>
 
 
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/button_reward_close"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/dialog_item_close"/>
-    </LinearLayout>
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+        <!--<Button-->
+            <!--android:id="@+id/button_reward_close"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/dialog_item_close"/>-->
+    <!--</LinearLayout>-->
 </LinearLayout>

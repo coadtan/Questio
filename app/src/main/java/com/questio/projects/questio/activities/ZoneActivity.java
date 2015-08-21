@@ -22,9 +22,14 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
+import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.adepters.QuestInActionAdapter;
+import com.questio.projects.questio.models.ExplorerProgress;
 import com.questio.projects.questio.models.Item;
+import com.questio.projects.questio.models.Place;
+import com.questio.projects.questio.models.PlaceProgress;
 import com.questio.projects.questio.models.Quest;
 import com.questio.projects.questio.models.QuestStatusAndScore;
 import com.questio.projects.questio.models.Reward;
@@ -93,6 +98,11 @@ public class ZoneActivity extends ActionBarActivity {
     QuestInActionAdapter adapterQuestList = null;
     Item item;
     Reward reward;
+    Reward exploreReward;
+    int exploreCount;
+    int zoneCount;
+    Place place;
+    PlaceProgress placeProgress;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -126,16 +136,16 @@ public class ZoneActivity extends ActionBarActivity {
 
         zoneId = zoneIdFromQRCode;
         Log.d(LOG_TAG, "zoneIdFromQRCode is " + zoneIdFromQRCode);
+        getPlace();
         requestZoneData(zoneIdFromQRCode);
         requestQuestData(zoneIdFromQRCode);
-
         questListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView questId = (TextView) view.findViewById(R.id.questid);
-                TextView questName = (TextView) view.findViewById(R.id.questname);
-                TextView questTypeInvisible = (TextView) view.findViewById(R.id.questTypeInvisible);
-                TextView zoneId = (TextView) view.findViewById(R.id.quest_zoneId);
+                TextView questId = ButterKnife.findById(view, R.id.questid);
+                TextView questName = ButterKnife.findById(view, R.id.questname);
+                TextView questTypeInvisible = ButterKnife.findById(view, R.id.questTypeInvisible);
+                TextView zoneId = ButterKnife.findById(view, R.id.quest_zoneId);
                 String questIdForIntent = questId.getText().toString();
                 String questNameForIntent = questName.getText().toString();
                 String zoneIdForIntent = zoneId.getText().toString();
@@ -363,7 +373,7 @@ public class ZoneActivity extends ActionBarActivity {
                             nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                             nagDialog.setCancelable(true);
                             nagDialog.setContentView(R.layout.mini_map_full_screen);
-                            ImageView imgPreview = (ImageView) nagDialog.findViewById(R.id.mini_map_full_view);
+                            ImageView imgPreview = ButterKnife.findById(nagDialog, R.id.mini_map_full_view);
                             imgPreview.setBackgroundDrawable(questActionMiniImg.getDrawable());
                             imgPreview.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -444,7 +454,7 @@ public class ZoneActivity extends ActionBarActivity {
                                     Log.d(LOG_TAG, "Reward count: " + rewardCount);
                                     if (rewardCount == 0) {
                                         int rank = calculateZoneReward();
-                                        showObtainRewardDialog(rank);
+                                        showObtainRewardDialog(reward, rank);
                                         addRewardHOF(reward.getRewardId(), rank);
                                     }
                                 }
@@ -474,15 +484,28 @@ public class ZoneActivity extends ActionBarActivity {
     }
 
     void showObtainItemDialog() {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.item_obtain_dialog);
-        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
-        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
-        dialog.setCancelable(true);
-        ImageView tvItemPicture = (ImageView) dialog.findViewById(R.id.dialog_obtain_item_picture);
-        TextView tvItemName = (TextView) dialog.findViewById(R.id.dialog_obtain_item_name);
-        Button closeBtn = (Button) dialog.findViewById(R.id.button_obtain_item_close);
+        final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(this);
+        dialog
+                .withTitle("Obtain Item")
+                .withTitleColor("#FFFFFF")
+                .withDividerColor("#11000000")
+                .withMessage("ได้รับไอเทม")
+                .withMessageColor("#FFFFFFFF")
+                .withDialogColor("#FFE74C3C")
+                .withDuration(300)
+                .withEffect(Effectstype.Slidetop)
+                .withButton1Text("Close")
+                .isCancelableOnTouchOutside(false)
+                .setCustomView(R.layout.item_obtain_dialog, this);
+//        final Dialog dialog = new Dialog(this);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setContentView(R.layout.item_obtain_dialog);
+//        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
+//        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
+//        dialog.setCancelable(true);
+        ImageView tvItemPicture = ButterKnife.findById(dialog, R.id.dialog_obtain_item_picture);
+        TextView tvItemName = ButterKnife.findById(dialog, R.id.dialog_obtain_item_name);
+//        Button closeBtn = (Button) dialog.findViewById(R.id.button_obtain_item_close);
 
         String obtainedName = item.getItemName();
         Glide.with(this)
@@ -492,26 +515,39 @@ public class ZoneActivity extends ActionBarActivity {
 
         tvItemName.setText(obtainedName);
 
-        closeBtn.setOnClickListener(new View.OnClickListener() {
+        dialog.setButton1Click(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.cancel();
+                dialog.dismiss();
             }
         });
         dialog.show();
     }
 
-    void showObtainRewardDialog(int rank) {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.reward_obtain_dialog);
-        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
-        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
-        dialog.setCancelable(true);
+    void showObtainRewardDialog(Reward reward, int rank) {
+        final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(this);
+        dialog
+                .withTitle("Obtain Reward")
+                .withTitleColor("#FFFFFF")
+                .withDividerColor("#11000000")
+                .withMessage("ได้รับ Reward")
+                .withMessageColor("#FFFFFFFF")
+                .withDialogColor("#FFE74C3C")
+                .withDuration(300)
+                .withEffect(Effectstype.Slidetop)
+                .withButton1Text("Close")
+                .isCancelableOnTouchOutside(false)
+                .setCustomView(R.layout.reward_obtain_dialog, this);
+//        final Dialog dialog = new Dialog(this);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setContentView(R.layout.reward_obtain_dialog);
+//        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
+//        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
+//        dialog.setCancelable(true);
         ImageView rewardPicture = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_picture);
         TextView tvRewardName = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_name);
         TextView tvRewardRank = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_rank);
-        Button closeBtn = ButterKnife.findById(dialog, R.id.button_obtain_reward_close);
+        //Button closeBtn = ButterKnife.findById(dialog, R.id.button_obtain_reward_close);
 
         String rewardName = reward.getRewardName();
         tvRewardName.setText(rewardName);
@@ -547,12 +583,13 @@ public class ZoneActivity extends ActionBarActivity {
 
         tvRewardRank.setText(rewardRank);
 
-        closeBtn.setOnClickListener(new View.OnClickListener() {
+        dialog.setButton1Click(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.cancel();
+                dialog.dismiss();
             }
         });
+
         dialog.show();
     }
 
@@ -583,4 +620,173 @@ public class ZoneActivity extends ActionBarActivity {
             }
         });
     }
+
+    public void updateExploreProgress(final Place p) {
+        api.getExplorerProgressByAdventurerIdPlaceIdAndZoneId(adventurerId, p.getPlaceId(), zoneId, new Callback<ExplorerProgress[]>() {
+            @Override
+            public void success(ExplorerProgress[] explorerProgresses, Response response) {
+                if (explorerProgresses != null) {
+                    ExplorerProgress ep = explorerProgresses[0];
+                    if (ep.getIsEntered() == 0) {
+                        api.updateExplorerProgressByAdventurerIdPlaceIdAndZoneId(adventurerId, p.getPlaceId(), zoneId, new Callback<Response>() {
+                            @Override
+                            public void success(Response response, Response response2) {
+                                Log.d(LOG_TAG, "Update Explore Progress Success");
+                                getCountProgress(place);
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+                                Log.d(LOG_TAG, "Update Explore Progress Fail");
+                            }
+                        });
+                    }
+                }else{
+                    Log.d(LOG_TAG, "Explore Progress Null");
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(LOG_TAG, "Get Explore Progress Fail");
+            }
+        });
+
+    }
+
+    public void getCountProgress(final Place p){
+        api.getCountExplorerProgressByAdventurerIdAndPlaceId(adventurerId, p.getPlaceId(), new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                exploreCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("explorecount", response));
+                Log.d(LOG_TAG, "Explorecount = " + Integer.toString(exploreCount));
+                api.getCountZoneByPlaceId(p.getPlaceId(), new Callback<Response>() {
+                    @Override
+                    public void success(Response response, Response response2) {
+                        zoneCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("zonecount", response));
+                        Log.d(LOG_TAG, "Zonecount = " + Integer.toString(zoneCount));
+                        if(exploreCount == zoneCount){
+                            getPlaceProgress(p);
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    public void getPlace(){
+        api.getAllPlaceByZoneId(zoneId, new Callback<Place[]>() {
+            @Override
+            public void success(Place[] places, Response response) {
+                if (places != null) {
+                    Log.d(LOG_TAG, "place get success");
+                    place = places[0];
+                    updateExploreProgress(place);
+                }else{
+                    Log.d(LOG_TAG, "place null");
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(LOG_TAG, "place failed");
+            }
+        });
+    }
+
+    public void getExploreReward(final Place p){
+        api.getAllExploreRewardByPlaceId(p.getPlaceId(), new Callback<Reward[]>() {
+            @Override
+            public void success(Reward[] rewards, Response response) {
+                if (rewards != null) {
+                    Log.d(LOG_TAG, "explorer reward - success");
+                    exploreReward = rewards[0];
+                    Log.d(LOG_TAG, exploreReward.toString());
+                    addExplorerReward(p);
+
+                } else {
+                    Log.d(LOG_TAG, "explorer reward - null");
+                }
+            }
+
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(LOG_TAG, "explorer reward - fail");
+            }
+        });
+    }
+
+    public void addExplorerReward(final Place p){
+                if (placeProgress.getQuestStatus() != QuestioConstants.QUEST_FINISHED) {
+                    api.getCountHOFByAdventurerIdAndRewardId(adventurerId, exploreReward.getRewardId(), new Callback<Response>() {
+                        @Override
+                        public void success(Response response, Response response2) {
+                            int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
+                            Log.d(LOG_TAG, "Reward count: " + rewardCount);
+                            if (rewardCount == 0) {
+                                addRewardHOF(exploreReward.getRewardId(), QuestioConstants.REWARD_RANK_NORMAL);
+                                showObtainRewardDialog(exploreReward, QuestioConstants.REWARD_RANK_NORMAL);
+                                api.updatePlaceProgressByAdventurerIdAndPlaceId(adventurerId, p.getPlaceId(), new Callback<Response>() {
+                                    @Override
+                                    public void success(Response response, Response response2) {
+
+                                    }
+
+                                    @Override
+                                    public void failure(RetrofitError error) {
+
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+
+                        }
+                    });
+                }
+
+            }
+
+
+
+
+
+    public void getPlaceProgress(final Place p) {
+        api.getAllPlaceProgressByAdventurerIdAndPlaceId(adventurerId, p.getPlaceId(), new Callback<PlaceProgress[]>() {
+
+                    @Override
+                    public void success(PlaceProgress[] placeProgresses, Response response) {
+                        if (placeProgresses != null) {
+                            Log.d(LOG_TAG, "PlaceProgress - success");
+                            placeProgress = placeProgresses[0];
+                            getExploreReward(p);
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.d(LOG_TAG, "PlaceProgress - fail");
+                    }
+
+
+                }
+        );
+    }
+
+
+
+
 }

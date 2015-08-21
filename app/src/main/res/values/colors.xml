@@ -30,6 +30,8 @@
     <color name="reward_bronze">#cd7f32</color>
     <color name="reward_silver">#c0c0c0</color>
     <color name="reward_gold">#ffd700</color>
-
+    <color name="background_global">#202020</color>
+    <color name="background_frame">#363636</color>
+    <color name="background_textview">#4891b4</color>
 
 </resources>
