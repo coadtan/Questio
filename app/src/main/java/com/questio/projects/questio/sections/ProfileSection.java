@@ -57,8 +57,8 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
     @Bind(R.id.profile_inventory)
     ImageButton profileInventory;
 
-    @Bind(R.id.halloffame)
-    GridView hallOfFame;
+//    @Bind(R.id.halloffame)
+//    GridView hallOfFame;
 
     View view;
     Person currentPerson;
@@ -88,7 +88,7 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
 
     public void init() {
         requestRewardsHOFData(adventurerId);
-        hallOfFame.setOnItemClickListener(this);
+//        hallOfFame.setOnItemClickListener(this);
     }
 
     @Override
@@ -97,10 +97,10 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
         view = inflater.inflate(R.layout.section_profile, container, false);
         ButterKnife.bind(this, view);
         init();
-        Glide.with(this)
-                .load(currentPerson.getImage().getUrl())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(profilePicture);
+//        Glide.with(this)
+//                .load(currentPerson.getImage().getUrl())
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                .into(profilePicture);
 
 
         return view;
@@ -179,7 +179,7 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
                 if (rewardHOFs != null) {
                     rewards = rewardHOFs;
                     rewardsAdapter = new RewardsAdapter(mContext, rewardHOFs);
-                    hallOfFame.setAdapter(rewardsAdapter);
+//                    hallOfFame.setAdapter(rewardsAdapter);
                     rewardsAdapter.notifyDataSetChanged();
                 }
 
