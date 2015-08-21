@@ -1,11 +1,16 @@
 package com.questio.projects.questio.activities;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -261,67 +266,88 @@ public class MainActivity extends AppCompatActivity
         if (results[0] <= p.getRadius()) {
 
             Log.d(LOG_TAG, "isEnterQuestMap: p.getPlaceId() = " + p.getPlaceId());
-            final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(this);
-            dialog
-                    .withTitle("เข้าสู่ " + p.getPlaceName() + "!")
-                    .withIcon(android.R.drawable.ic_dialog_info)
-                    .withTitleColor("#FFFFFF")
-                    .withDividerColor("#11000000")
-                    .withMessage("ยืนยันการเข้าสู่สถานที่แห่งนี้หรือไม่ครับ")
-                    .withMessageColor("#FFFFFFFF")
-                    .withDialogColor("#FFE74C3C")
-                    .withDuration(300)
-                    .withEffect(Effectstype.Slidetop)
-                    .withButton1Text("ยืนยัน!")
-                    .setButton1Click(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            api.getRewardByPlaceId(p.getPlaceId(), new Callback<Reward[]>() {
-                                @Override
-                                public void success(Reward[] rewards, Response response) {
-                                    if (rewards != null) {
-                                        reward = rewards[0];
-                                        api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), new Callback<Response>() {
-                                            @Override
-                                            public void success(Response response, Response response2) {
-                                                int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
-                                                Log.d(LOG_TAG, "Reward count: " + rewardCount);
-                                                if (rewardCount == 0) {
-                                                    showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL, p);
-                                                } else {
-                                                    insertExplorerProgress(p);
-                                                }
-                                            }
+//            final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(this);
+//            dialog
+//                    .withTitle("เข้าสู่ " + p.getPlaceName() + "!")
+//                    .withIcon(android.R.drawable.ic_dialog_info)
+//                    .withTitleColor("#FFFFFF")
+//                    .withDividerColor("#11000000")
+//                    .withMessage("ยืนยันการเข้าสู่สถานที่แห่งนี้หรือไม่ครับ")
+//                    .withMessageColor("#FFFFFFFF")
+//                    .withDialogColor("#FFE74C3C")
+//                    .withDuration(300)
+//                    .withEffect(Effectstype.Slidetop)
+//                    .withButton1Text("ยืนยัน!")
+//                    .setButton1Click(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//
+//                        }
+//                    })
+//                    .withButton2Text("ไม่")
+//                    .setButton2Click(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            dialog.dismiss();
+//                        }
+//                    })
+//                    .isCancelableOnTouchOutside(true);
+//            dialog.show();
 
-                                            @Override
-                                            public void failure(RetrofitError error) {
-                                                Log.d(LOG_TAG, "checkRewardData: failure");
-                                            }
-                                        });
-
-
-                                    } else {
-                                        insertExplorerProgress(p);
-                                    }
+            api.getRewardByPlaceId(p.getPlaceId(), new Callback<Reward[]>() {
+                @Override
+                public void success(Reward[] rewards, Response response) {
+                    if (rewards != null) {
+                        reward = rewards[0];
+                        api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), new Callback<Response>() {
+                            @Override
+                            public void success(Response response, Response response2) {
+                                int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
+                                Log.d(LOG_TAG, "Reward count: " + rewardCount);
+                                if (rewardCount == 0) {
+                                    showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL, p);
+                                } else {
+                                    insertExplorerProgress(p);
                                 }
+                            }
 
-                                @Override
-                                public void failure(RetrofitError error) {
+                            @Override
+                            public void failure(RetrofitError error) {
+                                Log.d(LOG_TAG, "checkRewardData: failure");
+                            }
+                        });
 
-                                }
-                            });
-                        }
-                    })
-                    .withButton2Text("ไม่")
-                    .setButton2Click(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .isCancelableOnTouchOutside(true);
-            dialog.show();
 
+                    } else {
+                        insertExplorerProgress(p);
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+
+                }
+            });
+            Intent intent = new Intent(this, PlaceActivity.class);
+            intent.putExtra("place", p);
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+            stackBuilder.addParentStack(PlaceActivity.class);
+            stackBuilder.addNextIntent(intent);
+            PendingIntent pendingIntent =
+                    stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            Notification notification =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setContentTitle("Enter new Place!")
+                            .setContentText("You enter " + p.getPlaceFullName())
+                            .setAutoCancel(true)
+                            .setContentIntent(pendingIntent)
+                            .build();
+
+            NotificationManager notificationManager =
+                    (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.notify(1000, notification);
         }
     }
 
@@ -449,8 +475,5 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-        Intent intent = new Intent(this, PlaceActivity.class);
-        intent.putExtra("place", p);
-        startActivity(intent);
     }
 }

@@ -139,7 +139,6 @@
             android:layout_alignParentTop="true"
             android:layout_weight="8"
             android:gravity="center"
-            android:hint="@string/insert_here"
             android:textColor="@color/white"
             flatui:fl_backgroundColor="fl_main"
             flatui:fl_fontWeight="bold"

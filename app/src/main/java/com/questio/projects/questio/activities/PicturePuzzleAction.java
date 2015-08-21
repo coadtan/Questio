@@ -1,10 +1,6 @@
 package com.questio.projects.questio.activities;
 
-import android.app.Dialog;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,8 +8,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -22,9 +16,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.questio.projects.questio.R;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
+import com.questio.projects.questio.R;
 import com.questio.projects.questio.models.PicturePuzzle;
 import com.questio.projects.questio.models.Reward;
 import com.questio.projects.questio.utilities.QuestioAPIService;
@@ -43,6 +37,7 @@ import retrofit.client.Response;
 
 public class PicturePuzzleAction extends ActionBarActivity implements View.OnClickListener, TextWatcher, Callback<Response> {
     private static final String LOG_TAG = PicturePuzzleAction.class.getSimpleName();
+
     @Bind(R.id.picture_puzzle_question)
     ImageView picturePuzzleQuestion;
 
