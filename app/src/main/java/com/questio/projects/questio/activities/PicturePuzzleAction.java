@@ -630,7 +630,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                 onBackPressed();
             }
         });
-        
+
         dialog.show();
     }
 }

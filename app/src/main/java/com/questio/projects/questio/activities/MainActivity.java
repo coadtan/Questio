@@ -214,19 +214,19 @@ public class MainActivity extends AppCompatActivity
 //            Log.d(LOG_TAG, "gps: false");
 //            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
 //        }
-        if (locationAvailability.isLocationAvailable()) {
-            locationRequest = new LocationRequest()
-                    .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                    .setInterval(QuestioConstants.LOCATION_INTERVAL_TIME_IN_MILLISEC);
+//        if (locationAvailability.isLocationAvailable()) {
+        locationRequest = new LocationRequest()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(QuestioConstants.LOCATION_INTERVAL_TIME_IN_MILLISEC);
 
-            LocationServices.FusedLocationApi.requestLocationUpdates(
-                    googleApiClient,
-                    locationRequest,
-                    this
-            );
-        } else {
-            Log.d(LOG_TAG, "locationAvailability: false");
-        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                googleApiClient,
+                locationRequest,
+                this
+        );
+//        } else {
+//            Log.d(LOG_TAG, "locationAvailability: false");
+//        }
     }
 
     @Override
@@ -452,7 +452,12 @@ public class MainActivity extends AppCompatActivity
         api.getZoneByPlaceId(p.getPlaceId(), new Callback<ArrayList<Zone>>() {
             @Override
             public void success(ArrayList<Zone> zones, Response response) {
-                if (!zones.isEmpty()) {
+                Log.d(LOG_TAG, "explorer progress: p.getPlaceId() " + p.getPlaceId());
+                if (zones == null) {
+                    Log.d(LOG_TAG, "explorer progress: zone is null");
+                }
+
+                if (zones != null) {
                     for (Zone z : zones) {
                         api.addExplorerProgress(adventurerId, p.getPlaceId(), z.getZoneId(), new Callback<Response>() {
                             @Override

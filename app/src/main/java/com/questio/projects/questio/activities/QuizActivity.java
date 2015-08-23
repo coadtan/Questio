@@ -116,7 +116,9 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(0xFFFFFFFF);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,7 +166,9 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         if (zoneId != null) {
             zid = Integer.parseInt(zoneId);
         }
-        getSupportActionBar().setTitle(questName);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(questName);
+        }
     }
 
     @Override
