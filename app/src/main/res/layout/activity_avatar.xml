@@ -20,7 +20,7 @@
         android:id="@+id/button_head"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/head"
+        android:src="@drawable/ic_head"
         android:layout_marginTop="20dp"
         android:layout_below="@+id/avatar_name"
         android:layout_alignStart="@+id/avatar_name" />
@@ -28,56 +28,56 @@
         android:id="@+id/button_background"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/background"
+        android:src="@drawable/ic_background"
         android:layout_below="@+id/button_head"
         android:layout_alignEnd="@+id/avatar_name" />
     <ImageButton
         android:id="@+id/button_neck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/neck"
+        android:src="@drawable/ic_neck"
         android:layout_below="@+id/button_background"
         android:layout_alignStart="@+id/avatar_name" />
     <ImageButton
         android:id="@+id/button_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/top"
+        android:src="@drawable/ic_top"
         android:layout_below="@+id/button_neck"
         android:layout_alignEnd="@+id/avatar_name" />
     <ImageButton
         android:id="@+id/button_arms"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/arm"
+        android:src="@drawable/ic_arm"
         android:layout_below="@+id/button_top"
         android:layout_alignStart="@+id/avatar_name" />
     <ImageButton
         android:id="@+id/button_handright"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/handright"
+        android:src="@drawable/ic_handright"
         android:layout_below="@+id/button_arms"
         android:layout_alignEnd="@+id/avatar_name" />
     <ImageButton
         android:id="@+id/button_handleft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/handleft"
+        android:src="@drawable/ic_handleft"
         android:layout_below="@+id/button_handright"
         android:layout_alignStart="@+id/avatar_name" />
     <ImageButton
         android:id="@+id/button_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/bottom"
+        android:src="@drawable/ic_bottom"
         android:layout_below="@+id/button_handleft"
         android:layout_alignEnd="@+id/avatar_name" />
     <ImageButton
         android:id="@+id/button_feet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/foot"
+        android:src="@drawable/ic_foot"
         android:layout_below="@+id/button_bottom"
         android:layout_alignStart="@+id/avatar_name" />
 
