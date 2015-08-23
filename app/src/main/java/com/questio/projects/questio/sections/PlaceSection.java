@@ -140,7 +140,7 @@ public class PlaceSection extends Fragment
         locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
         if (locationManager != null) {
             location = locationManager
-                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             if (location != null) {
                 LatLng coordinate = new LatLng(location.getLatitude(), location.getLongitude());
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 16));
