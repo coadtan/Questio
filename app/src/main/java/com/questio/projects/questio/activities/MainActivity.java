@@ -78,6 +78,9 @@ public class MainActivity extends AppCompatActivity
     long adventurerId;
     Place place;
     ArrayList<Place> placeListForDistance;
+    int zoneCount;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
     @Bind(R.id.app_bar)
     Toolbar toolbar;
@@ -148,7 +151,10 @@ public class MainActivity extends AppCompatActivity
                 e.printStackTrace();
             }
         }
+        sharedPreferences = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
+        editor = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE).edit();
         buildGoogleApiClient();
+        Log.d(LOG_TAG, "Default Place ID: " + sharedPreferences.getInt(QuestioConstants.PLACE_ID, 0));
     }
 
     private void buildGoogleApiClient() {
@@ -202,6 +208,9 @@ public class MainActivity extends AppCompatActivity
         if (beaconManager.hasBluetooth()) {
             beaconManager.disconnect();
         }
+        editor.putInt(QuestioConstants.PLACE_ID, 0);
+        editor.apply();
+
     }
 
     @Override
@@ -217,7 +226,7 @@ public class MainActivity extends AppCompatActivity
 //        if (locationAvailability.isLocationAvailable()) {
         locationRequest = new LocationRequest()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(QuestioConstants.LOCATION_INTERVAL_TIME_IN_MILLISEC);
+                .setInterval(QuestioConstants.DEFAULT_LOCATION_INTERVAL_TIME);
 
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 googleApiClient,
@@ -249,6 +258,8 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra("currentLatitude", currentLatitude);
         intent.putExtra("currentLongitude", currentLongitude);
         this.sendBroadcast(intent);
+        Log.d(LOG_TAG, "Current Place ID: " + sharedPreferences.getInt(QuestioConstants.PLACE_ID, 0));
+        Log.d(LOG_TAG, "Current Place Interval: " + locationRequest.getInterval());
 
         if (!placeListForDistance.isEmpty()) {
             for (Place po : placeListForDistance) {
@@ -262,10 +273,15 @@ public class MainActivity extends AppCompatActivity
         float[] results = new float[1];
         Location.distanceBetween(currentLat, currentLng,
                 p.getLatitude(), p.getLongitude(), results);
-
         if (results[0] <= p.getRadius()) {
 
             Log.d(LOG_TAG, "isEnterQuestMap: p.getPlaceId() = " + p.getPlaceId());
+            if(p.getPlaceId() != sharedPreferences.getInt(QuestioConstants.PLACE_ID, 0)){
+                editor.putInt(QuestioConstants.PLACE_ID, p.getPlaceId());
+                editor.apply();
+                getZoneCount(p);
+
+            }
 //            final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(this);
 //            dialog
 //                    .withTitle("เข้าสู่ " + p.getPlaceName() + "!")
@@ -328,6 +344,7 @@ public class MainActivity extends AppCompatActivity
 
                 }
             });
+
             Intent intent = new Intent(this, PlaceActivity.class);
             intent.putExtra("place", p);
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
@@ -348,6 +365,15 @@ public class MainActivity extends AppCompatActivity
             NotificationManager notificationManager =
                     (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             notificationManager.notify(1000, notification);
+        }else{
+            editor.putInt(QuestioConstants.PLACE_ID, 0);
+            editor.apply();
+            googleApiClient.connect();
+            locationRequest.setInterval(QuestioConstants.DEFAULT_LOCATION_INTERVAL_TIME);
+            LocationServices.FusedLocationApi.requestLocationUpdates(
+                    googleApiClient,
+                    locationRequest,
+                    this);
         }
     }
 
@@ -481,4 +507,28 @@ public class MainActivity extends AppCompatActivity
             }
         });
     }
+
+    public void getZoneCount(Place p){
+        api.getCountZoneByPlaceId(p.getPlaceId(), new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                zoneCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("zonecount", response));
+                Log.d(LOG_TAG, "Zonecount = " + Integer.toString(zoneCount));
+                googleApiClient.connect();
+                locationRequest.setInterval(zoneCount * 5 * 60 * 1000);
+                LocationServices.FusedLocationApi.requestLocationUpdates(
+                        googleApiClient,
+                        locationRequest,
+                        MainActivity.this
+                );
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+
 }

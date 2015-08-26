@@ -1,6 +1,7 @@
 package com.questio.projects.questio.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -24,6 +25,7 @@ import android.widget.Spinner;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.gms.location.LocationRequest;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.fragments.QuestRecycleView;
 import com.questio.projects.questio.libraries.zbarscanner.ZBarConstants;
@@ -36,6 +38,7 @@ import com.questio.projects.questio.utilities.QuestioHelper;
 
 import net.sourceforge.zbar.Symbol;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -86,6 +89,10 @@ public class PlaceActivity extends AppCompatActivity {
     String buildingItem = " ";
     String floorItem = " ";
     String zoneItem = " ";
+    QuestioAPIService api;
+    RestAdapter adapter;
+    int zoneCount;
+    LocationRequest locationRequest;
 
     public ArrayList<Quest> getQuestsTemp() {
         return questsTemp;
@@ -514,4 +521,6 @@ public class PlaceActivity extends AppCompatActivity {
         QuestRecycleView fragment = (QuestRecycleView) getSupportFragmentManager().findFragmentById(R.id.quest_browsing_null);
         fragment.reCreateRecyclerView();
     }
+
+
 }

@@ -24,6 +24,7 @@ public class QuestioConstants {
     public static final String QRTYPE_RIDDLE_ANSWER = "riddleanswer";
     public static final String ADVENTURER_PROFILE = "adventurer_profile";
     public static final String ADVENTURER_ID = "adventurer_id";
+    public static final String PLACE_ID = "place_id";
     public static final String ADVENTURER_DISPLAYNAME = "adventurer_displayname";
     public static final String CURRENT_PLACE = "current_place";
     public static final String CURRENT_PLACE_TIMEOUT = "current_place_timeout";
@@ -35,6 +36,6 @@ public class QuestioConstants {
     public static final int REWARD_RANK_BRONZE = 2;
     public static final int REWARD_RANK_SILVER = 3;
     public static final int REWARD_RANK_GOLD = 4;
-    public static final int LOCATION_INTERVAL_TIME_IN_MILLISEC = 5000;
+    public static final int DEFAULT_LOCATION_INTERVAL_TIME = 2 * 60 * 1000;
     public static final String LOCATION_UPDATE_ACTION = "location.update";
 }
