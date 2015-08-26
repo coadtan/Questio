@@ -2,9 +2,7 @@ package com.questio.projects.questio.models;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by ning jittima on 4/7/2558.
- */
+
 public class Item {
 
     private static final String LOG_TAG = Item.class.getSimpleName();
