@@ -8,12 +8,17 @@ import android.util.Log;
 import android.view.View;
 
 import com.questio.projects.questio.R;
+import com.questio.projects.questio.models.Avatar;
 import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
+import com.questio.projects.questio.utilities.QuestioHelper;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit.Callback;
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class AvatarActivity extends AppCompatActivity {
@@ -45,6 +50,24 @@ public class AvatarActivity extends AppCompatActivity {
         });
         handleInstanceState(savedInstanceState);
 
+        api.getAvatarCountByAvatarId(adventurerId, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                String avatarCountStr = QuestioHelper.getJSONStringValueByTag("avatarcount", response);
+                int avatarCount = Integer.parseInt(avatarCountStr);
+                boolean hasAvatar = (avatarCount == 1);
+                if (hasAvatar) {
+                    populateAvatar();
+                } else {
+                    insertNewAvatar();
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
 
     }
 
@@ -66,5 +89,34 @@ public class AvatarActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Your Avatar");
         }
+    }
+
+    private void insertNewAvatar() {
+        api.insertNewAvatar(adventurerId, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                Log.d(LOG_TAG, "insert new avatar successfully");
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(LOG_TAG, "insert new avatar failure");
+            }
+        });
+    }
+
+    private void populateAvatar() {
+        api.getAvatarByAvatarId(adventurerId, new Callback<Avatar[]>() {
+            @Override
+            public void success(Avatar[] avatars, Response response) {
+                Log.d(LOG_TAG, "get avatar successfully");
+                Log.d(LOG_TAG, avatars[0].toString());
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(LOG_TAG, "get avatar failure");
+            }
+        });
     }
 }
