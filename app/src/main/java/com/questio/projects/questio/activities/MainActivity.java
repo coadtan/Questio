@@ -6,14 +6,12 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -65,7 +63,7 @@ public class MainActivity extends AppCompatActivity
         implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener{
+        LocationListener {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private GoogleApiClient googleApiClient;
     public LocationRequest locationRequest;
@@ -354,7 +352,7 @@ public class MainActivity extends AppCompatActivity
             RemoteViews remoteViews = new RemoteViews(getPackageName(),
                     R.layout.custom_place_notification);
 
-            Intent intent = new Intent(this, CallButton.class);
+            Intent intent = new Intent(this, EnterPlace.class);
             intent.putExtra("place", p);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
@@ -371,7 +369,7 @@ public class MainActivity extends AppCompatActivity
                             .setContent(remoteViews)
                             .build();
 
-            remoteViews.setTextViewText(R.id.enter_place_text, "You enter " + p.getPlaceFullName());
+            remoteViews.setTextViewText(R.id.enter_place_text, p.getPlaceFullName());
             remoteViews.setOnClickPendingIntent(R.id.enter_place_button, pendingIntent);
 
             NotificationManager notificationManager =
@@ -543,12 +541,14 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public static class CallButton extends BroadcastReceiver{
+    public static class EnterPlace extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Place p = (Place)intent.getSerializableExtra("place");
+            Place p = (Place) intent.getSerializableExtra("place");
             Log.d(LOG_TAG, "Place - " + p.toString());
+            Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+            context.sendBroadcast(it);
             Intent placeIntent = new Intent(context, PlaceActivity.class);
             placeIntent.putExtra("place", p);
             placeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
