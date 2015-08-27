@@ -521,4 +521,27 @@ public interface QuestioAPIService {
             @Query("avatarid") long avatarId,
             Callback<Avatar[]> avatar
     );
+
+    //http://52.74.64.61/api/select_equipspritepath_by_itemid.php?itemid=1
+    @GET("/select_equipspritepath_by_itemid.php")
+    void getEquipSpritePathByItemId(
+            @Query("itemid") long itemid,
+            Response response
+    );
+
+    //http://52.74.64.61/api/select_all_item_by_itemid.php?headid=1&backgroundid=2&neckid=3&bodyid=4&handleftid=5&handrightid=6&armid=7&legid=8&footid=9&specialid=10
+    @GET("/select_all_item_by_itemid.php")
+    void getItemsBySetOfItemId(
+            @Query("headid") long headid,
+            @Query("backgroundid") long backgroundid,
+            @Query("neckid") long neckid,
+            @Query("bodyid") long bodyid,
+            @Query("handleftid") long handleftid,
+            @Query("handrightid") long handrightid,
+            @Query("armid") long armid,
+            @Query("legid") long legid,
+            @Query("footid") long footid,
+            @Query("specialid") long specialid,
+            Callback<Item[]> items
+    );
 }

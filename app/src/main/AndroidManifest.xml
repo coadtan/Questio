@@ -55,7 +55,6 @@
         <activity android:name=".libraries.zbarscanner.ZBarScannerActivity" />
         <activity android:name=".activities.InventoryActivity" />
         <activity android:name=".activities.AvatarActivity" />
-
         <receiver android:name=".activities.MainActivity$EnterPlace">
             <intent-filter>
                 <action android:name="go_to_place"/>
