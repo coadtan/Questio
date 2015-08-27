@@ -142,12 +142,12 @@ public class PlaceSection extends Fragment
             try {
                 location = locationManager
                         .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                currentLat = location.getLatitude();
-                currentLng = location.getLongitude();
             } catch (SecurityException e) {
                 Log.d(LOG_TAG, "NETWORK_PROVIDER disable or no permission");
             }
             if (location != null) {
+                currentLat = location.getLatitude();
+                currentLng = location.getLongitude();
                 LatLng coordinate = new LatLng(location.getLatitude(), location.getLongitude());
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 16));
                 if (mMarker != null) {
