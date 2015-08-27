@@ -37,9 +37,10 @@
 
         <activity
             android:name=".activities.MainActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name">
+        </activity>
         <activity android:name=".activities.PlaceActivity" />
-        <activity android:name=".activities.PlaceInfo" />'
+        <activity android:name=".activities.PlaceInfo" />
         <activity android:name=".activities.ZoneActivity" />
         <activity android:name=".activities.QuizActivity" />
         <activity android:name=".activities.PicturePuzzleAction" />
@@ -54,6 +55,12 @@
         <activity android:name=".libraries.zbarscanner.ZBarScannerActivity" />
         <activity android:name=".activities.InventoryActivity" />
         <activity android:name=".activities.AvatarActivity" />
+
+        <receiver android:name=".activities.MainActivity$CallButton">
+            <intent-filter>
+                <action android:name="go_to_place"/>
+            </intent-filter>
+        </receiver>
 
         <service
             android:name="com.estimote.sdk.service.BeaconService"
