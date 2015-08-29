@@ -1,5 +1,6 @@
 package com.questio.projects.questio.utilities;
 
+import com.questio.projects.questio.models.Avatar;
 import com.questio.projects.questio.models.ExplorerProgress;
 import com.questio.projects.questio.models.Item;
 import com.questio.projects.questio.models.ItemInInventory;
@@ -23,9 +24,7 @@ import retrofit.client.Response;
 import retrofit.http.GET;
 import retrofit.http.Query;
 
-/**
- * Created by coad4u4ever on 16-Apr-15.
- */
+
 public interface QuestioAPIService {
 
 
@@ -353,6 +352,7 @@ public interface QuestioAPIService {
             @Query("zoneid") int zoneId,
             Callback<Item[]> item
     );
+
     //http://52.74.64.61/api/insert_inventory.php?adventurerid=1&itemid=1
     @GET("/insert_inventory.php")
     void addInventory(
@@ -429,6 +429,7 @@ public interface QuestioAPIService {
             @Query("placeid") int placeId,
             Callback<Response> response
     );
+
     //http://52.74.64.61/api/select_count_explorerprogress_by_placeid_and_adventurerid.php?placeid=1&adventurerid=1
     @GET("/select_count_explorerprogress_by_placeid_and_adventurerid.php")
     void getCountExplorerProgressByAdventurerIdAndPlaceId(
@@ -436,6 +437,7 @@ public interface QuestioAPIService {
             @Query("placeid") int placeId,
             Callback<Response> response
     );
+
     //http://52.74.64.61/api/select_all_explorerprogress_by_adventurerid_placeid_and_zoneid.php?adventurerid=1&placeid=1&zoneid=1
     @GET("/select_all_explorerprogress_by_adventurerid_placeid_and_zoneid.php")
     void getExplorerProgressByAdventurerIdPlaceIdAndZoneId(
@@ -497,5 +499,49 @@ public interface QuestioAPIService {
     void getAllExploreRewardByPlaceId(
             @Query("placeid") int placeId,
             Callback<Reward[]> reward
+    );
+
+    //http://52.74.64.61/api/select_avatar_count_by_avatarid.php?avatarid=1
+    @GET("/select_avatar_count_by_avatarid.php")
+    void getAvatarCountByAvatarId(
+            @Query("avatarid") long avatarId,
+            Callback<Response> response
+    );
+
+    //http://52.74.64.61/api/insert_avatar.php?avatarid=1
+    @GET("/insert_avatar.php")
+    void insertNewAvatar(
+            @Query("avatarid") long avatarId,
+            Callback<Response> response
+    );
+
+    //http://52.74.64.61/api/select_all_avatar_by_avatarid.php?avatarid=1
+    @GET("/select_all_avatar_by_avatarid.php")
+    void getAvatarByAvatarId(
+            @Query("avatarid") long avatarId,
+            Callback<Avatar[]> avatar
+    );
+
+    //http://52.74.64.61/api/select_equipspritepath_by_itemid.php?itemid=1
+    @GET("/select_equipspritepath_by_itemid.php")
+    void getEquipSpritePathByItemId(
+            @Query("itemid") long itemid,
+            Response response
+    );
+
+    //http://52.74.64.61/api/select_all_item_by_itemid.php?headid=1&backgroundid=2&neckid=3&bodyid=4&handleftid=5&handrightid=6&armid=7&legid=8&footid=9&specialid=10
+    @GET("/select_all_item_by_itemid.php")
+    void getItemsBySetOfItemId(
+            @Query("headid") long headid,
+            @Query("backgroundid") long backgroundid,
+            @Query("neckid") long neckid,
+            @Query("bodyid") long bodyid,
+            @Query("handleftid") long handleftid,
+            @Query("handrightid") long handrightid,
+            @Query("armid") long armid,
+            @Query("legid") long legid,
+            @Query("footid") long footid,
+            @Query("specialid") long specialid,
+            Callback<Item[]> items
     );
 }

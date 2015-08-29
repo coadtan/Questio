@@ -15,13 +15,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.HttpContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -31,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -38,6 +36,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 @SuppressLint("NewApi")
 public class GoogleDirection {
+    public static final String LOG_TAG = GoogleDirection.class.getSimpleName();
     public final static String MODE_DRIVING = "driving";
     public final static String MODE_WALKING = "walking";
     public final static String MODE_BICYCLING = "bicycling";
@@ -96,31 +95,43 @@ public class GoogleDirection {
                 + "&sensor=false&units=metric&mode=" + mode;
 
 
-        if (isLogging)
-            Log.i("GoogleDirection", "URL : " + url);
+        Log.d(LOG_TAG, "URL : " + url);
         new RequestTask().execute(new String[]{url});
         return url;
     }
 
     private class RequestTask extends AsyncTask<String, Void, Document> {
-        protected Document doInBackground(String... url) {
+        protected Document doInBackground(String... urlStr) {
             try {
+                /*
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpContext localContext = new BasicHttpContext();
                 HttpPost httpPost = new HttpPost(url[0]);
                 HttpResponse response = httpClient.execute(httpPost, localContext);
                 InputStream in = response.getEntity().getContent();
                 DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-                return builder.parse(in);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ParserConfigurationException e) {
-                e.printStackTrace();
-            } catch (SAXException e) {
+                 */
+                OkHttpClient client = new OkHttpClient();
+                client.setConnectTimeout(20, TimeUnit.SECONDS); // connect timeout
+                client.setReadTimeout(20, TimeUnit.SECONDS);    // socket timeout
+                Request.Builder builder = new Request.Builder();
+                Request request = builder.url(urlStr[0]).build();
+
+                Response response = client.newCall(request).execute();
+                if (response.isSuccessful()) {
+                    Log.d(LOG_TAG, "Success");
+                } else {
+                    Log.d(LOG_TAG, "Not Success - code : " + response.code());
+                }
+                InputStream in = response.body().byteStream();
+                DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                return docBuilder.parse(in);
+            } catch (IOException | SAXException | ParserConfigurationException e) {
                 e.printStackTrace();
             }
             return null;
         }
+
 
         protected void onPostExecute(Document doc) {
             super.onPostExecute(doc);
@@ -399,6 +410,7 @@ public class GoogleDirection {
         public void onStart();
 
         public void onProgress(int progress, int total);
+
     }
 
     public void animateDirection(GoogleMap gm, ArrayList<LatLng> direction, int speed

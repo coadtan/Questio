@@ -139,9 +139,15 @@ public class PlaceSection extends Fragment
         googleMap.setMyLocationEnabled(true);
         locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
         if (locationManager != null) {
-            location = locationManager
-                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            try {
+                location = locationManager
+                        .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            } catch (SecurityException e) {
+                Log.d(LOG_TAG, "NETWORK_PROVIDER disable or no permission");
+            }
             if (location != null) {
+                currentLat = location.getLatitude();
+                currentLng = location.getLongitude();
                 LatLng coordinate = new LatLng(location.getLatitude(), location.getLongitude());
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 16));
                 if (mMarker != null) {
@@ -200,7 +206,8 @@ public class PlaceSection extends Fragment
             public void onReceive(Context context, Intent intent) {
                 double currentLatitude = intent.getDoubleExtra("currentLatitude", 0);
                 double currentLongitude = intent.getDoubleExtra("currentLongitude", 0);
-
+                currentLat = currentLatitude;
+                currentLng = currentLongitude;
                 //log our message value
                 Log.d(LOG_TAG, "receive currentLatitude: " + currentLatitude);
                 Log.d(LOG_TAG, "receive currentLongitude: " + currentLongitude);

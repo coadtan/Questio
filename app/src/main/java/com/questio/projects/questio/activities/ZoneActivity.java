@@ -3,9 +3,6 @@ package com.questio.projects.questio.activities;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -117,8 +113,10 @@ public class ZoneActivity extends ActionBarActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(0xFFFFFFFF);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("กำลังโหลดข้อมูล");
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("กำลังโหลดข้อมูล");
+        }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -347,7 +345,9 @@ public class ZoneActivity extends ActionBarActivity {
             public void success(Zone[] zones, Response response) {
                 if (zones != null) {
                     zone = zones[0];
-                    getSupportActionBar().setTitle(zone.getZoneName());
+                    if (getSupportActionBar() != null) {
+                        getSupportActionBar().setTitle(zone.getZoneName());
+                    }
                     if (!(zone.getImageUrl() == null)) {
                         Glide.with(ZoneActivity.this)
                                 .load(QuestioHelper.getImgLink(zone.getImageUrl()))

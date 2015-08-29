@@ -1,16 +1,23 @@
 package com.questio.projects.questio.activities;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -73,6 +80,10 @@ public class MainActivity extends AppCompatActivity
     long adventurerId;
     Place place;
     ArrayList<Place> placeListForDistance;
+    int zoneCount;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    static Context context;
 
     @Bind(R.id.app_bar)
     Toolbar toolbar;
@@ -80,6 +91,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getApplicationContext();
         prefs = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
         String displayName = prefs.getString(QuestioConstants.ADVENTURER_DISPLAYNAME, null);
         adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
@@ -143,7 +155,10 @@ public class MainActivity extends AppCompatActivity
                 e.printStackTrace();
             }
         }
+        sharedPreferences = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
+        editor = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE).edit();
         buildGoogleApiClient();
+        Log.d(LOG_TAG, "Default Place ID: " + sharedPreferences.getInt(QuestioConstants.PLACE_ID, 0));
     }
 
     private void buildGoogleApiClient() {
@@ -197,6 +212,9 @@ public class MainActivity extends AppCompatActivity
         if (beaconManager.hasBluetooth()) {
             beaconManager.disconnect();
         }
+        editor.putInt(QuestioConstants.PLACE_ID, 0);
+        editor.apply();
+
     }
 
     @Override
@@ -209,19 +227,19 @@ public class MainActivity extends AppCompatActivity
 //            Log.d(LOG_TAG, "gps: false");
 //            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
 //        }
-        if (locationAvailability.isLocationAvailable()) {
-            locationRequest = new LocationRequest()
-                    .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                    .setInterval(QuestioConstants.LOCATION_INTERVAL_TIME_IN_MILLISEC);
+//        if (locationAvailability.isLocationAvailable()) {
+        locationRequest = new LocationRequest()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(QuestioConstants.DEFAULT_LOCATION_INTERVAL_TIME);
 
-            LocationServices.FusedLocationApi.requestLocationUpdates(
-                    googleApiClient,
-                    locationRequest,
-                    this
-            );
-        } else {
-            Log.d(LOG_TAG, "locationAvailability: false");
-        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                googleApiClient,
+                locationRequest,
+                this
+        );
+//        } else {
+//            Log.d(LOG_TAG, "locationAvailability: false");
+//        }
     }
 
     @Override
@@ -244,6 +262,8 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra("currentLatitude", currentLatitude);
         intent.putExtra("currentLongitude", currentLongitude);
         this.sendBroadcast(intent);
+//        Log.d(LOG_TAG, "Current Place ID: " + sharedPreferences.getInt(QuestioConstants.PLACE_ID, 0));
+//        Log.d(LOG_TAG, "Current Place Interval: " + locationRequest.getInterval());
 
         if (!placeListForDistance.isEmpty()) {
             for (Place po : placeListForDistance) {
@@ -257,72 +277,115 @@ public class MainActivity extends AppCompatActivity
         float[] results = new float[1];
         Location.distanceBetween(currentLat, currentLng,
                 p.getLatitude(), p.getLongitude(), results);
-
         if (results[0] <= p.getRadius()) {
 
-            Log.d(LOG_TAG, "isEnterQuestMap: p.getPlaceId() = " + p.getPlaceId());
-            final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(this);
-            dialog
-                    .withTitle("เข้าสู่ " + p.getPlaceName() + "!")
-                    .withIcon(android.R.drawable.ic_dialog_info)
-                    .withTitleColor("#FFFFFF")
-                    .withDividerColor("#11000000")
-                    .withMessage("ยืนยันการเข้าสู่สถานที่แห่งนี้หรือไม่ครับ")
-                    .withMessageColor("#FFFFFFFF")
-                    .withDialogColor("#FFE74C3C")
-                    .withDuration(300)
-                    .withEffect(Effectstype.Slidetop)
-                    .withButton1Text("ยืนยัน!")
-                    .setButton1Click(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            api.getRewardByPlaceId(p.getPlaceId(), new Callback<Reward[]>() {
-                                @Override
-                                public void success(Reward[] rewards, Response response) {
-                                    if (rewards != null) {
-                                        reward = rewards[0];
-                                        api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), new Callback<Response>() {
-                                            @Override
-                                            public void success(Response response, Response response2) {
-                                                int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
-                                                Log.d(LOG_TAG, "Reward count: " + rewardCount);
-                                                if (rewardCount == 0) {
-                                                    showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL, p);
-                                                } else {
-                                                    insertExplorerProgress(p);
-                                                }
-                                            }
+//            Log.d(LOG_TAG, "isEnterQuestMap: p.getPlaceId() = " + p.getPlaceId());
+//            if(p.getPlaceId() != sharedPreferences.getInt(QuestioConstants.PLACE_ID, 0)){
+//                editor.putInt(QuestioConstants.PLACE_ID, p.getPlaceId());
+//                editor.apply();
+//                getZoneCount(p);
+//
+//            }
+//            final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(this);
+//            dialog
+//                    .withTitle("เข้าสู่ " + p.getPlaceName() + "!")
+//                    .withIcon(android.R.drawable.ic_dialog_info)
+//                    .withTitleColor("#FFFFFF")
+//                    .withDividerColor("#11000000")
+//                    .withMessage("ยืนยันการเข้าสู่สถานที่แห่งนี้หรือไม่ครับ")
+//                    .withMessageColor("#FFFFFFFF")
+//                    .withDialogColor("#FFE74C3C")
+//                    .withDuration(300)
+//                    .withEffect(Effectstype.Slidetop)
+//                    .withButton1Text("ยืนยัน!")
+//                    .setButton1Click(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//
+//                        }
+//                    })
+//                    .withButton2Text("ไม่")
+//                    .setButton2Click(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            dialog.dismiss();
+//                        }
+//                    })
+//                    .isCancelableOnTouchOutside(true);
+//            dialog.show();
 
-                                            @Override
-                                            public void failure(RetrofitError error) {
-                                                Log.d(LOG_TAG, "checkRewardData: failure");
-                                            }
-                                        });
-
-
-                                    } else {
-                                        insertExplorerProgress(p);
-                                    }
+            api.getRewardByPlaceId(p.getPlaceId(), new Callback<Reward[]>() {
+                @Override
+                public void success(Reward[] rewards, Response response) {
+                    if (rewards != null) {
+                        reward = rewards[0];
+                        api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), new Callback<Response>() {
+                            @Override
+                            public void success(Response response, Response response2) {
+                                int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
+                                Log.d(LOG_TAG, "Reward count: " + rewardCount);
+                                if (rewardCount == 0) {
+                                    showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL, p);
+                                } else {
+                                    insertExplorerProgress(p);
                                 }
+                            }
 
-                                @Override
-                                public void failure(RetrofitError error) {
+                            @Override
+                            public void failure(RetrofitError error) {
+                                Log.d(LOG_TAG, "checkRewardData: failure");
+                            }
+                        });
 
-                                }
-                            });
-                        }
-                    })
-                    .withButton2Text("ไม่")
-                    .setButton2Click(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .isCancelableOnTouchOutside(true);
-            dialog.show();
 
+                    } else {
+                        insertExplorerProgress(p);
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+
+                }
+            });
+
+            RemoteViews remoteViews = new RemoteViews(getPackageName(),
+                    R.layout.custom_place_notification);
+
+            Intent intent = new Intent(this, EnterPlace.class);
+            intent.putExtra("place", p);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+//            stackBuilder.addParentStack(PlaceActivity.class);
+//            stackBuilder.addNextIntent(intent);
+            PendingIntent pendingIntent =
+                    PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//                    stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            Notification notification =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setAutoCancel(true)
+                            .setContent(remoteViews)
+                            .build();
+
+            remoteViews.setTextViewText(R.id.enter_place_text, p.getPlaceFullName());
+            remoteViews.setOnClickPendingIntent(R.id.enter_place_button, pendingIntent);
+
+            NotificationManager notificationManager =
+                    (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.notify(1000, notification);
         }
+//        else{
+//            editor.putInt(QuestioConstants.PLACE_ID, 0);
+//            editor.apply();
+//            googleApiClient.connect();
+//            locationRequest.setInterval(QuestioConstants.DEFAULT_LOCATION_INTERVAL_TIME);
+//            LocationServices.FusedLocationApi.requestLocationUpdates(
+//                    googleApiClient,
+//                    locationRequest,
+//                    this);
+//        }
     }
 
     void showObtainRewardDialog(int rank, final Place p) {
@@ -426,7 +489,12 @@ public class MainActivity extends AppCompatActivity
         api.getZoneByPlaceId(p.getPlaceId(), new Callback<ArrayList<Zone>>() {
             @Override
             public void success(ArrayList<Zone> zones, Response response) {
-                if (!zones.isEmpty()) {
+                Log.d(LOG_TAG, "explorer progress: p.getPlaceId() " + p.getPlaceId());
+                if (zones == null) {
+                    Log.d(LOG_TAG, "explorer progress: zone is null");
+                }
+
+                if (zones != null) {
                     for (Zone z : zones) {
                         api.addExplorerProgress(adventurerId, p.getPlaceId(), z.getZoneId(), new Callback<Response>() {
                             @Override
@@ -449,8 +517,42 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-        Intent intent = new Intent(this, PlaceActivity.class);
-        intent.putExtra("place", p);
-        startActivity(intent);
+    }
+
+    public void getZoneCount(Place p) {
+        api.getCountZoneByPlaceId(p.getPlaceId(), new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                zoneCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("zonecount", response));
+                Log.d(LOG_TAG, "Zonecount = " + Integer.toString(zoneCount));
+                googleApiClient.connect();
+                locationRequest.setInterval(zoneCount * 5 * 60 * 1000);
+                LocationServices.FusedLocationApi.requestLocationUpdates(
+                        googleApiClient,
+                        locationRequest,
+                        MainActivity.this
+                );
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    public static class EnterPlace extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Place p = (Place) intent.getSerializableExtra("place");
+            Log.d(LOG_TAG, "Place - " + p.toString());
+            Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+            context.sendBroadcast(it);
+            Intent placeIntent = new Intent(context, PlaceActivity.class);
+            placeIntent.putExtra("place", p);
+            placeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(placeIntent);
+        }
     }
 }

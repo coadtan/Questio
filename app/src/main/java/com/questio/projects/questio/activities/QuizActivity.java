@@ -116,7 +116,9 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(0xFFFFFFFF);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,7 +166,9 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         if (zoneId != null) {
             zid = Integer.parseInt(zoneId);
         }
-        getSupportActionBar().setTitle(questName);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(questName);
+        }
     }
 
     @Override
@@ -235,6 +239,10 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         quizChoice2.setBackground(getResources().getDrawable(R.drawable.quiz_btn));
         quizChoice3.setBackground(getResources().getDrawable(R.drawable.quiz_btn));
         quizChoice4.setBackground(getResources().getDrawable(R.drawable.quiz_btn));
+        quizChoice1.setTextColor(getResources().getColor(R.color.white));
+        quizChoice2.setTextColor(getResources().getColor(R.color.white));
+        quizChoice3.setTextColor(getResources().getColor(R.color.white));
+        quizChoice4.setTextColor(getResources().getColor(R.color.white));
         enableAllChoices();
         if (answerStatesMap != null) {
             AnswerState as = answerStatesMap.get(q.getQuizId());
@@ -244,15 +252,19 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 switch (Integer.parseInt(q.getAnswerId())) {
                     case 1:
                         quizChoice1.setBackground(getResources().getDrawable(R.drawable.corners_button_green));
+                        quizChoice1.setTextColor(getResources().getColor(R.color.white));
                         break;
                     case 2:
                         quizChoice2.setBackground(getResources().getDrawable(R.drawable.corners_button_green));
+                        quizChoice2.setTextColor(getResources().getColor(R.color.white));
                         break;
                     case 3:
                         quizChoice3.setBackground(getResources().getDrawable(R.drawable.corners_button_green));
+                        quizChoice3.setTextColor(getResources().getColor(R.color.white));
                         break;
                     case 4:
                         quizChoice4.setBackground(getResources().getDrawable(R.drawable.corners_button_green));
+                        quizChoice4.setTextColor(getResources().getColor(R.color.white));
                         break;
                 }
             } else if (as.getStatus() == QuestioConstants.QUEST_FAILED) {
@@ -461,21 +473,25 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 as.setA(true);
                 answerStatesMap.put(quizId, as);
                 quizChoice1.setBackground(getResources().getDrawable(R.drawable.corners_button_green));
+                quizChoice1.setTextColor(getResources().getColor(R.color.white));
                 break;
             case 2:
                 as.setB(true);
                 answerStatesMap.put(quizId, as);
                 quizChoice2.setBackground(getResources().getDrawable(R.drawable.corners_button_green));
+                quizChoice2.setTextColor(getResources().getColor(R.color.white));
                 break;
             case 3:
                 as.setC(true);
                 answerStatesMap.put(quizId, as);
                 quizChoice3.setBackground(getResources().getDrawable(R.drawable.corners_button_green));
+                quizChoice3.setTextColor(getResources().getColor(R.color.white));
                 break;
             case 4:
                 as.setD(true);
                 answerStatesMap.put(quizId, as);
                 quizChoice4.setBackground(getResources().getDrawable(R.drawable.corners_button_green));
+                quizChoice4.setTextColor(getResources().getColor(R.color.white));
                 break;
         }
 
@@ -602,7 +618,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     void disableButtonAnswer(Button b) {
         //b.setBackgroundColor(getResources().getColor(R.color.red_quiz_wrong));
         b.setBackground(getResources().getDrawable(R.drawable.corners_button_red));
-        //b.setTextColor(getResources().getColor(R.color.white));
+        b.setTextColor(getResources().getColor(R.color.white));
         b.setEnabled(false);
         b.setClickable(false);
     }
@@ -725,7 +741,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                                 if (rewardCount == 0) {
                                     showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL);
                                     addRewardHOF(reward.getRewardId(), QuestioConstants.REWARD_RANK_NORMAL);
-                                }else{
+                                } else {
                                     onBackPressed();
                                 }
                             }

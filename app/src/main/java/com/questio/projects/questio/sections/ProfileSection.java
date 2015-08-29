@@ -17,8 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,6 +29,7 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.questio.projects.questio.QuestioApplication;
 import com.questio.projects.questio.R;
+import com.questio.projects.questio.activities.AvatarActivity;
 import com.questio.projects.questio.activities.InventoryActivity;
 import com.questio.projects.questio.activities.LoginActivity;
 import com.questio.projects.questio.adepters.RewardsAdapter;
@@ -97,6 +96,14 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
         view = inflater.inflate(R.layout.section_profile, container, false);
         ButterKnife.bind(this, view);
         init();
+        profilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentToAvatar = new Intent(getActivity(), AvatarActivity.class);
+                intentToAvatar.putExtra(QuestioConstants.ADVENTURER_ID, adventurerId);
+                getActivity().startActivity(intentToAvatar);
+            }
+        });
 //        Glide.with(this)
 //                .load(currentPerson.getImage().getUrl())
 //                .diskCacheStrategy(DiskCacheStrategy.ALL)
