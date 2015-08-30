@@ -561,12 +561,13 @@ public class MainActivity extends AppCompatActivity
         public void onReceive(Context context, Intent intent) {
             Place p = (Place)intent.getSerializableExtra("place");
             Log.d(LOG_TAG, "Place - " + p.toString());
-            Intent it = new Intent(context, PlaceActivity.class);
+            Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
             context.sendBroadcast(it);
             getZoneCount(p);
-            it.putExtra("place", p);
-            it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(it);
+            Intent placeIntent = new Intent(context, PlaceActivity.class);
+            placeIntent.putExtra("place", p);
+            placeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity( placeIntent);
         }
 
         @Override
