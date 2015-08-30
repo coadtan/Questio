@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity
         implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener{
+        LocationListener {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static GoogleApiClient googleApiClient;
     public static LocationRequest locationRequest;
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity
     Place place;
     ArrayList<Place> placeListForDistance;
     static int zoneCount;
-//    SharedPreferences sharedPreferences;
+    //    SharedPreferences sharedPreferences;
     static SharedPreferences.Editor editor;
     static Context context;
 
@@ -382,17 +382,16 @@ public class MainActivity extends AppCompatActivity
                 NotificationManager notificationManager =
                         (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 notificationManager.notify(1000, notification);
-            }
-        else{
-            editor.putInt(QuestioConstants.PLACE_ID, 0);
-            editor.apply();
-            googleApiClient.connect();
-            locationRequest.setInterval(QuestioConstants.DEFAULT_LOCATION_INTERVAL_TIME);
+            } else {
+                editor.putInt(QuestioConstants.PLACE_ID, 0);
+                editor.apply();
+                googleApiClient.connect();
+                locationRequest.setInterval(QuestioConstants.DEFAULT_LOCATION_INTERVAL_TIME);
 //            LocationServices.FusedLocationApi.requestLocationUpdates(
 //                    googleApiClient,
 //                    locationRequest,
 //                    this);
-        }
+            }
         }
     }
 
@@ -555,11 +554,11 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public static class EnterPlace extends BroadcastReceiver{
+    public static class EnterPlace extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Place p = (Place)intent.getSerializableExtra("place");
+            Place p = (Place) intent.getSerializableExtra("place");
             Log.d(LOG_TAG, "Place - " + p.toString());
             Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
             context.sendBroadcast(it);
@@ -567,7 +566,7 @@ public class MainActivity extends AppCompatActivity
             Intent placeIntent = new Intent(context, PlaceActivity.class);
             placeIntent.putExtra("place", p);
             placeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity( placeIntent);
+            context.startActivity(placeIntent);
         }
 
     }

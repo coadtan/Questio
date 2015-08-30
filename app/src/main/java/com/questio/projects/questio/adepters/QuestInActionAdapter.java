@@ -107,13 +107,20 @@ public class QuestInActionAdapter extends BaseAdapter {
             viewHolder.questListItem.setBackgroundColor(mContext.getResources().getColor(R.color.grey_500));
             viewHolder.questListItem.setBackgroundResource(R.drawable.touch_selector);
             viewHolder.status.setImageResource(R.drawable.ic_quest_unfinish);
-
+            viewHolder.status.setContentDescription(Integer.toString(QuestioConstants.QUEST_NOT_STARTED));
             if (this.statusList != null) {
                 for (QuestStatusAndScore q : this.statusList) {
                     if (items.getQuestId() == q.getQuestId()) {
                         if (q.getStatus() == QuestioConstants.QUEST_FINISHED || q.getStatus() == QuestioConstants.QUEST_FAILED) {
                             viewHolder.questListItem.setBackgroundColor(mContext.getResources().getColor(R.color.grey_500));
                             viewHolder.status.setImageResource(R.drawable.ic_quest_finish);
+                            viewHolder.status.setContentDescription(Integer.toString(QuestioConstants.QUEST_FINISHED));
+                        }
+                        if (q.getStatus() == QuestioConstants.QUEST_FAILED) {
+                            viewHolder.status.setContentDescription(Integer.toString(QuestioConstants.QUEST_FAILED));
+                        }
+                        if (q.getStatus() == QuestioConstants.QUEST_NOT_FINISHED) {
+                            viewHolder.status.setContentDescription(Integer.toString(QuestioConstants.QUEST_NOT_FINISHED));
                         }
                     }
                 }

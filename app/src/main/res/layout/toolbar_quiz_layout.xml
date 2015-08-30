@@ -3,13 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/toolbar_color">
+
     <TextView
+        android:id="@+id/quiz_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0"
         android:layout_gravity="end"
         android:layout_marginRight="20dp"
-        android:id="@+id/quiz_score"
+        android:text="0"
         android:textSize="16sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 </android.support.v7.widget.Toolbar>

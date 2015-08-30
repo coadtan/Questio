@@ -10,9 +10,7 @@ import java.util.ArrayList;
 
 import retrofit.client.Response;
 
-/**
- * Created by coad4u4ever on 20-May-15.
- */
+
 public class QuestStatusAndScore {
     private int questId;
     private int status;
