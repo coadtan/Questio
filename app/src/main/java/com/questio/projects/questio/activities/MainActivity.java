@@ -561,11 +561,9 @@ public class MainActivity extends AppCompatActivity
         public void onReceive(Context context, Intent intent) {
             Place p = (Place)intent.getSerializableExtra("place");
             Log.d(LOG_TAG, "Place - " + p.toString());
-            getZoneCount(p);
-            editor.putInt(QuestioConstants.PLACE_ID, p.getPlaceId());
-            editor.apply();
             Intent it = new Intent(context, PlaceActivity.class);
             context.sendBroadcast(it);
+            getZoneCount(p);
             it.putExtra("place", p);
             it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(it);
@@ -573,8 +571,8 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onLocationChanged(Location location) {
-//            MainActivity mainActivity = new MainActivity();
-//            mainActivity.onLocationChanged(location);
+            MainActivity mainActivity = new MainActivity();
+            mainActivity.onLocationChanged(location);
         }
     }
 }

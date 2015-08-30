@@ -342,17 +342,19 @@ public class AvatarActivity extends AppCompatActivity {
 
                     @Override
                     public void success(ArrayList<ItemInInventory> itemInInventories, Response response) {
-                        if (!itemInInventories.isEmpty()) {
-                            itemsEquip = itemInInventories;
-                            inventoryAdapter = new InventoryAdapter(mContext, itemsEquip);
-                            equipLayout.setAdapter(inventoryAdapter);
-                            equipLayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        if (itemInInventories != null) {
+                            if (!itemInInventories.isEmpty()) {
+                                itemsEquip = itemInInventories;
+                                inventoryAdapter = new InventoryAdapter(mContext, itemsEquip);
+                                equipLayout.setAdapter(inventoryAdapter);
+                                equipLayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                                }
-                            });
-                            inventoryAdapter.notifyDataSetChanged();
+                                    }
+                                });
+                                inventoryAdapter.notifyDataSetChanged();
+                            }
                         }
                     }
 
