@@ -6,12 +6,14 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -63,26 +65,26 @@ public class MainActivity extends AppCompatActivity
         implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener{
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private GoogleApiClient googleApiClient;
-    public LocationRequest locationRequest;
+    private static GoogleApiClient googleApiClient;
+    public static LocationRequest locationRequest;
     // Estimote zone
     private static final String ESTIMOTE_PROXIMITY_UUID = "b9407f30-f5f8-466e-aff9-25556b57fe6d";
     private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMOTE_PROXIMITY_UUID, 28521, 47387);
     private BeaconManager beaconManager = new BeaconManager(this);
     static final Region region = new Region("myRegion", ESTIMOTE_PROXIMITY_UUID, 28521, 47387);
     public Location location;
-    SharedPreferences prefs;
-    QuestioAPIService api;
+    static SharedPreferences prefs;
+    static QuestioAPIService api;
     RestAdapter adapter;
     Reward reward;
     long adventurerId;
     Place place;
     ArrayList<Place> placeListForDistance;
-    int zoneCount;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
+    static int zoneCount;
+//    SharedPreferences sharedPreferences;
+    static SharedPreferences.Editor editor;
     static Context context;
 
     @Bind(R.id.app_bar)
@@ -155,10 +157,10 @@ public class MainActivity extends AppCompatActivity
                 e.printStackTrace();
             }
         }
-        sharedPreferences = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
+//        sharedPreferences = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
         editor = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE).edit();
         buildGoogleApiClient();
-        Log.d(LOG_TAG, "Default Place ID: " + sharedPreferences.getInt(QuestioConstants.PLACE_ID, 0));
+        Log.d(LOG_TAG, "Default Place ID: " + prefs.getInt(QuestioConstants.PLACE_ID, 0));
     }
 
     private void buildGoogleApiClient() {
@@ -201,6 +203,10 @@ public class MainActivity extends AppCompatActivity
             }
 
         }
+        editor.putInt(QuestioConstants.PLACE_ID, 0);
+        editor.apply();
+        locationRequest.setInterval(QuestioConstants.DEFAULT_LOCATION_INTERVAL_TIME);
+
         if (googleApiClient != null && googleApiClient.isConnected()) {
             googleApiClient.disconnect();
         }
@@ -279,7 +285,7 @@ public class MainActivity extends AppCompatActivity
                 p.getLatitude(), p.getLongitude(), results);
         if (results[0] <= p.getRadius()) {
 
-//            Log.d(LOG_TAG, "isEnterQuestMap: p.getPlaceId() = " + p.getPlaceId());
+            Log.d(LOG_TAG, "isEnterQuestMap: p.getPlaceId() = " + p.getPlaceId());
 //            if(p.getPlaceId() != sharedPreferences.getInt(QuestioConstants.PLACE_ID, 0)){
 //                editor.putInt(QuestioConstants.PLACE_ID, p.getPlaceId());
 //                editor.apply();
@@ -349,43 +355,45 @@ public class MainActivity extends AppCompatActivity
                 }
             });
 
-            RemoteViews remoteViews = new RemoteViews(getPackageName(),
-                    R.layout.custom_place_notification);
+            if (prefs.getInt(QuestioConstants.PLACE_ID, 0) != p.getPlaceId()) {
+                RemoteViews remoteViews = new RemoteViews(getPackageName(),
+                        R.layout.custom_place_notification);
 
-            Intent intent = new Intent(this, EnterPlace.class);
-            intent.putExtra("place", p);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent intent = new Intent(this, EnterPlace.class);
+                intent.putExtra("place", p);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 //            stackBuilder.addParentStack(PlaceActivity.class);
 //            stackBuilder.addNextIntent(intent);
-            PendingIntent pendingIntent =
-                    PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent pendingIntent =
+                        PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 //                    stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            Notification notification =
-                    new NotificationCompat.Builder(this)
-                            .setSmallIcon(R.mipmap.ic_launcher)
-                            .setAutoCancel(true)
-                            .setContent(remoteViews)
-                            .build();
+                Notification notification =
+                        new NotificationCompat.Builder(this)
+                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setAutoCancel(true)
+                                .setContent(remoteViews)
+                                .build();
 
-            remoteViews.setTextViewText(R.id.enter_place_text, p.getPlaceFullName());
-            remoteViews.setOnClickPendingIntent(R.id.enter_place_button, pendingIntent);
+                remoteViews.setTextViewText(R.id.enter_place_text, "You enter " + p.getPlaceFullName());
+                remoteViews.setOnClickPendingIntent(R.id.enter_place_button, pendingIntent);
 
-            NotificationManager notificationManager =
-                    (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            notificationManager.notify(1000, notification);
-        }
-//        else{
-//            editor.putInt(QuestioConstants.PLACE_ID, 0);
-//            editor.apply();
-//            googleApiClient.connect();
-//            locationRequest.setInterval(QuestioConstants.DEFAULT_LOCATION_INTERVAL_TIME);
+                NotificationManager notificationManager =
+                        (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                notificationManager.notify(1000, notification);
+            }
+        else{
+            editor.putInt(QuestioConstants.PLACE_ID, 0);
+            editor.apply();
+            googleApiClient.connect();
+            locationRequest.setInterval(QuestioConstants.DEFAULT_LOCATION_INTERVAL_TIME);
 //            LocationServices.FusedLocationApi.requestLocationUpdates(
 //                    googleApiClient,
 //                    locationRequest,
 //                    this);
-//        }
+        }
+        }
     }
 
     void showObtainRewardDialog(int rank, final Place p) {
@@ -519,19 +527,25 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public void getZoneCount(Place p) {
+    public static void getZoneCount(Place p
+//            ,  final LocationListener locationListener
+    ) {
         api.getCountZoneByPlaceId(p.getPlaceId(), new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 zoneCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("zonecount", response));
                 Log.d(LOG_TAG, "Zonecount = " + Integer.toString(zoneCount));
-                googleApiClient.connect();
-                locationRequest.setInterval(zoneCount * 5 * 60 * 1000);
-                LocationServices.FusedLocationApi.requestLocationUpdates(
-                        googleApiClient,
-                        locationRequest,
-                        MainActivity.this
-                );
+                if (zoneCount > 0) {
+                    googleApiClient.connect();
+                    locationRequest.setInterval(zoneCount * 5 * 60 * 1000);
+//                    LocationServices.FusedLocationApi.requestLocationUpdates(
+//                            googleApiClient,
+//                            locationRequest,
+//                            locationListener
+//                    );
+                }
+                Log.d(LOG_TAG, "Current Place ID: " + prefs.getInt(QuestioConstants.PLACE_ID, 0));
+                Log.d(LOG_TAG, "Current Place Interval: " + locationRequest.getInterval());
             }
 
             @Override
@@ -541,18 +555,26 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public static class EnterPlace extends BroadcastReceiver {
+    public static class EnterPlace extends BroadcastReceiver implements LocationListener{
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Place p = (Place) intent.getSerializableExtra("place");
+            Place p = (Place)intent.getSerializableExtra("place");
             Log.d(LOG_TAG, "Place - " + p.toString());
-            Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+            getZoneCount(p);
+            editor.putInt(QuestioConstants.PLACE_ID, p.getPlaceId());
+            editor.apply();
+            Intent it = new Intent(context, PlaceActivity.class);
             context.sendBroadcast(it);
-            Intent placeIntent = new Intent(context, PlaceActivity.class);
-            placeIntent.putExtra("place", p);
-            placeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(placeIntent);
+            it.putExtra("place", p);
+            it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(it);
+        }
+
+        @Override
+        public void onLocationChanged(Location location) {
+//            MainActivity mainActivity = new MainActivity();
+//            mainActivity.onLocationChanged(location);
         }
     }
 }
