@@ -555,7 +555,7 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public static class EnterPlace extends BroadcastReceiver implements LocationListener{
+    public static class EnterPlace extends BroadcastReceiver{
 
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -570,10 +570,5 @@ public class MainActivity extends AppCompatActivity
             context.startActivity( placeIntent);
         }
 
-        @Override
-        public void onLocationChanged(Location location) {
-            MainActivity mainActivity = new MainActivity();
-            mainActivity.onLocationChanged(location);
-        }
     }
 }
