@@ -38,4 +38,14 @@ public class QuestioConstants {
     public static final int REWARD_RANK_GOLD = 4;
     public static final int DEFAULT_LOCATION_INTERVAL_TIME = 2 * 60 * 1000;
     public static final String LOCATION_UPDATE_ACTION = "location.update";
+    public static final int POSITION_HEAD = 1;
+    public static final int POSITION_BACKGROUND = 2;
+    public static final int POSITION_NECK = 3;
+    public static final int POSITION_BODY = 4;
+    public static final int POSITION_HANDLEFT = 5;
+    public static final int POSITION_HANDRIGHT = 6;
+    public static final int POSITION_ARMS = 7;
+    public static final int POSITION_LEGS = 8;
+    public static final int POSITION_FOOT = 9;
+    public static final int POSITION_AURA = 10;
 }

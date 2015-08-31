@@ -544,4 +544,12 @@ public interface QuestioAPIService {
             @Query("specialid") long specialid,
             Callback<Item[]> items
     );
+
+    //http://52.74.64.61/api/select_all_item_inventory_by_adventurerid_and_positionid.php?adventurerid=2&positionid=1
+    @GET("/select_all_item_inventory_by_adventurerid_and_positionid.php")
+    void getAllItemInInventoryByAdventurerIdAndPositionId(
+            @Query("adventurerid") long adventurerId,
+            @Query("positionid") int positionId,
+            Callback<ArrayList<ItemInInventory>> items
+    );
 }

@@ -28,6 +28,7 @@ import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
 import com.questio.projects.questio.utilities.QuestioHelper;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -52,6 +53,8 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     int zid;
     //int ref;
     long adventurerId;
+    int quizScoredCount;
+    double minusPoint;
 
     // View Zone
     @Bind(R.id.app_bar)
@@ -90,6 +93,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     @Bind(R.id.quiz_next_btn)
     Button quizNextBtn;
 
+    TextView scoreTV;
     // Misc
     private final int FIRST_QUIZ = 0;
     int currentQuiz;
@@ -125,6 +129,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 onBackPressed();
             }
         });
+        scoreTV = ButterKnife.findById(toolbar, R.id.quiz_score);
         handleInstanceState(savedInstanceState);
 
         adapter = new RestAdapter.Builder().setEndpoint(QuestioConstants.ENDPOINT).build();
@@ -138,24 +143,27 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         String questId;
         String questName;
         String zoneId;
+        String status;
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
-
             if (extras == null) {
                 questId = null;
                 questName = null;
                 zoneId = null;
+                status = null;
             } else {
                 questId = extras.getString(QuestioConstants.QUEST_ID);
                 questName = extras.getString(QuestioConstants.QUEST_NAME);
                 zoneId = extras.getString(QuestioConstants.QUEST_ZONE_ID);
+                status = extras.getString("ThisQuestStatus");
             }
         } else {
             questId = (String) savedInstanceState.getSerializable(QuestioConstants.QUEST_ID);
             questName = (String) savedInstanceState.getSerializable(QuestioConstants.QUEST_NAME);
             zoneId = (String) savedInstanceState.getSerializable(QuestioConstants.QUEST_ZONE_ID);
+            status = (String) savedInstanceState.getSerializable("ThisQuestStatus");
         }
-        Log.d(LOG_TAG, "questid: " + questId + " questName: " + questName);
+        Log.d(LOG_TAG, "questid: " + questId + " questName: " + questName + " status: " + status);
         SharedPreferences prefs = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
         adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
         reward = new Reward();
@@ -333,11 +341,16 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
             public void success(ArrayList<QuizProgress> quizProgressesTemp, Response response) {
                 quizProgresses = quizProgressesTemp;
                 Log.d(LOG_TAG, "requestQuizProgress: success");
+                if (quizProgresses == null) {
+                    scoreTV.setText(Integer.toString(10));
+                    quizScoredCount = totalQuiz;
+                }
                 if (quizProgresses == null || quizProgresses.size() != totalQuiz) {
                     Log.d(LOG_TAG, "requestQuizProgress: success but quizProgresses is null");
                     insertProgressData();
                     populateQuiz(FIRST_QUIZ);
                 } else {
+                    quizScoredCount = quizProgresses.size();
                     answerStatesMap = new HashMap<>();
                     for (QuizProgress qp : quizProgresses) {
                         AnswerState as = createAnswerState(qp);
@@ -363,6 +376,10 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d(LOG_TAG, "requestQuizProgress: failure");
             }
         });
+        if (quizScoredCount == 0) {
+            quizScoredCount = totalQuiz;
+        }
+        minusPoint = 10.0 / (quizScoredCount * 2.0);
 
     }
 
@@ -518,9 +535,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     void onIncorrect(int seqId, int quizId, int choiceSelected) {
-
         AnswerState as = answerStatesMap.get(quizId);
-
         switch (choiceSelected) {
             case 1:
                 as.setA(true);
@@ -545,6 +560,13 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         }
         int answerTime = as.getAnswerTime();
         Log.d(LOG_TAG, "onIncorrect: answerTime = " + answerTime);
+        double currentScoreTV = Double.parseDouble(scoreTV.getText().toString());
+        double newScoreTV = currentScoreTV - minusPoint;
+        DecimalFormat df = new DecimalFormat("#.00");
+        String pointShow = df.format(newScoreTV);
+        Log.d(LOG_TAG, "currentScoreTV: " + currentScoreTV + " " + "minusPoint: " + minusPoint);
+        Log.d(LOG_TAG, "newScoreTV: " + pointShow);
+        scoreTV.setText(pointShow);
         if (answerTime >= 2) {
             onLimitAnswer(seqId, quizId);
         }

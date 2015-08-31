@@ -144,15 +144,18 @@ public class ZoneActivity extends ActionBarActivity {
                 TextView questName = ButterKnife.findById(view, R.id.questname);
                 TextView questTypeInvisible = ButterKnife.findById(view, R.id.questTypeInvisible);
                 TextView zoneId = ButterKnife.findById(view, R.id.quest_zoneId);
+                ImageView status = ButterKnife.findById(view, R.id.status);
                 String questIdForIntent = questId.getText().toString();
                 String questNameForIntent = questName.getText().toString();
                 String zoneIdForIntent = zoneId.getText().toString();
+                String questStatusForIntent = status.getContentDescription().toString();
                 switch (Integer.parseInt(questTypeInvisible.getText().toString())) {
                     case 1:
                         Intent intentToQuiz = new Intent(ZoneActivity.this, QuizActivity.class);
                         intentToQuiz.putExtra(QuestioConstants.QUEST_ID, questIdForIntent);
                         intentToQuiz.putExtra(QuestioConstants.QUEST_NAME, questNameForIntent);
                         intentToQuiz.putExtra(QuestioConstants.QUEST_ZONE_ID, zoneIdForIntent);
+                        intentToQuiz.putExtra("ThisQuestStatus", questStatusForIntent);
                         startActivity(intentToQuiz);
                         break;
                     case 2:
@@ -641,7 +644,7 @@ public class ZoneActivity extends ActionBarActivity {
                             }
                         });
                     }
-                }else{
+                } else {
                     Log.d(LOG_TAG, "Explore Progress Null");
                 }
             }
@@ -654,7 +657,7 @@ public class ZoneActivity extends ActionBarActivity {
 
     }
 
-    public void getCountProgress(final Place p){
+    public void getCountProgress(final Place p) {
         api.getCountExplorerProgressByAdventurerIdAndPlaceId(adventurerId, p.getPlaceId(), new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
@@ -665,7 +668,7 @@ public class ZoneActivity extends ActionBarActivity {
                     public void success(Response response, Response response2) {
                         zoneCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("zonecount", response));
                         Log.d(LOG_TAG, "Zonecount = " + Integer.toString(zoneCount));
-                        if(exploreCount == zoneCount){
+                        if (exploreCount == zoneCount) {
                             getPlaceProgress(p);
                         }
                     }
@@ -684,7 +687,7 @@ public class ZoneActivity extends ActionBarActivity {
         });
     }
 
-    public void getPlace(){
+    public void getPlace() {
         api.getAllPlaceByZoneId(zoneId, new Callback<Place[]>() {
             @Override
             public void success(Place[] places, Response response) {
@@ -692,7 +695,7 @@ public class ZoneActivity extends ActionBarActivity {
                     Log.d(LOG_TAG, "place get success");
                     place = places[0];
                     updateExploreProgress(place);
-                }else{
+                } else {
                     Log.d(LOG_TAG, "place null");
                 }
             }
@@ -704,7 +707,7 @@ public class ZoneActivity extends ActionBarActivity {
         });
     }
 
-    public void getExploreReward(final Place p){
+    public void getExploreReward(final Place p) {
         api.getAllExploreRewardByPlaceId(p.getPlaceId(), new Callback<Reward[]>() {
             @Override
             public void success(Reward[] rewards, Response response) {
@@ -727,41 +730,38 @@ public class ZoneActivity extends ActionBarActivity {
         });
     }
 
-    public void addExplorerReward(final Place p){
-                if (placeProgress.getQuestStatus() != QuestioConstants.QUEST_FINISHED) {
-                    api.getCountHOFByAdventurerIdAndRewardId(adventurerId, exploreReward.getRewardId(), new Callback<Response>() {
-                        @Override
-                        public void success(Response response, Response response2) {
-                            int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
-                            Log.d(LOG_TAG, "Reward count: " + rewardCount);
-                            if (rewardCount == 0) {
-                                addRewardHOF(exploreReward.getRewardId(), QuestioConstants.REWARD_RANK_NORMAL);
-                                showObtainRewardDialog(exploreReward, QuestioConstants.REWARD_RANK_NORMAL);
-                                api.updatePlaceProgressByAdventurerIdAndPlaceId(adventurerId, p.getPlaceId(), new Callback<Response>() {
-                                    @Override
-                                    public void success(Response response, Response response2) {
+    public void addExplorerReward(final Place p) {
+        if (placeProgress.getQuestStatus() != QuestioConstants.QUEST_FINISHED) {
+            api.getCountHOFByAdventurerIdAndRewardId(adventurerId, exploreReward.getRewardId(), new Callback<Response>() {
+                @Override
+                public void success(Response response, Response response2) {
+                    int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
+                    Log.d(LOG_TAG, "Reward count: " + rewardCount);
+                    if (rewardCount == 0) {
+                        addRewardHOF(exploreReward.getRewardId(), QuestioConstants.REWARD_RANK_NORMAL);
+                        showObtainRewardDialog(exploreReward, QuestioConstants.REWARD_RANK_NORMAL);
+                        api.updatePlaceProgressByAdventurerIdAndPlaceId(adventurerId, p.getPlaceId(), new Callback<Response>() {
+                            @Override
+                            public void success(Response response, Response response2) {
 
-                                    }
-
-                                    @Override
-                                    public void failure(RetrofitError error) {
-
-                                    }
-                                });
                             }
-                        }
 
-                        @Override
-                        public void failure(RetrofitError error) {
+                            @Override
+                            public void failure(RetrofitError error) {
 
-                        }
-                    });
+                            }
+                        });
+                    }
                 }
 
-            }
+                @Override
+                public void failure(RetrofitError error) {
 
+                }
+            });
+        }
 
-
+    }
 
 
     public void getPlaceProgress(final Place p) {
@@ -785,8 +785,6 @@ public class ZoneActivity extends ActionBarActivity {
                 }
         );
     }
-
-
 
 
 }
