@@ -51,6 +51,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     // These 4 values have value after handleInstanceState() called
     int questId;
     int zid;
+    int thisQuestStatus;
     //int ref;
     long adventurerId;
     int quizScoredCount;
@@ -167,7 +168,9 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferences prefs = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
         adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
         reward = new Reward();
-
+        if (status != null) {
+            thisQuestStatus = Integer.parseInt(status);
+        }
         if (questId != null) {
             this.questId = Integer.parseInt(questId);
         }
@@ -342,7 +345,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 quizProgresses = quizProgressesTemp;
                 Log.d(LOG_TAG, "requestQuizProgress: success");
                 if (quizProgresses == null) {
-                    scoreTV.setText(Integer.toString(10));
+                    scoreTV.setText(Double.toString(10.0));
                     quizScoredCount = totalQuiz;
                 }
                 if (quizProgresses == null || quizProgresses.size() != totalQuiz) {
@@ -362,6 +365,20 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                         answerStatesMap.put(qp.getQuizId(), as);
                     }
                     populateQuiz(FIRST_QUIZ);
+                    if (thisQuestStatus == 3) {
+                        double scoreShow = calculateScoreByAnswerState(answerStatesMap);
+                        DecimalFormat df = new DecimalFormat("#.0");
+                        String pointShow = df.format(scoreShow);
+                        Log.d(LOG_TAG, "ScoreTV: " + scoreShow);
+                        scoreTV.setText(pointShow);
+                    } else {
+                        Log.d(LOG_TAG, "thisQuestStatus: " + thisQuestStatus);
+                        double scoreShow = calculateScoreByAnswerStateForQuizNotFinish(answerStatesMap);
+                        DecimalFormat df = new DecimalFormat("#.0");
+                        String pointShow = df.format(scoreShow);
+                        Log.d(LOG_TAG, "ScoreTV: " + scoreShow);
+                        scoreTV.setText(pointShow);
+                    }
                 }
                 quizChoice1.setOnClickListener(QuizActivity.this);
                 quizChoice2.setOnClickListener(QuizActivity.this);
@@ -562,7 +579,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         Log.d(LOG_TAG, "onIncorrect: answerTime = " + answerTime);
         double currentScoreTV = Double.parseDouble(scoreTV.getText().toString());
         double newScoreTV = currentScoreTV - minusPoint;
-        DecimalFormat df = new DecimalFormat("#.00");
+        DecimalFormat df = new DecimalFormat("#.0");
         String pointShow = df.format(newScoreTV);
         Log.d(LOG_TAG, "currentScoreTV: " + currentScoreTV + " " + "minusPoint: " + minusPoint);
         Log.d(LOG_TAG, "newScoreTV: " + pointShow);
@@ -1038,4 +1055,64 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         dialog.show();
     }
 
+    public double calculateScoreByAnswerState(HashMap<Integer, AnswerState> as) {
+        double score;
+        int numberOfQuiz = 0;
+        int quizScore = 0;
+        for (Integer key : as.keySet()) {
+            numberOfQuiz++;
+            AnswerState answerState = as.get(key);
+            if (answerState.status == QuestioConstants.QUEST_FINISHED) {
+                if (answerState.getAnswerTime() == 1) {
+                    quizScore = quizScore + 2;
+                } else if (answerState.getAnswerTime() == 2) {
+                    quizScore = quizScore + 1;
+                }
+            }
+        }
+        score = quizScore / ((numberOfQuiz * 2.0) / 10.0);
+        Log.d(LOG_TAG, "calculateScoreByAnswerState score: " + score);
+        Log.d(LOG_TAG, "calculateScoreByAnswerState numberOfQuiz: " + numberOfQuiz);
+        Log.d(LOG_TAG, "calculateScoreByAnswerState quizScore: " + quizScore);
+        return score;
+    }
+
+    public double calculateScoreByAnswerStateForQuizNotFinish(HashMap<Integer, AnswerState> as) {
+        double score;
+        int numberOfQuiz = 0;
+        int maxScore;
+        int wrongAnswerTime = 0;
+        double minusPoint;
+        for (Integer key : as.keySet()) {
+            numberOfQuiz++;
+            AnswerState answerState = as.get(key);
+            if (answerState.status == QuestioConstants.QUEST_FINISHED) {
+                if (answerState.getAnswerTime() == 2) {
+                    wrongAnswerTime = wrongAnswerTime + 1;
+                    Log.d(LOG_TAG, "this 0");
+                }
+            } else if (answerState.status == QuestioConstants.QUEST_FAILED) {
+                Log.d(LOG_TAG, "this 1");
+                wrongAnswerTime = wrongAnswerTime + 2;
+            } else if (answerState.status == QuestioConstants.QUEST_NOT_STARTED || answerState.status == QuestioConstants.QUEST_NOT_FINISHED) {
+                Log.d(LOG_TAG, "this 2");
+                wrongAnswerTime = wrongAnswerTime + 1;
+            } else {
+                // answerState.status == 0
+                Log.d(LOG_TAG, "Quiz ID: " + answerState.getQuizId() + " not finish yet");
+                if (answerState.getAnswerTime() == 1) {
+                    wrongAnswerTime = wrongAnswerTime + 1;
+                }
+            }
+        }
+        maxScore = numberOfQuiz * 2;
+        minusPoint = 10.0 / maxScore;
+
+        score = 10.0 - (wrongAnswerTime * minusPoint);
+        Log.d(LOG_TAG, "calculateScoreByAnswerState score: " + score);
+        Log.d(LOG_TAG, "calculateScoreByAnswerState numberOfQuiz: " + numberOfQuiz);
+        Log.d(LOG_TAG, "calculateScoreByAnswerState wrongAnswerTime: " + wrongAnswerTime);
+        Log.d(LOG_TAG, "calculateScoreByAnswerState minusPoint: " + minusPoint);
+        return score;
+    }
 }
