@@ -51,7 +51,7 @@ public class HOFActivity extends AppCompatActivity implements AdapterView.OnItem
     @Bind(R.id.hof_toolbar)
     Toolbar toolbar;
 
-    @Bind(R.id.hof_reward_place)
+    @Bind(R.id.hof_reward)
     GridView hallOfFame;
 
     @Override
