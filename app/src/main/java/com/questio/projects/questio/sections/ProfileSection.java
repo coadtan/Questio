@@ -30,6 +30,7 @@ import com.google.android.gms.plus.model.people.Person;
 import com.questio.projects.questio.QuestioApplication;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.activities.AvatarActivity;
+import com.questio.projects.questio.activities.HOFActivity;
 import com.questio.projects.questio.activities.HOFPlaceActivity;
 import com.questio.projects.questio.activities.InventoryActivity;
 import com.questio.projects.questio.activities.LoginActivity;
@@ -59,7 +60,8 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
 
     @Bind(R.id.profile_place_rewards_button)
     ImageButton placeRewardsButton;
-
+    @Bind(R.id.profile_rewards_button)
+    ImageButton rewardsButton;
 //    @Bind(R.id.halloffame)
 //    GridView hallOfFame;
 
@@ -114,6 +116,14 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
                 Intent intentToPlaceHOF = new Intent(getActivity(), HOFPlaceActivity.class);
                 intentToPlaceHOF.putExtra(QuestioConstants.ADVENTURER_ID, adventurerId);
                 getActivity().startActivity(intentToPlaceHOF);
+            }
+        });
+        rewardsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentToHOF = new Intent(getActivity(), HOFActivity.class);
+                intentToHOF.putExtra(QuestioConstants.ADVENTURER_ID, adventurerId);
+                getActivity().startActivity(intentToHOF);
             }
         });
 //        Glide.with(this)
