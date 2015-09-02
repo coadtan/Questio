@@ -97,6 +97,7 @@
             android:background="@android:color/darker_gray" />
 
         <ImageButton
+            android:id="@+id/profile_place_rewards_button"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginLeft="28dp"

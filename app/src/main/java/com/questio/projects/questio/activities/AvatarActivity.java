@@ -45,6 +45,7 @@ public class AvatarActivity extends AppCompatActivity {
     InventoryAdapter inventoryAdapter = null;
     ArrayList<ItemInInventory> itemsEquip;
     GridView equipLayout;
+    Avatar avatar;
 
     @Bind(R.id.avatar_toolbar)
     Toolbar toolbar;
@@ -164,6 +165,7 @@ public class AvatarActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
         adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
         mContext = this;
+        avatar = new Avatar();
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Your Avatar");
         }
@@ -189,17 +191,18 @@ public class AvatarActivity extends AppCompatActivity {
             public void success(Avatar[] avatars, Response response) {
                 Log.d(LOG_TAG, "get avatar successfully");
                 Log.d(LOG_TAG, avatars[0].toString());
+                avatar = avatars[0];
                 setImageSpike(
-                        avatars[0].getHeadId(),
-                        avatars[0].getBackgroundId(),
-                        avatars[0].getNeckId(),
-                        avatars[0].getBodyId(),
-                        avatars[0].getHandleftId(),
-                        avatars[0].getHandrightId(),
-                        avatars[0].getArmId(),
-                        avatars[0].getLegId(),
-                        avatars[0].getFootId(),
-                        avatars[0].getSpecialId()
+                        avatar.getHeadId(),
+                        avatar.getBackgroundId(),
+                        avatar.getNeckId(),
+                        avatar.getBodyId(),
+                        avatar.getHandleftId(),
+                        avatar.getHandrightId(),
+                        avatar.getArmId(),
+                        avatar.getLegId(),
+                        avatar.getFootId(),
+                        avatar.getSpecialId()
                 );
                 Log.d(LOG_TAG, "end of populateAvatar");
             }
@@ -347,10 +350,12 @@ public class AvatarActivity extends AppCompatActivity {
                                 itemsEquip = itemInInventories;
                                 inventoryAdapter = new InventoryAdapter(mContext, itemsEquip);
                                 equipLayout.setAdapter(inventoryAdapter);
-                                equipLayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                equipLayout.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                                     @Override
-                                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                        Log.d(LOG_TAG, view.toString());
+                                        ItemInInventory item = itemsEquip.get(i);
+                                        return false;
                                     }
                                 });
                                 inventoryAdapter.notifyDataSetChanged();

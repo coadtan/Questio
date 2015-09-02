@@ -552,4 +552,31 @@ public interface QuestioAPIService {
             @Query("positionid") int positionId,
             Callback<ArrayList<ItemInInventory>> items
     );
+
+    //http://52.74.64.61/api/equip_new_item_by_partid_itemid_and_avatarid.php?part=1&itemid=2&avatarid=2&olditemid=1
+    @GET("/equip_new_item_by_partid_itemid_and_avatarid.php")
+    void equipNewItem(
+            @Query("partid") int partId,
+            @Query("itemid") int itemId,
+            @Query("olditemid") int oldItemId,
+            @Query("avatarid") long avatarId,
+            Callback<Response> response
+    );
+
+    //http://52.74.64.61/api/unequip_by_partid_itemid_and_avatarid.php?part=1&itemid=1&avatarid=2
+    @GET("/unequip_by_partid_itemid_and_avatarid.php")
+    void unequipItem(
+            @Query("partid") int partId,
+            @Query("itemid") int itemId,
+            @Query("avatarid") long avatarId,
+            Callback<Response> response
+    );
+
+    //http://52.74.64.61/api/select_rewards_halloffame_place_by_adventurerid.php?adventurerid=2
+    @GET("/select_rewards_halloffame_place_by_adventurerid.php")
+    void getAllPlaceRewardsInHalloffameByAdventurerId(
+            @Query("adventurerid") long adventurerId,
+            Callback<ArrayList<RewardHOF>> response
+    );
+
 }
