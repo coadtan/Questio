@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.ColorFilterTransformation;
 import jp.wasabeef.glide.transformations.GrayscaleTransformation;
 import jp.wasabeef.glide.transformations.gpu.BrightnessFilterTransformation;
 import jp.wasabeef.glide.transformations.gpu.SepiaFilterTransformation;
@@ -83,10 +84,11 @@ public class RewardsAdapter extends BaseAdapter {
         } else if (reward.getRankId() == QuestioConstants.REWARD_RANK_GOLD) {
             Glide.with(mContext)
                     .load(QuestioHelper.getImgLink(reward.getRewardPic()))
-                    .bitmapTransform(new BrightnessFilterTransformation(mContext, Glide.get(mContext).getBitmapPool(), 0.5f))
+                    .bitmapTransform(new GrayscaleTransformation(Glide.get(mContext).getBitmapPool())
+                            , new ColorFilterTransformation(Glide.get(mContext).getBitmapPool(), mContext.getResources().getColor(R.color.reward_gold)))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(viewHolder.rewardsImage);
-        } else {
+        }else{
             Glide.with(mContext)
                     .load(QuestioHelper.getImgLink(reward.getRewardPic()))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)

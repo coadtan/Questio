@@ -26,6 +26,9 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.ColorFilterTransformation;
+import jp.wasabeef.glide.transformations.GrayscaleTransformation;
+import jp.wasabeef.glide.transformations.gpu.SepiaFilterTransformation;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -135,16 +138,37 @@ public class HOFPlaceActivity extends AppCompatActivity implements AdapterView.O
         TextView tvRewardName = ButterKnife.findById(dialog, R.id.dialog_reward_name);
         TextView tvRewardDesc = ButterKnife.findById(dialog, R.id.dialog_reward_desc);
         TextView tvRewardDate = ButterKnife.findById(dialog, R.id.dialog_reward_datereceived);
-        ImageView rewardImage = ButterKnife.findById(dialog, R.id.dialog_reward_picture);
+        ImageView rewardPicture = ButterKnife.findById(dialog, R.id.dialog_reward_picture);
 
         String rewardName = reward.getRewardName();
         String rewardDesc = reward.getDescription();
         String rewardDate = reward.getDateReceived();
 
-        Glide.with(mContext)
-                .load(QuestioConstants.BASE_URL + reward.getRewardPic())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(rewardImage);
+        if (reward.getRankId() == QuestioConstants.REWARD_RANK_NORMAL) {
+            Glide.with(this)
+                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(rewardPicture);
+        } else if (reward.getRankId() == QuestioConstants.REWARD_RANK_BRONZE) {
+            Glide.with(this)
+                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .bitmapTransform(new SepiaFilterTransformation(this, Glide.get(this).getBitmapPool()))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(rewardPicture);
+        } else if (reward.getRankId() == QuestioConstants.REWARD_RANK_SILVER) {
+            Glide.with(this)
+                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .bitmapTransform(new GrayscaleTransformation(Glide.get(this).getBitmapPool()))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(rewardPicture);
+        } else if (reward.getRankId() == QuestioConstants.REWARD_RANK_GOLD) {
+            Glide.with(this)
+                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .bitmapTransform(new GrayscaleTransformation(Glide.get(this).getBitmapPool())
+                            , new ColorFilterTransformation(Glide.get(this).getBitmapPool(), this.getResources().getColor(R.color.reward_gold)))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(rewardPicture);
+        }
         tvRewardName.setText(rewardName);
         tvRewardDesc.setText(rewardDesc);
         tvRewardDate.setText(rewardDate);

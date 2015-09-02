@@ -38,6 +38,7 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.ColorFilterTransformation;
 import jp.wasabeef.glide.transformations.GrayscaleTransformation;
 import jp.wasabeef.glide.transformations.gpu.BrightnessFilterTransformation;
 import jp.wasabeef.glide.transformations.gpu.SepiaFilterTransformation;
@@ -579,7 +580,8 @@ public class ZoneActivity extends ActionBarActivity {
             rewardRank = "ระดับทอง";
             Glide.with(this)
                     .load(QuestioConstants.BASE_URL + reward.getRewardPic())
-                    .bitmapTransform(new BrightnessFilterTransformation(this, Glide.get(this).getBitmapPool(), 0.5f))
+                    .bitmapTransform(new GrayscaleTransformation(Glide.get(this).getBitmapPool())
+                            , new ColorFilterTransformation(Glide.get(this).getBitmapPool(), this.getResources().getColor(R.color.reward_gold)))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
         }
