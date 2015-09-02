@@ -46,6 +46,7 @@ public class AvatarActivity extends AppCompatActivity {
     ArrayList<ItemInInventory> itemsEquip;
     GridView equipLayout;
     Avatar avatar;
+    long oldItemId;
 
     @Bind(R.id.avatar_toolbar)
     Toolbar toolbar;
@@ -321,7 +322,7 @@ public class AvatarActivity extends AppCompatActivity {
         );
     }
 
-    public void showEquipDialog(int position){
+    public void showEquipDialog(final int position){
         final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(this);
         dialog
                 .withTitle("Equip")
@@ -343,31 +344,32 @@ public class AvatarActivity extends AppCompatActivity {
         equipLayout = ButterKnife.findById(dialog, R.id.item_inventory_equip);
         api.getAllItemInInventoryByAdventurerIdAndPositionId(adventurerId, position, new Callback<ArrayList<ItemInInventory>>() {
 
-                    @Override
-                    public void success(ArrayList<ItemInInventory> itemInInventories, Response response) {
-                        if (itemInInventories != null) {
-                            if (!itemInInventories.isEmpty()) {
-                                itemsEquip = itemInInventories;
-                                inventoryAdapter = new InventoryAdapter(mContext, itemsEquip);
-                                equipLayout.setAdapter(inventoryAdapter);
-                                equipLayout.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                                    @Override
-                                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                        Log.d(LOG_TAG, view.toString());
-                                        ItemInInventory item = itemsEquip.get(i);
-                                        return false;
-                                    }
-                                });
-                                inventoryAdapter.notifyDataSetChanged();
+            @Override
+            public void success(ArrayList<ItemInInventory> itemInInventories, Response response) {
+                if (itemInInventories != null) {
+                    if (!itemInInventories.isEmpty()) {
+                        itemsEquip = itemInInventories;
+                        inventoryAdapter = new InventoryAdapter(mContext, itemsEquip);
+                        equipLayout.setAdapter(inventoryAdapter);
+                        equipLayout.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                            @Override
+                            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                Log.d(LOG_TAG, view.toString());
+                                ItemInInventory newItem = itemsEquip.get(i);
+                                equipNewItem(position, newItem.getItemId());
+                                return false;
                             }
-                        }
+                        });
+                        inventoryAdapter.notifyDataSetChanged();
                     }
+                }
+            }
 
-                    @Override
-                    public void failure(RetrofitError error) {
+            @Override
+            public void failure(RetrofitError error) {
 
-                    }
-                });
+            }
+        });
 
             dialog.show();
     }
@@ -427,5 +429,155 @@ public class AvatarActivity extends AppCompatActivity {
                 showEquipDialog(QuestioConstants.POSITION_FOOT);
             }
         });
+    }
+
+    public void equipNewItem(final int partId, final long newItemId){
+        if(avatar.getAvatarId() != 0){
+            switch (partId){
+                case QuestioConstants.POSITION_HEAD:
+                    oldItemId = avatar.getHeadId();
+                    avatar.setHeadId(newItemId);
+                    break;
+                case QuestioConstants.POSITION_BACKGROUND:
+                    oldItemId = avatar.getBackgroundId();
+                    avatar.setBackgroundId(newItemId);
+                    break;
+                case QuestioConstants.POSITION_NECK:
+                    oldItemId = avatar.getNeckId();
+                    avatar.setNeckId(newItemId);
+                    break;
+                case QuestioConstants.POSITION_BODY:
+                    oldItemId = avatar.getBodyId();
+                    avatar.setBodyId(newItemId);
+                    break;
+                case QuestioConstants.POSITION_HANDLEFT:
+                    oldItemId = avatar.getHandleftId();
+                    avatar.setHandleftId(newItemId);
+                    break;
+                case QuestioConstants.POSITION_HANDRIGHT:
+                    oldItemId = avatar.getHandrightId();
+                    avatar.setHandrightId(newItemId);
+                    break;
+                case QuestioConstants.POSITION_ARMS:
+                    oldItemId = avatar.getArmId();
+                    avatar.setArmId(newItemId);
+                    break;
+                case QuestioConstants.POSITION_LEGS:
+                    oldItemId = avatar.getLegId();
+                    avatar.setLegId(newItemId);
+                    break;
+                case QuestioConstants.POSITION_FOOT:
+                    oldItemId = avatar.getFootId();
+                    avatar.setFootId(newItemId);
+                    break;
+                case QuestioConstants.POSITION_AURA:
+                    oldItemId = avatar.getSpecialId();
+                    avatar.setSpecialId(newItemId);
+                    break;
+            }
+            Log.d(LOG_TAG, "Old Item ID - " + oldItemId);
+        }
+        api.equipNewItem(partId, newItemId, oldItemId, adventurerId, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                if(oldItemId != 0){
+                    String status = QuestioHelper.getJSONStringValueByTag("status", response);
+                    if(status.equalsIgnoreCase("1")){
+                        changeSpritePathByNewItemId(partId, newItemId);
+                    }else{
+                        Log.d(LOG_TAG, "EquipNewItem Failed");
+                    }
+                }else{
+                    String status = QuestioHelper.getJSONStringValueByTag("status", response);
+                    if(status.equalsIgnoreCase("1")){
+                        changeSpritePathByNewItemId(partId, newItemId);
+                    }else{
+                        Log.d(LOG_TAG, "EquipNewItem Failed");
+                    }
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    public void changeSpritePathByNewItemId(final int partId, long newItemId){
+        api.getEquipSpritePathByItemId(newItemId, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                String url = QuestioHelper.getJSONStringValueByTag("equipspritepath", response);
+                switch (partId) {
+                    case QuestioConstants.POSITION_HEAD:
+                        Glide.with(AvatarActivity.this)
+                                .load(QuestioConstants.BASE_URL + url)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(avatarHead);
+                        break;
+                    case QuestioConstants.POSITION_BACKGROUND:
+                        Glide.with(AvatarActivity.this)
+                                .load(QuestioConstants.BASE_URL + url)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(avatarBackground);
+                        break;
+                    case QuestioConstants.POSITION_NECK:
+                        Glide.with(AvatarActivity.this)
+                                .load(QuestioConstants.BASE_URL + url)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(avatarNeck);
+                        break;
+                    case QuestioConstants.POSITION_BODY:
+                        Glide.with(AvatarActivity.this)
+                                .load(QuestioConstants.BASE_URL + url)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(avatarBody);
+                        break;
+                    case QuestioConstants.POSITION_HANDLEFT:
+                        Glide.with(AvatarActivity.this)
+                                .load(QuestioConstants.BASE_URL + url)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(avatarHandLeft);
+                        break;
+                    case QuestioConstants.POSITION_HANDRIGHT:
+                        Glide.with(AvatarActivity.this)
+                                .load(QuestioConstants.BASE_URL + url)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(avatarHandRight);
+                        break;
+                    case QuestioConstants.POSITION_ARMS:
+                        Glide.with(AvatarActivity.this)
+                                .load(QuestioConstants.BASE_URL + url)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(avatarArms);
+                        break;
+                    case QuestioConstants.POSITION_LEGS:
+                        Glide.with(AvatarActivity.this)
+                                .load(QuestioConstants.BASE_URL + url)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(avatarLegs);
+                        break;
+                    case QuestioConstants.POSITION_FOOT:
+                        Glide.with(AvatarActivity.this)
+                                .load(QuestioConstants.BASE_URL + url)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(avatarFoot);
+                        break;
+                    case QuestioConstants.POSITION_AURA:
+                        Glide.with(AvatarActivity.this)
+                                .load(QuestioConstants.BASE_URL + url)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(avatarSpecial);
+                        break;
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+
     }
 }
