@@ -67,6 +67,10 @@ public class InventoryAdapter extends BaseAdapter {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(viewHolder.itemImage);
 
+        if(itemInv.getIsEquipped() == 1){
+            viewHolder.itemImage.setImageAlpha(100);
+        }
+
         return convertView;
 
     }

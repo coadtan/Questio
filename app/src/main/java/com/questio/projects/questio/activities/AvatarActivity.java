@@ -357,6 +357,7 @@ public class AvatarActivity extends AppCompatActivity {
                                 Log.d(LOG_TAG, view.toString());
                                 ItemInInventory newItem = itemsEquip.get(i);
                                 equipNewItem(position, newItem.getItemId());
+                                dialog.dismiss();
                                 return false;
                             }
                         });
@@ -480,18 +481,27 @@ public class AvatarActivity extends AppCompatActivity {
         api.equipNewItem(partId, newItemId, oldItemId, adventurerId, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
-                if(oldItemId != 0){
-                    String status = QuestioHelper.getJSONStringValueByTag("status", response);
-                    if(status.equalsIgnoreCase("1")){
-                        changeSpritePathByNewItemId(partId, newItemId);
+                if (oldItemId != 0) {
+                    if (newItemId != oldItemId) {
+                        String status = QuestioHelper.getJSONStringValueByTag("status", response);
+                        if (status.equalsIgnoreCase("1")) {
+                            changeSpritePathByNewItemId(partId, newItemId);
+                        } else {
+                            Log.d(LOG_TAG, "EquipNewItem Failed");
+                        }
                     }else{
-                        Log.d(LOG_TAG, "EquipNewItem Failed");
+                        String status = QuestioHelper.getJSONStringValueByTag("status", response);
+                        if (status.equalsIgnoreCase("1")) {
+                            unequipItem(partId, oldItemId);
+                        } else {
+                            Log.d(LOG_TAG, "EquipNewItem Failed");
+                        }
                     }
-                }else{
+                } else {
                     String status = QuestioHelper.getJSONStringValueByTag("status", response);
-                    if(status.equalsIgnoreCase("1")){
+                    if (status.equalsIgnoreCase("1")) {
                         changeSpritePathByNewItemId(partId, newItemId);
-                    }else{
+                    } else {
                         Log.d(LOG_TAG, "EquipNewItem Failed");
                     }
                 }
@@ -502,6 +512,57 @@ public class AvatarActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void unequipItem(final int partId, long itemId){
+        api.unequipItem(partId, itemId, adventurerId, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                String status = QuestioHelper.getJSONStringValueByTag("status", response);
+                if (status.equalsIgnoreCase("1")) {
+                    switch (partId) {
+                        case QuestioConstants.POSITION_HEAD:
+                            avatarHead.setVisibility(View.INVISIBLE);
+                            break;
+                        case QuestioConstants.POSITION_BACKGROUND:
+                            avatarBackground.setVisibility(View.INVISIBLE);
+                            break;
+                        case QuestioConstants.POSITION_NECK:
+                            avatarNeck.setVisibility(View.INVISIBLE);
+                            break;
+                        case QuestioConstants.POSITION_BODY:
+                            avatarBody.setVisibility(View.INVISIBLE);
+                            break;
+                        case QuestioConstants.POSITION_HANDLEFT:
+                            avatarHandLeft.setVisibility(View.INVISIBLE);
+                            break;
+                        case QuestioConstants.POSITION_HANDRIGHT:
+                            avatarHandRight.setVisibility(View.INVISIBLE);
+                            break;
+                        case QuestioConstants.POSITION_ARMS:
+                            avatarArms.setVisibility(View.INVISIBLE);
+                            break;
+                        case QuestioConstants.POSITION_LEGS:
+                            avatarLegs.setVisibility(View.INVISIBLE);
+                            break;
+                        case QuestioConstants.POSITION_FOOT:
+                            avatarFoot.setVisibility(View.INVISIBLE);
+                            break;
+                        case QuestioConstants.POSITION_AURA:
+                            avatarSpecial.setVisibility(View.INVISIBLE);
+                            break;
+                    }
+                } else {
+                    Log.d(LOG_TAG, "EquipNewItem Failed");
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+
     }
 
     public void changeSpritePathByNewItemId(final int partId, long newItemId){
