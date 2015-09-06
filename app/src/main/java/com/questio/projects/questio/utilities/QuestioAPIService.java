@@ -579,7 +579,7 @@ public interface QuestioAPIService {
             Callback<ArrayList<RewardHOF>> response
     );
 
-    @GET("select_rewards_halloffame_nonplace_by_adventurerid.php")
+    @GET("/select_rewards_halloffame_nonplace_by_adventurerid.php")
     void getNonPlaceRewardsInHalloffameByAdventurerId(
             @Query("adventurerid") long adventurerId,
             Callback<ArrayList<RewardHOF>> response
