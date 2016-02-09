@@ -2,7 +2,7 @@ package com.questio.projects.questio.utilities;
 
 
 public class QuestioConstants {
-    public static final String BASE_URL = "http://52.74.64.61";
+    public static final String BASE_URL = "http://52.74.64.61/questio_management";
     public static final String ENDPOINT = "http://52.74.64.61/api";
     public static final String TAG_PLACE_ID = "placeid";
     public static final String TAG_PLACE_NAME = "placename";
