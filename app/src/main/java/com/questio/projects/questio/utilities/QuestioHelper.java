@@ -102,7 +102,7 @@ public class QuestioHelper {
     }
 
     public static String getImgLink(String path) {
-        return "http://52.74.64.61" + path;
+        return "http://52.74.64.61/questio_management" + path;
     }
 
     public static long getAdventurerCountFromJson(String response) {

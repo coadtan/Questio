@@ -69,11 +69,7 @@ public class MainActivity extends AppCompatActivity
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static GoogleApiClient googleApiClient;
     public static LocationRequest locationRequest;
-    // Estimote zone
-    private static final String ESTIMOTE_PROXIMITY_UUID = "b9407f30-f5f8-466e-aff9-25556b57fe6d";
-    private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMOTE_PROXIMITY_UUID, 28521, 47387);
-    private BeaconManager beaconManager = new BeaconManager(this);
-    static final Region region = new Region("myRegion", ESTIMOTE_PROXIMITY_UUID, 28521, 47387);
+
     public Location location;
     static SharedPreferences prefs;
     static QuestioAPIService api;
@@ -130,34 +126,7 @@ public class MainActivity extends AppCompatActivity
         }
         Log.d(LOG_TAG, "count: " + place.getPlaceCount());
 
-        // Estimote zone
-        if (beaconManager.hasBluetooth()) {
-            beaconManager.setRangingListener(new BeaconManager.RangingListener() {
-                @Override
-                public void onBeaconsDiscovered(Region region, List<Beacon> beacons) {
-                    Log.d(LOG_TAG, "Ranged beacons: " + beacons);
-                }
-            });
 
-            try {
-                beaconManager.setMonitoringListener(new BeaconManager.MonitoringListener() {
-                    @Override
-                    public void onEnteredRegion(Region region, List<Beacon> beacons) {
-                        Beacon beacon = beacons.get(0);
-                        Log.d("Beacon", beacon.getMajor() + ": " + beacon.getMinor());
-                    }
-
-                    @Override
-                    public void onExitedRegion(Region region) {
-                        Log.d("Beacon", "exit Region");
-                    }
-                });
-                beaconManager.startMonitoring(region);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-//        sharedPreferences = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
         editor = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE).edit();
         buildGoogleApiClient();
         Log.d(LOG_TAG, "Default Place ID: " + prefs.getInt(QuestioConstants.PLACE_ID, 0));
@@ -174,35 +143,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        // Should be invoked in #onStart.
-        if (beaconManager.hasBluetooth()) {
-            beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
-                @Override
-                public void onServiceReady() {
-                    try {
-                        beaconManager.startRanging(ALL_ESTIMOTE_BEACONS);
-                    } catch (RemoteException e) {
-                        Log.e(LOG_TAG, "Cannot start ranging", e);
-                    }
-                }
-            });
-
-        }
         googleApiClient.connect();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        // Should be invoked in #onStop.
-        if (beaconManager.hasBluetooth()) {
-            try {
-                beaconManager.stopRanging(ALL_ESTIMOTE_BEACONS);
-            } catch (RemoteException e) {
-                Log.e(LOG_TAG, "Cannot stop but it does not matter now", e);
-            }
-
-        }
         editor.putInt(QuestioConstants.PLACE_ID, 0);
         editor.apply();
         locationRequest.setInterval(QuestioConstants.DEFAULT_LOCATION_INTERVAL_TIME);
@@ -215,9 +161,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (beaconManager.hasBluetooth()) {
-            beaconManager.disconnect();
-        }
         editor.putInt(QuestioConstants.PLACE_ID, 0);
         editor.apply();
 
@@ -329,12 +272,12 @@ public class MainActivity extends AppCompatActivity
                         PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                 Notification notification =
                         new NotificationCompat.Builder(this)
-                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setSmallIcon(R.drawable.ic_icon_quest)
                                 .setAutoCancel(true)
                                 .setContent(remoteViews)
                                 .build();
-                remoteViews.setTextViewText(R.id.enter_place_text, "You enter " + p.getPlaceFullName());
-                remoteViews.setOnClickPendingIntent(R.id.enter_place_button, pendingIntent);
+                remoteViews.setTextViewText(R.id.enter_place_text, p.getPlaceFullName());
+                remoteViews.setOnClickPendingIntent(R.id.enter_place_notification, pendingIntent);
                 NotificationManager notificationManager =
                         (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 notificationManager.notify(1000, notification);

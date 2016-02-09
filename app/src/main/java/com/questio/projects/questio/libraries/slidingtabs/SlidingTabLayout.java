@@ -192,26 +192,22 @@ public class SlidingTabLayout extends HorizontalScrollView {
         final View.OnClickListener tabClickListener = new TabClickListener();
 
 
-        Integer[] iconResourceArray = new Integer[5];
+        Integer[] iconResourceArray = new Integer[4];
         iconResourceArray[0] = R.drawable.ic_icon_ranking;
-        iconResourceArray[1] = R.drawable.ic_icon_search;
-        iconResourceArray[2] = R.drawable.ic_icon_quest;
-        iconResourceArray[3] = R.drawable.ic_icon_hallofframe;
-        iconResourceArray[4] = R.drawable.ic_icon_profile;
+        iconResourceArray[1] = R.drawable.ic_icon_quest;
+        iconResourceArray[2] = R.drawable.ic_icon_hallofframe;
+        iconResourceArray[3] = R.drawable.ic_icon_profile;
 
-        String[] tabDescription = new String[5];
+        String[] tabDescription = new String[4];
         tabDescription[0] = "go to ranking section tab";
-        tabDescription[1] = "go to search section tab";
-        tabDescription[2] = "go to quest section tab";
-        tabDescription[3] = "go to inventory section tab";
-        tabDescription[4] = "go to profile section tab";
+        tabDescription[1] = "go to quest section tab";
+        tabDescription[2] = "go to inventory section tab";
+        tabDescription[3] = "go to profile section tab";
 
         for (int i = 0; i < adapter.getCount(); i++) {
             View tabView = null;
             tabView = LayoutInflater.from(getContext()).inflate(R.layout.section_tab, mTabStrip,
                     false);
-            //     tabView.setBackgroundColor(Color.BLACK);
-            //tabView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             ImageView iconImageView = (ImageView) tabView.findViewById(R.id.tab_layout_icon);
             iconImageView.setImageDrawable(getContext().getResources().getDrawable(iconResourceArray[i]));
             tabView.setContentDescription(tabDescription[i]);
