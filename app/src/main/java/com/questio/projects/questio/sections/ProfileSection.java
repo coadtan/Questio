@@ -253,7 +253,7 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
         String rewardDate = reward.getDateReceived();
 
         Glide.with(mContext)
-                .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                .load(QuestioConstants.BASE_URL_PIC + reward.getRewardPic())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(rewardImage);
         tvRewardName.setText(rewardName);

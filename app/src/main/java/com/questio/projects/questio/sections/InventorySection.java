@@ -308,7 +308,7 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
         String itemCollection = item.getItemCollection();
 
         Glide.with(mContext)
-                .load(QuestioConstants.BASE_URL + item.getItemPicPath())
+                .load(QuestioConstants.BASE_URL_PIC + item.getItemPicPath())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(itemImage);
         tvItemName.setText(itemName);

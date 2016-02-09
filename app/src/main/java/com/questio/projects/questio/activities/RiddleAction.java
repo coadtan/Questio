@@ -502,27 +502,27 @@ public class RiddleAction extends AppCompatActivity implements View.OnClickListe
         if (rank == QuestioConstants.REWARD_RANK_NORMAL) {
             rewardRank = "ระดับปกติ";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_URL_PIC + reward.getRewardPic())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
         } else if (rank == QuestioConstants.REWARD_RANK_BRONZE) {
             rewardRank = "ระดับทองแดง";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_URL_PIC + reward.getRewardPic())
                     .bitmapTransform(new SepiaFilterTransformation(this, Glide.get(this).getBitmapPool()))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
         } else if (rank == QuestioConstants.REWARD_RANK_SILVER) {
             rewardRank = "ระดับเงิน";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_URL_PIC + reward.getRewardPic())
                     .bitmapTransform(new GrayscaleTransformation(Glide.get(this).getBitmapPool()))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
         } else if (rank == QuestioConstants.REWARD_RANK_GOLD) {
             rewardRank = "ระดับทอง";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_URL_PIC + reward.getRewardPic())
                     .bitmapTransform(new BrightnessFilterTransformation(this, Glide.get(this).getBitmapPool(), 0.5f))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);

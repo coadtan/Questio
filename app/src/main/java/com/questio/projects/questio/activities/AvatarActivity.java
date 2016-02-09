@@ -249,61 +249,61 @@ public class AvatarActivity extends AppCompatActivity {
                                 switch (item.getPositionId()) {
                                     case QuestioConstants.POSITION_HEAD:
                                         Glide.with(AvatarActivity.this)
-                                                .load(QuestioConstants.BASE_URL + item.getEquipSpritePath())
+                                                .load(QuestioConstants.BASE_URL_PIC + item.getEquipSpritePath())
                                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                                 .into(avatarHead);
                                         break;
                                     case QuestioConstants.POSITION_BACKGROUND:
                                         Glide.with(AvatarActivity.this)
-                                                .load(QuestioConstants.BASE_URL + item.getEquipSpritePath())
+                                                .load(QuestioConstants.BASE_URL_PIC + item.getEquipSpritePath())
                                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                                 .into(avatarBackground);
                                         break;
                                     case QuestioConstants.POSITION_NECK:
                                         Glide.with(AvatarActivity.this)
-                                                .load(QuestioConstants.BASE_URL + item.getEquipSpritePath())
+                                                .load(QuestioConstants.BASE_URL_PIC + item.getEquipSpritePath())
                                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                                 .into(avatarNeck);
                                         break;
                                     case QuestioConstants.POSITION_BODY:
                                         Glide.with(AvatarActivity.this)
-                                                .load(QuestioConstants.BASE_URL + item.getEquipSpritePath())
+                                                .load(QuestioConstants.BASE_URL_PIC + item.getEquipSpritePath())
                                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                                 .into(avatarBody);
                                         break;
                                     case QuestioConstants.POSITION_HANDLEFT:
                                         Glide.with(AvatarActivity.this)
-                                                .load(QuestioConstants.BASE_URL + item.getEquipSpritePath())
+                                                .load(QuestioConstants.BASE_URL_PIC + item.getEquipSpritePath())
                                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                                 .into(avatarHandLeft);
                                         break;
                                     case QuestioConstants.POSITION_HANDRIGHT:
                                         Glide.with(AvatarActivity.this)
-                                                .load(QuestioConstants.BASE_URL + item.getEquipSpritePath())
+                                                .load(QuestioConstants.BASE_URL_PIC + item.getEquipSpritePath())
                                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                                 .into(avatarHandRight);
                                         break;
                                     case QuestioConstants.POSITION_ARMS:
                                         Glide.with(AvatarActivity.this)
-                                                .load(QuestioConstants.BASE_URL + item.getEquipSpritePath())
+                                                .load(QuestioConstants.BASE_URL_PIC + item.getEquipSpritePath())
                                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                                 .into(avatarArms);
                                         break;
                                     case QuestioConstants.POSITION_LEGS:
                                         Glide.with(AvatarActivity.this)
-                                                .load(QuestioConstants.BASE_URL + item.getEquipSpritePath())
+                                                .load(QuestioConstants.BASE_URL_PIC + item.getEquipSpritePath())
                                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                                 .into(avatarLegs);
                                         break;
                                     case QuestioConstants.POSITION_FOOT:
                                         Glide.with(AvatarActivity.this)
-                                                .load(QuestioConstants.BASE_URL + item.getEquipSpritePath())
+                                                .load(QuestioConstants.BASE_URL_PIC + item.getEquipSpritePath())
                                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                                 .into(avatarFoot);
                                         break;
                                     case QuestioConstants.POSITION_AURA:
                                         Glide.with(AvatarActivity.this)
-                                                .load(QuestioConstants.BASE_URL + item.getEquipSpritePath())
+                                                .load(QuestioConstants.BASE_URL_PIC + item.getEquipSpritePath())
                                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                                 .into(avatarSpecial);
                                         break;

@@ -239,7 +239,7 @@ public class ZoneActivity extends ActionBarActivity {
                     reward = rewards[0];
                     Log.d(LOG_TAG, rewards[0].toString());
                     Glide.with(ZoneActivity.this)
-                            .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                            .load(QuestioConstants.BASE_URL_PIC + reward.getRewardPic())
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(rewardPic);
                 } else {
@@ -263,7 +263,7 @@ public class ZoneActivity extends ActionBarActivity {
                     item = items[0];
                     Log.d(LOG_TAG, item.toString());
                     Glide.with(ZoneActivity.this)
-                            .load(QuestioConstants.BASE_URL + item.getItemPicPath())
+                            .load(QuestioConstants.BASE_URL_PIC + item.getItemPicPath())
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(itemPic);
                 } else {
@@ -513,7 +513,7 @@ public class ZoneActivity extends ActionBarActivity {
 
         String obtainedName = item.getItemName();
         Glide.with(this)
-                .load(QuestioConstants.BASE_URL + item.getItemPicPath())
+                .load(QuestioConstants.BASE_URL_PIC + item.getItemPicPath())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(tvItemPicture);
 
@@ -559,27 +559,27 @@ public class ZoneActivity extends ActionBarActivity {
         if (rank == QuestioConstants.REWARD_RANK_NORMAL) {
             rewardRank = "ระดับปกติ";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_URL_PIC + reward.getRewardPic())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
         } else if (rank == QuestioConstants.REWARD_RANK_BRONZE) {
             rewardRank = "ระดับทองแดง";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_URL_PIC + reward.getRewardPic())
                     .bitmapTransform(new SepiaFilterTransformation(this, Glide.get(this).getBitmapPool()))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
         } else if (rank == QuestioConstants.REWARD_RANK_SILVER) {
             rewardRank = "ระดับเงิน";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_URL_PIC + reward.getRewardPic())
                     .bitmapTransform(new GrayscaleTransformation(Glide.get(this).getBitmapPool()))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
         } else if (rank == QuestioConstants.REWARD_RANK_GOLD) {
             rewardRank = "ระดับทอง";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_URL_PIC + reward.getRewardPic())
                     .bitmapTransform(new GrayscaleTransformation(Glide.get(this).getBitmapPool())
                             , new ColorFilterTransformation(Glide.get(this).getBitmapPool(), this.getResources().getColor(R.color.reward_gold)))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
