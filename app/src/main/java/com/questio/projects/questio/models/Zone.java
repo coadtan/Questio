@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
 import com.questio.projects.questio.utilities.HttpHelper;
+import com.questio.projects.questio.utilities.QuestioConstants;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -289,7 +290,7 @@ public class Zone {
 
     public static int findZoneIdByQRCode(int qrCode) {
         int zoneId = 0;
-        final String URL = "http://52.74.64.61/api/select_zoneid_by_qrcode.php?qrcode=" + qrCode;
+        final String URL = QuestioConstants.ENDPOINT + "/select_zoneid_by_qrcode.php?qrcode=" + qrCode;
         try {
             String response = new HttpHelper().execute(URL).get();
             Log.d(LOG_TAG, "response: " + response);
@@ -307,7 +308,7 @@ public class Zone {
 
     public static Zone getZoneByZoneId(int id) {
         Zone zone = null;
-        final String URL = "http://52.74.64.61/api/select_zone_by_zoneid.php?zoneid=" + id;
+        final String URL = QuestioConstants.ENDPOINT + "/select_zone_by_zoneid.php?zoneid=" + id;
         try {
             String response = new HttpHelper().execute(URL).get();
             Log.d(LOG_TAG, "response: " + response);

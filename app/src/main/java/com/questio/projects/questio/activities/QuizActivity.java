@@ -217,7 +217,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void requestQuizData(int qid) {
-        api.getAllQuizByQuestId(qid, new Callback<ArrayList<Quiz>>() {
+        api.getAllQuizByQuestId(qid, QuestioConstants.QUESTIO_KEY, new Callback<ArrayList<Quiz>>() {
             @Override
             public void success(ArrayList<Quiz> quizsTemp, Response response) {
                 if (quizsTemp != null) {
@@ -339,7 +339,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
     private void requestQuizProgresses() {
         Log.d(LOG_TAG, "requestQuizProgress: called");
-        api.getQuizProgressByRef(adventurerId, questId, new Callback<ArrayList<QuizProgress>>() {
+        api.getQuizProgressByRef(adventurerId, questId, QuestioConstants.QUESTIO_KEY, new Callback<ArrayList<QuizProgress>>() {
             @Override
             public void success(ArrayList<QuizProgress> quizProgressesTemp, Response response) {
                 quizProgresses = quizProgressesTemp;
@@ -401,7 +401,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void insertProgressData() {
-        api.addQuestProgress(questId, adventurerId, zid, 1, new Callback<Response>() {
+        api.addQuestProgress(questId, adventurerId, zid, 1, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 String questioStatus = QuestioHelper.responseToString(response);
@@ -409,7 +409,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 answerStatesMap = new HashMap<>();
                 for (Quiz q : quizs) {
                     answerStatesMap.put(q.getQuizId(), new AnswerState());
-                    api.addQuizProgress(adventurerId, questId, q.getQuizId(), new Callback<Response>() {
+                    api.addQuizProgress(adventurerId, questId, q.getQuizId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                         @Override
                         public void success(Response response, Response response2) {
                             Log.d(LOG_TAG, QuestioHelper.responseToString(response));
@@ -530,7 +530,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
-        api.updateScoreQuizProgressByRefAndQuizId(score, adventurerId, questId, quizId,
+        api.updateScoreQuizProgressByRefAndQuizId(score, adventurerId, questId, quizId, QuestioConstants.QUESTIO_KEY,
                 new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
@@ -596,7 +596,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         AnswerState as = answerStatesMap.get(quizId);
         as.setStatus(QuestioConstants.QUEST_FAILED);
         answerStatesMap.put(quizId, as);
-        api.updateScoreQuizProgressByRefAndQuizId(0, adventurerId, questId, quizId,
+        api.updateScoreQuizProgressByRefAndQuizId(0, adventurerId, questId, quizId, QuestioConstants.QUESTIO_KEY,
                 new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
@@ -640,7 +640,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         Log.d(LOG_TAG, "updateQuizProgressStatus status: " + status);
         //Log.d(LOG_TAG, "updateQuizProgressStatus ref: " + ref);
         Log.d(LOG_TAG, "updateQuizProgressStatus quizId: " + quizId);
-        api.updateStatusQuizProgressByRefAndQuizId(status, adventurerId, questId, quizId, new Callback<Response>() {
+        api.updateStatusQuizProgressByRefAndQuizId(status, adventurerId, questId, quizId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 Log.d(LOG_TAG, "updateQuizProgressStatus: success");
@@ -691,7 +691,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         //Log.d(LOG_TAG, "updateStateAnswerButton: " + "ref: " + ref + " quizid: " + qid);
         switch (answer) {
             case 1:
-                api.updateStatusChoiceAQuizByRefAndQuizId(adventurerId, questId, qid, new Callback<Response>() {
+                api.updateStatusChoiceAQuizByRefAndQuizId(adventurerId, questId, qid, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
                         Log.d(LOG_TAG, "updateStateAnswerButton success: " + QuestioHelper.responseToString(response));
@@ -704,7 +704,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 });
                 break;
             case 2:
-                api.updateStatusChoiceBQuizByRefAndQuizId(adventurerId, questId, qid, new Callback<Response>() {
+                api.updateStatusChoiceBQuizByRefAndQuizId(adventurerId, questId, qid, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
                         Log.d(LOG_TAG, "updateStateAnswerButton success: " + QuestioHelper.responseToString(response));
@@ -718,7 +718,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 });
                 break;
             case 3:
-                api.updateStatusChoiceCQuizByRefAndQuizId(adventurerId, questId, qid, new Callback<Response>() {
+                api.updateStatusChoiceCQuizByRefAndQuizId(adventurerId, questId, qid, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
                         Log.d(LOG_TAG, "updateStateAnswerButton success: " + QuestioHelper.responseToString(response));
@@ -731,7 +731,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 });
                 break;
             case 4:
-                api.updateStatusChoiceDQuizByRefAndQuizId(adventurerId, questId, qid, new Callback<Response>() {
+                api.updateStatusChoiceDQuizByRefAndQuizId(adventurerId, questId, qid, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
                         Log.d(LOG_TAG, "updateStateAnswerButton success: " + QuestioHelper.responseToString(response));
@@ -749,7 +749,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     private void updateProgressStatusAndScore(int status) {
 
         Log.d(LOG_TAG, "updateProgressStatusAndScore: called");
-        api.updateQuestProgressAutoScoreQuiz(questId, adventurerId, status, new Callback<Response>() {
+        api.updateQuestProgressAutoScoreQuiz(questId, adventurerId, status, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
 
@@ -767,12 +767,12 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         if (isAllQuizFinish()) {
             updateProgressStatusAndScore(QuestioConstants.QUEST_FINISHED);
 
-            api.getRewardByQuestId(questId, new Callback<Reward[]>() {
+            api.getRewardByQuestId(questId, QuestioConstants.QUESTIO_KEY, new Callback<Reward[]>() {
                 @Override
                 public void success(Reward[] rewards, Response response) {
                     if (rewards != null) {
                         reward = rewards[0];
-                        api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), new Callback<Response>() {
+                        api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                             @Override
                             public void success(Response response, Response response2) {
                                 int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
@@ -972,7 +972,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void addRewardHOF(int rewardId, int rank) {
-        api.addRewards(adventurerId, rewardId, rank, new Callback<Response>() {
+        api.addRewards(adventurerId, rewardId, rank, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
 
@@ -1016,27 +1016,27 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         if (rank == QuestioConstants.REWARD_RANK_NORMAL) {
             rewardRank = "ระดับปกติ";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL_PIC + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + reward.getRewardPic())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
         } else if (rank == QuestioConstants.REWARD_RANK_BRONZE) {
             rewardRank = "ระดับทองแดง";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL_PIC + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + reward.getRewardPic())
                     .bitmapTransform(new SepiaFilterTransformation(this, Glide.get(this).getBitmapPool()))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
         } else if (rank == QuestioConstants.REWARD_RANK_SILVER) {
             rewardRank = "ระดับเงิน";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL_PIC + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + reward.getRewardPic())
                     .bitmapTransform(new GrayscaleTransformation(Glide.get(this).getBitmapPool()))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
         } else if (rank == QuestioConstants.REWARD_RANK_GOLD) {
             rewardRank = "ระดับทอง";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL_PIC + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + reward.getRewardPic())
                     .bitmapTransform(new BrightnessFilterTransformation(this, Glide.get(this).getBitmapPool(), 0.5f))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);

@@ -215,7 +215,7 @@ public class PlaceActivity extends AppCompatActivity {
                 .setEndpoint(QuestioConstants.ENDPOINT)
                 .build();
         QuestioAPIService api = adapter.create(QuestioAPIService.class);
-        api.getQuestsByPlaceId(id, new Callback<ArrayList<Quest>>() {
+        api.getQuestsByPlaceId(id, QuestioConstants.QUESTIO_KEY, new Callback<ArrayList<Quest>>() {
             @Override
             public void success(final ArrayList<Quest> quests, Response response) {
                 if (quests != null) {

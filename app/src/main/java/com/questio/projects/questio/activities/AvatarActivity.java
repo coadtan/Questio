@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -34,6 +33,8 @@ import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
+import static com.questio.projects.questio.utilities.QuestioConstants.*;
 
 
 public class AvatarActivity extends AppCompatActivity {
@@ -111,7 +112,7 @@ public class AvatarActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new RestAdapter.Builder().setEndpoint(QuestioConstants.ENDPOINT).build();
+        adapter = new RestAdapter.Builder().setEndpoint(ENDPOINT).build();
         api = adapter.create(QuestioAPIService.class);
         setContentView(R.layout.activity_avatar);
         ButterKnife.bind(this);
@@ -128,7 +129,7 @@ public class AvatarActivity extends AppCompatActivity {
         });
         handleInstanceState(savedInstanceState);
 
-        api.getAvatarCountByAvatarId(adventurerId, new Callback<Response>() {
+        api.getAvatarCountByAvatarId(adventurerId, QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 String avatarCountStr = QuestioHelper.getJSONStringValueByTag("avatarcount", response);
@@ -157,14 +158,14 @@ public class AvatarActivity extends AppCompatActivity {
             if (extras == null) {
                 adventurerId = 0;
             } else {
-                adventurerId = extras.getLong(QuestioConstants.ADVENTURER_ID);
+                adventurerId = extras.getLong(ADVENTURER_ID);
             }
         } else {
-            adventurerId = (long) savedInstanceState.getSerializable(QuestioConstants.ADVENTURER_ID);
+            adventurerId = (long) savedInstanceState.getSerializable(ADVENTURER_ID);
         }
-        Log.d(LOG_TAG, QuestioConstants.ADVENTURER_ID + ": " + adventurerId);
-        SharedPreferences prefs = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
-        adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
+        Log.d(LOG_TAG, ADVENTURER_ID + ": " + adventurerId);
+        SharedPreferences prefs = getSharedPreferences(ADVENTURER_PROFILE, MODE_PRIVATE);
+        adventurerId = prefs.getLong(ADVENTURER_ID, 0);
         mContext = this;
         avatar = new Avatar();
         if (getSupportActionBar() != null) {
@@ -173,7 +174,7 @@ public class AvatarActivity extends AppCompatActivity {
     }
 
     private void insertNewAvatar() {
-        api.insertNewAvatar(adventurerId, new Callback<Response>() {
+        api.insertNewAvatar(adventurerId, QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 Log.d(LOG_TAG, "insert new avatar successfully");
@@ -187,7 +188,7 @@ public class AvatarActivity extends AppCompatActivity {
     }
 
     private void populateAvatar() {
-        api.getAvatarByAvatarId(adventurerId, new Callback<Avatar[]>() {
+        api.getAvatarByAvatarId(adventurerId, QUESTIO_KEY, new Callback<Avatar[]>() {
             @Override
             public void success(Avatar[] avatars, Response response) {
                 Log.d(LOG_TAG, "get avatar successfully");
@@ -239,6 +240,7 @@ public class AvatarActivity extends AppCompatActivity {
                 legId,
                 footId,
                 specialId,
+                QUESTIO_KEY,
                 new Callback<Item[]>() {
                     @Override
                     public void success(Item[] items, Response response) {
@@ -247,63 +249,63 @@ public class AvatarActivity extends AppCompatActivity {
                             for (Item item : items) {
                                 Log.d(LOG_TAG, item.toString());
                                 switch (item.getPositionId()) {
-                                    case QuestioConstants.POSITION_HEAD:
+                                    case POSITION_HEAD:
                                         Glide.with(AvatarActivity.this)
-                                                .load(QuestioConstants.BASE_URL_PIC + item.getEquipSpritePath())
+                                                .load(BASE_QUESTIO_MANAGEMENT + item.getEquipSpritePath())
                                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                                 .into(avatarHead);
                                         break;
-                                    case QuestioConstants.POSITION_BACKGROUND:
+                                    case POSITION_BACKGROUND:
                                         Glide.with(AvatarActivity.this)
-                                                .load(QuestioConstants.BASE_URL_PIC + item.getEquipSpritePath())
+                                                .load(BASE_QUESTIO_MANAGEMENT + item.getEquipSpritePath())
                                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                                 .into(avatarBackground);
                                         break;
-                                    case QuestioConstants.POSITION_NECK:
+                                    case POSITION_NECK:
                                         Glide.with(AvatarActivity.this)
-                                                .load(QuestioConstants.BASE_URL_PIC + item.getEquipSpritePath())
+                                                .load(BASE_QUESTIO_MANAGEMENT + item.getEquipSpritePath())
                                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                                 .into(avatarNeck);
                                         break;
-                                    case QuestioConstants.POSITION_BODY:
+                                    case POSITION_BODY:
                                         Glide.with(AvatarActivity.this)
-                                                .load(QuestioConstants.BASE_URL_PIC + item.getEquipSpritePath())
+                                                .load(BASE_QUESTIO_MANAGEMENT + item.getEquipSpritePath())
                                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                                 .into(avatarBody);
                                         break;
-                                    case QuestioConstants.POSITION_HANDLEFT:
+                                    case POSITION_HANDLEFT:
                                         Glide.with(AvatarActivity.this)
-                                                .load(QuestioConstants.BASE_URL_PIC + item.getEquipSpritePath())
+                                                .load(BASE_QUESTIO_MANAGEMENT + item.getEquipSpritePath())
                                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                                 .into(avatarHandLeft);
                                         break;
-                                    case QuestioConstants.POSITION_HANDRIGHT:
+                                    case POSITION_HANDRIGHT:
                                         Glide.with(AvatarActivity.this)
-                                                .load(QuestioConstants.BASE_URL_PIC + item.getEquipSpritePath())
+                                                .load(BASE_QUESTIO_MANAGEMENT + item.getEquipSpritePath())
                                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                                 .into(avatarHandRight);
                                         break;
-                                    case QuestioConstants.POSITION_ARMS:
+                                    case POSITION_ARMS:
                                         Glide.with(AvatarActivity.this)
-                                                .load(QuestioConstants.BASE_URL_PIC + item.getEquipSpritePath())
+                                                .load(BASE_QUESTIO_MANAGEMENT + item.getEquipSpritePath())
                                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                                 .into(avatarArms);
                                         break;
-                                    case QuestioConstants.POSITION_LEGS:
+                                    case POSITION_LEGS:
                                         Glide.with(AvatarActivity.this)
-                                                .load(QuestioConstants.BASE_URL_PIC + item.getEquipSpritePath())
+                                                .load(BASE_QUESTIO_MANAGEMENT + item.getEquipSpritePath())
                                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                                 .into(avatarLegs);
                                         break;
-                                    case QuestioConstants.POSITION_FOOT:
+                                    case POSITION_FOOT:
                                         Glide.with(AvatarActivity.this)
-                                                .load(QuestioConstants.BASE_URL_PIC + item.getEquipSpritePath())
+                                                .load(BASE_QUESTIO_MANAGEMENT + item.getEquipSpritePath())
                                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                                 .into(avatarFoot);
                                         break;
-                                    case QuestioConstants.POSITION_AURA:
+                                    case POSITION_AURA:
                                         Glide.with(AvatarActivity.this)
-                                                .load(QuestioConstants.BASE_URL_PIC + item.getEquipSpritePath())
+                                                .load(BASE_QUESTIO_MANAGEMENT + item.getEquipSpritePath())
                                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                                 .into(avatarSpecial);
                                         break;
@@ -342,7 +344,7 @@ public class AvatarActivity extends AppCompatActivity {
                 })
                 .setCustomView(R.layout.inventory_equip_layout, this);
         equipLayout = ButterKnife.findById(dialog, R.id.item_inventory_equip);
-        api.getAllItemInInventoryByAdventurerIdAndPositionId(adventurerId, position, new Callback<ArrayList<ItemInInventory>>() {
+        api.getAllItemInInventoryByAdventurerIdAndPositionId(adventurerId, position, QuestioConstants.QUESTIO_KEY, new Callback<ArrayList<ItemInInventory>>() {
 
             @Override
             public void success(ArrayList<ItemInInventory> itemInInventories, Response response) {
@@ -379,55 +381,55 @@ public class AvatarActivity extends AppCompatActivity {
         buttonHead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showEquipDialog(QuestioConstants.POSITION_HEAD);
+                showEquipDialog(POSITION_HEAD);
             }
         });
         buttonBackground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showEquipDialog(QuestioConstants.POSITION_BACKGROUND);
+                showEquipDialog(POSITION_BACKGROUND);
             }
         });
         buttonNeck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showEquipDialog(QuestioConstants.POSITION_NECK);
+                showEquipDialog(POSITION_NECK);
             }
         });
         buttonBody.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showEquipDialog(QuestioConstants.POSITION_BODY);
+                showEquipDialog(POSITION_BODY);
             }
         });
         buttonHandLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showEquipDialog(QuestioConstants.POSITION_HANDLEFT);
+                showEquipDialog(POSITION_HANDLEFT);
             }
         });
         buttonHandRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showEquipDialog(QuestioConstants.POSITION_HANDRIGHT);
+                showEquipDialog(POSITION_HANDRIGHT);
             }
         });
         buttonArms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showEquipDialog(QuestioConstants.POSITION_ARMS);
+                showEquipDialog(POSITION_ARMS);
             }
         });
         buttonBottom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showEquipDialog(QuestioConstants.POSITION_LEGS);
+                showEquipDialog(POSITION_LEGS);
             }
         });
         buttonFoot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showEquipDialog(QuestioConstants.POSITION_FOOT);
+                showEquipDialog(POSITION_FOOT);
             }
         });
     }
@@ -435,50 +437,50 @@ public class AvatarActivity extends AppCompatActivity {
     public void equipNewItem(final int partId, final long newItemId){
         if(avatar.getAvatarId() != 0){
             switch (partId){
-                case QuestioConstants.POSITION_HEAD:
+                case POSITION_HEAD:
                     oldItemId = avatar.getHeadId();
                     avatar.setHeadId(newItemId);
                     break;
-                case QuestioConstants.POSITION_BACKGROUND:
+                case POSITION_BACKGROUND:
                     oldItemId = avatar.getBackgroundId();
                     avatar.setBackgroundId(newItemId);
                     break;
-                case QuestioConstants.POSITION_NECK:
+                case POSITION_NECK:
                     oldItemId = avatar.getNeckId();
                     avatar.setNeckId(newItemId);
                     break;
-                case QuestioConstants.POSITION_BODY:
+                case POSITION_BODY:
                     oldItemId = avatar.getBodyId();
                     avatar.setBodyId(newItemId);
                     break;
-                case QuestioConstants.POSITION_HANDLEFT:
+                case POSITION_HANDLEFT:
                     oldItemId = avatar.getHandleftId();
                     avatar.setHandleftId(newItemId);
                     break;
-                case QuestioConstants.POSITION_HANDRIGHT:
+                case POSITION_HANDRIGHT:
                     oldItemId = avatar.getHandrightId();
                     avatar.setHandrightId(newItemId);
                     break;
-                case QuestioConstants.POSITION_ARMS:
+                case POSITION_ARMS:
                     oldItemId = avatar.getArmId();
                     avatar.setArmId(newItemId);
                     break;
-                case QuestioConstants.POSITION_LEGS:
+                case POSITION_LEGS:
                     oldItemId = avatar.getLegId();
                     avatar.setLegId(newItemId);
                     break;
-                case QuestioConstants.POSITION_FOOT:
+                case POSITION_FOOT:
                     oldItemId = avatar.getFootId();
                     avatar.setFootId(newItemId);
                     break;
-                case QuestioConstants.POSITION_AURA:
+                case POSITION_AURA:
                     oldItemId = avatar.getSpecialId();
                     avatar.setSpecialId(newItemId);
                     break;
             }
             Log.d(LOG_TAG, "Old Item ID - " + oldItemId);
         }
-        api.equipNewItem(partId, newItemId, oldItemId, adventurerId, new Callback<Response>() {
+        api.equipNewItem(partId, newItemId, oldItemId, adventurerId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 if (oldItemId != 0) {
@@ -515,40 +517,40 @@ public class AvatarActivity extends AppCompatActivity {
     }
 
     public void unequipItem(final int partId, long itemId){
-        api.unequipItem(partId, itemId, adventurerId, new Callback<Response>() {
+        api.unequipItem(partId, itemId, adventurerId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 String status = QuestioHelper.getJSONStringValueByTag("status", response);
                 if (status.equalsIgnoreCase("1")) {
                     switch (partId) {
-                        case QuestioConstants.POSITION_HEAD:
+                        case POSITION_HEAD:
                             avatarHead.setVisibility(View.INVISIBLE);
                             break;
-                        case QuestioConstants.POSITION_BACKGROUND:
+                        case POSITION_BACKGROUND:
                             avatarBackground.setVisibility(View.INVISIBLE);
                             break;
-                        case QuestioConstants.POSITION_NECK:
+                        case POSITION_NECK:
                             avatarNeck.setVisibility(View.INVISIBLE);
                             break;
-                        case QuestioConstants.POSITION_BODY:
+                        case POSITION_BODY:
                             avatarBody.setVisibility(View.INVISIBLE);
                             break;
-                        case QuestioConstants.POSITION_HANDLEFT:
+                        case POSITION_HANDLEFT:
                             avatarHandLeft.setVisibility(View.INVISIBLE);
                             break;
-                        case QuestioConstants.POSITION_HANDRIGHT:
+                        case POSITION_HANDRIGHT:
                             avatarHandRight.setVisibility(View.INVISIBLE);
                             break;
-                        case QuestioConstants.POSITION_ARMS:
+                        case POSITION_ARMS:
                             avatarArms.setVisibility(View.INVISIBLE);
                             break;
-                        case QuestioConstants.POSITION_LEGS:
+                        case POSITION_LEGS:
                             avatarLegs.setVisibility(View.INVISIBLE);
                             break;
-                        case QuestioConstants.POSITION_FOOT:
+                        case POSITION_FOOT:
                             avatarFoot.setVisibility(View.INVISIBLE);
                             break;
-                        case QuestioConstants.POSITION_AURA:
+                        case POSITION_AURA:
                             avatarSpecial.setVisibility(View.INVISIBLE);
                             break;
                     }
@@ -566,68 +568,68 @@ public class AvatarActivity extends AppCompatActivity {
     }
 
     public void changeSpritePathByNewItemId(final int partId, long newItemId){
-        api.getEquipSpritePathByItemId(newItemId, new Callback<Response>() {
+        api.getEquipSpritePathByItemId(newItemId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 String url = QuestioHelper.getJSONStringValueByTag("equipspritepath", response);
                 switch (partId) {
-                    case QuestioConstants.POSITION_HEAD:
+                    case POSITION_HEAD:
                         Glide.with(AvatarActivity.this)
-                                .load(QuestioConstants.BASE_URL + url)
+                                .load(BASE_URL + url)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(avatarHead);
                         break;
-                    case QuestioConstants.POSITION_BACKGROUND:
+                    case POSITION_BACKGROUND:
                         Glide.with(AvatarActivity.this)
-                                .load(QuestioConstants.BASE_URL + url)
+                                .load(BASE_URL + url)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(avatarBackground);
                         break;
-                    case QuestioConstants.POSITION_NECK:
+                    case POSITION_NECK:
                         Glide.with(AvatarActivity.this)
-                                .load(QuestioConstants.BASE_URL + url)
+                                .load(BASE_URL + url)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(avatarNeck);
                         break;
-                    case QuestioConstants.POSITION_BODY:
+                    case POSITION_BODY:
                         Glide.with(AvatarActivity.this)
-                                .load(QuestioConstants.BASE_URL + url)
+                                .load(BASE_URL + url)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(avatarBody);
                         break;
-                    case QuestioConstants.POSITION_HANDLEFT:
+                    case POSITION_HANDLEFT:
                         Glide.with(AvatarActivity.this)
-                                .load(QuestioConstants.BASE_URL + url)
+                                .load(BASE_URL + url)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(avatarHandLeft);
                         break;
-                    case QuestioConstants.POSITION_HANDRIGHT:
+                    case POSITION_HANDRIGHT:
                         Glide.with(AvatarActivity.this)
-                                .load(QuestioConstants.BASE_URL + url)
+                                .load(BASE_URL + url)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(avatarHandRight);
                         break;
-                    case QuestioConstants.POSITION_ARMS:
+                    case POSITION_ARMS:
                         Glide.with(AvatarActivity.this)
-                                .load(QuestioConstants.BASE_URL + url)
+                                .load(BASE_URL + url)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(avatarArms);
                         break;
-                    case QuestioConstants.POSITION_LEGS:
+                    case POSITION_LEGS:
                         Glide.with(AvatarActivity.this)
-                                .load(QuestioConstants.BASE_URL + url)
+                                .load(BASE_URL + url)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(avatarLegs);
                         break;
-                    case QuestioConstants.POSITION_FOOT:
+                    case POSITION_FOOT:
                         Glide.with(AvatarActivity.this)
-                                .load(QuestioConstants.BASE_URL + url)
+                                .load(BASE_URL + url)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(avatarFoot);
                         break;
-                    case QuestioConstants.POSITION_AURA:
+                    case POSITION_AURA:
                         Glide.with(AvatarActivity.this)
-                                .load(QuestioConstants.BASE_URL + url)
+                                .load(BASE_URL + url)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(avatarSpecial);
                         break;

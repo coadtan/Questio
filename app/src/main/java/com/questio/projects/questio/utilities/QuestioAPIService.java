@@ -21,567 +21,740 @@ import java.util.ArrayList;
 
 import retrofit.Callback;
 import retrofit.client.Response;
-import retrofit.http.GET;
+import retrofit.http.Field;
+import retrofit.http.Query;
+import retrofit.http.FormUrlEncoded;
+import retrofit.http.POST;
 import retrofit.http.Query;
 
 
 public interface QuestioAPIService {
 
 
-    @GET("/select_all_quest_by_placeid_location_name.php")
-    void getQuestsByPlaceId(@Query("placeid") int id, Callback<ArrayList<Quest>> response);
+    @FormUrlEncoded
+    @POST("/select_all_quest_by_placeid_location_name.php")
+    void getQuestsByPlaceId(@Field("placeid") int id,
+                            @Field("key") String key,
+                            Callback<ArrayList<Quest>> response);
 
 
-    @GET("/select_all_quest_by_zoneid.php")
-    void getAllQuestByZoneId(@Query("zoneid") int id, Callback<ArrayList<Quest>> response);
+    @FormUrlEncoded
+    @POST("/select_all_quest_by_zoneid.php")
+    void getAllQuestByZoneId(@Field("zoneid") int id,
+                             @Field("key") String key,
+                             Callback<ArrayList<Quest>> response);
 
-    @GET("/select_all_quiz_by_questid.php")
-    void getAllQuizByQuestId(@Query("questid") int id, Callback<ArrayList<Quiz>> response);
+    @FormUrlEncoded
+    @POST("/select_all_quiz_by_questid.php")
+    void getAllQuizByQuestId(@Field("questid") int id,
+                             @Field("key") String key,
+                             Callback<ArrayList<Quiz>> response);
 
-    @GET("/select_all_riddle_by_questid.php")
-    void getRiddleByQuestId(@Query("questid") int id, Callback<Riddle[]> response);
+    @FormUrlEncoded
+    @POST("/select_all_riddle_by_questid.php")
+    void getRiddleByQuestId(@Field("questid") int id,
+                            @Field("key") String key,
+                            Callback<Riddle[]> response);
 
-    @GET("/select_all_picturepuzzle_by_puzzleid.php")
-    void getPicturePuzzleByPuzzleId(@Query("puzzleid") int id, Callback<PicturePuzzle[]> response);
+    @FormUrlEncoded
+    @POST("/select_all_picturepuzzle_by_puzzleid.php")
+    void getPicturePuzzleByPuzzleId(@Field("puzzleid") int id,
+                                    @Field("key") String key,
+                                    Callback<PicturePuzzle[]> response);
 
-    @GET("/select_all_placenews_by_placeid.php")
-    void getAllPlaceNewsByPlaceId(@Query("placeid") int id, Callback<ArrayList<PlaceNews>> response);
+    @FormUrlEncoded
+    @POST("/select_all_placenews_by_placeid.php")
+    void getAllPlaceNewsByPlaceId(@Field("placeid") int id,
+                                  @Field("key") String key,
+                                  Callback<ArrayList<PlaceNews>> response);
 
-    @GET("/select_placedetail_by_placeid.php")
-    void getPlaceDetailByPlaceId(@Query("placeid") int id, Callback<PlaceDetail[]> response);
+    @FormUrlEncoded
+    @POST("/select_placedetail_by_placeid.php")
+    void getPlaceDetailByPlaceId(@Field("placeid") int id,
+                                 @Field("key") String key,
+                                 Callback<PlaceDetail[]> response);
 
-    @GET("/select_zone_by_zoneid.php")
-    void getZoneByZoneId(@Query("zoneid") int id, Callback<Zone[]> response);
+    @FormUrlEncoded
+    @POST("/select_zone_by_zoneid.php")
+    void getZoneByZoneId(@Field("zoneid") int id,
+                         Callback<Zone[]> response);
 
-    @GET("/select_count_adventurer.php")
-    void getCountAdventurer(Callback<Response> response);
+    @FormUrlEncoded
+    @POST("/select_count_adventurer.php")
+    void getCountAdventurer(@Field("key") String key,
+            Callback<Response> response);
 
-    @GET("/select_guserid_adventurer_from_guserid.php")
-    void getGuserIdByGuserId(@Query("guserid") String gid, Callback<Response> response);
+    @FormUrlEncoded
+    @POST("/select_guserid_adventurer_from_guserid.php")
+    void getGuserIdByGuserId(@Field("guserid") String gid,
+                             @Field("key") String key,
+                             Callback<Response> response);
 
-    @GET("/select_adventurerid_adventurer_from_guserid.php")
-    void getAdventurerIdByGuserId(@Query("guserid") String gid, Callback<Response> response);
+    @FormUrlEncoded
+    @POST("/select_adventurerid_adventurer_from_guserid.php")
+    void getAdventurerIdByGuserId(@Field("guserid") String gid,
+                                  @Field("key") String key,
+                                  Callback<Response> response);
 
 
-    @GET("/insert_adventurer.php")
-    void addAdventurer(@Query("adventurerid") long id,
-                       @Query("guserid") String gid,
-                       @Query("email") String email,
-                       @Query("avatarid") long aid,
-                       @Query("detailid") long did,
+    @FormUrlEncoded
+    @POST("/insert_adventurer.php")
+    void addAdventurer(@Field("adventurerid") long id,
+                       @Field("guserid") String gid,
+                       @Field("email") String email,
+                       @Field("avatarid") long aid,
+                       @Field("detailid") long did,
+                       @Field("key") String key,
                        Callback<Response> response);
 
-    @GET("/insert_adventurerdetails.php")
-    void addAdventurerDetails(@Query("detailid") long id,
-                              @Query("displayname") String displayName,
-                              @Query("birthdate") String birthDate,
+    @FormUrlEncoded
+    @POST("/insert_adventurerdetails.php")
+    void addAdventurerDetails(@Field("detailid") long id,
+                              @Field("displayname") String displayName,
+                              @Field("birthdate") String birthDate,
+                              @Field("key") String key,
                               Callback<Response> response);
 
-    @GET("/select_all_questprogress_by_questid_and_adventurerid.php")
+    @FormUrlEncoded
+    @POST("/select_all_questprogress_by_questid_and_adventurerid.php")
     void getQuestProgressByQuestIdAndAdventurerId(
-            @Query("questid") int questid,
-            @Query("adventurerid") long adventurerid,
+            @Field("questid") int questid,
+            @Field("adventurerid") long adventurerid,
+            @Field("key") String key,
             Callback<Response> response);
 
-    @GET("/select_all_questprogress_by_adventurerid.php")
+    @FormUrlEncoded
+    @POST("/select_all_questprogress_by_adventurerid.php")
     void getQuestProgressByAdventurerId(
-            @Query("adventurerid") long adventurerid,
+            @Field("adventurerid") long adventurerid,
+            @Field("key") String key,
             Callback<Response> response);
 
-    @GET("/select_all_questprogress_by_questid.php")
+    @FormUrlEncoded
+    @POST("/select_all_questprogress_by_questid.php")
     void getQuestProgressByQuestId(
-            @Query("questid") int questid,
+            @Field("questid") int questid,
+            @Field("key") String key,
             Callback<Response> response);
 
-    @GET("/select_all_quizprogress_by_ref.php")
+    @FormUrlEncoded
+    @POST("/select_all_quizprogress_by_ref.php")
     void getQuizProgressByRef(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("key") String key,
             Callback<ArrayList<QuizProgress>> response);
 
-    @GET("/update_score_questprogress_by_questid_and_adventurerid.php")
+    @FormUrlEncoded
+    @POST("/update_score_questprogress_by_questid_and_adventurerid.php")
     void updateScoreQuestProgressByQuestIdAndAdventurerId(
-            @Query("score") int score,
-            @Query("questid") int questid,
-            @Query("adventurerid") long adventurerid,
+            @Field("score") int score,
+            @Field("questid") int questid,
+            @Field("adventurerid") long adventurerid,
+            @Field("key") String key,
             Callback<Response> response);
 
-    @GET("/update_status_questprogress_by_questid_and_adventurerid.php")
+    @FormUrlEncoded
+    @POST("/update_status_questprogress_by_questid_and_adventurerid.php")
     void updateStatusQuestProgressByQuestIdAndAdventurerId(
-            @Query("statusid") int status,
-            @Query("questid") int questid,
-            @Query("adventurerid") long adventurerid,
+            @Field("statusid") int status,
+            @Field("questid") int questid,
+            @Field("adventurerid") long adventurerid,
+            @Field("key") String key,
             Callback<Response> response);
 
-    @GET("/update_status_quizprogress_by_ref_and_quizid.php")
+    @FormUrlEncoded
+    @POST("/update_status_quizprogress_by_ref_and_quizid.php")
     void updateStatusQuizProgressByRefAndQuizId(
-            @Query("statusid") int status,
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
-            @Query("quizid") int quizid,
+            @Field("statusid") int status,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("quizid") int quizid,
+            @Field("key") String key,
             Callback<Response> response);
 
-    @GET("/update_score_quizprogress_by_ref_and_quizid.php")
+    @FormUrlEncoded
+    @POST("/update_score_quizprogress_by_ref_and_quizid.php")
     void updateScoreQuizProgressByRefAndQuizId(
-            @Query("score") int score,
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
-            @Query("quizid") int quizid,
+            @Field("score") int score,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("quizid") int quizid,
+            @Field("key") String key,
             Callback<Response> response);
 
-    @GET("/update_statuschoicea_quizprogress_by_ref_and_quizid.php")
+    @FormUrlEncoded
+    @POST("/update_statuschoicea_quizprogress_by_ref_and_quizid.php")
     void updateStatusChoiceAQuizByRefAndQuizId(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
-            @Query("quizid") int quizid,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("quizid") int quizid,
+            @Field("key") String key,
             Callback<Response> response);
 
-    @GET("/update_statuschoiceb_quizprogress_by_ref_and_quizid.php")
+    @FormUrlEncoded
+    @POST("/update_statuschoiceb_quizprogress_by_ref_and_quizid.php")
     void updateStatusChoiceBQuizByRefAndQuizId(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
-            @Query("quizid") int quizid,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("quizid") int quizid,
+            @Field("key") String key,
             Callback<Response> response);
 
-    @GET("/update_statuschoicec_quizprogress_by_ref_and_quizid.php")
+    @FormUrlEncoded
+    @POST("/update_statuschoicec_quizprogress_by_ref_and_quizid.php")
     void updateStatusChoiceCQuizByRefAndQuizId(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
-            @Query("quizid") int quizid,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("quizid") int quizid,
+            @Field("key") String key,
             Callback<Response> response);
 
-    @GET("/update_statuschoiced_quizprogress_by_ref_and_quizid.php")
+    @FormUrlEncoded
+    @POST("/update_statuschoiced_quizprogress_by_ref_and_quizid.php")
     void updateStatusChoiceDQuizByRefAndQuizId(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
-            @Query("quizid") int quizid,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("quizid") int quizid,
+            @Field("key") String key,
             Callback<Response> response);
 
-    @GET("/insert_questprogress.php")
+    @FormUrlEncoded
+    @POST("/insert_questprogress.php")
     void addQuestProgress(
-            @Query("questid") int qid,
-            @Query("adventurerid") long aid,
-            @Query("zoneid") int zid,
-            @Query("questtypeid") int qtid,
+            @Field("questid") int qid,
+            @Field("adventurerid") long aid,
+            @Field("zoneid") int zid,
+            @Field("questtypeid") int qtid,
+            @Field("key") String key,
             Callback<Response> response);
 
-//    @GET("/insert_questprogress.php")
+//
+// @POST("/insert_questprogress.php")
 //    void addQuestProgressNonQuiz(
-//            @Query("questid") int qid,
-//            @Query("adventurerid") long aid,
-//            @Query("zoneid") int zid,
-//            @Query("questtypeid") int qtid,
+//            @Field("questid") int qid,
+//            @Field("adventurerid") long aid,
+//            @Field("zoneid") int zid,
+//            @Field("questtypeid") int qtid,
 //            Callback<Response> response);
 
-    @GET("/insert_quizprogress.php")
+    @FormUrlEncoded
+    @POST("/insert_quizprogress.php")
     void addQuizProgress(
-            @Query("adventurerid") long aid,
-            @Query("questid") int quid,
-            @Query("quizid") int qid,
+            @Field("adventurerid") long aid,
+            @Field("questid") int quid,
+            @Field("quizid") int qid,
+            @Field("key") String key,
             Callback<Response> response);
 
-    @GET("/select_count_quizprogress_by_ref_finished.php")
+    @FormUrlEncoded
+    @POST("/select_count_quizprogress_by_ref_finished.php")
     void getCountQuizProgressFinishedByRef(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("key") String key,
             Callback<Response> response);
 
-    @GET("/update_puzzleprogress_tlpiece_by_ref.php")
+    @FormUrlEncoded
+    @POST("/update_puzzleprogress_tlpiece_by_ref.php")
     void updatePuzzleProgressTopLeftPieceByRef(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
-    @GET("/update_puzzleprogress_tmpiece_by_ref.php")
+    @FormUrlEncoded
+    @POST("/update_puzzleprogress_tmpiece_by_ref.php")
     void updatePuzzleProgressTopMidPieceByRef(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
-    @GET("/update_puzzleprogress_trpiece_by_ref.php")
+    @FormUrlEncoded
+    @POST("/update_puzzleprogress_trpiece_by_ref.php")
     void updatePuzzleProgressTopRightPieceByRef(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
-    @GET("/update_puzzleprogress_mlpiece_by_ref.php")
+    @FormUrlEncoded
+    @POST("/update_puzzleprogress_mlpiece_by_ref.php")
     void updatePuzzleProgressMidLeftPieceByRef(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
-    @GET("/update_puzzleprogress_mmpiece_by_ref.php")
+    @FormUrlEncoded
+    @POST("/update_puzzleprogress_mmpiece_by_ref.php")
     void updatePuzzleProgressMidMidPieceByRef(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
-    @GET("/update_puzzleprogress_mrpiece_by_ref.php")
+    @FormUrlEncoded
+    @POST("/update_puzzleprogress_mrpiece_by_ref.php")
     void updatePuzzleProgressMidRightPieceByRef(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
-    @GET("/update_puzzleprogress_blpiece_by_ref.php")
+    @FormUrlEncoded
+    @POST("/update_puzzleprogress_blpiece_by_ref.php")
     void updatePuzzleProgressBottomLeftPieceByRef(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
-    @GET("/update_puzzleprogress_bmpiece_by_ref.php")
+    @FormUrlEncoded
+    @POST("/update_puzzleprogress_bmpiece_by_ref.php")
     void updatePuzzleProgressBottomMidPieceByRef(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
-    @GET("/update_puzzleprogress_brpiece_by_ref.php")
+    @FormUrlEncoded
+    @POST("/update_puzzleprogress_brpiece_by_ref.php")
     void updatePuzzleProgressBottomRightPieceByRef(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
-    @GET("/select_all_puzzleprogress_by_ref.php")
+    @FormUrlEncoded
+    @POST("/select_all_puzzleprogress_by_ref.php")
     void getPuzzleProgressByRef(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
-    @GET("/insert_puzzleprogress.php")
+    @FormUrlEncoded
+    @POST("/insert_puzzleprogress.php")
     void addPuzzleProgress(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
-    @GET("/select_all_riddleprogress_by_ref.php")
+    @FormUrlEncoded
+    @POST("/select_all_riddleprogress_by_ref.php")
     void getRiddleProgressByRef(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
-    @GET("/update_riddleprogress_scanlimit_by_ref.php")
+    @FormUrlEncoded
+    @POST("/update_riddleprogress_scanlimit_by_ref.php")
     void updateRiddleProgressScanLimitByRef(
-            @Query("scanlimit") int scanLimit,
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
+            @Field("scanlimit") int scanLimit,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
 
-    @GET("/select_current_points_puzzle_progress_by_ref.php")
+    @FormUrlEncoded
+    @POST("/select_current_points_puzzle_progress_by_ref.php")
     void getCurrentPointsByRef(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
-    @GET("/select_current_points_riddle_progress_by_ref.php")
+    @FormUrlEncoded
+    @POST("/select_current_points_riddle_progress_by_ref.php")
     void getCurrentRiddlePointByRef(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
-    @GET("/insert_riddleprogress.php")
+    @FormUrlEncoded
+    @POST("/insert_riddleprogress.php")
     void addRiddleProgress(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
-    @GET("/update_riddleprogress_hint1_by_ref.php")
+    @FormUrlEncoded
+    @POST("/update_riddleprogress_hint1_by_ref.php")
     void updateRiddleProgressHint1ByRef(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
-    @GET("/update_riddleprogress_hint2_by_ref.php")
+    @FormUrlEncoded
+    @POST("/update_riddleprogress_hint2_by_ref.php")
     void updateRiddleProgressHint2ByRef(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
-    @GET("/update_riddleprogress_hint3_by_ref.php")
+    @FormUrlEncoded
+    @POST("/update_riddleprogress_hint3_by_ref.php")
     void updateRiddleProgressHint3ByRef(
-            @Query("adventurerid") long adventurerId,
-            @Query("questid") int questId,
+            @Field("adventurerid") long adventurerId,
+            @Field("questid") int questId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
     //http://52.74.64.61/api/update_questprogress_autoscore_quiz.php?questid=20&adventurerid=1&statusid=3
 
-    @GET("/update_questprogress_autoscore_quiz.php")
+    @FormUrlEncoded
+    @POST("/update_questprogress_autoscore_quiz.php")
     void updateQuestProgressAutoScoreQuiz(
-            @Query("questid") int questId,
-            @Query("adventurerid") long adventurerId,
-            @Query("statusid") int statusId,
+            @Field("questid") int questId,
+            @Field("adventurerid") long adventurerId,
+            @Field("statusid") int statusId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
     //http://52.74.64.61/api/select_quest_status_and_score_by_zoneandadventurerid.php?zoneid=1&adventurerid=2
-    @GET("/select_quest_status_and_score_by_zoneandadventurerid.php")
+    @FormUrlEncoded
+    @POST("/select_quest_status_and_score_by_zoneandadventurerid.php")
     void getQuestStatusAndScoreByZoneAdventurerid(
-            @Query("zoneid") int zoneId,
-            @Query("adventurerid") long adventurerId,
+            @Field("zoneid") int zoneId,
+            @Field("adventurerid") long adventurerId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
     //http://52.74.64.61/api/select_all_reward_by_zoneid.php?zoneid=1
-    @GET("/select_all_reward_by_zoneid.php")
+    @FormUrlEncoded
+    @POST("/select_all_reward_by_zoneid.php")
     void getRewardByZoneId(
-            @Query("zoneid") int zoneId,
+            @Field("zoneid") int zoneId,
+            @Field("key") String key,
             Callback<Reward[]> reward
     );
 
     //http://52.74.64.61/api/select_all_item_by_zoneid.php?zoneid=1
-    @GET("/select_all_item_by_zoneid.php")
+    @FormUrlEncoded
+    @POST("/select_all_item_by_zoneid.php")
     void getItemByZoneId(
-            @Query("zoneid") int zoneId,
+            @Field("zoneid") int zoneId,
+            @Field("key") String key,
             Callback<Item[]> item
     );
 
     //http://52.74.64.61/api/insert_inventory.php?adventurerid=1&itemid=1
-    @GET("/insert_inventory.php")
+    @FormUrlEncoded
+    @POST("/insert_inventory.php")
     void addInventory(
-            @Query("adventurerid") long adventurerId,
-            @Query("itemid") int itemId,
+            @Field("adventurerid") long adventurerId,
+            @Field("itemid") int itemId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
     //http://52.74.64.61/api/select_count_inventory_by_adventurerid_and_itemid.php?adventurerid=1&itemid=1
-    @GET("/select_count_inventory_by_adventurerid_and_itemid.php")
+    @FormUrlEncoded
+    @POST("/select_count_inventory_by_adventurerid_and_itemid.php")
     void getCountInventoryByAdventurerIdAndItemId(
-            @Query("adventurerid") long adventurerId,
-            @Query("itemid") int itemId,
+            @Field("adventurerid") long adventurerId,
+            @Field("itemid") int itemId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
     //http://52.74.64.61/api/select_count_hof_by_adventurerid_and_rewardid.php?adventurerid=2&rewardid=1
-    @GET("/select_count_hof_by_adventurerid_and_rewardid.php")
+    @FormUrlEncoded
+    @POST("/select_count_hof_by_adventurerid_and_rewardid.php")
     void getCountHOFByAdventurerIdAndRewardId(
-            @Query("adventurerid") long adventurerId,
-            @Query("rewardid") int rewardId,
+            @Field("adventurerid") long adventurerId,
+            @Field("rewardid") int rewardId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
     //http://52.74.64.61/api/select_all_item_inventory_by_adventurerid.php?adventurerid=2
-    @GET("/select_all_item_inventory_by_adventurerid.php")
+    @FormUrlEncoded
+    @POST("/select_all_item_inventory_by_adventurerid.php")
     void getAllItemInInventoryByAdventurerId(
-            @Query("adventurerid") long adventurerId,
+            @Field("adventurerid") long adventurerId,
+            @Field("key") String key,
             Callback<ArrayList<ItemInInventory>> response
     );
 
     //http://52.74.64.61/api/select_all_rewards_halloffame_by_adventurerid.php?adventurerid=2
-    @GET("/select_all_rewards_halloffame_by_adventurerid.php")
+    @FormUrlEncoded
+    @POST("/select_all_rewards_halloffame_by_adventurerid.php")
     void getAllRewardsInHalloffameByAdventurerId(
-            @Query("adventurerid") long adventurerId,
+            @Field("adventurerid") long adventurerId,
+            @Field("key") String key,
             Callback<ArrayList<RewardHOF>> response
     );
 
     //http://52.74.64.61/api/insert_rewards.php?adventurerid=2&rewardid=1&rankid=4
-    @GET("/insert_rewards.php")
+    @FormUrlEncoded
+    @POST("/insert_rewards.php")
     void addRewards(
-            @Query("adventurerid") long adventurerId,
-            @Query("rewardid") int rewardId,
-            @Query("rankid") int rankId,
+            @Field("adventurerid") long adventurerId,
+            @Field("rewardid") int rewardId,
+            @Field("rankid") int rankId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
     //http://52.74.64.61/api/select_all_reward_by_questid.php?questid=22
-    @GET("/select_all_reward_by_questid.php")
+    @FormUrlEncoded
+    @POST("/select_all_reward_by_questid.php")
     void getRewardByQuestId(
-            @Query("questid") int questId,
+            @Field("questid") int questId,
+            @Field("key") String key,
             Callback<Reward[]> reward
     );
 
     //http://52.74.64.61/api/select_all_reward_by_placeid.php?placeid=1
-    @GET("/select_all_reward_by_placeid.php")
+    @FormUrlEncoded
+    @POST("/select_all_reward_by_placeid.php")
     void getRewardByPlaceId(
-            @Query("placeid") int placeId,
+            @Field("placeid") int placeId,
+            @Field("key") String key,
             Callback<Reward[]> reward
     );
 
     //http://52.74.64.61/api/insert_explorerprogress.php?adventurerid=2&placeid=1&zoneid=1
-    @GET("/insert_explorerprogress.php")
+    @FormUrlEncoded
+    @POST("/insert_explorerprogress.php")
     void addExplorerProgress(
-            @Query("adventurerid") long adventurerId,
-            @Query("placeid") int placeId,
-            @Query("zoneid") int zoneId,
+            @Field("adventurerid") long adventurerId,
+            @Field("placeid") int placeId,
+            @Field("zoneid") int zoneId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
     //http://52.74.64.61/api/select_count_all_zone_by_placeid.php?placeid=1
-    @GET("/select_count_all_zone_by_placeid.php")
+    @FormUrlEncoded
+    @POST("/select_count_all_zone_by_placeid.php")
     void getCountZoneByPlaceId(
-            @Query("placeid") int placeId,
+            @Field("placeid") int placeId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
     //http://52.74.64.61/api/select_count_explorerprogress_by_placeid_and_adventurerid.php?placeid=1&adventurerid=1
-    @GET("/select_count_explorerprogress_by_placeid_and_adventurerid.php")
+    @FormUrlEncoded
+    @POST("/select_count_explorerprogress_by_placeid_and_adventurerid.php")
     void getCountExplorerProgressByAdventurerIdAndPlaceId(
-            @Query("adventurerid") long adventurerId,
-            @Query("placeid") int placeId,
+            @Field("adventurerid") long adventurerId,
+            @Field("placeid") int placeId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
     //http://52.74.64.61/api/select_all_explorerprogress_by_adventurerid_placeid_and_zoneid.php?adventurerid=1&placeid=1&zoneid=1
-    @GET("/select_all_explorerprogress_by_adventurerid_placeid_and_zoneid.php")
+    @FormUrlEncoded
+    @POST("/select_all_explorerprogress_by_adventurerid_placeid_and_zoneid.php")
     void getExplorerProgressByAdventurerIdPlaceIdAndZoneId(
-            @Query("adventurerid") long adventurerId,
-            @Query("placeid") int placeId,
-            @Query("zoneid") int zoneId,
+            @Field("adventurerid") long adventurerId,
+            @Field("placeid") int placeId,
+            @Field("zoneid") int zoneId,
+            @Field("key") String key,
             Callback<ExplorerProgress[]> response
     );
 
     //http://52.74.64.61/api/select_all_zone_by_placeid.php?placeid=1
-    @GET("/select_all_zone_by_placeid.php")
+    @FormUrlEncoded
+    @POST("/select_all_zone_by_placeid.php")
     void getZoneByPlaceId(
-            @Query("placeid") int placeId,
+            @Field("placeid") int placeId,
+            @Field("key") String key,
             Callback<ArrayList<Zone>> response
     );
 
     //http://52.74.64.61/api/update_explorerprogress_by_adventurerid_and_placeid_and_zoneid.php?adventurerid=2&placeid=1&zoneid=1
-    @GET("/update_explorerprogress_by_adventurerid_and_placeid_and_zoneid.php")
+    @FormUrlEncoded
+    @POST("/update_explorerprogress_by_adventurerid_and_placeid_and_zoneid.php")
     void updateExplorerProgressByAdventurerIdPlaceIdAndZoneId(
-            @Query("adventurerid") long adventurerId,
-            @Query("placeid") int placeId,
-            @Query("zoneid") int zoneId,
+            @Field("adventurerid") long adventurerId,
+            @Field("placeid") int placeId,
+            @Field("zoneid") int zoneId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
     //http://52.74.64.61/api/insert_placeprogress.php?adventurerid=1&placeid=1
-    @GET("/insert_placeprogress.php")
+    @FormUrlEncoded
+    @POST("/insert_placeprogress.php")
     void addPlaceProgress(
-            @Query("adventurerid") long adventurerId,
-            @Query("placeid") int placeId,
+            @Field("adventurerid") long adventurerId,
+            @Field("placeid") int placeId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
     //http://52.74.64.61/api/update_placeprogress_by_adventurerid_and_placeid.php?adventurerid=1&placeid=1
-    @GET("/update_placeprogress_by_adventurerid_and_placeid.php")
+    @FormUrlEncoded
+    @POST("/update_placeprogress_by_adventurerid_and_placeid.php")
     void updatePlaceProgressByAdventurerIdAndPlaceId(
-            @Query("adventurerid") long adventurerId,
-            @Query("placeid") int placeId,
+            @Field("adventurerid") long adventurerId,
+            @Field("placeid") int placeId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
     //http://52.74.64.61/api/select_all_placeprogress_by_adventurerid_and_placeid.php?adventurerid=1&placeid=1
-    @GET("/select_all_placeprogress_by_adventurerid_and_placeid.php")
+    @FormUrlEncoded
+    @POST("/select_all_placeprogress_by_adventurerid_and_placeid.php")
     void getAllPlaceProgressByAdventurerIdAndPlaceId(
-            @Query("adventurerid") long adventurerId,
-            @Query("placeid") int placeId,
+            @Field("adventurerid") long adventurerId,
+            @Field("placeid") int placeId,
+            @Field("key") String key,
             Callback<PlaceProgress[]> response
     );
 
     //http://52.74.64.61/api/select_all_place_by_zoneid.php?zoneid=1
-    @GET("/select_all_place_by_zoneid.php")
+    @FormUrlEncoded
+    @POST("/select_all_place_by_zoneid.php")
     void getAllPlaceByZoneId(
-            @Query("zoneid") int zoneId,
+            @Field("zoneid") int zoneId,
+            @Field("key") String key,
             Callback<Place[]> response
     );
 
     //http://52.74.64.61/api/select_all_explore_reward_by_placeid.php?placeid=1
-    @GET("/select_all_explore_reward_by_placeid.php")
+    @FormUrlEncoded
+    @POST("/select_all_explore_reward_by_placeid.php")
     void getAllExploreRewardByPlaceId(
-            @Query("placeid") int placeId,
+            @Field("placeid") int placeId,
+            @Field("key") String key,
             Callback<Reward[]> reward
     );
 
     //http://52.74.64.61/api/select_avatar_count_by_avatarid.php?avatarid=1
-    @GET("/select_avatar_count_by_avatarid.php")
+    @FormUrlEncoded
+    @POST("/select_avatar_count_by_avatarid.php")
     void getAvatarCountByAvatarId(
-            @Query("avatarid") long avatarId,
+            @Field("avatarid") long avatarId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
     //http://52.74.64.61/api/insert_avatar.php?avatarid=1
-    @GET("/insert_avatar.php")
+    @FormUrlEncoded
+    @POST("/insert_avatar.php")
     void insertNewAvatar(
-            @Query("avatarid") long avatarId,
+            @Field("avatarid") long avatarId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
     //http://52.74.64.61/api/select_all_avatar_by_avatarid.php?avatarid=1
-    @GET("/select_all_avatar_by_avatarid.php")
+    @FormUrlEncoded
+    @POST("/select_all_avatar_by_avatarid.php")
     void getAvatarByAvatarId(
-            @Query("avatarid") long avatarId,
+            @Field("avatarid") long avatarId,
+            @Field("key") String key,
             Callback<Avatar[]> avatar
     );
 
     //http://52.74.64.61/api/select_equipspritepath_by_itemid.php?itemid=1
-    @GET("/select_equipspritepath_by_itemid.php")
+    @FormUrlEncoded
+    @POST("/select_equipspritepath_by_itemid.php")
     void getEquipSpritePathByItemId(
-            @Query("itemid") long itemid,
+            @Field("itemid") long itemid,
+            @Field("key") String key,
             Callback<Response> response
     );
 
     //http://52.74.64.61/api/select_all_item_by_itemid.php?headid=1&backgroundid=2&neckid=3&bodyid=4&handleftid=5&handrightid=6&armid=7&legid=8&footid=9&specialid=10
-    @GET("/select_all_item_by_itemid.php")
+    @FormUrlEncoded
+    @POST("/select_all_item_by_itemid.php")
     void getItemsBySetOfItemId(
-            @Query("headid") long headid,
-            @Query("backgroundid") long backgroundid,
-            @Query("neckid") long neckid,
-            @Query("bodyid") long bodyid,
-            @Query("handleftid") long handleftid,
-            @Query("handrightid") long handrightid,
-            @Query("armid") long armid,
-            @Query("legid") long legid,
-            @Query("footid") long footid,
-            @Query("specialid") long specialid,
+            @Field("headid") long headid,
+            @Field("backgroundid") long backgroundid,
+            @Field("neckid") long neckid,
+            @Field("bodyid") long bodyid,
+            @Field("handleftid") long handleftid,
+            @Field("handrightid") long handrightid,
+            @Field("armid") long armid,
+            @Field("legid") long legid,
+            @Field("footid") long footid,
+            @Field("specialid") long specialid,
+            @Field("key") String key,
             Callback<Item[]> items
     );
 
     //http://52.74.64.61/api/select_all_item_inventory_by_adventurerid_and_positionid.php?adventurerid=2&positionid=1
-    @GET("/select_all_item_inventory_by_adventurerid_and_positionid.php")
+    @FormUrlEncoded
+    @POST("/select_all_item_inventory_by_adventurerid_and_positionid.php")
     void getAllItemInInventoryByAdventurerIdAndPositionId(
-            @Query("adventurerid") long adventurerId,
-            @Query("positionid") int positionId,
+            @Field("adventurerid") long adventurerId,
+            @Field("positionid") int positionId,
+            @Field("key") String key,
             Callback<ArrayList<ItemInInventory>> items
     );
 
     //http://52.74.64.61/api/equip_new_item_by_partid_itemid_and_avatarid.php?part=1&itemid=2&avatarid=2&olditemid=1
-    @GET("/equip_new_item_by_partid_itemid_and_avatarid.php")
+    @FormUrlEncoded
+    @POST("/equip_new_item_by_partid_itemid_and_avatarid.php")
     void equipNewItem(
-            @Query("part") int partId,
-            @Query("itemid") long itemId,
-            @Query("olditemid") long oldItemId,
-            @Query("avatarid") long avatarId,
+            @Field("part") int partId,
+            @Field("itemid") long itemId,
+            @Field("olditemid") long oldItemId,
+            @Field("avatarid") long avatarId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
     //http://52.74.64.61/api/unequip_by_partid_itemid_and_avatarid.php?part=1&itemid=1&avatarid=2
-    @GET("/unequip_by_partid_itemid_and_avatarid.php")
+    @FormUrlEncoded
+    @POST("/unequip_by_partid_itemid_and_avatarid.php")
     void unequipItem(
-            @Query("part") int partId,
-            @Query("itemid") long itemId,
-            @Query("avatarid") long avatarId,
+            @Field("part") int partId,
+            @Field("itemid") long itemId,
+            @Field("avatarid") long avatarId,
+            @Field("key") String key,
             Callback<Response> response
     );
 
     //http://52.74.64.61/api/select_rewards_halloffame_place_by_adventurerid.php?adventurerid=2
-    @GET("/select_rewards_halloffame_place_by_adventurerid.php")
+    @FormUrlEncoded
+    @POST("/select_rewards_halloffame_place_by_adventurerid.php")
     void getAllPlaceRewardsInHalloffameByAdventurerId(
-            @Query("adventurerid") long adventurerId,
+            @Field("adventurerid") long adventurerId,
+            @Field("key") String key,
             Callback<ArrayList<RewardHOF>> response
     );
 
-    @GET("/select_rewards_halloffame_nonplace_by_adventurerid.php")
+    @FormUrlEncoded
+    @POST("/select_rewards_halloffame_nonplace_by_adventurerid.php")
     void getNonPlaceRewardsInHalloffameByAdventurerId(
-            @Query("adventurerid") long adventurerId,
+            @Field("adventurerid") long adventurerId,
+            @Field("key") String key,
             Callback<ArrayList<RewardHOF>> response
     );
 }

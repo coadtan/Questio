@@ -40,7 +40,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.ColorFilterTransformation;
 import jp.wasabeef.glide.transformations.GrayscaleTransformation;
-import jp.wasabeef.glide.transformations.gpu.BrightnessFilterTransformation;
 import jp.wasabeef.glide.transformations.gpu.SepiaFilterTransformation;
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -232,14 +231,14 @@ public class ZoneActivity extends ActionBarActivity {
     }
 
     private void requestRewardData(int id) {
-        api.getRewardByZoneId(id, new Callback<Reward[]>() {
+        api.getRewardByZoneId(id, QuestioConstants.QUESTIO_KEY, new Callback<Reward[]>() {
             @Override
             public void success(Reward[] rewards, Response response) {
                 if (rewards != null) {
                     reward = rewards[0];
                     Log.d(LOG_TAG, rewards[0].toString());
                     Glide.with(ZoneActivity.this)
-                            .load(QuestioConstants.BASE_URL_PIC + reward.getRewardPic())
+                            .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + reward.getRewardPic())
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(rewardPic);
                 } else {
@@ -256,14 +255,14 @@ public class ZoneActivity extends ActionBarActivity {
     }
 
     private void requestItemData(int id) {
-        api.getItemByZoneId(id, new Callback<Item[]>() {
+        api.getItemByZoneId(id, QuestioConstants.QUESTIO_KEY, new Callback<Item[]>() {
             @Override
             public void success(Item[] items, Response response) {
                 if (items != null) {
                     item = items[0];
                     Log.d(LOG_TAG, item.toString());
                     Glide.with(ZoneActivity.this)
-                            .load(QuestioConstants.BASE_URL_PIC + item.getItemPicPath())
+                            .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + item.getItemPicPath())
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(itemPic);
                 } else {
@@ -297,13 +296,13 @@ public class ZoneActivity extends ActionBarActivity {
 
     private void requestQuestData(final int id) {
         Log.d(LOG_TAG, "requestQuestData called");
-        api.getAllQuestByZoneId(id, new Callback<ArrayList<Quest>>() {
+        api.getAllQuestByZoneId(id, QuestioConstants.QUESTIO_KEY, new Callback<ArrayList<Quest>>() {
             @Override
             public void success(final ArrayList<Quest> quests, Response response) {
                 Log.d(LOG_TAG, "requestQuestData success");
                 if (quests != null) {
                     questsList = quests;
-                    api.getQuestStatusAndScoreByZoneAdventurerid(id, adventurerId, new Callback<Response>() {
+                    api.getQuestStatusAndScoreByZoneAdventurerid(id, adventurerId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                         @Override
                         public void success(Response response, Response response2) {
                             statusList = QuestStatusAndScore.createStatusList(response);
@@ -357,6 +356,9 @@ public class ZoneActivity extends ActionBarActivity {
                                 .load(QuestioHelper.getImgLink(zone.getImageUrl()))
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(questActionImg);
+                        Log.d(LOG_TAG, "imglink:" + QuestioHelper.getImgLink(zone.getImageUrl()));
+                    } else {
+                        Log.d(LOG_TAG, "imglink: failed");
                     }
                     if (!(zone.getMiniMapUrl() == null)) {
                         Glide.with(ZoneActivity.this)
@@ -407,7 +409,7 @@ public class ZoneActivity extends ActionBarActivity {
     protected void onResume() {
         Log.d(LOG_TAG, "onResume: called");
         if (adapterQuestList != null) {
-            api.getQuestStatusAndScoreByZoneAdventurerid(zoneId, adventurerId, new Callback<Response>() {
+            api.getQuestStatusAndScoreByZoneAdventurerid(zoneId, adventurerId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                 @Override
                 public void success(Response response, Response response2) {
                     statusList = QuestStatusAndScore.createStatusList(response);
@@ -424,14 +426,14 @@ public class ZoneActivity extends ActionBarActivity {
                         questActionQuizfinishProgressbar.setProgress(QuestioHelper.getPercentFrom2ValueAsInt(questFinished, totalQuestInZone));
                         questActionScoreGainProgressbar.setProgress(QuestioHelper.getPercentFrom2ValueAsInt(scoreGain, totalQuestInZone * 10));
                         if (questFinished == totalQuestInZone) {
-                            api.getCountInventoryByAdventurerIdAndItemId(adventurerId, item.getItemId(), new Callback<Response>() {
+                            api.getCountInventoryByAdventurerIdAndItemId(adventurerId, item.getItemId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                                 @Override
                                 public void success(Response response, Response response2) {
                                     int itemCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("inventorycount", response));
                                     Log.d(LOG_TAG, "Item count: " + itemCount);
                                     if (itemCount == 0) {
                                         showObtainItemDialog();
-                                        api.addInventory(adventurerId, item.getItemId(), new Callback<Response>() {
+                                        api.addInventory(adventurerId, item.getItemId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                                             @Override
                                             public void success(Response response, Response response2) {
 
@@ -451,7 +453,7 @@ public class ZoneActivity extends ActionBarActivity {
                                 }
                             });
 
-                            api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), new Callback<Response>() {
+                            api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                                 @Override
                                 public void success(Response response, Response response2) {
                                     int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
@@ -513,7 +515,7 @@ public class ZoneActivity extends ActionBarActivity {
 
         String obtainedName = item.getItemName();
         Glide.with(this)
-                .load(QuestioConstants.BASE_URL_PIC + item.getItemPicPath())
+                .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + item.getItemPicPath())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(tvItemPicture);
 
@@ -559,27 +561,27 @@ public class ZoneActivity extends ActionBarActivity {
         if (rank == QuestioConstants.REWARD_RANK_NORMAL) {
             rewardRank = "ระดับปกติ";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL_PIC + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + reward.getRewardPic())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
         } else if (rank == QuestioConstants.REWARD_RANK_BRONZE) {
             rewardRank = "ระดับทองแดง";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL_PIC + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + reward.getRewardPic())
                     .bitmapTransform(new SepiaFilterTransformation(this, Glide.get(this).getBitmapPool()))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
         } else if (rank == QuestioConstants.REWARD_RANK_SILVER) {
             rewardRank = "ระดับเงิน";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL_PIC + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + reward.getRewardPic())
                     .bitmapTransform(new GrayscaleTransformation(Glide.get(this).getBitmapPool()))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
         } else if (rank == QuestioConstants.REWARD_RANK_GOLD) {
             rewardRank = "ระดับทอง";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL_PIC + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + reward.getRewardPic())
                     .bitmapTransform(new GrayscaleTransformation(Glide.get(this).getBitmapPool())
                             , new ColorFilterTransformation(Glide.get(this).getBitmapPool(), this.getResources().getColor(R.color.reward_gold)))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -613,7 +615,7 @@ public class ZoneActivity extends ActionBarActivity {
     }
 
     public void addRewardHOF(int rewardId, int rank) {
-        api.addRewards(adventurerId, rewardId, rank, new Callback<Response>() {
+        api.addRewards(adventurerId, rewardId, rank, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
 
@@ -627,13 +629,13 @@ public class ZoneActivity extends ActionBarActivity {
     }
 
     public void updateExploreProgress(final Place p) {
-        api.getExplorerProgressByAdventurerIdPlaceIdAndZoneId(adventurerId, p.getPlaceId(), zoneId, new Callback<ExplorerProgress[]>() {
+        api.getExplorerProgressByAdventurerIdPlaceIdAndZoneId(adventurerId, p.getPlaceId(), zoneId, QuestioConstants.QUESTIO_KEY, new Callback<ExplorerProgress[]>() {
             @Override
             public void success(ExplorerProgress[] explorerProgresses, Response response) {
                 if (explorerProgresses != null) {
                     ExplorerProgress ep = explorerProgresses[0];
                     if (ep.getIsEntered() == 0) {
-                        api.updateExplorerProgressByAdventurerIdPlaceIdAndZoneId(adventurerId, p.getPlaceId(), zoneId, new Callback<Response>() {
+                        api.updateExplorerProgressByAdventurerIdPlaceIdAndZoneId(adventurerId, p.getPlaceId(), zoneId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                             @Override
                             public void success(Response response, Response response2) {
                                 Log.d(LOG_TAG, "Update Explore Progress Success");
@@ -660,12 +662,12 @@ public class ZoneActivity extends ActionBarActivity {
     }
 
     public void getCountProgress(final Place p) {
-        api.getCountExplorerProgressByAdventurerIdAndPlaceId(adventurerId, p.getPlaceId(), new Callback<Response>() {
+        api.getCountExplorerProgressByAdventurerIdAndPlaceId(adventurerId, p.getPlaceId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 exploreCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("explorecount", response));
                 Log.d(LOG_TAG, "Explorecount = " + Integer.toString(exploreCount));
-                api.getCountZoneByPlaceId(p.getPlaceId(), new Callback<Response>() {
+                api.getCountZoneByPlaceId(p.getPlaceId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
                         zoneCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("zonecount", response));
@@ -690,7 +692,7 @@ public class ZoneActivity extends ActionBarActivity {
     }
 
     public void getPlace() {
-        api.getAllPlaceByZoneId(zoneId, new Callback<Place[]>() {
+        api.getAllPlaceByZoneId(zoneId, QuestioConstants.QUESTIO_KEY, new Callback<Place[]>() {
             @Override
             public void success(Place[] places, Response response) {
                 if (places != null) {
@@ -710,7 +712,7 @@ public class ZoneActivity extends ActionBarActivity {
     }
 
     public void getExploreReward(final Place p) {
-        api.getAllExploreRewardByPlaceId(p.getPlaceId(), new Callback<Reward[]>() {
+        api.getAllExploreRewardByPlaceId(p.getPlaceId(), QuestioConstants.QUESTIO_KEY, new Callback<Reward[]>() {
             @Override
             public void success(Reward[] rewards, Response response) {
                 if (rewards != null) {
@@ -734,7 +736,7 @@ public class ZoneActivity extends ActionBarActivity {
 
     public void addExplorerReward(final Place p) {
         if (placeProgress.getQuestStatus() != QuestioConstants.QUEST_FINISHED) {
-            api.getCountHOFByAdventurerIdAndRewardId(adventurerId, exploreReward.getRewardId(), new Callback<Response>() {
+            api.getCountHOFByAdventurerIdAndRewardId(adventurerId, exploreReward.getRewardId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                 @Override
                 public void success(Response response, Response response2) {
                     int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
@@ -742,7 +744,7 @@ public class ZoneActivity extends ActionBarActivity {
                     if (rewardCount == 0) {
                         addRewardHOF(exploreReward.getRewardId(), QuestioConstants.REWARD_RANK_NORMAL);
                         showObtainRewardDialog(exploreReward, QuestioConstants.REWARD_RANK_NORMAL);
-                        api.updatePlaceProgressByAdventurerIdAndPlaceId(adventurerId, p.getPlaceId(), new Callback<Response>() {
+                        api.updatePlaceProgressByAdventurerIdAndPlaceId(adventurerId, p.getPlaceId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                             @Override
                             public void success(Response response, Response response2) {
 
@@ -767,7 +769,7 @@ public class ZoneActivity extends ActionBarActivity {
 
 
     public void getPlaceProgress(final Place p) {
-        api.getAllPlaceProgressByAdventurerIdAndPlaceId(adventurerId, p.getPlaceId(), new Callback<PlaceProgress[]>() {
+        api.getAllPlaceProgressByAdventurerIdAndPlaceId(adventurerId, p.getPlaceId(), QuestioConstants.QUESTIO_KEY, new Callback<PlaceProgress[]>() {
 
                     @Override
                     public void success(PlaceProgress[] placeProgresses, Response response) {

@@ -122,7 +122,7 @@ public class PlaceInfo extends ActionBarActivity {
                 .setEndpoint(QuestioConstants.ENDPOINT)
                 .build();
         QuestioAPIService api = adapter.create(QuestioAPIService.class);
-        api.getAllPlaceNewsByPlaceId(id, new Callback<ArrayList<PlaceNews>>() {
+        api.getAllPlaceNewsByPlaceId(id, QuestioConstants.QUESTIO_KEY, new Callback<ArrayList<PlaceNews>>() {
             @Override
             public void success(ArrayList<PlaceNews> placeNews, Response response) {
                 if (placeNews != null) {
@@ -150,7 +150,7 @@ public class PlaceInfo extends ActionBarActivity {
                 .setEndpoint(QuestioConstants.ENDPOINT)
                 .build();
         QuestioAPIService api = adapter.create(QuestioAPIService.class);
-        api.getPlaceDetailByPlaceId(id, new Callback<PlaceDetail[]>() {
+        api.getPlaceDetailByPlaceId(id, QuestioConstants.QUESTIO_KEY, new Callback<PlaceDetail[]>() {
             @Override
             public void success(PlaceDetail[] placeDetails, Response response) {
                 if (placeDetails[0] != null) {

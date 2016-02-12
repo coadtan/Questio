@@ -1,18 +1,13 @@
 package com.questio.projects.questio.sections;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -232,7 +227,7 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
     }
 
     private void requestItemInventoryData(long id) {
-        api.getAllItemInInventoryByAdventurerId(id, new Callback<ArrayList<ItemInInventory>>() {
+        api.getAllItemInInventoryByAdventurerId(id, QuestioConstants.QUESTIO_KEY, new Callback<ArrayList<ItemInInventory>>() {
             @Override
             public void success(ArrayList<ItemInInventory> itemInInventories, Response response) {
                 if (itemInInventories != null) {
@@ -308,7 +303,7 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
         String itemCollection = item.getItemCollection();
 
         Glide.with(mContext)
-                .load(QuestioConstants.BASE_URL_PIC + item.getItemPicPath())
+                .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + item.getItemPicPath())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(itemImage);
         tvItemName.setText(itemName);

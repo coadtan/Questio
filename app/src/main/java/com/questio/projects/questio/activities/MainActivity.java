@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity
         placeListForDistance = place.getAllPlaceArrayList();
         Place place = new Place(getApplicationContext());
         try {
-            String res = new HttpHelper().execute("http://52.74.64.61/api/select_all_place_count.php").get();
+            String res = new HttpHelper().execute(QuestioConstants.ENDPOINT + "/select_all_place_count.php").get();
 
             Log.d(LOG_TAG, "count: " + res);
             long placeServerCount = QuestioHelper.getPlaceCountFromJson(res);
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity
             Log.d(LOG_TAG, "placeServerCount: " + placeServerCount + " placeSQLiteCount: " + placeSQLiteCount);
             if (placeServerCount != placeSQLiteCount) {
                 place.deleteAllPlace();
-                new PlaceSync(getApplicationContext()).execute("http://52.74.64.61/api/select_all_place.php");
+                new PlaceSync(getApplicationContext()).execute(QuestioConstants.ENDPOINT + "/select_all_place.php");
             }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -230,12 +230,12 @@ public class MainActivity extends AppCompatActivity
 
             Log.d(LOG_TAG, "isEnterQuestMap: p.getPlaceId() = " + p.getPlaceId());
 
-            api.getRewardByPlaceId(p.getPlaceId(), new Callback<Reward[]>() {
+            api.getRewardByPlaceId(p.getPlaceId(), QuestioConstants.QUESTIO_KEY, new Callback<Reward[]>() {
                 @Override
                 public void success(Reward[] rewards, Response response) {
                     if (rewards != null) {
                         reward = rewards[0];
-                        api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), new Callback<Response>() {
+                        api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                             @Override
                             public void success(Response response, Response response2) {
                                 int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
@@ -355,7 +355,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void addRewardHOF(int rewardId, int rank) {
-        api.addRewards(adventurerId, rewardId, rank, new Callback<Response>() {
+        api.addRewards(adventurerId, rewardId, rank, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
 
@@ -369,7 +369,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void insertExplorerProgress(final Place p) {
-        api.addPlaceProgress(adventurerId, p.getPlaceId(), new Callback<Response>() {
+        api.addPlaceProgress(adventurerId, p.getPlaceId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
 
@@ -380,7 +380,7 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-        api.getZoneByPlaceId(p.getPlaceId(), new Callback<ArrayList<Zone>>() {
+        api.getZoneByPlaceId(p.getPlaceId(), QuestioConstants.QUESTIO_KEY, new Callback<ArrayList<Zone>>() {
             @Override
             public void success(ArrayList<Zone> zones, Response response) {
                 Log.d(LOG_TAG, "explorer progress: p.getPlaceId() " + p.getPlaceId());
@@ -390,7 +390,7 @@ public class MainActivity extends AppCompatActivity
 
                 if (zones != null) {
                     for (Zone z : zones) {
-                        api.addExplorerProgress(adventurerId, p.getPlaceId(), z.getZoneId(), new Callback<Response>() {
+                        api.addExplorerProgress(adventurerId, p.getPlaceId(), z.getZoneId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                             @Override
                             public void success(Response response, Response response2) {
 
@@ -414,7 +414,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public static void getZoneCount(Place p) {
-        api.getCountZoneByPlaceId(p.getPlaceId(), new Callback<Response>() {
+        api.getCountZoneByPlaceId(p.getPlaceId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 zoneCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("zonecount", response));
