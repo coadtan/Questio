@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import retrofit.Callback;
 import retrofit.client.Response;
 import retrofit.http.Field;
+import retrofit.http.GET;
 import retrofit.http.Query;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.POST;
@@ -74,9 +75,8 @@ public interface QuestioAPIService {
                                  @Field("key") String key,
                                  Callback<PlaceDetail[]> response);
 
-    @FormUrlEncoded
-    @POST("/select_zone_by_zoneid.php")
-    void getZoneByZoneId(@Field("zoneid") int id,
+    @GET("/select_zone_by_zoneid.php")
+    void getZoneByZoneId(@Query("zoneid") int id,
                          Callback<Zone[]> response);
 
     @FormUrlEncoded
