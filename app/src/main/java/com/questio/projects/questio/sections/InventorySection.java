@@ -44,7 +44,6 @@ import retrofit.client.Response;
 public class InventorySection extends Fragment implements AdapterView.OnItemClickListener {
     private final String LOG_TAG = InventorySection.class.getSimpleName();
     Context mContext;
-    SharedPreferences prefs;
     SharedPreferences.Editor editor;
     View view;
 
@@ -64,6 +63,7 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
     long adventurerId;
     RestAdapter adapter;
     QuestioAPIService api;
+    SharedPreferences prefs;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

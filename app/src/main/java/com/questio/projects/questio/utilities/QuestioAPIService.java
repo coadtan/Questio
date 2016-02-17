@@ -12,6 +12,7 @@ import com.questio.projects.questio.models.PlaceProgress;
 import com.questio.projects.questio.models.Quest;
 import com.questio.projects.questio.models.Quiz;
 import com.questio.projects.questio.models.QuizProgress;
+import com.questio.projects.questio.models.Ranking;
 import com.questio.projects.questio.models.Reward;
 import com.questio.projects.questio.models.RewardHOF;
 import com.questio.projects.questio.models.Riddle;
@@ -756,5 +757,22 @@ public interface QuestioAPIService {
             @Field("adventurerid") long adventurerId,
             @Field("key") String key,
             Callback<ArrayList<RewardHOF>> response
+    );
+
+    //select_topten_rank.php
+    @FormUrlEncoded
+    @POST("/select_topten_rank.php")
+    void getRankingTopTen(
+            @Field("adventurerid") long adventurerId,
+            @Field("key") String key,
+            Callback<ArrayList<Ranking>> response
+    );
+
+    @FormUrlEncoded
+    @POST("/select_guserid_adventurer_from_adventurerid.php")
+    void getGUserIdFromAdventurerId(
+            @Field("adventurerid") long adventurerId,
+            @Field("key") String key,
+            Callback<ArrayList<Ranking>> response
     );
 }
