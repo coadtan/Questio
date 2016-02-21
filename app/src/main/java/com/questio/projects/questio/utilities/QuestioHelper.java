@@ -221,4 +221,10 @@ public class QuestioHelper {
         }
         return (int)temp;
     }
+
+    public static String getProfileLink(int gUserId){
+        //https://www.googleapis.com/plus/v1/people/117289274317591199072?fields=image&key=AIzaSyC32SIKa3xbeyLFSEP9vgRklXLdyZ1igCc
+        // ImagePathURL to be returned
+        return "";
+    }
 }
