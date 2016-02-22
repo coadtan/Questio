@@ -2,6 +2,10 @@ package com.questio.projects.questio.utilities;
 
 import android.util.Log;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,6 +13,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.concurrent.ExecutionException;
 
 import retrofit.client.Response;
 
@@ -222,9 +227,24 @@ public class QuestioHelper {
         return (int)temp;
     }
 
-    public static String getProfileLink(int gUserId){
+    public static String getProfileLink(String gUserId){
         //https://www.googleapis.com/plus/v1/people/117289274317591199072?fields=image&key=AIzaSyC32SIKa3xbeyLFSEP9vgRklXLdyZ1igCc
         // ImagePathURL to be returned
-        return "";
+        String imageUrl = "";
+        String linkUrl = "https://www.googleapis.com/plus/v1/people/"+gUserId+"?fields=image&key=AIzaSyC32SIKa3xbeyLFSEP9vgRklXLdyZ1igCc";
+        try {
+            String response = new HttpHelper().execute(linkUrl).get();
+            Log.d(LOG_TAG, "response: " + response);
+            JsonObject obj = new JsonParser().parse(response).getAsJsonObject();
+            JsonObject image = obj.getAsJsonObject("image");
+            JsonPrimitive url = image.getAsJsonObject().getAsJsonPrimitive("url");
+            imageUrl = url.getAsString();
+            Log.d(LOG_TAG, "imageurl: " + imageUrl);
+
+
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return imageUrl;
     }
 }

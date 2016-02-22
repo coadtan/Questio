@@ -9,13 +9,24 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.models.Ranking;
+import com.questio.projects.questio.utilities.QuestioAPIService;
+import com.questio.projects.questio.utilities.QuestioConstants;
+import com.questio.projects.questio.utilities.QuestioHelper;
 
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
+import static com.questio.projects.questio.utilities.QuestioConstants.ENDPOINT;
 
 /**
  * Created by ning jittima on 17/2/2559.
@@ -25,6 +36,7 @@ public class RankingAdapter extends BaseAdapter {
     private Context mContext;
     private ArrayList<Ranking> rankingList;
     private Typeface tf;
+
     public static class ViewHolder{
         @Bind(R.id.rank_no)
         TextView rankNumber;
@@ -79,6 +91,12 @@ public class RankingAdapter extends BaseAdapter {
             viewHolder.rankName.setTypeface(tf);
             viewHolder.rankScore.setText(Integer.toString(ranking.getScore()));
             viewHolder.rankScore.setTypeface(tf);
+            String gUserId = ranking.getgUserId();
+            Glide.with(mContext)
+                    .load(QuestioHelper.getProfileLink(gUserId))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(viewHolder.rankImage);
+
             //getProfileLink for update rankImage; use glide.
         }
         return view;

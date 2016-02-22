@@ -9,8 +9,8 @@ public class Ranking {
     @SerializedName("rank")
     private int rank;
 
-    @SerializedName("adventurerid")
-    private long adventurerId;
+    @SerializedName("guserid")
+    private String gUserId;
 
     @SerializedName("displayname")
     private String displayName;
@@ -18,12 +18,12 @@ public class Ranking {
     @SerializedName("score")
     private int score;
 
-    public long getAdventurerId() {
-        return adventurerId;
+    public String getgUserId() {
+        return gUserId;
     }
 
-    public void setAdventurerId(long adventurerId) {
-        this.adventurerId = adventurerId;
+    public void setgUserId(String gUserId) {
+        this.gUserId = gUserId;
     }
 
     public String getDisplayName() {
@@ -53,9 +53,9 @@ public class Ranking {
     @Override
     public String toString() {
         return "Ranking{" +
-                "adventurerId=" + adventurerId +
+                "displayName='" + displayName + '\'' +
                 ", rank=" + rank +
-                ", displayName='" + displayName + '\'' +
+                ", gUserId='" + gUserId + '\'' +
                 ", score=" + score +
                 '}';
     }

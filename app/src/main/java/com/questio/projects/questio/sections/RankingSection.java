@@ -3,6 +3,7 @@ package com.questio.projects.questio.sections;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,8 +13,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
+import com.questio.projects.questio.QuestioApplication;
 import com.questio.projects.questio.R;
 import com.questio.projects.questio.activities.ZoneActivity;
 import com.questio.projects.questio.adepters.RankingAdapter;
@@ -22,6 +31,7 @@ import com.questio.projects.questio.libraries.zbarscanner.ZBarScannerActivity;
 import com.questio.projects.questio.models.Ranking;
 import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
+import com.questio.projects.questio.utilities.QuestioHelper;
 
 import net.sourceforge.zbar.Symbol;
 
@@ -44,9 +54,25 @@ public class RankingSection extends Fragment {
     RankingAdapter rankingAdapter;
     SharedPreferences prefs;
     long adventurerId;
+    private Typeface tf;
+    public static GoogleApiClient mGoogleApiClient;
+    Person currentPerson;
+
 
     @Bind(R.id.ranking)
     ListView ranking;
+
+    @Bind(R.id.self_rank_no)
+    TextView selfRankNumber;
+
+    @Bind(R.id.self_rank_name)
+    TextView selfRankName;
+
+    @Bind(R.id.self_rank_score)
+    TextView selfRankScore;
+
+    @Bind(R.id.self_rank_image)
+    ImageView selfRankImage;
 
 
     @Override
@@ -60,6 +86,8 @@ public class RankingSection extends Fragment {
         api = adapter.create(QuestioAPIService.class);
         prefs = this.getActivity().getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, Context.MODE_PRIVATE);
         adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
+        currentPerson = Plus.PeopleApi
+                .getCurrentPerson(QuestioApplication.mGoogleApiClient);
     }
 
     @Override
@@ -67,7 +95,9 @@ public class RankingSection extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.section_ranking, container, false);
         ButterKnife.bind(this, view);
+        tf = Typeface.createFromAsset(mContext.getAssets(), "fonts/CSPraJad.otf");
         requestRankingData(adventurerId);
+        getCurrentAdventurerRank();
 
         return view;
     }
@@ -113,6 +143,36 @@ public class RankingSection extends Fragment {
 
                 }else{
                     Log.d(LOG_TAG, "ranking is null");
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    public void getCurrentAdventurerRank(){
+        api.getCurrentRankByAdventurerId(adventurerId, QuestioConstants.QUESTIO_KEY, new Callback<Ranking[]>() {
+            @Override
+            public void success(Ranking[] rankings, Response response) {
+                if(rankings[0] != null){
+                    Ranking ranking = rankings[0];
+                    selfRankNumber.setText(Integer.toString(ranking.getRank()));
+                    selfRankNumber.setTypeface(tf);
+                    selfRankName.setText(ranking.getDisplayName());
+                    selfRankName.setTypeface(tf);
+                    selfRankScore.setText(Integer.toString(ranking.getScore()));
+                    selfRankScore.setTypeface(tf);
+                    if (QuestioApplication.mGoogleApiClient.isConnected()) {
+                        Glide.with(mContext)
+                                .load(currentPerson.getImage().getUrl())
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(selfRankImage);
+                    }
+                }else{
+                    Log.d(LOG_TAG, "current ranking is null");
                 }
             }
 

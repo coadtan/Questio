@@ -761,18 +761,26 @@ public interface QuestioAPIService {
 
     //select_topten_rank.php
     @FormUrlEncoded
-    @POST("/select_topten_rank.php")
-    void getRankingTopTen(
-            @Field("adventurerid") long adventurerId,
-            @Field("key") String key,
-            Callback<ArrayList<Ranking>> response
-    );
+                               @POST("/select_topten_rank.php")
+      void getRankingTopTen(
+                    @Field("adventurerid") long adventurerId,
+                    @Field("key") String key,
+                    Callback<ArrayList<Ranking>> response
+            );
 
     @FormUrlEncoded
     @POST("/select_guserid_adventurer_from_adventurerid.php")
     void getGUserIdFromAdventurerId(
             @Field("adventurerid") long adventurerId,
             @Field("key") String key,
-            Callback<ArrayList<Ranking>> response
+            Callback<Response> response
+    );
+
+    @FormUrlEncoded
+    @POST("/select_current_rank_by_adventurerid.php")
+    void getCurrentRankByAdventurerId(
+            @Field("adventurerid") long adventurerId,
+            @Field("key") String key,
+            Callback<Ranking[]> response
     );
 }
