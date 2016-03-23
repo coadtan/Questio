@@ -95,7 +95,7 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
             Bundle savedInstanceState
     ) {
         FlatUI.initDefaultValues(getActivity());
-        FlatUI.setDefaultTheme(FlatUI.ORANGE);
+        FlatUI.setDefaultTheme(FlatUI.DEEP);
         view = inflater.inflate(R.layout.section_inventory, container, false);
         ButterKnife.bind(this, view);
         requestItemInventoryData(adventurerId);

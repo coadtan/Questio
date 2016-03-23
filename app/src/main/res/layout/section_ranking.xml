@@ -3,17 +3,19 @@
     android:id="@+id/ranking_section"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/default_pane">
 
     <LinearLayout
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/ranking_user"
         android:orientation="horizontal"
         android:weightSum="10">
 
         <TextView
+            android:textColor="@color/white"
             android:id="@+id/self_rank_no"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -32,6 +34,7 @@
             android:src="@drawable/ic_icon_profile" />
 
         <TextView
+            android:textColor="@color/white"
             android:id="@+id/self_rank_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -42,6 +45,7 @@
             android:textSize="18sp" />
 
         <TextView
+            android:textColor="@color/white"
             android:id="@+id/self_rank_score"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -53,6 +57,7 @@
 
     <ListView
         android:id="@+id/ranking"
+        android:textColor="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

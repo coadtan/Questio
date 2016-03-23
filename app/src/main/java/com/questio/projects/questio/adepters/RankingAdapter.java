@@ -92,10 +92,10 @@ public class RankingAdapter extends BaseAdapter {
             viewHolder.rankScore.setText(Integer.toString(ranking.getScore()));
             viewHolder.rankScore.setTypeface(tf);
             String gUserId = ranking.getgUserId();
-            Glide.with(mContext)
-                    .load(QuestioHelper.getProfileLink(gUserId))
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(viewHolder.rankImage);
+//            Glide.with(mContext)
+//                    .load(QuestioHelper.getProfileLink(gUserId))
+//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                    .into(viewHolder.rankImage);
 
             //getProfileLink for update rankImage; use glide.
         }

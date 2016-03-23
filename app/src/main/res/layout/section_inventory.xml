@@ -4,12 +4,15 @@
     android:id="@+id/inventory_section"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/default_pane"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:background="@color/default_pane"
         android:layout_gravity="center"
+        android:layout_margin="5dp"
         android:orientation="horizontal">
 
         <!--<EditText-->
@@ -62,7 +65,7 @@
         android:id="@+id/inventory"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
+        android:background="@color/default_pane"
         android:gravity="center"
         android:horizontalSpacing="2dp"
         android:numColumns="4"

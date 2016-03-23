@@ -9,7 +9,7 @@
         android:id="@+id/hof_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary" />
+        android:background="@color/default_pane" />
 
     <TextView
         android:layout_width="match_parent"

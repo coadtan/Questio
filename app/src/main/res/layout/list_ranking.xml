@@ -7,11 +7,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@color/ranking_listview"
         android:orientation="horizontal"
         android:weightSum="10">
 
         <TextView
+            android:textColor="@color/white"
             android:id="@+id/rank_no"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -30,6 +31,7 @@
             android:src="@drawable/ic_icon_profile" />
 
         <TextView
+            android:textColor="@color/white"
             android:id="@+id/rank_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -40,6 +42,7 @@
             android:textSize="14sp" />
 
         <TextView
+            android:textColor="@color/white"
             android:id="@+id/rank_score"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
