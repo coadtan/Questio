@@ -204,6 +204,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     editor.putLong(QuestioConstants.ADVENTURER_ID, Long.parseLong(idStr));
                                     editor.putString(QuestioConstants.ADVENTURER_DISPLAYNAME, currentPerson.getDisplayName());
                                     editor.apply();
+
+                                    QuestioApplication.setLogin(true);
+
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    startActivity(intent);
+
+                                    finish();
                                 }
 
                                 @Override
@@ -230,12 +237,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             e.printStackTrace();
         }
 
-        QuestioApplication.setLogin(true);
-
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-
-        finish();
+//        QuestioApplication.setLogin(true);
+//
+//        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//        startActivity(intent);
+//
+//        finish();
     }
 
     @Override

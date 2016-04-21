@@ -49,17 +49,8 @@
                 android:layout_marginStart="21dp"
                 android:layout_marginTop="22dp"
                 android:layout_toEndOf="@+id/profile_picture"
-                android:text="Large Text"
+                android:text="Unknown"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:id="@+id/profile_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/profile_nickname"
-                android:layout_below="@+id/profile_nickname"
-                android:layout_marginTop="15dp"
-                android:text="New Text" />
 
         </RelativeLayout>
 

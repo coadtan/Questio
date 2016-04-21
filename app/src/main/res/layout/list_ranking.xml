@@ -23,22 +23,21 @@
             android:text="1"
             android:textSize="24sp" />
 
-        <ImageView
-            android:id="@+id/rank_image"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:src="@drawable/ic_icon_profile" />
+        <!--<ImageView-->
+            <!--android:id="@+id/rank_image"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="2"-->
+            <!--android:src="@drawable/ic_icon_profile" />-->
 
         <TextView
             android:textColor="@color/white"
             android:id="@+id/rank_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="6"
-            android:paddingEnd="5dp"
+            android:layout_weight="7"
             android:paddingStart="5dp"
-            android:text="บร๊ะเจ้าโจ๊ก"
+            android:text="User name"
             android:textSize="14sp" />
 
         <TextView
@@ -46,9 +45,17 @@
             android:id="@+id/rank_score"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.7"
             android:gravity="center"
             android:text="0"
             android:textSize="14sp" />
+        <TextView
+            android:textColor="@color/white"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:gravity="center"
+            android:text="Points"
+            android:textSize="8sp" />
     </LinearLayout>
 </LinearLayout>

@@ -44,6 +44,8 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import static com.questio.projects.questio.utilities.QuestioConstants.ADVENTURER_ID;
+
 public class RankingSection extends Fragment {
     private static final String LOG_TAG = RankingSection.class.getSimpleName();
     Context mContext;
@@ -154,10 +156,11 @@ public class RankingSection extends Fragment {
     }
 
     public void getCurrentAdventurerRank(){
+        Log.d(LOG_TAG, "adventurerId: " + adventurerId);
         api.getCurrentRankByAdventurerId(adventurerId, QuestioConstants.QUESTIO_KEY, new Callback<Ranking[]>() {
             @Override
             public void success(Ranking[] rankings, Response response) {
-                if(rankings[0] != null){
+                if(null != rankings[0]){
                     Ranking ranking = rankings[0];
                     selfRankNumber.setText(Integer.toString(ranking.getRank()));
                     selfRankNumber.setTypeface(tf);

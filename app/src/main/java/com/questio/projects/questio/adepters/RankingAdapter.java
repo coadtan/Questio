@@ -47,8 +47,8 @@ public class RankingAdapter extends BaseAdapter {
         @Bind(R.id.rank_score)
         TextView rankScore;
 
-        @Bind(R.id.rank_image)
-        ImageView rankImage;
+//        @Bind(R.id.rank_image)
+//        ImageView rankImage;
 
         public ViewHolder(View view){
             ButterKnife.bind(this, view);
@@ -91,7 +91,7 @@ public class RankingAdapter extends BaseAdapter {
             viewHolder.rankName.setTypeface(tf);
             viewHolder.rankScore.setText(Integer.toString(ranking.getScore()));
             viewHolder.rankScore.setTypeface(tf);
-            String gUserId = ranking.getgUserId();
+//            String gUserId = ranking.getgUserId();
 //            Glide.with(mContext)
 //                    .load(QuestioHelper.getProfileLink(gUserId))
 //                    .diskCacheStrategy(DiskCacheStrategy.ALL)

@@ -49,6 +49,8 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import static com.questio.projects.questio.utilities.QuestioConstants.ADVENTURER_DISPLAYNAME;
+
 public class ProfileSection extends Fragment implements AdapterView.OnItemClickListener {
     private static final String LOG_TAG = ProfileSection.class.getSimpleName();
     Context mContext;
@@ -62,6 +64,10 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
     ImageButton placeRewardsButton;
     @Bind(R.id.profile_rewards_button)
     ImageButton rewardsButton;
+
+    @Bind(R.id.profile_nickname)
+    TextView profileName;
+
 //    @Bind(R.id.halloffame)
 //    GridView hallOfFame;
 
@@ -71,6 +77,7 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
     SharedPreferences.Editor editor;
     RestAdapter adapter;
     long adventurerId;
+    String adventurerName;
     QuestioAPIService api;
     ArrayList<RewardHOF> rewards;
     RewardsAdapter rewardsAdapter;
@@ -83,6 +90,7 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
         prefs = this.getActivity().getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, Context.MODE_PRIVATE);
         editor = this.getActivity().getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, Context.MODE_PRIVATE).edit();
         adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
+        adventurerName = prefs.getString(ADVENTURER_DISPLAYNAME, "Unknown");
         currentPerson = Plus.PeopleApi
                 .getCurrentPerson(QuestioApplication.mGoogleApiClient);
         adapter = new RestAdapter.Builder()
@@ -102,6 +110,12 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
         view = inflater.inflate(R.layout.section_profile, container, false);
         ButterKnife.bind(this, view);
         init();
+        String nameToShow = adventurerName;
+        String[] parts = nameToShow.split(" ");
+
+        nameToShow = parts[0] + " " + (parts[1].charAt(0)+"").toUpperCase() + ".";
+        profileName.setText(nameToShow);
+
         profilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
