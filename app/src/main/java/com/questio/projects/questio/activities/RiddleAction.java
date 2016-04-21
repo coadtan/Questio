@@ -1,19 +1,13 @@
 package com.questio.projects.questio.activities;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -162,19 +156,19 @@ public class RiddleAction extends AppCompatActivity implements View.OnClickListe
                 hintReveal1.setText(r.getHint1());
                 hint1Btn.setEnabled(false);
                 hint1Btn.setClickable(false);
-                api.updateRiddleProgressHint1ByRef(adventurerId, qid, this);
+                api.updateRiddleProgressHint1ByRef(adventurerId, qid, QuestioConstants.QUESTIO_KEY, this);
                 break;
             case R.id.riddle_hint2Btn:
                 hintReveal2.setText(r.getHint2());
                 hint2Btn.setEnabled(false);
                 hint2Btn.setClickable(false);
-                api.updateRiddleProgressHint2ByRef(adventurerId, qid, this);
+                api.updateRiddleProgressHint2ByRef(adventurerId, qid, QuestioConstants.QUESTIO_KEY, this);
                 break;
             case R.id.riddle_hint3Btn:
                 hintReveal3.setText(r.getHint3());
                 hint3Btn.setEnabled(false);
                 hint3Btn.setClickable(false);
-                api.updateRiddleProgressHint3ByRef(adventurerId, qid, this);
+                api.updateRiddleProgressHint3ByRef(adventurerId, qid, QuestioConstants.QUESTIO_KEY, this);
                 break;
         }
     }
@@ -206,7 +200,7 @@ public class RiddleAction extends AppCompatActivity implements View.OnClickListe
             } else {
                 scanLimit--;
                 scanTV.setText(Integer.toString(scanLimit));
-                api.updateRiddleProgressScanLimitByRef(scanLimit, adventurerId, qid, this);
+                api.updateRiddleProgressScanLimitByRef(scanLimit, adventurerId, qid, QuestioConstants.QUESTIO_KEY, this);
                 if (scanLimit == 0) {
                     updateQuestStatus(QuestioConstants.QUEST_FAILED);
                     showCompleteDialog(points);
@@ -217,7 +211,7 @@ public class RiddleAction extends AppCompatActivity implements View.OnClickListe
     }
 
     private void updateScoreToQuestProgress() {
-        api.getCurrentRiddlePointByRef(adventurerId, qid, new Callback<Response>() {
+        api.getCurrentRiddlePointByRef(adventurerId, qid, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 Log.d(LOG_TAG, "updateScoreToQuestProgressTest: response = " + QuestioHelper.responseToString(response));
@@ -228,7 +222,7 @@ public class RiddleAction extends AppCompatActivity implements View.OnClickListe
 
                 points = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("points", response));
                 showCompleteDialog(points);
-                api.updateScoreQuestProgressByQuestIdAndAdventurerId(points, qid, adventurerId, new Callback<Response>() {
+                api.updateScoreQuestProgressByQuestIdAndAdventurerId(points, qid, adventurerId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
 
@@ -250,7 +244,7 @@ public class RiddleAction extends AppCompatActivity implements View.OnClickListe
     }
 
     private void requestRiddleData(int id) {
-        api.getRiddleByQuestId(id, new Callback<Riddle[]>() {
+        api.getRiddleByQuestId(id, QuestioConstants.QUESTIO_KEY, new Callback<Riddle[]>() {
             @Override
             public void success(Riddle[] riddleTemp, Response response) {
                 if (riddleTemp != null) {
@@ -304,7 +298,7 @@ public class RiddleAction extends AppCompatActivity implements View.OnClickListe
 
     private void requestProgressData() {
 
-        api.getQuestProgressByQuestIdAndAdventurerId(qid, adventurerId, new Callback<Response>() {
+        api.getQuestProgressByQuestIdAndAdventurerId(qid, adventurerId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 if (QuestioHelper.responseToString(response).equalsIgnoreCase("null")) {
@@ -316,7 +310,7 @@ public class RiddleAction extends AppCompatActivity implements View.OnClickListe
                     if (status == QuestioConstants.QUEST_FINISHED || status == QuestioConstants.QUEST_FAILED) {
                         onQuestFinish();
                     } else {
-                        api.getRiddleProgressByRef(adventurerId, qid, new Callback<Response>() {
+                        api.getRiddleProgressByRef(adventurerId, qid, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                             @Override
                             public void success(Response response, Response response2) {
                                 String scanLimitStr = QuestioHelper.getJSONStringValueByTag("scanlimit", response);
@@ -350,7 +344,7 @@ public class RiddleAction extends AppCompatActivity implements View.OnClickListe
     }
 
     private void insertProgressData() {
-        api.addQuestProgress(qid, adventurerId, zid, 2, new Callback<Response>() {
+        api.addQuestProgress(qid, adventurerId, zid, 2, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 String questioStatus = QuestioHelper.responseToString(response);
@@ -366,7 +360,7 @@ public class RiddleAction extends AppCompatActivity implements View.OnClickListe
     }
 
     private void insertRiddleProgress() {
-        api.addRiddleProgress(adventurerId, qid, new Callback<Response>() {
+        api.addRiddleProgress(adventurerId, qid, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
 
@@ -380,7 +374,7 @@ public class RiddleAction extends AppCompatActivity implements View.OnClickListe
     }
 
     private void updateQuestStatus(int status) {
-        api.updateStatusQuestProgressByQuestIdAndAdventurerId(status, qid, adventurerId, new Callback<Response>() {
+        api.updateStatusQuestProgressByQuestIdAndAdventurerId(status, qid, adventurerId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
 
@@ -458,7 +452,7 @@ public class RiddleAction extends AppCompatActivity implements View.OnClickListe
     }
 
     public void addRewardHOF(int rewardId, int rank) {
-        api.addRewards(adventurerId, rewardId, rank, new Callback<Response>() {
+        api.addRewards(adventurerId, rewardId, rank, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
 
@@ -502,27 +496,27 @@ public class RiddleAction extends AppCompatActivity implements View.OnClickListe
         if (rank == QuestioConstants.REWARD_RANK_NORMAL) {
             rewardRank = "ระดับปกติ";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + reward.getRewardPic())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
         } else if (rank == QuestioConstants.REWARD_RANK_BRONZE) {
             rewardRank = "ระดับทองแดง";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + reward.getRewardPic())
                     .bitmapTransform(new SepiaFilterTransformation(this, Glide.get(this).getBitmapPool()))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
         } else if (rank == QuestioConstants.REWARD_RANK_SILVER) {
             rewardRank = "ระดับเงิน";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + reward.getRewardPic())
                     .bitmapTransform(new GrayscaleTransformation(Glide.get(this).getBitmapPool()))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
         } else if (rank == QuestioConstants.REWARD_RANK_GOLD) {
             rewardRank = "ระดับทอง";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + reward.getRewardPic())
                     .bitmapTransform(new BrightnessFilterTransformation(this, Glide.get(this).getBitmapPool(), 0.5f))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
@@ -543,12 +537,12 @@ public class RiddleAction extends AppCompatActivity implements View.OnClickListe
 
 
     void checkRewards() {
-        api.getRewardByQuestId(qid, new Callback<Reward[]>() {
+        api.getRewardByQuestId(qid, QuestioConstants.QUESTIO_KEY, new Callback<Reward[]>() {
             @Override
             public void success(Reward[] rewards, Response response) {
                 if (rewards != null) {
                     reward = rewards[0];
-                    api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), new Callback<Response>() {
+                    api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                         @Override
                         public void success(Response response, Response response2) {
                             int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));

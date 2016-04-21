@@ -3,7 +3,8 @@ package com.questio.projects.questio.utilities;
 
 public class QuestioConstants {
     public static final String BASE_URL = "http://52.74.64.61";
-    public static final String ENDPOINT = "http://52.74.64.61/api";
+    public static final String BASE_QUESTIO_MANAGEMENT = "http://52.74.64.61/questio_management";
+    public static final String ENDPOINT = "http://52.74.64.61/questio_management/api";
     public static final String TAG_PLACE_ID = "placeid";
     public static final String TAG_PLACE_NAME = "placename";
     public static final String TAG_PLACE_FULL_NAME = "placefullname";
@@ -28,6 +29,7 @@ public class QuestioConstants {
     public static final String ADVENTURER_DISPLAYNAME = "adventurer_displayname";
     public static final String CURRENT_PLACE = "current_place";
     public static final String CURRENT_PLACE_TIMEOUT = "current_place_timeout";
+    public static final String QUESTIO_KEY = "asdlaekqwekasdlkxzc";
     public static final int QUEST_NOT_STARTED = 1;
     public static final int QUEST_NOT_FINISHED = 2;
     public static final int QUEST_FINISHED = 3;

@@ -195,38 +195,38 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         pointTV.setText(Integer.toString(points));
         switch (position) {
             case 1:
-                api.updatePuzzleProgressTopLeftPieceByRef(adventurerId, qid, this);
+                api.updatePuzzleProgressTopLeftPieceByRef(adventurerId, qid, QuestioConstants.QUESTIO_KEY, this);
                 break;
             case 2:
-                api.updatePuzzleProgressTopMidPieceByRef(adventurerId, qid, this);
+                api.updatePuzzleProgressTopMidPieceByRef(adventurerId, qid, QuestioConstants.QUESTIO_KEY, this);
                 break;
             case 3:
-                api.updatePuzzleProgressTopRightPieceByRef(adventurerId, qid, this);
+                api.updatePuzzleProgressTopRightPieceByRef(adventurerId, qid, QuestioConstants.QUESTIO_KEY, this);
                 break;
             case 4:
-                api.updatePuzzleProgressMidLeftPieceByRef(adventurerId, qid, this);
+                api.updatePuzzleProgressMidLeftPieceByRef(adventurerId, qid, QuestioConstants.QUESTIO_KEY, this);
                 break;
             case 5:
-                api.updatePuzzleProgressMidMidPieceByRef(adventurerId, qid, this);
+                api.updatePuzzleProgressMidMidPieceByRef(adventurerId, qid, QuestioConstants.QUESTIO_KEY, this);
                 break;
             case 6:
-                api.updatePuzzleProgressMidRightPieceByRef(adventurerId, qid, this);
+                api.updatePuzzleProgressMidRightPieceByRef(adventurerId, qid, QuestioConstants.QUESTIO_KEY, this);
                 break;
             case 7:
-                api.updatePuzzleProgressBottomLeftPieceByRef(adventurerId, qid, this);
+                api.updatePuzzleProgressBottomLeftPieceByRef(adventurerId, qid, QuestioConstants.QUESTIO_KEY, this);
                 break;
             case 8:
-                api.updatePuzzleProgressBottomMidPieceByRef(adventurerId, qid, this);
+                api.updatePuzzleProgressBottomMidPieceByRef(adventurerId, qid, QuestioConstants.QUESTIO_KEY, this);
                 break;
             case 9:
-                api.updatePuzzleProgressBottomRightPieceByRef(adventurerId, qid, this);
+                api.updatePuzzleProgressBottomRightPieceByRef(adventurerId, qid, QuestioConstants.QUESTIO_KEY,this);
                 break;
 
         }
     }
 
     private void requestPicturePuzzleData(int id) {
-        api.getPicturePuzzleByPuzzleId(id, new Callback<PicturePuzzle[]>() {
+        api.getPicturePuzzleByPuzzleId(id, QuestioConstants.QUESTIO_KEY, new Callback<PicturePuzzle[]>() {
             @Override
             public void success(PicturePuzzle[] picturePuzzleTemp, Response response) {
                 if (picturePuzzleTemp[0] != null) {
@@ -262,7 +262,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     }
 
     private void requestQuestProgress() {
-        api.getQuestProgressByQuestIdAndAdventurerId(qid, adventurerId, new Callback<Response>() {
+        api.getQuestProgressByQuestIdAndAdventurerId(qid, adventurerId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 if (QuestioHelper.responseToString(response).equalsIgnoreCase("null")) {
@@ -286,7 +286,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                         picturePuzzleAnswer.setEnabled(false);
                         picturePuzzleAnswer.setClickable(false);
                     } else {
-                        api.getPuzzleProgressByRef(adventurerId, qid, new Callback<Response>() {
+                        api.getPuzzleProgressByRef(adventurerId, qid, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                             @Override
                             public void success(Response response, Response response2) {
                                 if (Integer.parseInt(QuestioHelper.getJSONStringValueByTag("topleftopened", response)) == 1) {
@@ -336,7 +336,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
 
     private void insertProgressData() {
         Log.d(LOG_TAG, "No Progress in Quest");
-        api.addQuestProgress(qid, adventurerId, zid, 3, new Callback<Response>() {
+        api.addQuestProgress(qid, adventurerId, zid, 3, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 String questioStatus = QuestioHelper.responseToString(response);
@@ -352,7 +352,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
 
     private void insertPuzzleProgress() {
         Log.d(LOG_TAG, "No Progress in Puzzle");
-        api.addPuzzleProgress(adventurerId, qid, new Callback<Response>() {
+        api.addPuzzleProgress(adventurerId, qid, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 String questioStatus = QuestioHelper.responseToString(response);
@@ -368,7 +368,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
 
     private void updateQuestStatus(int status) {
         Log.d(LOG_TAG, "updateQuestStatus: called");
-        api.updateStatusQuestProgressByQuestIdAndAdventurerId(status, qid, adventurerId, new Callback<Response>() {
+        api.updateStatusQuestProgressByQuestIdAndAdventurerId(status, qid, adventurerId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
 
@@ -382,7 +382,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     }
 
     private void updateScore() {
-        api.updateScoreQuestProgressByQuestIdAndAdventurerId(points, qid, adventurerId, new Callback<Response>() {
+        api.updateScoreQuestProgressByQuestIdAndAdventurerId(points, qid, adventurerId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 Log.d(LOG_TAG, "updateScore: success with points = " + points);
@@ -452,12 +452,12 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         disableAll();
         picturePuzzleAnswer.setEnabled(false);
         picturePuzzleAnswer.setClickable(false);
-        api.getRewardByQuestId(qid, new Callback<Reward[]>() {
+        api.getRewardByQuestId(qid, QuestioConstants.QUESTIO_KEY, new Callback<Reward[]>() {
             @Override
             public void success(Reward[] rewards, Response response) {
                 if (rewards != null) {
                     reward = rewards[0];
-                    api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), new Callback<Response>() {
+                    api.getCountHOFByAdventurerIdAndRewardId(adventurerId, reward.getRewardId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                         @Override
                         public void success(Response response, Response response2) {
                             int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
@@ -489,7 +489,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     }
 
     private void getCurrentPoints() {
-        api.getCurrentPointsByRef(adventurerId, qid, new Callback<Response>() {
+        api.getCurrentPointsByRef(adventurerId, qid, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 points = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("points", QuestioHelper.responseToString(response)));
@@ -551,7 +551,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     }
 
     public void addRewardHOF(int rewardId, int rank) {
-        api.addRewards(adventurerId, rewardId, rank, new Callback<Response>() {
+        api.addRewards(adventurerId, rewardId, rank, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
 
@@ -595,27 +595,27 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         if (rank == QuestioConstants.REWARD_RANK_NORMAL) {
             rewardRank = "ระดับปกติ";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + reward.getRewardPic())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
         } else if (rank == QuestioConstants.REWARD_RANK_BRONZE) {
             rewardRank = "ระดับทองแดง";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + reward.getRewardPic())
                     .bitmapTransform(new SepiaFilterTransformation(this, Glide.get(this).getBitmapPool()))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
         } else if (rank == QuestioConstants.REWARD_RANK_SILVER) {
             rewardRank = "ระดับเงิน";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + reward.getRewardPic())
                     .bitmapTransform(new GrayscaleTransformation(Glide.get(this).getBitmapPool()))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
         } else if (rank == QuestioConstants.REWARD_RANK_GOLD) {
             rewardRank = "ระดับทอง";
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + reward.getRewardPic())
                     .bitmapTransform(new BrightnessFilterTransformation(this, Glide.get(this).getBitmapPool(), 0.5f))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);

@@ -6,7 +6,6 @@
     <color name="colorPrimaryDark">#fff9871e</color>
     <color name="textColorPrimary">#ffefffd2</color>
     <color name="windowBackground">#ffb5c6b7</color>
-
     <color name="brown">#ff8f6641</color>
     <color name="white">#FFFFFF</color>
     <color name="grey">#cccccc</color>
@@ -35,4 +34,9 @@
     <color name="background_textview_frame">#353c42</color>
     <color name="background_textview">#4891b4</color>
     <color name="footer">#242424</color>
+    <color name="default_pane">#315178</color>
+    <color name="ranking_listview">#4875ac</color>
+    <color name="ranking_user">#3b618f</color>
+
+
 </resources>

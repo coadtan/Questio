@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ranking_section"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/default_pane">
+    android:orientation="vertical">
 
     <LinearLayout
-        android:gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@color/ranking_user"
+        android:layout_height="wrap_content"
+        android:background="@color/ranking_listview"
         android:orientation="horizontal"
         android:weightSum="10">
 
         <TextView
             android:textColor="@color/white"
-            android:id="@+id/self_rank_no"
+            android:id="@+id/rank_no"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -27,38 +24,31 @@
             android:textSize="24sp" />
 
         <ImageView
-            android:id="@+id/self_rank_image"
+            android:id="@+id/rank_image"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="2"
             android:src="@drawable/ic_icon_profile" />
 
         <TextView
             android:textColor="@color/white"
-            android:id="@+id/self_rank_name"
+            android:id="@+id/rank_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="6"
             android:paddingEnd="5dp"
             android:paddingStart="5dp"
             android:text="บร๊ะเจ้าโจ๊ก"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:textColor="@color/white"
-            android:id="@+id/self_rank_score"
+            android:id="@+id/rank_score"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:text="0"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
     </LinearLayout>
-
-    <ListView
-        android:id="@+id/ranking"
-        android:textColor="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
 </LinearLayout>

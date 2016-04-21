@@ -94,7 +94,7 @@ public class HOFActivity extends AppCompatActivity implements AdapterView.OnItem
     }
 
     private void requestPlaceRewardsHOFData(long id){
-        api.getNonPlaceRewardsInHalloffameByAdventurerId(id, new Callback<ArrayList<RewardHOF>>() {
+        api.getNonPlaceRewardsInHalloffameByAdventurerId(id, QuestioConstants.QUESTIO_KEY, new Callback<ArrayList<RewardHOF>>() {
             @Override
             public void success(ArrayList<RewardHOF> rewardHOFs, Response response) {
                 if(rewardHOFs != null){
@@ -146,24 +146,24 @@ public class HOFActivity extends AppCompatActivity implements AdapterView.OnItem
 
         if (reward.getRankId() == QuestioConstants.REWARD_RANK_NORMAL) {
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + reward.getRewardPic())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
         } else if (reward.getRankId() == QuestioConstants.REWARD_RANK_BRONZE) {
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + reward.getRewardPic())
                     .bitmapTransform(new SepiaFilterTransformation(this, Glide.get(this).getBitmapPool()))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
         } else if (reward.getRankId() == QuestioConstants.REWARD_RANK_SILVER) {
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + reward.getRewardPic())
                     .bitmapTransform(new GrayscaleTransformation(Glide.get(this).getBitmapPool()))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(rewardPicture);
         } else if (reward.getRankId() == QuestioConstants.REWARD_RANK_GOLD) {
             Glide.with(this)
-                    .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                    .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + reward.getRewardPic())
                     .bitmapTransform(new GrayscaleTransformation(Glide.get(this).getBitmapPool())
                             , new ColorFilterTransformation(Glide.get(this).getBitmapPool(), this.getResources().getColor(R.color.reward_gold)))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)

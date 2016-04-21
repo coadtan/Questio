@@ -202,7 +202,7 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
     }
 
     private void requestRewardsHOFData(long id) {
-        api.getAllRewardsInHalloffameByAdventurerId(id, new Callback<ArrayList<RewardHOF>>() {
+        api.getAllRewardsInHalloffameByAdventurerId(id, QuestioConstants.QUESTIO_KEY, new Callback<ArrayList<RewardHOF>>() {
             @Override
             public void success(ArrayList<RewardHOF> rewardHOFs, Response response) {
                 if (rewardHOFs != null) {
@@ -253,7 +253,7 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
         String rewardDate = reward.getDateReceived();
 
         Glide.with(mContext)
-                .load(QuestioConstants.BASE_URL + reward.getRewardPic())
+                .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + reward.getRewardPic())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(rewardImage);
         tvRewardName.setText(rewardName);

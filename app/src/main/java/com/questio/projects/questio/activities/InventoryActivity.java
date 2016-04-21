@@ -224,9 +224,10 @@ public class InventoryActivity extends AppCompatActivity implements AdapterView.
     }
 
     private void requestItemInventoryData(long id) {
-        api.getAllItemInInventoryByAdventurerId(id, new Callback<ArrayList<ItemInInventory>>() {
+        api.getAllItemInInventoryByAdventurerId(id, QuestioConstants.QUESTIO_KEY, new Callback<ArrayList<ItemInInventory>>() {
             @Override
             public void success(ArrayList<ItemInInventory> itemInInventories, Response response) {
+
                 if (itemInInventories != null) {
                     itemsInv = itemInInventories;
                     itemsInvFilterType = new ArrayList<>(itemInInventories);

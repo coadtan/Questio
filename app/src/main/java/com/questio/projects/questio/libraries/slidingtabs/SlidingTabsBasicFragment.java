@@ -15,7 +15,6 @@ import com.questio.projects.questio.sections.InventorySection;
 import com.questio.projects.questio.sections.PlaceSection;
 import com.questio.projects.questio.sections.ProfileSection;
 import com.questio.projects.questio.sections.RankingSection;
-import com.questio.projects.questio.sections.SearchSection;
 
 
 public class SlidingTabsBasicFragment extends Fragment {
@@ -79,12 +78,9 @@ public class SlidingTabsBasicFragment extends Fragment {
                     fragment = new RankingSection();
                     break;
                 case 1:
-                    fragment = new SearchSection();
-                    break;
-                case 2:
                     fragment = new PlaceSection();
                     break;
-                case 3:
+                case 2:
                     fragment = new InventorySection();
                     break;
                 default:
@@ -102,7 +98,7 @@ public class SlidingTabsBasicFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return 5;
+            return 4;
         }
 
 

@@ -3,43 +3,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/questio_light_orange"
+    android:background="@color/questio_orange"
     android:orientation="horizontal"
-    android:weightSum="5">
+    android:id="@+id/enter_place_notification">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:src="@drawable/ic_icon_quest" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="You have entered"
-            android:textSize="20sp" />
+        android:orientation="vertical"
+        android:layout_margin="8dp">
 
         <TextView
             android:id="@+id/enter_place_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:text="Place Name"
-            android:textSize="20sp"
+            android:textSize="17sp"
             android:textStyle="bold" />
-
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Touch to enter place."
+            android:textSize="15sp" />
     </LinearLayout>
-    <Button
-        android:id="@+id/enter_place_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginEnd="5dp"
-        android:layout_weight="2"
-        android:background="@color/colorPrimaryDark"
-        android:text="Enter Place"
-        android:textSize="15sp" />
 
 </LinearLayout>

@@ -125,13 +125,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         .build();
                 api = adapter.create(QuestioAPIService.class);
 
-                api.getGuserIdByGuserId(currentPerson.getId(), new Callback<Response>() {
+                api.getGuserIdByGuserId(currentPerson.getId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
                         Log.d(LOG_TAG, "s:getGuserIdByGuserId");
                         String result = QuestioHelper.responseToString(response);
                         if (result.equalsIgnoreCase("null")) {
-                            api.getCountAdventurer(new Callback<Response>() {
+                            api.getCountAdventurer(QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                                 @Override
                                 public void success(Response response, Response response2) {
 
@@ -154,7 +154,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     Log.d(LOG_TAG, "displayName: " + displayName + " id: " + id);
 
                                     api.addAdventurerDetails(aId, currentPerson.getDisplayName(), currentPerson.getBirthday()
-                                            , new Callback<Response>() {
+                                            ,QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                                         @Override
                                         public void success(Response response, Response response2) {
 
@@ -162,7 +162,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                             Log.d(LOG_TAG, "addAdDetail: " + result);
 
                                             api.addAdventurer(aId, currentPerson.getId(), Plus.AccountApi.getAccountName(mGoogleApiClient),
-                                                    aId, aId, new Callback<Response>() {
+                                                    aId, aId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                                                         @Override
                                                         public void success(Response response, Response response2) {
 
@@ -195,7 +195,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         } else {
                             Log.d(LOG_TAG, "gid: " + result + " is already exists.");
 
-                            api.getAdventurerIdByGuserId(currentPerson.getId(), new Callback<Response>() {
+                            api.getAdventurerIdByGuserId(currentPerson.getId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                                 @Override
                                 public void success(Response response, Response response2) {
 
