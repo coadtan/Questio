@@ -195,7 +195,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
         Integer[] iconResourceArray = new Integer[4];
         iconResourceArray[0] = R.drawable.ic_icon_ranking;
         iconResourceArray[1] = R.drawable.ic_icon_quest;
-        iconResourceArray[2] = R.drawable.ic_icon_hallofframe;
+        iconResourceArray[2] = R.drawable.ic_backpack;
         iconResourceArray[3] = R.drawable.ic_icon_profile;
 
         String[] tabDescription = new String[4];

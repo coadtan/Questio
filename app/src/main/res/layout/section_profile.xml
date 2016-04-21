@@ -5,13 +5,14 @@
     android:layout_height="match_parent"
     android:background="@color/background_global"
     android:orientation="vertical">
+
     <TextView
         android:id="@+id/textView"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/textview_corner"
         android:gravity="center"
         android:padding="10dp"
@@ -19,6 +20,7 @@
         android:textColor="@color/white"
         android:textSize="20dp"
         android:textStyle="bold" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="120dp"
@@ -37,8 +39,8 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_alignParentStart="true"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="31dp"
+                android:layout_marginTop="10dp"
                 android:src="@drawable/profile_avatar" />
 
             <TextView
@@ -64,7 +66,6 @@
         android:background="@android:color/darker_gray" />
 
     <LinearLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/profile_nickname"
@@ -72,44 +73,35 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:background="@color/white"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="10">
 
         <ImageButton
             android:id="@+id/profile_rewards_button"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginLeft="28dp"
-            android:layout_marginRight="28dp"
-            android:scaleType="centerCrop"
+            android:layout_weight="4.9"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:padding="10dp"
             android:src="@drawable/rank_global" />
 
         <View
             android:layout_width="1dp"
             android:layout_height="64dp"
+            android:layout_weight="0.2"
             android:background="@android:color/darker_gray" />
 
         <ImageButton
             android:id="@+id/profile_place_rewards_button"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginLeft="28dp"
-            android:layout_marginRight="28dp"
-            android:scaleType="centerCrop"
+            android:layout_weight="4.9"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:padding="10dp"
             android:src="@drawable/rank_map" />
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="64dp"
-            android:background="@android:color/darker_gray" />
-
-        <ImageButton
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_marginLeft="28dp"
-            android:layout_marginRight="28dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/profile_inventory"
-            android:id="@+id/profile_inventory"/>
     </LinearLayout>
 
     <!--<GridView-->

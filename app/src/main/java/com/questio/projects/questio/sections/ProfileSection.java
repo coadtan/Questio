@@ -57,8 +57,8 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
     @Bind(R.id.profile_picture)
     ImageView profilePicture;
 
-    @Bind(R.id.profile_inventory)
-    ImageButton profileInventory;
+//    @Bind(R.id.profile_inventory)
+//    ImageButton profileInventory;
 
     @Bind(R.id.profile_place_rewards_button)
     ImageButton placeRewardsButton;
@@ -283,9 +283,9 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
         dialog.show();
     }
 
-    @OnClick(R.id.profile_inventory)
-    void onClick() {
-        Intent intent = new Intent(getActivity(), InventoryActivity.class);
-        startActivity(intent);
-    }
+//    @OnClick(R.id.profile_inventory)
+//    void onClick() {
+//        Intent intent = new Intent(getActivity(), InventoryActivity.class);
+//        startActivity(intent);
+//    }
 }
