@@ -1,5 +1,7 @@
 package com.questio.projects.questio.models;
 
+import android.util.Log;
+
 import com.google.gson.annotations.SerializedName;
 import com.questio.projects.questio.utilities.QuestioHelper;
 
