@@ -2,12 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_kmutt_location"
-        android:orderInCategory="101"
-        android:title="fake kmutt location"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/action_enter_zone68001"
         android:orderInCategory="101"
         android:title="fake enter zone:68001"

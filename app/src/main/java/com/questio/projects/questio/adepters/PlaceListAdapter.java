@@ -39,6 +39,8 @@ public class PlaceListAdapter extends CursorAdapter {
         @Bind(R.id.placeLng)
         TextView placeLng;
 
+        @Bind(R.id.placeRadius)
+        TextView placeRadius;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
@@ -75,6 +77,7 @@ public class PlaceListAdapter extends CursorAdapter {
         String placeLngString = cursor.getString(6);
         viewHolder.placeLng.setText(placeLngString);
         String placeType = cursor.getString(8);
+        viewHolder.placeRadius.setText(cursor.getString(7) + " m.");
         if (!placeType.equalsIgnoreCase("null")) {
             viewHolder.iconView.setImageResource(R.drawable.ic_logo_museum);
         }
