@@ -31,7 +31,6 @@ import com.questio.projects.questio.libraries.zbarscanner.ZBarScannerActivity;
 import com.questio.projects.questio.models.Ranking;
 import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
-import com.questio.projects.questio.utilities.QuestioHelper;
 
 import net.sourceforge.zbar.Symbol;
 
@@ -43,8 +42,6 @@ import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-
-import static com.questio.projects.questio.utilities.QuestioConstants.ADVENTURER_ID;
 
 public class RankingSection extends Fragment {
     private static final String LOG_TAG = RankingSection.class.getSimpleName();
@@ -160,7 +157,7 @@ public class RankingSection extends Fragment {
         api.getCurrentRankByAdventurerId(adventurerId, QuestioConstants.QUESTIO_KEY, new Callback<Ranking[]>() {
             @Override
             public void success(Ranking[] rankings, Response response) {
-                if(null != rankings[0]){
+                if(null != rankings){
                     Ranking ranking = rankings[0];
                     selfRankNumber.setText(Integer.toString(ranking.getRank()));
                     selfRankNumber.setTypeface(tf);
