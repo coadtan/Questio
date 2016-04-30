@@ -71,8 +71,8 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     @Bind(R.id.picture_puzzle_answer)
     EditText picturePuzzleAnswer;
 
-    @Bind(R.id.picture_puzzle_showhint_btn)
-    ImageButton picturePuzzleShowHintBtn;
+    @Bind(R.id.picture_puzzle_hint)
+    TextView picturePuzzleHint;
 
     @Bind(R.id.app_bar)
     Toolbar toolbar;
@@ -183,9 +183,6 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                 bottomRight.setVisibility(View.INVISIBLE);
                 onUnMask(9);
                 break;
-            case R.id.picture_puzzle_showhint_btn:
-                Toast.makeText(this, pp.getHelperAnswer(), Toast.LENGTH_LONG).show();
-                break;
         }
 
     }
@@ -237,7 +234,6 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(picturePuzzleQuestion);
                     requestQuestProgress();
-                    picturePuzzleShowHintBtn.setOnClickListener(PicturePuzzleAction.this);
                     picturePuzzleAnswer.addTextChangedListener(PicturePuzzleAction.this);
                     topLeft.setOnClickListener(PicturePuzzleAction.this);
                     topMiddle.setOnClickListener(PicturePuzzleAction.this);
@@ -248,6 +244,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                     bottomLeft.setOnClickListener(PicturePuzzleAction.this);
                     bottomMiddle.setOnClickListener(PicturePuzzleAction.this);
                     bottomRight.setOnClickListener(PicturePuzzleAction.this);
+                    picturePuzzleHint.setText("คำใบ้: " + pp.getHelperAnswer());
                 } else {
                     Log.d(LOG_TAG, "Picture Puzzle is null");
                 }

@@ -11,7 +11,6 @@
         layout="@layout/toolbar_puzzle_layout" />
 
     <FrameLayout
-
         android:id="@+id/puzzle_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -116,44 +115,25 @@
         android:layout_marginRight="30dp"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:weightSum="10">
+        android:orientation="vertical">
 
 
-        <!--<EditText-->
-        <!--android:background="@drawable/answer_button"-->
-        <!--android:id="@+id/picture_puzzle_answer"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_alignParentStart="true"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:gravity="center"-->
-        <!--android:textColor="@color/white"-->
-        <!--android:textSize="30sp"-->
-        <!--android:layout_weight="8"/>-->
-        <com.cengalabs.flatui.views.FlatEditText
+        <EditText
             android:id="@+id/picture_puzzle_answer"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_weight="8"
             android:gravity="center"
+            android:hint="กรอกคำตอบที่นี้"
             android:textColor="@color/white"
-            flatui:fl_backgroundColor="fl_main"
-            flatui:fl_fontWeight="bold"
-            flatui:fl_textColor="fl_light" />
+            android:textSize="20dp" />
 
-        <ImageButton
-            android:id="@+id/picture_puzzle_showhint_btn"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/picture_puzzle_hint"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1.5"
-            android:background="@drawable/answer_button"
-            android:backgroundTint="@color/white"
-
-            android:src="@drawable/ic_action_placedetail" />
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:textColor="@color/grape_dark" />
     </LinearLayout>
 
     <ImageView

@@ -3,6 +3,7 @@ package com.questio.projects.questio;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
+
 import com.questio.projects.questio.activities.MainActivity;
 
 import org.junit.After;
@@ -16,10 +17,8 @@ import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.questio.projects.questio.TestHelper.WaitForId.waitId;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
@@ -58,18 +57,6 @@ public class MainActivityTest {
 
     }
 
-    @Test
-    public void shouldGoToSearchSectionWhenClickSeachIcon() {
-        onView(withContentDescription("go to search section tab"))
-                .perform(click());
-        onView(withContentDescription("go to inventory section tab"))
-                .perform(click());
-        onView(withContentDescription("go to search section tab"))
-                .perform(click());
-        onView(withId(R.id.search_section))
-                .check(matches(isDisplayed()));
-
-    }
 
     @Test
     public void shouldGoToQuestSectionWhenClickQuestIcon() {
