@@ -478,14 +478,17 @@ public class AvatarActivity extends AppCompatActivity {
                     avatar.setSpecialId(newItemId);
                     break;
             }
+            Log.d(LOG_TAG, "new Item Id - " + newItemId);
             Log.d(LOG_TAG, "Old Item ID - " + oldItemId);
         }
         api.equipNewItem(partId, newItemId, oldItemId, adventurerId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
+                Log.d(LOG_TAG, "equipNewItem status: success");
                 if (oldItemId != 0) {
                     if (newItemId != oldItemId) {
                         String status = QuestioHelper.getJSONStringValueByTag("status", response);
+                        Log.d(LOG_TAG, "equipNewItem status: " + status);
                         if (status.equalsIgnoreCase("1")) {
                             changeSpritePathByNewItemId(partId, newItemId);
                         } else {
@@ -511,7 +514,7 @@ public class AvatarActivity extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
-
+                Log.d(LOG_TAG, "equipNewItem status: failure");
             }
         });
     }
@@ -525,33 +528,43 @@ public class AvatarActivity extends AppCompatActivity {
                     switch (partId) {
                         case POSITION_HEAD:
                             avatarHead.setVisibility(View.INVISIBLE);
+                            avatar.setHeadId(0);
                             break;
                         case POSITION_BACKGROUND:
                             avatarBackground.setVisibility(View.INVISIBLE);
+                            avatar.setBackgroundId(0);
                             break;
                         case POSITION_NECK:
                             avatarNeck.setVisibility(View.INVISIBLE);
+                            avatar.setNeckId(0);
                             break;
                         case POSITION_BODY:
                             avatarBody.setVisibility(View.INVISIBLE);
+                            avatar.setBodyId(0);
                             break;
                         case POSITION_HANDLEFT:
                             avatarHandLeft.setVisibility(View.INVISIBLE);
+                            avatar.setHandleftId(0);
                             break;
                         case POSITION_HANDRIGHT:
                             avatarHandRight.setVisibility(View.INVISIBLE);
+                            avatar.setHandrightId(0);
                             break;
                         case POSITION_ARMS:
                             avatarArms.setVisibility(View.INVISIBLE);
+                            avatar.setArmId(0);
                             break;
                         case POSITION_LEGS:
                             avatarLegs.setVisibility(View.INVISIBLE);
+                            avatar.setLegId(0);
                             break;
                         case POSITION_FOOT:
                             avatarFoot.setVisibility(View.INVISIBLE);
+                            avatar.setFootId(0);
                             break;
                         case POSITION_AURA:
                             avatarSpecial.setVisibility(View.INVISIBLE);
+                            avatar.setSpecialId(0);
                             break;
                     }
                 } else {
@@ -568,6 +581,7 @@ public class AvatarActivity extends AppCompatActivity {
     }
 
     public void changeSpritePathByNewItemId(final int partId, long newItemId){
+        Log.d(LOG_TAG, "changeSpritePathByNewItemId : called");
         api.getEquipSpritePathByItemId(newItemId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
@@ -575,61 +589,61 @@ public class AvatarActivity extends AppCompatActivity {
                 switch (partId) {
                     case POSITION_HEAD:
                         Glide.with(AvatarActivity.this)
-                                .load(BASE_URL + url)
+                                .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + url)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(avatarHead);
                         break;
                     case POSITION_BACKGROUND:
                         Glide.with(AvatarActivity.this)
-                                .load(BASE_URL + url)
+                                .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + url)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(avatarBackground);
                         break;
                     case POSITION_NECK:
                         Glide.with(AvatarActivity.this)
-                                .load(BASE_URL + url)
+                                .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + url)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(avatarNeck);
                         break;
                     case POSITION_BODY:
                         Glide.with(AvatarActivity.this)
-                                .load(BASE_URL + url)
+                                .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + url)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(avatarBody);
                         break;
                     case POSITION_HANDLEFT:
                         Glide.with(AvatarActivity.this)
-                                .load(BASE_URL + url)
+                                .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + url)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(avatarHandLeft);
                         break;
                     case POSITION_HANDRIGHT:
                         Glide.with(AvatarActivity.this)
-                                .load(BASE_URL + url)
+                                .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + url)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(avatarHandRight);
                         break;
                     case POSITION_ARMS:
                         Glide.with(AvatarActivity.this)
-                                .load(BASE_URL + url)
+                                .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + url)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(avatarArms);
                         break;
                     case POSITION_LEGS:
                         Glide.with(AvatarActivity.this)
-                                .load(BASE_URL + url)
+                                .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + url)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(avatarLegs);
                         break;
                     case POSITION_FOOT:
                         Glide.with(AvatarActivity.this)
-                                .load(BASE_URL + url)
+                                .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + url)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(avatarFoot);
                         break;
                     case POSITION_AURA:
                         Glide.with(AvatarActivity.this)
-                                .load(BASE_URL + url)
+                                .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + url)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(avatarSpecial);
                         break;
@@ -638,7 +652,7 @@ public class AvatarActivity extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
-
+                Log.d(LOG_TAG, "changeSpritePathByNewItemId : failure");
             }
         });
 
