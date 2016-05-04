@@ -437,6 +437,7 @@ public class MainActivity extends AppCompatActivity
             placeIntent.putExtra("place", p);
             placeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(placeIntent);
+
         }
     }
 }

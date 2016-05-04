@@ -761,8 +761,8 @@ public interface QuestioAPIService {
 
     //select_topten_rank.php
     @FormUrlEncoded
-                               @POST("/select_topten_rank.php")
-      void getRankingTopTen(
+    @POST("/select_topten_rank.php")
+    void getRankingTopTen(
                     @Field("adventurerid") long adventurerId,
                     @Field("key") String key,
                     Callback<ArrayList<Ranking>> response
@@ -783,4 +783,14 @@ public interface QuestioAPIService {
             @Field("key") String key,
             Callback<Ranking[]> response
     );
+
+    @FormUrlEncoded
+    @POST("/insert_placeenterlog.php")
+    void addPlaceEnterLog(
+            @Field("adventurerid") long adventurerId,
+            @Field("placeid") int placeid,
+            @Field("key") String key,
+            Callback<Response> response
+    );
+
 }

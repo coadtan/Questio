@@ -91,8 +91,10 @@ public class PlaceActivity extends AppCompatActivity {
     String zoneItem = " ";
     QuestioAPIService api;
     RestAdapter adapter;
+    long adventurerId;
     int zoneCount;
     LocationRequest locationRequest;
+
 
     public ArrayList<Quest> getQuestsTemp() {
         return questsTemp;
@@ -127,6 +129,7 @@ public class PlaceActivity extends AppCompatActivity {
             }
         });
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/THSarabunNew.ttf");
+
         placeBtnTrigerFilter.setTypeface(custom_font);
         placeBtnTrigerMap.setTypeface(custom_font);
         place = (Place) getIntent().getSerializableExtra("place");
@@ -177,6 +180,11 @@ public class PlaceActivity extends AppCompatActivity {
                     .into(questBrowsingPicture);
 
             requestQuestData(place.getPlaceId());
+
+            SharedPreferences prefs = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
+            adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
+
+            addPlaceEnterLog(adventurerId, place.getPlaceId());
 
         } else {
             Log.d(LOG_TAG, "place: is null");
@@ -436,6 +444,25 @@ public class PlaceActivity extends AppCompatActivity {
         });
     }
 
+    private void addPlaceEnterLog(long adventurerId, int placeid){
+        Log.d(LOG_TAG, "addPlaceEnterLog: called with adventurerId = "+ adventurerId + " and " + " placeid = " + placeid);
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(QuestioConstants.ENDPOINT)
+                .build();
+        QuestioAPIService api = adapter.create(QuestioAPIService.class);
+        api.addPlaceEnterLog(adventurerId, placeid, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+//                String result = QuestioHelper.responseToString(response);
+//                Log.d(LOG_TAG, "addPlaceEnterLog: success with result = " + result);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(LOG_TAG, "addPlaceEnterLog: failure");
+            }
+        });
+    }
     private void reTempArray() {
         questsTemp = new ArrayList<>();
         Iterator<Quest> iter = quests.iterator();
