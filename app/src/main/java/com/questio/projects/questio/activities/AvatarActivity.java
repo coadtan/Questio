@@ -439,42 +439,52 @@ public class AvatarActivity extends AppCompatActivity {
             switch (partId){
                 case POSITION_HEAD:
                     oldItemId = avatar.getHeadId();
-                    avatar.setHeadId(newItemId);
+                    //avatarHead.setVisibility(View.VISIBLE);
+                    //avatar.setHeadId(newItemId);
                     break;
                 case POSITION_BACKGROUND:
                     oldItemId = avatar.getBackgroundId();
+                    avatarBackground.setVisibility(View.VISIBLE);
                     avatar.setBackgroundId(newItemId);
                     break;
                 case POSITION_NECK:
                     oldItemId = avatar.getNeckId();
+                    avatarNeck.setVisibility(View.VISIBLE);
                     avatar.setNeckId(newItemId);
                     break;
                 case POSITION_BODY:
                     oldItemId = avatar.getBodyId();
+                    avatarBody.setVisibility(View.VISIBLE);
                     avatar.setBodyId(newItemId);
                     break;
                 case POSITION_HANDLEFT:
                     oldItemId = avatar.getHandleftId();
+                    avatarHandLeft.setVisibility(View.VISIBLE);
                     avatar.setHandleftId(newItemId);
                     break;
                 case POSITION_HANDRIGHT:
                     oldItemId = avatar.getHandrightId();
+                    avatarHandRight.setVisibility(View.VISIBLE);
                     avatar.setHandrightId(newItemId);
                     break;
                 case POSITION_ARMS:
                     oldItemId = avatar.getArmId();
+                    avatarArms.setVisibility(View.VISIBLE);
                     avatar.setArmId(newItemId);
                     break;
                 case POSITION_LEGS:
                     oldItemId = avatar.getLegId();
+                    avatarLegs.setVisibility(View.VISIBLE);
                     avatar.setLegId(newItemId);
                     break;
                 case POSITION_FOOT:
                     oldItemId = avatar.getFootId();
+                    avatarFoot.setVisibility(View.VISIBLE);
                     avatar.setFootId(newItemId);
                     break;
                 case POSITION_AURA:
                     oldItemId = avatar.getSpecialId();
+                    avatarSpecial.setVisibility(View.VISIBLE);
                     avatar.setSpecialId(newItemId);
                     break;
             }
@@ -528,7 +538,7 @@ public class AvatarActivity extends AppCompatActivity {
                     switch (partId) {
                         case POSITION_HEAD:
                             avatarHead.setVisibility(View.INVISIBLE);
-                            avatar.setHeadId(0);
+                            //avatar.setHeadId(0);
                             break;
                         case POSITION_BACKGROUND:
                             avatarBackground.setVisibility(View.INVISIBLE);
