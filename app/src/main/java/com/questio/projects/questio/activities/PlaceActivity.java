@@ -175,12 +175,11 @@ public class PlaceActivity extends AppCompatActivity {
         if (place != null) {
             Log.d(LOG_TAG, Integer.toString(place.getPlaceId()) + place.getImageUrl());
             Glide.with(this)
-                    .load("http://52.74.64.61" + place.getImageUrl())
+                    .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + place.getImageUrl())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(questBrowsingPicture);
 
             requestQuestData(place.getPlaceId());
-
             SharedPreferences prefs = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
             adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
 
