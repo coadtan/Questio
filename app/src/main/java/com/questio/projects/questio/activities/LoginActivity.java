@@ -51,7 +51,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
         ButterKnife.bind(this);
-//        btnSignIn = (SignInButton) findViewById(R.id.sign_in_button);
         btnSignIn.setOnClickListener(this);
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)

@@ -3,25 +3,23 @@
     android:id="@+id/login_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/windowBackground">
+    android:background="@color/login_background"
+    android:orientation="vertical">
 
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/login_mockup"
-        >
+        android:background="@drawable/login_mockup">
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/sign_in_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginTop="57dp"
-            android:layout_marginLeft="21dp"
-            android:layout_marginRight="21dp"
-            />
+            android:layout_marginEnd="20.5dp"
+            android:layout_marginStart="20.5dp"
+            android:layout_marginTop="100dp" />
 
     </FrameLayout>
 

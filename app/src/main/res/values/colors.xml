@@ -37,6 +37,7 @@
     <color name="default_pane">#315178</color>
     <color name="ranking_listview">#4875ac</color>
     <color name="ranking_user">#3b618f</color>
+    <color name="login_background">#2E343C</color>
 
 
 </resources>

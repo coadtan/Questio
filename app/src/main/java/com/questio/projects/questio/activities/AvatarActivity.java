@@ -2,6 +2,7 @@ package com.questio.projects.questio.activities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -439,8 +440,8 @@ public class AvatarActivity extends AppCompatActivity {
             switch (partId){
                 case POSITION_HEAD:
                     oldItemId = avatar.getHeadId();
-                    //avatarHead.setVisibility(View.VISIBLE);
-                    //avatar.setHeadId(newItemId);
+                    avatarHead.setVisibility(View.VISIBLE);
+                    avatar.setHeadId(newItemId);
                     break;
                 case POSITION_BACKGROUND:
                     oldItemId = avatar.getBackgroundId();
@@ -538,7 +539,7 @@ public class AvatarActivity extends AppCompatActivity {
                     switch (partId) {
                         case POSITION_HEAD:
                             avatarHead.setVisibility(View.INVISIBLE);
-                            //avatar.setHeadId(0);
+                            avatar.setHeadId(0);
                             break;
                         case POSITION_BACKGROUND:
                             avatarBackground.setVisibility(View.INVISIBLE);
