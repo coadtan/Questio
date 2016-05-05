@@ -44,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_weight="1.5"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -53,8 +53,6 @@
                     android:id="@+id/button_head"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_alignStart="@+id/avatar_name"
-                    android:layout_below="@+id/avatar_name"
                     android:layout_marginTop="20dp"
                     android:background="@null"
                     android:scaleType="centerCrop"
@@ -65,8 +63,6 @@
                     android:id="@+id/button_background"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_alignEnd="@+id/avatar_name"
-                    android:layout_below="@+id/button_head"
                     android:layout_marginTop="20dp"
                     android:background="@null"
                     android:scaleType="centerCrop"
@@ -76,8 +72,6 @@
                     android:id="@+id/button_neck"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_alignStart="@+id/avatar_name"
-                    android:layout_below="@+id/button_background"
                     android:layout_marginTop="20dp"
                     android:background="@null"
                     android:scaleType="centerCrop"
@@ -87,8 +81,6 @@
                     android:id="@+id/button_top"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_alignEnd="@+id/avatar_name"
-                    android:layout_below="@+id/button_neck"
                     android:layout_marginTop="20dp"
                     android:background="@null"
                     android:scaleType="centerCrop"
@@ -98,8 +90,6 @@
                     android:id="@+id/button_arms"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_alignStart="@+id/avatar_name"
-                    android:layout_below="@+id/button_top"
                     android:layout_marginTop="20dp"
                     android:background="@null"
                     android:scaleType="centerCrop"
@@ -109,6 +99,7 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/avatar_profile_layout"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="40dp"
@@ -206,8 +197,6 @@
                     android:id="@+id/button_handright"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_alignEnd="@+id/avatar_name"
-                    android:layout_below="@+id/button_arms"
                     android:layout_marginTop="20dp"
                     android:background="@null"
                     android:scaleType="centerCrop"
@@ -217,8 +206,6 @@
                     android:id="@+id/button_handleft"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_alignStart="@+id/avatar_name"
-                    android:layout_below="@+id/button_handright"
                     android:layout_marginTop="20dp"
                     android:background="@null"
                     android:scaleType="centerCrop"
@@ -228,8 +215,6 @@
                     android:id="@+id/button_bottom"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_alignEnd="@+id/avatar_name"
-                    android:layout_below="@+id/button_handleft"
                     android:layout_marginTop="20dp"
                     android:background="@null"
                     android:scaleType="centerCrop"
@@ -239,12 +224,17 @@
                     android:id="@+id/button_feet"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_alignStart="@+id/avatar_name"
-                    android:layout_below="@+id/button_bottom"
                     android:layout_marginTop="20dp"
+                    android:layout_marginBottom="80dp"
                     android:background="@null"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_foot" />
+
+                <Button
+                    android:id="@+id/button_save"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@android:drawable/ic_menu_save" />
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>

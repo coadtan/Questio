@@ -1,17 +1,22 @@
 package com.questio.projects.questio.activities;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -26,6 +31,8 @@ import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
 import com.questio.projects.questio.utilities.QuestioHelper;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import butterknife.Bind;
@@ -109,6 +116,9 @@ public class AvatarActivity extends AppCompatActivity {
 
     @Bind(R.id.button_feet)
     ImageButton buttonFoot;
+
+    @Bind(R.id.button_save)
+    Button buttonSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -325,7 +335,7 @@ public class AvatarActivity extends AppCompatActivity {
         );
     }
 
-    public void showEquipDialog(final int position){
+    public void showEquipDialog(final int position) {
         final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(this);
         dialog
                 .withTitle("Equip")
@@ -375,10 +385,10 @@ public class AvatarActivity extends AppCompatActivity {
             }
         });
 
-            dialog.show();
+        dialog.show();
     }
 
-    public void setButtonClick(){
+    public void setButtonClick() {
         buttonHead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -433,11 +443,42 @@ public class AvatarActivity extends AppCompatActivity {
                 showEquipDialog(POSITION_FOOT);
             }
         });
+
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(LOG_TAG, "buttonSave: called");
+                avatarBackground.setVisibility(View.INVISIBLE);
+                View content = findViewById(R.id.avatar_profile_layout);
+                try {
+                    assert content != null;
+                    content.setDrawingCacheEnabled(true);
+                    Bitmap bitmap = content.getDrawingCache();
+                    File file = new File(Environment.getExternalStorageDirectory().getAbsoluteFile(), "questio_avatar.png");
+                    if (!file.exists()) {
+                        file.createNewFile();
+                    }
+                    FileOutputStream fos = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 0, fos);
+                    fos.flush();
+                    fos.close();
+                    bitmap.recycle();
+                    content.invalidate();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    assert content != null;
+                    content.setDrawingCacheEnabled(false);
+                }
+                avatarBackground.setVisibility(View.VISIBLE);
+                Toast.makeText(AvatarActivity.this, "Profile saved!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    public void equipNewItem(final int partId, final long newItemId){
-        if(avatar.getAvatarId() != 0){
-            switch (partId){
+    public void equipNewItem(final int partId, final long newItemId) {
+        if (avatar.getAvatarId() != 0) {
+            switch (partId) {
                 case POSITION_HEAD:
                     oldItemId = avatar.getHeadId();
                     avatarHead.setVisibility(View.VISIBLE);
@@ -505,7 +546,7 @@ public class AvatarActivity extends AppCompatActivity {
                         } else {
                             Log.d(LOG_TAG, "EquipNewItem Failed");
                         }
-                    }else{
+                    } else {
                         String status = QuestioHelper.getJSONStringValueByTag("status", response);
                         if (status.equalsIgnoreCase("1")) {
                             unequipItem(partId, oldItemId);
@@ -530,7 +571,7 @@ public class AvatarActivity extends AppCompatActivity {
         });
     }
 
-    public void unequipItem(final int partId, long itemId){
+    public void unequipItem(final int partId, long itemId) {
         api.unequipItem(partId, itemId, adventurerId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
@@ -591,7 +632,7 @@ public class AvatarActivity extends AppCompatActivity {
 
     }
 
-    public void changeSpritePathByNewItemId(final int partId, long newItemId){
+    public void changeSpritePathByNewItemId(final int partId, long newItemId) {
         Log.d(LOG_TAG, "changeSpritePathByNewItemId : called");
         api.getEquipSpritePathByItemId(newItemId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override

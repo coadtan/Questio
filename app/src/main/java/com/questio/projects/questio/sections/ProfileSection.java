@@ -4,11 +4,15 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,18 +36,17 @@ import com.questio.projects.questio.R;
 import com.questio.projects.questio.activities.AvatarActivity;
 import com.questio.projects.questio.activities.HOFActivity;
 import com.questio.projects.questio.activities.HOFPlaceActivity;
-import com.questio.projects.questio.activities.InventoryActivity;
 import com.questio.projects.questio.activities.LoginActivity;
 import com.questio.projects.questio.adepters.RewardsAdapter;
 import com.questio.projects.questio.models.RewardHOF;
 import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -56,10 +59,6 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
     Context mContext;
     @Bind(R.id.profile_picture)
     ImageView profilePicture;
-
-//    @Bind(R.id.profile_inventory)
-//    ImageButton profileInventory;
-
     @Bind(R.id.profile_place_rewards_button)
     ImageButton placeRewardsButton;
     @Bind(R.id.profile_rewards_button)
@@ -67,9 +66,6 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
 
     @Bind(R.id.profile_nickname)
     TextView profileName;
-
-//    @Bind(R.id.halloffame)
-//    GridView hallOfFame;
 
     View view;
     Person currentPerson;
@@ -101,7 +97,6 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
 
     public void init() {
         requestRewardsHOFData(adventurerId);
-//        hallOfFame.setOnItemClickListener(this);
     }
 
     @Override
@@ -113,7 +108,7 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
         String nameToShow = adventurerName;
         String[] parts = nameToShow.split(" ");
 
-        nameToShow = parts[0] + " " + (parts[1].charAt(0)+"").toUpperCase() + ".";
+        nameToShow = parts[0] + " " + (parts[1].charAt(0) + "").toUpperCase() + ".";
         profileName.setText(nameToShow);
 
         profilePicture.setOnClickListener(new View.OnClickListener() {
@@ -140,13 +135,30 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
                 getActivity().startActivity(intentToHOF);
             }
         });
-//        Glide.with(this)
-//                .load(currentPerson.getImage().getUrl())
-//                .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                .into(profilePicture);
+
+        File imageFile = new File(Environment.getExternalStorageDirectory().getAbsoluteFile(), "questio_avatar.png");
+        if (imageFile.exists()) {
+            Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+            profilePicture.setImageBitmap(bitmap);
+        } else {
+            profilePicture.setImageDrawable(getResources().getDrawable(R.drawable.avatar_default));
+        }
 
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(LOG_TAG, "onResume: called");
+        File imageFile = new File(Environment.getExternalStorageDirectory().getAbsoluteFile(), "questio_avatar.png");
+        if (imageFile.exists()) {
+            Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+            profilePicture.setImageBitmap(bitmap);
+        } else {
+            profilePicture.setImageDrawable(getResources().getDrawable(R.drawable.avatar_default));
+        }
     }
 
     @Override
@@ -222,7 +234,6 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
                 if (rewardHOFs != null) {
                     rewards = rewardHOFs;
                     rewardsAdapter = new RewardsAdapter(mContext, rewardHOFs);
-//                    hallOfFame.setAdapter(rewardsAdapter);
                     rewardsAdapter.notifyDataSetChanged();
                 }
 
@@ -274,18 +285,6 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
         tvRewardDesc.setText(rewardDesc);
         tvRewardDate.setText(rewardDate);
 
-//        closeBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                dialog.cancel();
-//            }
-//        });
         dialog.show();
     }
-
-//    @OnClick(R.id.profile_inventory)
-//    void onClick() {
-//        Intent intent = new Intent(getActivity(), InventoryActivity.class);
-//        startActivity(intent);
-//    }
 }
