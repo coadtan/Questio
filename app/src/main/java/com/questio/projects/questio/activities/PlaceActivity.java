@@ -173,20 +173,14 @@ public class PlaceActivity extends AppCompatActivity {
             }
         });
         if (place != null) {
-            Log.d(LOG_TAG, Integer.toString(place.getPlaceId()) + place.getImageUrl());
             Glide.with(this)
                     .load(QuestioConstants.BASE_QUESTIO_MANAGEMENT + place.getImageUrl())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(questBrowsingPicture);
-
             requestQuestData(place.getPlaceId());
             SharedPreferences prefs = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
             adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
-
             addPlaceEnterLog(adventurerId, place.getPlaceId());
-
-        } else {
-            Log.d(LOG_TAG, "place: is null");
         }
     }
 
@@ -308,9 +302,6 @@ public class PlaceActivity extends AppCompatActivity {
                                                 }
                                                 String[] zoneNameFilter = zoneFilter.toArray(new String[zoneFilter.size() + 1]);
                                                 zoneNameFilter[zoneFilter.size()] = " ";
-
-                                                Log.d(LOG_TAG, "Zone Name Filter" + Arrays.toString(zoneNameFilter));
-                                                Log.d(LOG_TAG, "Temp Zone Name Filter" + Arrays.toString(QuestioHelper.moveBackToFront(zoneNameFilter)));
                                                 ArrayAdapter<String> adapterZoneFiltered = new ArrayAdapter<>(PlaceActivity.this,
                                                         R.layout.spinner_item_list, QuestioHelper.moveBackToFront(zoneNameFilter));
                                                 zoneSpinner.setAdapter(adapterZoneFiltered);
@@ -431,20 +422,16 @@ public class PlaceActivity extends AppCompatActivity {
                     QuestRecycleView fragment = new QuestRecycleView();
                     transaction.replace(R.id.quest_browsing_null, fragment);
                     transaction.commit();
-                } else {
-                    Log.d(LOG_TAG, "quests: is null");
                 }
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Log.d(LOG_TAG, "requestQuestData: failure");
             }
         });
     }
 
-    private void addPlaceEnterLog(long adventurerId, int placeid){
-        Log.d(LOG_TAG, "addPlaceEnterLog: called with adventurerId = "+ adventurerId + " and " + " placeid = " + placeid);
+    private void addPlaceEnterLog(long adventurerId, int placeid) {
         RestAdapter adapter = new RestAdapter.Builder()
                 .setEndpoint(QuestioConstants.ENDPOINT)
                 .build();
@@ -452,23 +439,17 @@ public class PlaceActivity extends AppCompatActivity {
         api.addPlaceEnterLog(adventurerId, placeid, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
-//                String result = QuestioHelper.responseToString(response);
-//                Log.d(LOG_TAG, "addPlaceEnterLog: success with result = " + result);
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Log.d(LOG_TAG, "addPlaceEnterLog: failure");
             }
         });
     }
+
     private void reTempArray() {
         questsTemp = new ArrayList<>();
         Iterator<Quest> iter = quests.iterator();
-        Log.d(LOG_TAG, "buildingItem: " + buildingItem);
-        Log.d(LOG_TAG, "floorItem: " + floorItem);
-        Log.d(LOG_TAG, "zoneItem: " + zoneItem);
-
         if (buildingItem.equalsIgnoreCase(" ")) {
             if (floorItem.equalsIgnoreCase(" ")) {
                 if (zoneItem.equalsIgnoreCase(" ")) {

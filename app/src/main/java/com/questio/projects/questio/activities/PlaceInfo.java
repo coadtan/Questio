@@ -1,14 +1,8 @@
 package com.questio.projects.questio.activities;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -27,7 +21,6 @@ import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
 import com.questio.projects.questio.utilities.QuestioHelper;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 
 import butterknife.Bind;
@@ -83,39 +76,11 @@ public class PlaceInfo extends ActionBarActivity {
                 onBackPressed();
             }
         });
-
         place = (Place) getIntent().getSerializableExtra("place");
         requestPlaceInfoData(place.getPlaceId());
-
-        // set value
         requestPlaceNewsData(place.getPlaceId());
-        // set value-end
     }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
-    }
 
     private void requestPlaceNewsData(int id) {
         RestAdapter adapter = new RestAdapter.Builder()
@@ -130,17 +95,12 @@ public class PlaceInfo extends ActionBarActivity {
                     NewsListAdapter adapter = new NewsListAdapter(PlaceInfo.this, newsList);
                     ListView listView = ButterKnife.findById(PlaceInfo.this, R.id.place_list_feed);
                     listView.setAdapter(adapter);
-                } else {
-                    Log.d(LOG_TAG, "place news is null");
                 }
 
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                Log.d(LOG_TAG, "Fail: " + retrofitError.toString());
-                Log.d(LOG_TAG, "Fail: " + retrofitError.getUrl());
-                Log.d(LOG_TAG, "Fail: " + retrofitError.getStackTrace());
             }
         });
     }
@@ -183,34 +143,17 @@ public class PlaceInfo extends ActionBarActivity {
                                     })
                                     .isCancelableOnTouchOutside(true);
                             dialog.show();
-//                            AlertDialog.Builder builder1 = new AlertDialog.Builder(PlaceInfo.this);
-//                            builder1.setTitle("ข้อมูลสถานที่");
-//                            builder1.setMessage(placeDetail.getPlaceDetails());
-//                            builder1.setCancelable(true);
-//                            builder1.setNeutralButton("ขอบคุณ",
-//                                    new DialogInterface.OnClickListener() {
-//                                        public void onClick(DialogInterface dialog, int id) {
-//                                            dialog.cancel();
-//                                        }
-//                                    });
-//                            builder1.show();
                         }
                     });
                     Glide.with(PlaceInfo.this)
                             .load(QuestioHelper.getImgLink(placeDetail.getImageUrl()))
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(placeInfoPicture);
-                } else {
-                    Log.d(LOG_TAG, "Place details is null");
                 }
-
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                Log.d(LOG_TAG, "Fail: " + retrofitError.toString());
-                Log.d(LOG_TAG, "Fail: " + retrofitError.getUrl());
-                Log.d(LOG_TAG, "Fail: " + retrofitError.getStackTrace());
             }
         });
     }

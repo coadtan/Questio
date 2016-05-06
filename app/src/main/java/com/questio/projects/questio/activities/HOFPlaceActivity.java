@@ -37,7 +37,7 @@ import retrofit.client.Response;
 /**
  * Created by ning jittima on 1/9/2558.
  */
-public class HOFPlaceActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
+public class HOFPlaceActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private final String LOG_TAG = HOFPlaceActivity.class.getSimpleName();
     Context mContext;
     SharedPreferences prefs;
@@ -93,17 +93,15 @@ public class HOFPlaceActivity extends AppCompatActivity implements AdapterView.O
         hallOfFame.setOnItemClickListener(this);
     }
 
-    private void requestPlaceRewardsHOFData(long id){
+    private void requestPlaceRewardsHOFData(long id) {
         api.getAllPlaceRewardsInHalloffameByAdventurerId(id, QuestioConstants.QUESTIO_KEY, new Callback<ArrayList<RewardHOF>>() {
             @Override
             public void success(ArrayList<RewardHOF> rewardHOFs, Response response) {
-                if(rewardHOFs != null){
+                if (rewardHOFs != null) {
                     rewards = rewardHOFs;
                     rewardsAdapter = new RewardsAdapter(mContext, rewardHOFs);
                     hallOfFame.setAdapter(rewardsAdapter);
                     rewardsAdapter.notifyDataSetChanged();
-                }else{
-                    Log.d(LOG_TAG, "place reward hof = null");
                 }
             }
 

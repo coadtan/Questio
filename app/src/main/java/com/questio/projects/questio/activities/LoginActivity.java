@@ -106,17 +106,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         .getCurrentPerson(mGoogleApiClient);
                 String personName = currentPerson.getDisplayName();
                 Toast.makeText(this, "ยินดีต้อนรับ: " + personName, Toast.LENGTH_LONG).show();
-                String personPhotoUrl = currentPerson.getImage().getUrl();
-                String personGooglePlusProfile = currentPerson.getUrl();
-                String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
-
-
-                Log.d(LOG_TAG, "Name: " + personName + ", plusProfile: "
-                        + personGooglePlusProfile + ", email: " + email
-                        + ", Image: " + personPhotoUrl);
-                Log.d(LOG_TAG, "" + currentPerson.getId());
-                Log.d(LOG_TAG, "" + currentPerson.getBirthday());
-
 
                 // step 1: isNewAdventurer
                 RestAdapter adapter = new RestAdapter.Builder()
@@ -127,61 +116,41 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 api.getGuserIdByGuserId(currentPerson.getId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
-                        Log.d(LOG_TAG, "s:getGuserIdByGuserId");
                         String result = QuestioHelper.responseToString(response);
                         if (result.equalsIgnoreCase("null")) {
                             api.getCountAdventurer(QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                                 @Override
                                 public void success(Response response, Response response2) {
-
                                     String result = QuestioHelper.responseToString(response);
-                                    Log.d(LOG_TAG, "result: " + result);
-
                                     aId = (QuestioHelper.getAdventurerCountFromJson(result) + 1);
-                                    Log.d(LOG_TAG, "aId: " + aId);
                                     // add to SharedPreferences
                                     SharedPreferences.Editor editor = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE).edit();
                                     editor.putLong(QuestioConstants.ADVENTURER_ID, aId);
                                     editor.putString(QuestioConstants.ADVENTURER_DISPLAYNAME, currentPerson.getDisplayName());
                                     editor.apply();
-                                    // end of - add to SharedPreferences
-
-                                    SharedPreferences prefs = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
-                                    String displayName = prefs.getString(QuestioConstants.ADVENTURER_DISPLAYNAME, null);
-                                    long id = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
-
-                                    Log.d(LOG_TAG, "displayName: " + displayName + " id: " + id);
-
                                     api.addAdventurerDetails(aId, currentPerson.getDisplayName(), currentPerson.getBirthday()
-                                            ,QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
-                                        @Override
-                                        public void success(Response response, Response response2) {
+                                            , QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
+                                                @Override
+                                                public void success(Response response, Response response2) {
+                                                    api.addAdventurer(aId, currentPerson.getId(), Plus.AccountApi.getAccountName(mGoogleApiClient),
+                                                            aId, aId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
+                                                                @Override
+                                                                public void success(Response response, Response response2) {
+                                                                }
 
-                                            String result = QuestioHelper.responseToString(response);
-                                            Log.d(LOG_TAG, "addAdDetail: " + result);
+                                                                @Override
+                                                                public void failure(RetrofitError error) {
 
-                                            api.addAdventurer(aId, currentPerson.getId(), Plus.AccountApi.getAccountName(mGoogleApiClient),
-                                                    aId, aId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
-                                                        @Override
-                                                        public void success(Response response, Response response2) {
+                                                                }
+                                                            });
 
-                                                            String result = QuestioHelper.responseToString(response);
-                                                            Log.d(LOG_TAG, "addAdventurer: " + result);
-                                                        }
+                                                }
 
-                                                        @Override
-                                                        public void failure(RetrofitError error) {
+                                                @Override
+                                                public void failure(RetrofitError error) {
 
-                                                        }
-                                                    });
-
-                                        }
-
-                                        @Override
-                                        public void failure(RetrofitError error) {
-
-                                        }
-                                    });
+                                                }
+                                            });
 
 
                                 }
@@ -192,8 +161,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 }
                             });
                         } else {
-                            Log.d(LOG_TAG, "gid: " + result + " is already exists.");
-
                             api.getAdventurerIdByGuserId(currentPerson.getId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                                 @Override
                                 public void success(Response response, Response response2) {
@@ -217,31 +184,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                 }
                             });
-
-
                         }
-
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Log.d(LOG_TAG, "f:getGuserIdByGuserId");
                     }
                 });
             } else {
-                Toast.makeText(getApplicationContext(),
-                        "Person information is null", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "No network connection.", Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-//        QuestioApplication.setLogin(true);
-//
-//        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//        startActivity(intent);
-//
-//        finish();
     }
 
     @Override
@@ -293,7 +249,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     .setResultCallback(new ResultCallback<Status>() {
                         @Override
                         public void onResult(Status arg0) {
-                            Log.e(LOG_TAG, "User access revoked!");
                             mGoogleApiClient.connect();
 
                         }

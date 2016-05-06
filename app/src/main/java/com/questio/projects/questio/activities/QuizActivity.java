@@ -338,18 +338,15 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void requestQuizProgresses() {
-        Log.d(LOG_TAG, "requestQuizProgress: called");
         api.getQuizProgressByRef(adventurerId, questId, QuestioConstants.QUESTIO_KEY, new Callback<ArrayList<QuizProgress>>() {
             @Override
             public void success(ArrayList<QuizProgress> quizProgressesTemp, Response response) {
                 quizProgresses = quizProgressesTemp;
-                Log.d(LOG_TAG, "requestQuizProgress: success");
                 if (quizProgresses == null) {
                     scoreTV.setText(Double.toString(10.0));
                     quizScoredCount = totalQuiz;
                 }
                 if (quizProgresses == null || quizProgresses.size() != totalQuiz) {
-                    Log.d(LOG_TAG, "requestQuizProgress: success but quizProgresses is null");
                     insertProgressData();
                     populateQuiz(FIRST_QUIZ);
                 } else {
@@ -369,14 +366,11 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                         double scoreShow = calculateScoreByAnswerState(answerStatesMap);
                         DecimalFormat df = new DecimalFormat("#.0");
                         String pointShow = df.format(scoreShow);
-                        Log.d(LOG_TAG, "ScoreTV: " + scoreShow);
                         scoreTV.setText(pointShow);
                     } else {
-                        Log.d(LOG_TAG, "thisQuestStatus: " + thisQuestStatus);
                         double scoreShow = calculateScoreByAnswerStateForQuizNotFinish(answerStatesMap);
                         DecimalFormat df = new DecimalFormat("#.0");
                         String pointShow = df.format(scoreShow);
-                        Log.d(LOG_TAG, "ScoreTV: " + scoreShow);
                         scoreTV.setText(pointShow);
                     }
                 }
@@ -390,7 +384,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void failure(RetrofitError error) {
-                Log.d(LOG_TAG, "requestQuizProgress: failure");
             }
         });
         if (quizScoredCount == 0) {
@@ -405,14 +398,12 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void success(Response response, Response response2) {
                 String questioStatus = QuestioHelper.responseToString(response);
-                Log.d(LOG_TAG, "Add Quest Progress: " + questId + " " + questioStatus);
                 answerStatesMap = new HashMap<>();
                 for (Quiz q : quizs) {
                     answerStatesMap.put(q.getQuizId(), new AnswerState());
                     api.addQuizProgress(adventurerId, questId, q.getQuizId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                         @Override
                         public void success(Response response, Response response2) {
-                            Log.d(LOG_TAG, QuestioHelper.responseToString(response));
                             String questioStatus = QuestioHelper.responseToString(response);
                             if (QuestioHelper.getJSONStringValueByTag("status", questioStatus).equalsIgnoreCase("1")) {
                                 Log.d(LOG_TAG, "Add Quiz Progress Successful");
@@ -423,7 +414,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
                         @Override
                         public void failure(RetrofitError error) {
-                            Log.d(LOG_TAG, "addQuizProgress FAILURE");
                         }
                     });
                 }
@@ -491,7 +481,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     void onCorrect(int seqId, int quizId, int choiceSelected) {
-        Log.d(LOG_TAG, "onCorrect: called");
         AnswerState as = answerStatesMap.get(quizId);
         int answerTime = as.getAnswerTime();
         int score = 2;
@@ -542,13 +531,8 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
                     }
                 });
-
-
         updateQuizProgressStatus(QuestioConstants.QUEST_FINISHED, quizId);
-        //populateQuiz(getPossibleNextQuizSeqFromCurrentSeq(seqId - 1));
         showCorrectAnswer(seqId, true);
-        Log.d(LOG_TAG, "onCorrect: seqId = " + seqId);
-
     }
 
     void onIncorrect(int seqId, int quizId, int choiceSelected) {
@@ -576,13 +560,10 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
         int answerTime = as.getAnswerTime();
-        Log.d(LOG_TAG, "onIncorrect: answerTime = " + answerTime);
         double currentScoreTV = Double.parseDouble(scoreTV.getText().toString());
         double newScoreTV = currentScoreTV - minusPoint;
         DecimalFormat df = new DecimalFormat("#.0");
         String pointShow = df.format(newScoreTV);
-        Log.d(LOG_TAG, "currentScoreTV: " + currentScoreTV + " " + "minusPoint: " + minusPoint);
-        Log.d(LOG_TAG, "newScoreTV: " + pointShow);
         scoreTV.setText(pointShow);
         if (answerTime >= 2) {
             onLimitAnswer(seqId, quizId);
@@ -600,25 +581,18 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
-
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-
                     }
                 });
         updateQuizProgressStatus(QuestioConstants.QUEST_FAILED, quizId);
-        Log.d(LOG_TAG, "onLimitAnswer: called");
-
         showCorrectAnswer(seqId, false);
     }
 
 
     int getPossibleNextQuizSeqFromCurrentSeq(int currentSeq) {
-        Log.d(LOG_TAG, "getPossibleNextQuizSeqFromCurrentSeq: called");
-        Log.d(LOG_TAG, "getPossibleNextQuizSeqFromCurrentSeq: ");
-
         AnswerState as;
         int i = 0;
         for (Quiz q : quizs) {
@@ -627,19 +601,13 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 i++;
                 continue;
             }
-
-            Log.d(LOG_TAG, "getPossibleNextQuizSeqFromCurrentSeq: return: " + i);
             return i;
         }
-        Log.d(LOG_TAG, "getPossibleNextQuizSeqFromCurrentSeq: return: " + 0);
+
         return 0;
     }
 
     void updateQuizProgressStatus(int status, int quizId) {
-        Log.d(LOG_TAG, "updateQuizProgressStatus: called");
-        Log.d(LOG_TAG, "updateQuizProgressStatus status: " + status);
-        //Log.d(LOG_TAG, "updateQuizProgressStatus ref: " + ref);
-        Log.d(LOG_TAG, "updateQuizProgressStatus quizId: " + quizId);
         api.updateStatusQuizProgressByRefAndQuizId(status, adventurerId, questId, quizId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
@@ -655,7 +623,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     void disableButtonAnswer(Button b) {
-        //b.setBackgroundColor(getResources().getColor(R.color.red_quiz_wrong));
         b.setBackground(getResources().getDrawable(R.drawable.corners_button_red));
         b.setTextColor(getResources().getColor(R.color.white));
         b.setEnabled(false);
@@ -687,19 +654,15 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void updateStateAnswerButton(int answer, int qid) {
-        Log.d(LOG_TAG, "updateStateAnswerButton: called");
-        //Log.d(LOG_TAG, "updateStateAnswerButton: " + "ref: " + ref + " quizid: " + qid);
         switch (answer) {
             case 1:
                 api.updateStatusChoiceAQuizByRefAndQuizId(adventurerId, questId, qid, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
-                        Log.d(LOG_TAG, "updateStateAnswerButton success: " + QuestioHelper.responseToString(response));
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Log.d(LOG_TAG, "updateStateAnswerButton failure: " + error.getUrl());
                     }
                 });
                 break;
@@ -707,12 +670,10 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 api.updateStatusChoiceBQuizByRefAndQuizId(adventurerId, questId, qid, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
-                        Log.d(LOG_TAG, "updateStateAnswerButton success: " + QuestioHelper.responseToString(response));
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Log.d(LOG_TAG, "updateStateAnswerButton failure: " + error.getUrl());
 
                     }
                 });
@@ -721,12 +682,10 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 api.updateStatusChoiceCQuizByRefAndQuizId(adventurerId, questId, qid, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
-                        Log.d(LOG_TAG, "updateStateAnswerButton success: " + QuestioHelper.responseToString(response));
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Log.d(LOG_TAG, "updateStateAnswerButton failure: " + error.getUrl());
                     }
                 });
                 break;
@@ -734,12 +693,10 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 api.updateStatusChoiceDQuizByRefAndQuizId(adventurerId, questId, qid, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
-                        Log.d(LOG_TAG, "updateStateAnswerButton success: " + QuestioHelper.responseToString(response));
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Log.d(LOG_TAG, "updateStateAnswerButton failure: " + error.getUrl());
                     }
                 });
                 break;
@@ -747,17 +704,13 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void updateProgressStatusAndScore(int status) {
-
-        Log.d(LOG_TAG, "updateProgressStatusAndScore: called");
         api.updateQuestProgressAutoScoreQuiz(questId, adventurerId, status, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
-
             }
 
             @Override
             public void failure(RetrofitError error) {
-
             }
         });
     }
@@ -776,7 +729,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void success(Response response, Response response2) {
                                 int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
-                                Log.d(LOG_TAG, "Reward count: " + rewardCount);
                                 if (rewardCount == 0) {
                                     showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL);
                                     addRewardHOF(reward.getRewardId(), QuestioConstants.REWARD_RANK_NORMAL);
@@ -787,7 +739,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
                             @Override
                             public void failure(RetrofitError error) {
-                                Log.d(LOG_TAG, "checkRewardData: failure");
                             }
                         });
 
@@ -798,7 +749,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
                 @Override
                 public void failure(RetrofitError error) {
-                    Log.d(LOG_TAG, "checkRewardData: failure");
                 }
             });
         }
@@ -813,7 +763,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                     as.getStatus() != QuestioConstants.QUEST_FAILED) {
                 return false;
             }
-
         }
         return true;
     }
@@ -915,11 +864,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
     void showCorrectAnswer(final int seqId, boolean isCorrect) {
         final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(this);
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        dialog.setContentView(R.layout.correct_answer_dialog);
-//        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
-//        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
-//        dialog.setCancelable(true);
         dialog
                 .withTitleColor("#FFFFFF")
                 .withDividerColor("#11000000")
@@ -929,8 +873,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 .withDuration(300)
                 .withEffect(Effectstype.Slidetop)
                 .isCancelableOnTouchOutside(false);
-//        TextView correctMsg = ButterKnife.findById(dialog, R.id.dialog_correctanswer_msg);
-//        TextView correctAns = ButterKnife.findById(dialog, R.id.dialog_correctanswer_answer);
         if (q.getAnswerId().equalsIgnoreCase("1")) {
             dialog.withMessage("คำตอบที่ถูกต้องคือ" + q.getChoiceA());
         } else if (q.getAnswerId().equalsIgnoreCase("2")) {
@@ -946,7 +888,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             dialog.withTitle("ผิดครับ");
         }
-        //Button nextQuestion = ButterKnife.findById(dialog, R.id.button_correctanswer_next_question);
         if (!isAllQuizFinish()) {
             dialog.withButton1Text("ไปยังข้อถัดไป");
             dialog.setButton1Click(new View.OnClickListener() {
@@ -999,16 +940,9 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 .withButton1Text("Close")
                 .isCancelableOnTouchOutside(false)
                 .setCustomView(R.layout.reward_obtain_dialog, this);
-//        final Dialog dialog = new Dialog(this);
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        dialog.setContentView(R.layout.reward_obtain_dialog);
-//        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
-//        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
-//        dialog.setCancelable(true);
         ImageView rewardPicture = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_picture);
         TextView tvRewardName = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_name);
         TextView tvRewardRank = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_rank);
-        //Button closeBtn = ButterKnife.findById(dialog, R.id.button_obtain_reward_close);
 
         String rewardName = reward.getRewardName();
         tvRewardName.setText(rewardName);
@@ -1071,9 +1005,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         score = quizScore / ((numberOfQuiz * 2.0) / 10.0);
-        Log.d(LOG_TAG, "calculateScoreByAnswerState score: " + score);
-        Log.d(LOG_TAG, "calculateScoreByAnswerState numberOfQuiz: " + numberOfQuiz);
-        Log.d(LOG_TAG, "calculateScoreByAnswerState quizScore: " + quizScore);
         return score;
     }
 
@@ -1089,17 +1020,12 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
             if (answerState.status == QuestioConstants.QUEST_FINISHED) {
                 if (answerState.getAnswerTime() == 2) {
                     wrongAnswerTime = wrongAnswerTime + 1;
-                    Log.d(LOG_TAG, "this 0");
                 }
             } else if (answerState.status == QuestioConstants.QUEST_FAILED) {
-                Log.d(LOG_TAG, "this 1");
                 wrongAnswerTime = wrongAnswerTime + 2;
             } else if (answerState.status == QuestioConstants.QUEST_NOT_STARTED || answerState.status == QuestioConstants.QUEST_NOT_FINISHED) {
-                Log.d(LOG_TAG, "this 2");
                 wrongAnswerTime = wrongAnswerTime + 1;
             } else {
-                // answerState.status == 0
-                Log.d(LOG_TAG, "Quiz ID: " + answerState.getQuizId() + " not finish yet");
                 if (answerState.getAnswerTime() == 1) {
                     wrongAnswerTime = wrongAnswerTime + 1;
                 }
@@ -1107,12 +1033,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         }
         maxScore = numberOfQuiz * 2;
         minusPoint = 10.0 / maxScore;
-
         score = 10.0 - (wrongAnswerTime * minusPoint);
-        Log.d(LOG_TAG, "calculateScoreByAnswerState score: " + score);
-        Log.d(LOG_TAG, "calculateScoreByAnswerState numberOfQuiz: " + numberOfQuiz);
-        Log.d(LOG_TAG, "calculateScoreByAnswerState wrongAnswerTime: " + wrongAnswerTime);
-        Log.d(LOG_TAG, "calculateScoreByAnswerState minusPoint: " + minusPoint);
         return score;
     }
 }

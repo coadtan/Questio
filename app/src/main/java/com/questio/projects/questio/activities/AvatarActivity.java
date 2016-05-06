@@ -174,7 +174,6 @@ public class AvatarActivity extends AppCompatActivity {
         } else {
             adventurerId = (long) savedInstanceState.getSerializable(ADVENTURER_ID);
         }
-        Log.d(LOG_TAG, ADVENTURER_ID + ": " + adventurerId);
         SharedPreferences prefs = getSharedPreferences(ADVENTURER_PROFILE, MODE_PRIVATE);
         adventurerId = prefs.getLong(ADVENTURER_ID, 0);
         mContext = this;
@@ -188,12 +187,10 @@ public class AvatarActivity extends AppCompatActivity {
         api.insertNewAvatar(adventurerId, QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
-                Log.d(LOG_TAG, "insert new avatar successfully");
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Log.d(LOG_TAG, "insert new avatar failure");
             }
         });
     }
@@ -202,8 +199,6 @@ public class AvatarActivity extends AppCompatActivity {
         api.getAvatarByAvatarId(adventurerId, QUESTIO_KEY, new Callback<Avatar[]>() {
             @Override
             public void success(Avatar[] avatars, Response response) {
-                Log.d(LOG_TAG, "get avatar successfully");
-                Log.d(LOG_TAG, avatars[0].toString());
                 avatar = avatars[0];
                 setImageSpike(
                         avatar.getHeadId(),
@@ -217,12 +212,10 @@ public class AvatarActivity extends AppCompatActivity {
                         avatar.getFootId(),
                         avatar.getSpecialId()
                 );
-                Log.d(LOG_TAG, "end of populateAvatar");
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Log.d(LOG_TAG, "get avatar failure");
             }
         });
     }
@@ -239,7 +232,6 @@ public class AvatarActivity extends AppCompatActivity {
             long footId,
             long specialId
     ) {
-        Log.d(LOG_TAG, "setImageSpike called");
         api.getItemsBySetOfItemId(
                 headId,
                 backgroundId,
@@ -255,10 +247,8 @@ public class AvatarActivity extends AppCompatActivity {
                 new Callback<Item[]>() {
                     @Override
                     public void success(Item[] items, Response response) {
-                        Log.d(LOG_TAG, "setImageSpike load successfully");
                         if (items != null) {
                             for (Item item : items) {
-                                Log.d(LOG_TAG, item.toString());
                                 switch (item.getPositionId()) {
                                     case POSITION_HEAD:
                                         Glide.with(AvatarActivity.this)
@@ -327,8 +317,6 @@ public class AvatarActivity extends AppCompatActivity {
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Log.d(LOG_TAG, "setImageSpike load failed");
-                        Log.d(LOG_TAG, error.getUrl());
                     }
                 }
 
@@ -367,7 +355,6 @@ public class AvatarActivity extends AppCompatActivity {
                         equipLayout.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                             @Override
                             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                Log.d(LOG_TAG, view.toString());
                                 ItemInInventory newItem = itemsEquip.get(i);
                                 equipNewItem(position, newItem.getItemId());
                                 dialog.dismiss();
@@ -447,7 +434,6 @@ public class AvatarActivity extends AppCompatActivity {
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(LOG_TAG, "buttonSave: called");
                 avatarBackground.setVisibility(View.INVISIBLE);
                 View content = findViewById(R.id.avatar_profile_layout);
                 try {
@@ -530,43 +516,32 @@ public class AvatarActivity extends AppCompatActivity {
                     avatar.setSpecialId(newItemId);
                     break;
             }
-            Log.d(LOG_TAG, "new Item Id - " + newItemId);
-            Log.d(LOG_TAG, "Old Item ID - " + oldItemId);
         }
         api.equipNewItem(partId, newItemId, oldItemId, adventurerId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
-                Log.d(LOG_TAG, "equipNewItem status: success");
                 if (oldItemId != 0) {
                     if (newItemId != oldItemId) {
                         String status = QuestioHelper.getJSONStringValueByTag("status", response);
-                        Log.d(LOG_TAG, "equipNewItem status: " + status);
                         if (status.equalsIgnoreCase("1")) {
                             changeSpritePathByNewItemId(partId, newItemId);
-                        } else {
-                            Log.d(LOG_TAG, "EquipNewItem Failed");
                         }
                     } else {
                         String status = QuestioHelper.getJSONStringValueByTag("status", response);
                         if (status.equalsIgnoreCase("1")) {
                             unequipItem(partId, oldItemId);
-                        } else {
-                            Log.d(LOG_TAG, "EquipNewItem Failed");
                         }
                     }
                 } else {
                     String status = QuestioHelper.getJSONStringValueByTag("status", response);
                     if (status.equalsIgnoreCase("1")) {
                         changeSpritePathByNewItemId(partId, newItemId);
-                    } else {
-                        Log.d(LOG_TAG, "EquipNewItem Failed");
                     }
                 }
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Log.d(LOG_TAG, "equipNewItem status: failure");
             }
         });
     }
@@ -620,7 +595,6 @@ public class AvatarActivity extends AppCompatActivity {
                             break;
                     }
                 } else {
-                    Log.d(LOG_TAG, "EquipNewItem Failed");
                 }
             }
 
@@ -633,7 +607,6 @@ public class AvatarActivity extends AppCompatActivity {
     }
 
     public void changeSpritePathByNewItemId(final int partId, long newItemId) {
-        Log.d(LOG_TAG, "changeSpritePathByNewItemId : called");
         api.getEquipSpritePathByItemId(newItemId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
@@ -704,7 +677,6 @@ public class AvatarActivity extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
-                Log.d(LOG_TAG, "changeSpritePathByNewItemId : failure");
             }
         });
 

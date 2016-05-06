@@ -90,10 +90,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
         prefs = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE);
-        String displayName = prefs.getString(QuestioConstants.ADVENTURER_DISPLAYNAME, null);
         adventurerId = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
-        long id = prefs.getLong(QuestioConstants.ADVENTURER_ID, 0);
-        Log.d(LOG_TAG, "displayName: " + displayName + " id: " + id);
         adapter = new RestAdapter.Builder().setEndpoint(QuestioConstants.ENDPOINT).build();
         api = adapter.create(QuestioAPIService.class);
         place = new Place(this);
@@ -101,11 +98,8 @@ public class MainActivity extends AppCompatActivity
         Place place = new Place(getApplicationContext());
         try {
             String res = new HttpHelper().execute(QuestioConstants.ENDPOINT + "/select_all_place_count.php").get();
-
-            Log.d(LOG_TAG, "count: " + res);
             long placeServerCount = QuestioHelper.getPlaceCountFromJson(res);
             long placeSQLiteCount = place.getPlaceCount();
-            Log.d(LOG_TAG, "placeServerCount: " + placeServerCount + " placeSQLiteCount: " + placeSQLiteCount);
             if (placeServerCount != placeSQLiteCount) {
                 place.deleteAllPlace();
                 new PlaceSync(getApplicationContext()).execute(QuestioConstants.ENDPOINT + "/select_all_place.php");
@@ -123,12 +117,9 @@ public class MainActivity extends AppCompatActivity
             transaction.replace(R.id.sample_content_fragment, fragment);
             transaction.commit();
         }
-        Log.d(LOG_TAG, "count: " + place.getPlaceCount());
-
 
         editor = getSharedPreferences(QuestioConstants.ADVENTURER_PROFILE, MODE_PRIVATE).edit();
         buildGoogleApiClient();
-        Log.d(LOG_TAG, "Default Place ID: " + prefs.getInt(QuestioConstants.PLACE_ID, 0));
     }
 
     private void buildGoogleApiClient() {
@@ -178,7 +169,6 @@ public class MainActivity extends AppCompatActivity
                     this
             );
         } catch (SecurityException e) {
-            Log.d(LOG_TAG, "SecurityException");
         }
     }
 
@@ -189,22 +179,17 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.d(LOG_TAG, "onConnectionFailed");
     }
 
     @Override
     public void onLocationChanged(Location location) {
         this.location = location;
-        Log.d(LOG_TAG, "This is the Google location service " + location.getLatitude() + " " + location.getLongitude());
         double currentLatitude = location.getLatitude();
         double currentLongitude = location.getLongitude();
         Intent intent = new Intent(QuestioConstants.LOCATION_UPDATE_ACTION);
         intent.putExtra("currentLatitude", currentLatitude);
         intent.putExtra("currentLongitude", currentLongitude);
         this.sendBroadcast(intent);
-//        Log.d(LOG_TAG, "Current Place ID: " + sharedPreferences.getInt(QuestioConstants.PLACE_ID, 0));
-//        Log.d(LOG_TAG, "Current Place Interval: " + locationRequest.getInterval());
-
         if (!placeListForDistance.isEmpty()) {
             for (Place po : placeListForDistance) {
                 isEnterQuestMap(currentLatitude, currentLongitude, po);
@@ -213,14 +198,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void isEnterQuestMap(double currentLat, double currentLng, final Place p) {
-
         float[] results = new float[1];
         Location.distanceBetween(currentLat, currentLng,
                 p.getLatitude(), p.getLongitude(), results);
         if (results[0] <= p.getRadius()) {
-
-            Log.d(LOG_TAG, "isEnterQuestMap: p.getPlaceId() = " + p.getPlaceId());
-
+            QuestioHelper.questioLog(LOG_TAG, "isEnterQuestMap: p.getPlaceId() = " + p.getPlaceId());
             api.getRewardByPlaceId(p.getPlaceId(), QuestioConstants.QUESTIO_KEY, new Callback<Reward[]>() {
                 @Override
                 public void success(Reward[] rewards, Response response) {
@@ -230,7 +212,6 @@ public class MainActivity extends AppCompatActivity
                             @Override
                             public void success(Response response, Response response2) {
                                 int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
-                                Log.d(LOG_TAG, "Reward count: " + rewardCount);
                                 if (rewardCount == 0) {
                                     showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL);
                                 }
@@ -239,7 +220,6 @@ public class MainActivity extends AppCompatActivity
 
                             @Override
                             public void failure(RetrofitError error) {
-                                Log.d(LOG_TAG, "checkRewardData: failure");
                             }
                         });
                     } else {
@@ -374,11 +354,6 @@ public class MainActivity extends AppCompatActivity
         api.getZoneByPlaceId(p.getPlaceId(), QuestioConstants.QUESTIO_KEY, new Callback<ArrayList<Zone>>() {
             @Override
             public void success(ArrayList<Zone> zones, Response response) {
-                Log.d(LOG_TAG, "explorer progress: p.getPlaceId() " + p.getPlaceId());
-                if (zones == null) {
-                    Log.d(LOG_TAG, "explorer progress: zone is null");
-                }
-
                 if (zones != null) {
                     for (Zone z : zones) {
                         api.addExplorerProgress(adventurerId, p.getPlaceId(), z.getZoneId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
@@ -409,12 +384,9 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void success(Response response, Response response2) {
                 zoneCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("zonecount", response));
-                Log.d(LOG_TAG, "Zonecount = " + Integer.toString(zoneCount));
                 if (zoneCount > 0) {
                     locationRequest.setInterval(zoneCount * 5 * 60 * 1000);
                 }
-                Log.d(LOG_TAG, "Current Place ID: " + prefs.getInt(QuestioConstants.PLACE_ID, 0));
-                Log.d(LOG_TAG, "Current Place Interval: " + locationRequest.getInterval());
             }
 
             @Override
@@ -429,7 +401,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onReceive(Context context, Intent intent) {
             Place p = (Place) intent.getSerializableExtra("place");
-            Log.d(LOG_TAG, "Place - " + p.toString());
+            QuestioHelper.questioLog(LOG_TAG, "Place - " + p.toString());
             Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
             context.sendBroadcast(it);
             getZoneCount(p);

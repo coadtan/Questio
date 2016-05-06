@@ -252,4 +252,34 @@ public class Place implements Serializable {
         return count;
     }
 
+    public Place getPlaceFromQRCode(String qrCode) {
+        DatabaseHelper databaseHelper = new DatabaseHelper(mContext);
+        SQLiteDatabase database = databaseHelper.getWritableDatabase();
+        Place p = null;
+        String selectQuery = "SELECT  * FROM place WHERE qrcode = " + qrCode;
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                p = new Place();
+                p.setPlaceId(Integer.parseInt(cursor.getString(0)));
+                p.setPlaceName(cursor.getString(1));
+                p.setPlaceFullName(cursor.getString(2));
+                if (!cursor.getString(3).equalsIgnoreCase("null")) {
+                    p.setQrCode(Integer.parseInt(cursor.getString(3)));
+                }
+                if (!cursor.getString(4).equalsIgnoreCase("null")) {
+                    p.setSensorId(Integer.parseInt(cursor.getString(4)));
+                }
+                p.setLatitude(Double.parseDouble(cursor.getString(5)));
+                p.setLongitude(Double.parseDouble(cursor.getString(6)));
+                p.setRadius(Double.parseDouble(cursor.getString(7)));
+                p.setPlaceType(cursor.getString(8));
+                p.setImageUrl(cursor.getString(9));
+            } while (cursor.moveToNext());
+        }
+        databaseHelper.close();
+        database.close();
+        return p;
+    }
+
 }

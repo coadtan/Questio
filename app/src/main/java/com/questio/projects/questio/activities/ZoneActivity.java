@@ -503,15 +503,8 @@ public class ZoneActivity extends ActionBarActivity {
                 .withButton1Text("Close")
                 .isCancelableOnTouchOutside(false)
                 .setCustomView(R.layout.item_obtain_dialog, this);
-//        final Dialog dialog = new Dialog(this);
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        dialog.setContentView(R.layout.item_obtain_dialog);
-//        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
-//        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
-//        dialog.setCancelable(true);
         ImageView tvItemPicture = ButterKnife.findById(dialog, R.id.dialog_obtain_item_picture);
         TextView tvItemName = ButterKnife.findById(dialog, R.id.dialog_obtain_item_name);
-//        Button closeBtn = (Button) dialog.findViewById(R.id.button_obtain_item_close);
 
         String obtainedName = item.getItemName();
         Glide.with(this)
@@ -544,16 +537,9 @@ public class ZoneActivity extends ActionBarActivity {
                 .withButton1Text("Close")
                 .isCancelableOnTouchOutside(false)
                 .setCustomView(R.layout.reward_obtain_dialog, this);
-//        final Dialog dialog = new Dialog(this);
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        dialog.setContentView(R.layout.reward_obtain_dialog);
-//        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
-//        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
-//        dialog.setCancelable(true);
         ImageView rewardPicture = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_picture);
         TextView tvRewardName = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_name);
         TextView tvRewardRank = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_rank);
-        //Button closeBtn = ButterKnife.findById(dialog, R.id.button_obtain_reward_close);
 
         String rewardName = reward.getRewardName();
         tvRewardName.setText(rewardName);

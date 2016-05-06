@@ -39,6 +39,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.questio.projects.questio.R;
+import com.questio.projects.questio.activities.PlaceActivity;
 import com.questio.projects.questio.activities.ZoneActivity;
 import com.questio.projects.questio.adepters.PlaceListAdapter;
 import com.questio.projects.questio.libraries.AndroidGoogleDirectionAndPlaceLibrary.AndroidGoogleDirectionAndPlaceLibrary.GoogleDirection;
@@ -273,6 +274,11 @@ public class PlaceSection extends Fragment {
             if (qr[0].equalsIgnoreCase(QuestioConstants.QRTYPE_ZONE)) {
                 Intent intent = new Intent(getActivity(), ZoneActivity.class);
                 intent.putExtra("qrcode", qr[1]);
+                startActivity(intent);
+            } else if (qr[0].equalsIgnoreCase(QuestioConstants.QRTYPE_PLACE)) {
+                Intent intent = new Intent(getActivity(), PlaceActivity.class);
+                Place p = new Place(getContext());
+                intent.putExtra("place", p.getPlaceFromQRCode(qr[1]));
                 startActivity(intent);
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {

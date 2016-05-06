@@ -4,19 +4,20 @@
     <item
         android:id="@+id/action_enter_zone68001"
         android:orderInCategory="101"
-        android:title="fake enter zone:68001"
+        android:title="ทดสอบเข้าสู่ zone หมายเลข 68001"
+        android:visible="false"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_delect_all_data"
         android:orderInCategory="101"
-        android:title="delete all data"
+        android:title="ตั้งรายการสถานที่ใหม่"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_qrcode_scan"
-        android:icon="@drawable/ic_action_qrscan"
+        android:icon="@android:drawable/ic_menu_camera"
         android:orderInCategory="101"
-        android:title="scab qr"
+        android:title="เปิดการแสกน QR Code"
         app:showAsAction="ifRoom" />
 </menu>

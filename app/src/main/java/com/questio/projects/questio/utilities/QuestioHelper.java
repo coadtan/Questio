@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
+import com.questio.projects.questio.models.Place;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,11 +49,12 @@ public class QuestioHelper {
         } else if (type.equalsIgnoreCase(QuestioConstants.QRTYPE_RIDDLE_ANSWER)) {
             qrCode = qrCode.replace(BEGIN_TYPE_5, "");
         }
-
         // 3 Step: removeEnd
         qrCode = qrCode.replace(END, "");
         deCodeForReturn[0] = type;
         deCodeForReturn[1] = qrCode;
+        questioLog(LOG_TAG, "deCodeForReturn[0]: " + deCodeForReturn[0]);
+        questioLog(LOG_TAG, "deCodeForReturn[1]: " + deCodeForReturn[1]);
         return deCodeForReturn;
     }
 
@@ -74,21 +76,8 @@ public class QuestioHelper {
         return type;
     }
 
-    //    public static int checkValidQRCode(String qrCode,ArrayList<Zone> zoneList){
-//        int count = -1;
-//        String tempQR;
-//        for(int i = 0; i < zoneList.size(); i++){
-//            tempQR = zoneList.get(i).getQrCode();
-//            if(tempQR.equalsIgnoreCase(qrCode)){
-//                count = i;
-//                return count;
-//            }
-//        }
-//        Log.d(LOG_TAG, "checkValidQRCode: QRCode Invalid: Not found in list or database.");
-//        return count;
-//    }
     public static long getPlaceCountFromJson(String response) {
-        JSONArray arr = null;
+        JSONArray arr;
         Log.d(LOG_TAG, "getPlaceCountFromJson: " + response);
         long result = 0;
         try {
@@ -111,7 +100,7 @@ public class QuestioHelper {
     }
 
     public static long getAdventurerCountFromJson(String response) {
-        JSONArray arr = null;
+        JSONArray arr;
         Log.d(LOG_TAG, "getAdventurerCountFromJson: " + response);
         long result = 0;
         try {
@@ -130,7 +119,7 @@ public class QuestioHelper {
     }
 
     public static String responseToString(Response response) {
-        BufferedReader reader = null;
+        BufferedReader reader;
         StringBuilder sb = new StringBuilder();
         try {
 
@@ -146,14 +135,12 @@ public class QuestioHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return sb.toString();
     }
 
-
     public static String getJSONStringValueByTag(String tag, String inputResponese) {
 
-        JSONArray arr = null;
+        JSONArray arr;
         Log.d(LOG_TAG, "getJSONStringValueByTag: " + inputResponese);
         String resultForReturn = null;
         try {
@@ -170,10 +157,8 @@ public class QuestioHelper {
         return resultForReturn;
     }
 
-
     public static String getJSONStringValueByTag(String tag, Response inputResponese) {
-
-        JSONArray arr = null;
+        JSONArray arr;
         Log.d(LOG_TAG, "getJSONStringValueByTag(Response): " + inputResponese);
         String resultForReturn = null;
         try {
@@ -202,49 +187,17 @@ public class QuestioHelper {
         return temp;
     }
 
-    public static long getTimeNow() {
-        return System.currentTimeMillis();
-    }
-
-    public static boolean isTimeDifferentLessThan3Hours(Long startTimeInSecond, Long endTimeInSecond) {
-        long dif;
-        try {
-            dif = endTimeInSecond - startTimeInSecond;
-        } catch (NullPointerException nex) {
-            return false;
-        }
-
-        return dif < 10800;
-    }
-
-    public static int getPercentFrom2ValueAsInt(double a, double b){
-        double temp = a/b*100;
-        Log.d(LOG_TAG, "getPercentFrom2ValueAsInt: " + (int)temp);
-        if(a==b){
+    public static int getPercentFrom2ValueAsInt(double a, double b) {
+        double temp = a / b * 100;
+        Log.d(LOG_TAG, "getPercentFrom2ValueAsInt: " + (int) temp);
+        if (a == b) {
             Log.d(LOG_TAG, "getPercentFrom2ValueAsInt: " + 100);
             return 100;
         }
-        return (int)temp;
+        return (int) temp;
     }
 
-    public static String getProfileLink(String gUserId){
-        //https://www.googleapis.com/plus/v1/people/117289274317591199072?fields=image&key=AIzaSyC32SIKa3xbeyLFSEP9vgRklXLdyZ1igCc
-        // ImagePathURL to be returned
-        String imageUrl = "";
-        String linkUrl = "https://www.googleapis.com/plus/v1/people/"+gUserId+"?fields=image&key=AIzaSyC32SIKa3xbeyLFSEP9vgRklXLdyZ1igCc";
-        try {
-            String response = new HttpHelper().execute(linkUrl).get();
-            Log.d(LOG_TAG, "response: " + response);
-            JsonObject obj = new JsonParser().parse(response).getAsJsonObject();
-            JsonObject image = obj.getAsJsonObject("image");
-            JsonPrimitive url = image.getAsJsonObject().getAsJsonPrimitive("url");
-            imageUrl = url.getAsString();
-            Log.d(LOG_TAG, "imageurl: " + imageUrl);
-
-
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-        return imageUrl;
+    public static void questioLog(String tag, String message) {
+        Log.d(tag, message);
     }
 }

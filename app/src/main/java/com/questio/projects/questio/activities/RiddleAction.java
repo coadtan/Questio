@@ -432,22 +432,8 @@ public class RiddleAction extends AppCompatActivity implements View.OnClickListe
                     }
                 })
                 .isCancelableOnTouchOutside(false);
-//        final Dialog dialog = new Dialog(PicturePuzzleAction.this);
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        dialog.setContentView(R.layout.quest_finished_puzzle_dialog);
-//        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
-//        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
-//        dialog.setCancelable(true);
-//        TextView puzzleScoreTV = (TextView) dialog.findViewById(R.id.dialog_puzzle_score);
-        //Button goBack = (Button) dialog.findViewById(R.id.button_puzzle_goback);
         String riddleScore = "คุณได้รับ " + Integer.toString(score) + " แต้ม";
         dialog.withMessage(riddleScore);
-//        goBack.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                dialog.dismiss();
-//            }
-//        });
         dialog.show();
     }
 
@@ -479,16 +465,9 @@ public class RiddleAction extends AppCompatActivity implements View.OnClickListe
                 .withButton1Text("Close")
                 .isCancelableOnTouchOutside(false)
                 .setCustomView(R.layout.reward_obtain_dialog, this);
-//        final Dialog dialog = new Dialog(this);
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        dialog.setContentView(R.layout.reward_obtain_dialog);
-//        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
-//        dialog.getWindow().setBackgroundDrawable(transparentDrawable);
-//        dialog.setCancelable(true);
         ImageView rewardPicture = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_picture);
         TextView tvRewardName = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_name);
         TextView tvRewardRank = ButterKnife.findById(dialog, R.id.dialog_obtain_reward_rank);
-        //Button closeBtn = ButterKnife.findById(dialog, R.id.button_obtain_reward_close);
 
         String rewardName = reward.getRewardName();
         tvRewardName.setText(rewardName);

@@ -101,35 +101,6 @@ public class RankingSection extends Fragment {
         return view;
     }
 
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_place_section, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_qrcode_scan:
-                Intent intent = new Intent(getActivity(), ZBarScannerActivity.class);
-                intent.putExtra(ZBarConstants.SCAN_MODES, new int[]{Symbol.QRCODE});
-                startActivityForResult(intent, 0);
-
-                return true;
-            case R.id.action_enter_zone68001:
-                String[] qr = {"zone", "68001"};
-                if (qr[0].equalsIgnoreCase("zone")) {
-                    Intent intentToQuestAction = new Intent(getActivity(), ZoneActivity.class);
-                    intentToQuestAction.putExtra("qrcode", qr[1]);
-                    startActivity(intentToQuestAction);
-                }
-                return true;
-            default:
-                break;
-        }
-        return false;
-    }
-
     private void requestRankingData(long adventurerId){
         api.getRankingTopTen(adventurerId, QuestioConstants.QUESTIO_KEY, new Callback<ArrayList<Ranking>>() {
             @Override

@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
@@ -202,7 +201,6 @@ public class InventoryActivity extends AppCompatActivity implements AdapterView.
                     itemsInvForShow.clear();
                     for (ItemInInventory each : itemsInv) {
                         if (positionChecker[each.getPositionId() - 1]) {
-                            Log.d(LOG_TAG, each.getPositionId() + " was added to itemsInvFilterType");
                             itemsInvFilterType.add(each);
                         }
                     }

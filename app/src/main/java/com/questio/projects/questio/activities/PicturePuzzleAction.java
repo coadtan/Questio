@@ -216,7 +216,7 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                 api.updatePuzzleProgressBottomMidPieceByRef(adventurerId, qid, QuestioConstants.QUESTIO_KEY, this);
                 break;
             case 9:
-                api.updatePuzzleProgressBottomRightPieceByRef(adventurerId, qid, QuestioConstants.QUESTIO_KEY,this);
+                api.updatePuzzleProgressBottomRightPieceByRef(adventurerId, qid, QuestioConstants.QUESTIO_KEY, this);
                 break;
 
         }
@@ -228,7 +228,6 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
             public void success(PicturePuzzle[] picturePuzzleTemp, Response response) {
                 if (picturePuzzleTemp[0] != null) {
                     pp = picturePuzzleTemp[0];
-                    Log.d(LOG_TAG, QuestioHelper.getImgLink(pp.getImageUrl()));
                     Glide.with(PicturePuzzleAction.this)
                             .load(QuestioHelper.getImgLink(pp.getImageUrl()))
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -245,15 +244,11 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                     bottomMiddle.setOnClickListener(PicturePuzzleAction.this);
                     bottomRight.setOnClickListener(PicturePuzzleAction.this);
                     picturePuzzleHint.setText("คำใบ้: " + pp.getHelperAnswer());
-                } else {
-                    Log.d(LOG_TAG, "Picture Puzzle is null");
                 }
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                Log.d(LOG_TAG, "Fail: " + retrofitError.toString());
-                Log.d(LOG_TAG, "Fail: " + retrofitError.getUrl());
             }
         });
     }
@@ -317,7 +312,6 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
 
                             @Override
                             public void failure(RetrofitError error) {
-                                Log.d(LOG_TAG, error.getMessage());
                             }
                         });
                     }
@@ -332,12 +326,9 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     }
 
     private void insertProgressData() {
-        Log.d(LOG_TAG, "No Progress in Quest");
         api.addQuestProgress(qid, adventurerId, zid, 3, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
-                String questioStatus = QuestioHelper.responseToString(response);
-                Log.d(LOG_TAG, "Add Quest Progress: " + qid + " " + questioStatus);
                 insertPuzzleProgress();
             }
 
@@ -348,12 +339,9 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     }
 
     private void insertPuzzleProgress() {
-        Log.d(LOG_TAG, "No Progress in Puzzle");
         api.addPuzzleProgress(adventurerId, qid, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
-                String questioStatus = QuestioHelper.responseToString(response);
-                Log.d(LOG_TAG, "Add Quest Progress: " + qid + " " + questioStatus);
             }
 
             @Override
@@ -364,7 +352,6 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
     }
 
     private void updateQuestStatus(int status) {
-        Log.d(LOG_TAG, "updateQuestStatus: called");
         api.updateStatusQuestProgressByQuestIdAndAdventurerId(status, qid, adventurerId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
@@ -382,12 +369,10 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
         api.updateScoreQuestProgressByQuestIdAndAdventurerId(points, qid, adventurerId, QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
-                Log.d(LOG_TAG, "updateScore: success with points = " + points);
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Log.d(LOG_TAG, "updateScore: failed");
             }
         });
     }
@@ -458,7 +443,6 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
                         @Override
                         public void success(Response response, Response response2) {
                             int rewardCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("hofcount", response));
-                            Log.d(LOG_TAG, "Reward count: " + rewardCount);
                             if (rewardCount == 0) {
                                 addRewardHOF(reward.getRewardId(), QuestioConstants.REWARD_RANK_NORMAL);
                                 showObtainRewardDialog(QuestioConstants.REWARD_RANK_NORMAL);
@@ -468,7 +452,6 @@ public class PicturePuzzleAction extends ActionBarActivity implements View.OnCli
 
                         @Override
                         public void failure(RetrofitError error) {
-                            Log.d(LOG_TAG, "checkRewardData: failure");
                         }
                     });
 
