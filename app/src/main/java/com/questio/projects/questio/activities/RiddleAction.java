@@ -417,7 +417,7 @@ public class RiddleAction extends AppCompatActivity implements View.OnClickListe
     void showCompleteDialog(int score) {
         final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(this);
         dialog
-                .withTitle("Puzzle Complete")
+                .withTitle("Riddle Complete")
                 .withTitleColor("#FFFFFF")
                 .withDividerColor("#11000000")
                 .withMessageColor("#FFFFFFFF")
