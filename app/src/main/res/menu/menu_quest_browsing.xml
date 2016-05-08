@@ -3,17 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_place_details"
-        android:icon="@drawable/ic_action_placedetail"
+        android:id="@+id/action_qrcode_scan"
+        android:icon="@android:drawable/ic_menu_camera"
         android:orderInCategory="100"
+        android:title="scab qr"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_place_details"
+        android:icon="@android:drawable/star_on"
+        android:orderInCategory="101"
         android:title="ข้อมูลสถานที่"
         app:showAsAction="ifRoom" />
 
 
-    <item
-        android:id="@+id/action_qrcode_scan"
-        android:icon="@drawable/ic_action_qrscan"
-        android:orderInCategory="101"
-        android:title="scab qr"
-        app:showAsAction="ifRoom" />
 </menu>

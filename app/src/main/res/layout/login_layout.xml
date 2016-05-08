@@ -15,11 +15,11 @@
         <com.google.android.gms.common.SignInButton
             android:id="@+id/sign_in_button"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="70dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginEnd="20.5dp"
-            android:layout_marginStart="20.5dp"
-            android:layout_marginTop="100dp" />
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="50dp" />
 
     </FrameLayout>
 

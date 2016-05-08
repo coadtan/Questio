@@ -24,6 +24,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center"
+            android:layout_marginStart="10dp"
             android:src="@drawable/loading" />
 
         <LinearLayout
@@ -156,24 +157,17 @@
         </LinearLayout>
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/holo_orange_dark" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:background="@color/default_bg"
         android:fontFamily="sans-serif-condensed"
         android:gravity="center"
         android:text="ข่าวสารประกาศ"
+        android:textColor="@color/white"
         android:textSize="20sp" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/holo_orange_dark" />
 
     <ListView
         android:id="@+id/place_list_feed"

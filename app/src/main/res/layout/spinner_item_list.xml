@@ -3,9 +3,10 @@
     android:id="@+id/customSpinnerItemTextView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dip"
+    android:background="@color/default_bg"
     android:gravity="center_horizontal"
-    android:textColor="@color/grey_900"
+    android:padding="5dip"
+    android:text="Unknown"
+    android:textColor="@color/white"
     android:textSize="20sp"
-    android:text="test"
     android:textStyle="bold" />

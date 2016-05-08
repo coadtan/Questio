@@ -77,8 +77,11 @@ public class PlaceInfo extends ActionBarActivity {
             }
         });
         place = (Place) getIntent().getSerializableExtra("place");
+
+      
         requestPlaceInfoData(place.getPlaceId());
         requestPlaceNewsData(place.getPlaceId());
+
     }
 
 
@@ -105,56 +108,64 @@ public class PlaceInfo extends ActionBarActivity {
         });
     }
 
-    private void requestPlaceInfoData(int id) {
+    private void requestPlaceInfoData(int id) throws NullPointerException {
         RestAdapter adapter = new RestAdapter.Builder()
                 .setEndpoint(QuestioConstants.ENDPOINT)
                 .build();
         QuestioAPIService api = adapter.create(QuestioAPIService.class);
-        api.getPlaceDetailByPlaceId(id, QuestioConstants.QUESTIO_KEY, new Callback<PlaceDetail[]>() {
-            @Override
-            public void success(PlaceDetail[] placeDetails, Response response) {
-                if (placeDetails[0] != null) {
-                    final PlaceDetail placeDetail = placeDetails[0];
-                    placeName.setText(place.getPlaceName());
-                    placeFullname.setText(place.getPlaceFullName());
-                    placeContact1.setText(placeDetail.getPhoneContact1());
-                    placeContact2.setText(placeDetail.getPhoneContact2());
-                    placeWww.setText(placeDetail.getWebSite());
-                    placeEmail.setText(placeDetail.geteMail());
-                    PlaceInfo.this.placeDetail.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(PlaceInfo.this);
-                            dialog
-                                    .withTitle("ข้อมูลสถานที่")
-                                    .withTitleColor("#FFFFFF")
-                                    .withDividerColor("#11000000")
-                                    .withMessage(placeDetail.getPlaceDetails())
-                                    .withMessageColor("#FFFFFFFF")
-                                    .withDialogColor("#FFE74C3C")
-                                    .withDuration(300)
-                                    .withEffect(Effectstype.Slidetop)
-                                    .withButton1Text("ขอบคุณ")
-                                    .setButton1Click(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            dialog.dismiss();
-                                        }
-                                    })
-                                    .isCancelableOnTouchOutside(true);
-                            dialog.show();
-                        }
-                    });
-                    Glide.with(PlaceInfo.this)
-                            .load(QuestioHelper.getImgLink(placeDetail.getImageUrl()))
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(placeInfoPicture);
+        try {
+            api.getPlaceDetailByPlaceId(id, QuestioConstants.QUESTIO_KEY, new Callback<PlaceDetail[]>() {
+                @Override
+                public void success(PlaceDetail[] placeDetails, Response response) {
+                    if (placeDetails == null) {
+                        placeDetails = new PlaceDetail[3];
+                    }
+                    if (placeDetails[0] != null) {
+                        final PlaceDetail placeDetail = placeDetails[0];
+                        placeName.setText(place.getPlaceName());
+                        placeFullname.setText(place.getPlaceFullName());
+                        placeContact1.setText(placeDetail.getPhoneContact1());
+                        placeContact2.setText(placeDetail.getPhoneContact2());
+                        placeWww.setText(placeDetail.getWebSite());
+                        placeEmail.setText(placeDetail.geteMail());
+                        PlaceInfo.this.placeDetail.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(PlaceInfo.this);
+                                dialog
+                                        .withTitle("ข้อมูลสถานที่")
+                                        .withTitleColor("#FFFFFF")
+                                        .withDividerColor("#11000000")
+                                        .withMessage(placeDetail.getPlaceDetails())
+                                        .withMessageColor("#FFFFFFFF")
+                                        .withDialogColor("#FFE74C3C")
+                                        .withDuration(300)
+                                        .withEffect(Effectstype.Slidetop)
+                                        .withButton1Text("ขอบคุณ")
+                                        .setButton1Click(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                dialog.dismiss();
+                                            }
+                                        })
+                                        .isCancelableOnTouchOutside(true);
+                                dialog.show();
+                            }
+                        });
+                        Glide.with(PlaceInfo.this)
+                                .load(QuestioHelper.getImgLink(placeDetail.getImageUrl()))
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(placeInfoPicture);
+                    }
                 }
-            }
 
-            @Override
-            public void failure(RetrofitError retrofitError) {
-            }
-        });
+
+                @Override
+                public void failure(RetrofitError retrofitError) {
+                }
+            });
+        } catch (Exception ex) {
+            QuestioHelper.questioLog(LOG_TAG, ex.getMessage());
+        }
     }
 }

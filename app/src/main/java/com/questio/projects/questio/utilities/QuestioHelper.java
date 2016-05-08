@@ -159,7 +159,7 @@ public class QuestioHelper {
 
     public static String getJSONStringValueByTag(String tag, Response inputResponese) {
         JSONArray arr;
-        Log.d(LOG_TAG, "getJSONStringValueByTag(Response): " + inputResponese);
+        Log.d(LOG_TAG, "getJSONStringValueByTag(Response): " + responseToString(inputResponese));
         String resultForReturn = null;
         try {
             arr = new JSONArray(QuestioHelper.responseToString(inputResponese));

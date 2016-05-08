@@ -83,7 +83,7 @@ public interface QuestioAPIService {
     @FormUrlEncoded
     @POST("/select_count_adventurer.php")
     void getCountAdventurer(@Field("key") String key,
-            Callback<Response> response);
+                            Callback<Response> response);
 
     @FormUrlEncoded
     @POST("/select_guserid_adventurer_from_guserid.php")
@@ -763,10 +763,10 @@ public interface QuestioAPIService {
     @FormUrlEncoded
     @POST("/select_topten_rank.php")
     void getRankingTopTen(
-                    @Field("adventurerid") long adventurerId,
-                    @Field("key") String key,
-                    Callback<ArrayList<Ranking>> response
-            );
+            @Field("adventurerid") long adventurerId,
+            @Field("key") String key,
+            Callback<ArrayList<Ranking>> response
+    );
 
     @FormUrlEncoded
     @POST("/select_guserid_adventurer_from_adventurerid.php")
