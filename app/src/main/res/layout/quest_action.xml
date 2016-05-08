@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_questio"
+    android:background="@color/default_bg"
     android:orientation="vertical">
 
     <include
@@ -18,26 +18,24 @@
             android:id="@+id/quest_browsing_top_frame"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:background="@drawable/show_quiz_map">
+            android:layout_margin="15dp">
 
 
             <ImageView
                 android:id="@+id/quest_action_picture"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_margin="15dp"
                 android:layout_gravity="center_horizontal|top"
-                android:alpha="0.5"
+                android:layout_margin="15dp"
                 android:src="@drawable/loading" />
 
-            <ImageView
-                android:id="@+id/quest_action_minimap"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_gravity="end|bottom"
-                android:layout_margin="15dp"
-                android:src="@drawable/loading" />
+            <!--<ImageView-->
+            <!--android:id="@+id/quest_action_minimap"-->
+            <!--android:layout_width="60dp"-->
+            <!--android:layout_height="60dp"-->
+            <!--android:layout_gravity="end|bottom"-->
+            <!--android:layout_margin="15dp"-->
+            <!--android:src="@drawable/loading" />-->
 
         </FrameLayout>
     </RelativeLayout>
@@ -55,8 +53,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_quest_finish"
-            android:layout_marginEnd="10dp"/>
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_quest_finish" />
 
         <ProgressBar
             android:id="@+id/quest_action_quizfinish_progressbar"
@@ -71,9 +69,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginBottom="5dp"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
-        android:layout_marginBottom="5dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -81,8 +79,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_score_progress"
-            android:layout_marginEnd="10dp"/>
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_score_progress" />
 
         <ProgressBar
             android:id="@+id/quest_action_scoregain_progressbar"
@@ -126,7 +124,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginTop="7dp"
             android:layout_weight="2"
-            android:contentDescription="@string/itemget"/>
+            android:contentDescription="@string/itemget" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -148,7 +146,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginTop="7dp"
             android:layout_weight="2"
-            android:contentDescription="@string/rewardget"/>
+            android:contentDescription="@string/rewardget" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -170,7 +168,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginTop="7dp"
             android:layout_weight="2"
-            android:contentDescription="@string/zonetype"/>
+            android:contentDescription="@string/zonetype" />
     </LinearLayout>
 
     <ListView

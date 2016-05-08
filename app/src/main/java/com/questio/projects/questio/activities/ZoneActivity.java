@@ -56,8 +56,8 @@ public class ZoneActivity extends ActionBarActivity {
     @Bind(R.id.quest_action_picture)
     ImageView questActionImg;
 
-    @Bind(R.id.quest_action_minimap)
-    ImageView questActionMiniImg;
+//    @Bind(R.id.quest_action_minimap)
+//    ImageView questActionMiniImg;
 
     @Bind(R.id.quest_action_item_picture)
     ImageView itemPic;
@@ -361,10 +361,10 @@ public class ZoneActivity extends ActionBarActivity {
                         Log.d(LOG_TAG, "imglink: failed");
                     }
                     if (!(zone.getMiniMapUrl() == null)) {
-                        Glide.with(ZoneActivity.this)
-                                .load(QuestioHelper.getImgLink(zone.getMiniMapUrl()))
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .into(questActionMiniImg);
+//                        Glide.with(ZoneActivity.this)
+//                                .load(QuestioHelper.getImgLink(zone.getMiniMapUrl()))
+//                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                                .into(questActionMiniImg);
                     }
                     if (!(zone.getZoneTypeImage() == null)) {
                         Glide.with(ZoneActivity.this)
@@ -372,24 +372,24 @@ public class ZoneActivity extends ActionBarActivity {
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(zonetype);
                     }
-                    questActionMiniImg.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            final Dialog nagDialog = new Dialog(ZoneActivity.this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
-                            nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            nagDialog.setCancelable(true);
-                            nagDialog.setContentView(R.layout.mini_map_full_screen);
-                            ImageView imgPreview = ButterKnife.findById(nagDialog, R.id.mini_map_full_view);
-                            imgPreview.setBackgroundDrawable(questActionMiniImg.getDrawable());
-                            imgPreview.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    nagDialog.dismiss();
-                                }
-                            });
-                            nagDialog.show();
-                        }
-                    });
+//                    questActionMiniImg.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            final Dialog nagDialog = new Dialog(ZoneActivity.this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+//                            nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                            nagDialog.setCancelable(true);
+//                            nagDialog.setContentView(R.layout.mini_map_full_screen);
+//                            ImageView imgPreview = ButterKnife.findById(nagDialog, R.id.mini_map_full_view);
+//                            imgPreview.setBackgroundDrawable(questActionMiniImg.getDrawable());
+//                            imgPreview.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    nagDialog.dismiss();
+//                                }
+//                            });
+//                            nagDialog.show();
+//                        }
+//                    });
                     requestItemData(id);
                     requestRewardData(id);
 

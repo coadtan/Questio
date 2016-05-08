@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/riddle_field"
         android:orientation="vertical">
 
@@ -52,21 +52,15 @@
                 flatui:fl_textColor="fl_light" />
         </FrameLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-            <ImageButton
-                android:id="@+id/riddle_scanHere"
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:background="@color/white"
-                android:contentDescription="@string/touch_here_to_scan"
-                android:padding="10dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_qr_scan" />
-        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/riddle_scanHere"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/touch_here_to_scan"
+            android:src="@drawable/ic_qr_scan" />
+
 
         <ScrollView
             android:layout_width="match_parent"
@@ -76,7 +70,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingBottom="20dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:paddingTop="5dp">

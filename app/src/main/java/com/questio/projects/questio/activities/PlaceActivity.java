@@ -1,5 +1,6 @@
 package com.questio.projects.questio.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -22,6 +23,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -529,5 +531,21 @@ public class PlaceActivity extends AppCompatActivity {
         fragment.reCreateRecyclerView();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(LOG_TAG, "requestCode: " + requestCode);
+        Log.d(LOG_TAG, "Activity.RESULT_OK: " + Activity.RESULT_OK);
+        if (resultCode == Activity.RESULT_OK) {
+            String[] qr = QuestioHelper.getDeQRCode(data.getStringExtra(ZBarConstants.SCAN_RESULT));
+            if (qr[0].equalsIgnoreCase(QuestioConstants.QRTYPE_ZONE)) {
+                Intent intent = new Intent(PlaceActivity.this, ZoneActivity.class);
+                intent.putExtra("qrcode", qr[1]);
+                startActivity(intent);
+            }
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            Toast.makeText(PlaceActivity.this, "Camera unavailable", Toast.LENGTH_SHORT).show();
+        }
+    }
 
 }

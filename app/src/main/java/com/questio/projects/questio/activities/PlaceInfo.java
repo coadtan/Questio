@@ -78,7 +78,7 @@ public class PlaceInfo extends ActionBarActivity {
         });
         place = (Place) getIntent().getSerializableExtra("place");
 
-      
+
         requestPlaceInfoData(place.getPlaceId());
         requestPlaceNewsData(place.getPlaceId());
 
