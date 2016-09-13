@@ -4,11 +4,12 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
@@ -23,28 +24,26 @@ import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
 import com.questio.projects.questio.utilities.QuestioHelper;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-    private static final String LOG_TAG = LoginActivity.class.getSimpleName();
+public class LoginActivity extends FragmentActivity implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+    private static final String TAG = LoginActivity.class.getSimpleName();
     private static final int RC_SIGN_IN = 0;
-    GoogleApiClient mGoogleApiClient;
     boolean mIntentInProgress;
-    boolean mSignInClicked;
-    ConnectionResult mConnectionResult;
-
-    @Bind(R.id.sign_in_button)
+    GoogleApiClient mGoogleApiClient;
+    @BindView(R.id.sign_in_button)
     SignInButton btnSignIn;
-
-    Person currentPerson;
     QuestioAPIService api;
     Long aId;
+    GoogleSignInAccount acct;
+    boolean mSignInClicked;
+    ConnectionResult mConnectionResult;
+    Person currentPerson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,14 +84,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void resolveSignInError() {
-        if (mConnectionResult.hasResolution()) {
-            try {
-                mIntentInProgress = true;
-                mConnectionResult.startResolutionForResult(this, RC_SIGN_IN);
-            } catch (IntentSender.SendIntentException e) {
-                mIntentInProgress = false;
-                mGoogleApiClient.connect();
+        try {
+            if (mConnectionResult.hasResolution()) {
+                try {
+                    mIntentInProgress = true;
+                    mConnectionResult.startResolutionForResult(this, RC_SIGN_IN);
+                } catch (IntentSender.SendIntentException e) {
+                    mIntentInProgress = false;
+                    mGoogleApiClient.connect();
+                }
             }
+        } catch (NullPointerException nex) {
+            Log.d(TAG, "resolveSignInError return null");
         }
     }
 
@@ -265,6 +268,5 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         }
     }
-
 
 }

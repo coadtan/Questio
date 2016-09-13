@@ -31,10 +31,11 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import butterknife.Unbinder;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -47,11 +48,11 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
     SharedPreferences.Editor editor;
     View view;
 
-    @Bind(R.id.inventory)
+    @BindView(R.id.inventory)
     GridView inventory;
-    @Bind(R.id.inventory_filter_name)
+    @BindView(R.id.inventory_filter_name)
     FlatEditText inventoryFilterName;
-    @Bind(R.id.inventory_filter_button)
+    @BindView(R.id.inventory_filter_button)
     Button inventoryFilterButton;
 
     ArrayList<ItemInInventory> itemsInv;
@@ -64,6 +65,7 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
     RestAdapter adapter;
     QuestioAPIService api;
     SharedPreferences prefs;
+    private Unbinder unbinder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,7 +99,7 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
         FlatUI.initDefaultValues(getActivity());
         FlatUI.setDefaultTheme(FlatUI.DEEP);
         view = inflater.inflate(R.layout.section_inventory, container, false);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         requestItemInventoryData(adventurerId);
         inventory.setOnItemClickListener(this);
 
@@ -107,7 +109,7 @@ public class InventorySection extends Fragment implements AdapterView.OnItemClic
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @OnClick(R.id.inventory_filter_button)

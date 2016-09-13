@@ -17,54 +17,16 @@ import com.questio.projects.questio.utilities.QuestioConstants;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
 public class QuestInActionAdapter extends BaseAdapter {
     public static final String LOG_TAG = QuestInActionAdapter.class.getSimpleName();
-    private Context mContext;
-    private Typeface tf;
     ArrayList<QuestStatusAndScore> statusList;
     ArrayList<Quest> quests;
-
-    public static class ViewHolder {
-        @Bind(R.id.questtype)
-        ImageView questtype;
-
-        @Bind(R.id.difficulty)
-        ImageView difficulty;
-
-        @Bind(R.id.status)
-        ImageView status;
-
-        @Bind(R.id.quest_list_item)
-        LinearLayout questListItem;
-
-        @Bind(R.id.quest_zoneId)
-        TextView zoneid;
-
-        @Bind(R.id.questname)
-        TextView questname;
-
-        @Bind(R.id.questid)
-        TextView questid;
-
-        @Bind(R.id.questdetails)
-        TextView questdetails;
-
-        @Bind(R.id.questTypeInvisible)
-        TextView questTypeInvisible;
-
-        public ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
-
-        @Override
-        public String toString() {
-            return questid.getText().toString();
-        }
-    }
+    private Context mContext;
+    private Typeface tf;
 
     public QuestInActionAdapter(Context context, ArrayList<Quest> quests, ArrayList<QuestStatusAndScore> statusList) {
         this.quests = quests;
@@ -162,5 +124,44 @@ public class QuestInActionAdapter extends BaseAdapter {
     @Override
     public void notifyDataSetChanged() {
         super.notifyDataSetChanged();
+    }
+
+    public static class ViewHolder {
+
+        @BindView(R.id.questtype)
+        ImageView questtype;
+
+        @BindView(R.id.difficulty)
+        ImageView difficulty;
+
+        @BindView(R.id.status)
+        ImageView status;
+
+        @BindView(R.id.quest_list_item)
+        LinearLayout questListItem;
+
+        @BindView(R.id.quest_zoneId)
+        TextView zoneid;
+
+        @BindView(R.id.questname)
+        TextView questname;
+
+        @BindView(R.id.questid)
+        TextView questid;
+
+        @BindView(R.id.questdetails)
+        TextView questdetails;
+
+        @BindView(R.id.questTypeInvisible)
+        TextView questTypeInvisible;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+
+        @Override
+        public String toString() {
+            return questid.getText().toString();
+        }
     }
 }

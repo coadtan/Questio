@@ -22,7 +22,7 @@ import com.questio.projects.questio.utilities.QuestioAPIService;
 import com.questio.projects.questio.utilities.QuestioConstants;
 import com.questio.projects.questio.utilities.QuestioHelper;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.GrayscaleTransformation;
 import jp.wasabeef.glide.transformations.gpu.BrightnessFilterTransformation;
@@ -35,43 +35,43 @@ import retrofit.client.Response;
 public class PicturePuzzleAction extends ActionBarActivity implements View.OnClickListener, TextWatcher, Callback<Response> {
     private static final String LOG_TAG = PicturePuzzleAction.class.getSimpleName();
 
-    @Bind(R.id.picture_puzzle_question)
+    @BindView(R.id.picture_puzzle_question)
     ImageView picturePuzzleQuestion;
 
-    @Bind(R.id.topLeft)
+    @BindView(R.id.topLeft)
     ImageView topLeft;
 
-    @Bind(R.id.topMiddle)
+    @BindView(R.id.topMiddle)
     ImageView topMiddle;
 
-    @Bind(R.id.topRight)
+    @BindView(R.id.topRight)
     ImageView topRight;
 
-    @Bind(R.id.middleLeft)
+    @BindView(R.id.middleLeft)
     ImageView middleLeft;
 
-    @Bind(R.id.middleMiddle)
+    @BindView(R.id.middleMiddle)
     ImageView middleMiddle;
 
-    @Bind(R.id.middleRight)
+    @BindView(R.id.middleRight)
     ImageView middleRight;
 
-    @Bind(R.id.bottomLeft)
+    @BindView(R.id.bottomLeft)
     ImageView bottomLeft;
 
-    @Bind(R.id.bottomMiddle)
+    @BindView(R.id.bottomMiddle)
     ImageView bottomMiddle;
 
-    @Bind(R.id.bottomRight)
+    @BindView(R.id.bottomRight)
     ImageView bottomRight;
 
-    @Bind(R.id.picture_puzzle_answer)
+    @BindView(R.id.picture_puzzle_answer)
     EditText picturePuzzleAnswer;
 
-    @Bind(R.id.picture_puzzle_hint)
+    @BindView(R.id.picture_puzzle_hint)
     TextView picturePuzzleHint;
 
-    @Bind(R.id.app_bar)
+    @BindView(R.id.app_bar)
     Toolbar toolbar;
 
     TextView pointTV;

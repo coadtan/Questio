@@ -32,7 +32,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.GrayscaleTransformation;
 import jp.wasabeef.glide.transformations.gpu.BrightnessFilterTransformation;
@@ -47,7 +47,8 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     private static final String LOG_TAG = QuizActivity.class.getSimpleName();
     private static final int I_DO_NOT_CARE_JUST_CHANGE_IT_IMMEDIATELY_TO_CORRECT = 1;
     private static final int I_DO_NOT_CARE_JUST_CHANGE_IT_IMMEDIATELY_TO_INCORRECT = 2;
-
+    // Misc
+    private final int FIRST_QUIZ = 0;
     // These 4 values have value after handleInstanceState() called
     int questId;
     int zid;
@@ -56,47 +57,32 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     long adventurerId;
     int quizScoredCount;
     double minusPoint;
-
     // View Zone
-    @Bind(R.id.app_bar)
+    @BindView(R.id.app_bar)
     Toolbar toolbar;
-
-    @Bind(R.id.quiz_score)
+    @BindView(R.id.quiz_score)
     TextView score;
-
-    @Bind(R.id.quiz_question)
+    @BindView(R.id.quiz_question)
     TextView quizQuestion;
-
-    @Bind(R.id.quiz_sequence)
+    @BindView(R.id.quiz_sequence)
     TextView quizSequence;
-
-    @Bind(R.id.quiz_current_tv)
+    @BindView(R.id.quiz_current_tv)
     TextView quizCurrentTv;
-
-    @Bind(R.id.quiz_total_number_tv)
+    @BindView(R.id.quiz_total_number_tv)
     TextView quizTotalNumberTv;
-
-    @Bind(R.id.quiz_choice_1)
+    @BindView(R.id.quiz_choice_1)
     Button quizChoice1;
-
-    @Bind(R.id.quiz_choice_2)
+    @BindView(R.id.quiz_choice_2)
     Button quizChoice2;
-
-    @Bind(R.id.quiz_choice_3)
+    @BindView(R.id.quiz_choice_3)
     Button quizChoice3;
-
-    @Bind(R.id.quiz_choice_4)
+    @BindView(R.id.quiz_choice_4)
     Button quizChoice4;
-
-    @Bind(R.id.quiz_pre_btn)
+    @BindView(R.id.quiz_pre_btn)
     Button quizPreBtn;
-
-    @Bind(R.id.quiz_next_btn)
+    @BindView(R.id.quiz_next_btn)
     Button quizNextBtn;
-
     TextView scoreTV;
-    // Misc
-    private final int FIRST_QUIZ = 0;
     int currentQuiz;
     int currentSeq;
     int currentScore;
@@ -767,101 +753,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-    private class AnswerState {
-        private int status;
-        private int quizId;
-        private boolean a;
-        private boolean b;
-        private boolean c;
-        private boolean d;
-
-        AnswerState() {
-            status = 0;
-            quizId = 0;
-            a = false;
-            b = false;
-            c = false;
-            d = false;
-        }
-
-        public int getStatus() {
-            return status;
-        }
-
-        public void setStatus(int status) {
-            this.status = status;
-        }
-
-        public void setQuizId(int quizId) {
-            this.quizId = quizId;
-        }
-
-        public void setA(boolean a) {
-            this.a = a;
-        }
-
-        public void setB(boolean b) {
-            this.b = b;
-        }
-
-        public void setC(boolean c) {
-            this.c = c;
-        }
-
-        public void setD(boolean d) {
-            this.d = d;
-        }
-
-        public int getQuizId() {
-            return quizId;
-        }
-
-        public boolean isA() {
-            return a;
-        }
-
-        public boolean isB() {
-            return b;
-        }
-
-        public boolean isC() {
-            return c;
-        }
-
-        public boolean isD() {
-            return d;
-        }
-
-        int getAnswerTime() {
-            int i = 0;
-            if (a) {
-                i++;
-            }
-            if (b) {
-                i++;
-            }
-            if (c) {
-                i++;
-            }
-            if (d) {
-                i++;
-            }
-            return i;
-        }
-
-        @Override
-        public String toString() {
-            return "AnswerState{" +
-                    "status=" + status +
-                    ", quizId=" + quizId +
-                    ", a=" + a +
-                    ", b=" + b +
-                    ", c=" + c +
-                    ", d=" + d +
-                    '}';
-        }
-    }
-
     void showCorrectAnswer(final int seqId, boolean isCorrect) {
         final NiftyDialogBuilder dialog = NiftyDialogBuilder.getInstance(this);
         dialog
@@ -1035,5 +926,100 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         minusPoint = 10.0 / maxScore;
         score = 10.0 - (wrongAnswerTime * minusPoint);
         return score;
+    }
+
+    private class AnswerState {
+        private int status;
+        private int quizId;
+        private boolean a;
+        private boolean b;
+        private boolean c;
+        private boolean d;
+
+        AnswerState() {
+            status = 0;
+            quizId = 0;
+            a = false;
+            b = false;
+            c = false;
+            d = false;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+        public int getQuizId() {
+            return quizId;
+        }
+
+        public void setQuizId(int quizId) {
+            this.quizId = quizId;
+        }
+
+        public boolean isA() {
+            return a;
+        }
+
+        public void setA(boolean a) {
+            this.a = a;
+        }
+
+        public boolean isB() {
+            return b;
+        }
+
+        public void setB(boolean b) {
+            this.b = b;
+        }
+
+        public boolean isC() {
+            return c;
+        }
+
+        public void setC(boolean c) {
+            this.c = c;
+        }
+
+        public boolean isD() {
+            return d;
+        }
+
+        public void setD(boolean d) {
+            this.d = d;
+        }
+
+        int getAnswerTime() {
+            int i = 0;
+            if (a) {
+                i++;
+            }
+            if (b) {
+                i++;
+            }
+            if (c) {
+                i++;
+            }
+            if (d) {
+                i++;
+            }
+            return i;
+        }
+
+        @Override
+        public String toString() {
+            return "AnswerState{" +
+                    "status=" + status +
+                    ", quizId=" + quizId +
+                    ", a=" + a +
+                    ", b=" + b +
+                    ", c=" + c +
+                    ", d=" + d +
+                    '}';
+        }
     }
 }

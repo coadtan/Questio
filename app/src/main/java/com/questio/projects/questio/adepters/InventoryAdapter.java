@@ -16,22 +16,13 @@ import com.questio.projects.questio.utilities.QuestioHelper;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class InventoryAdapter extends BaseAdapter {
     public static final String LOG_TAG = InventoryAdapter.class.getSimpleName();
-    private Context mContext;
     ArrayList<ItemInInventory> itemInvList;
-
-    public static class ViewHolder {
-        @Bind(R.id.item_inventory)
-        ImageView itemImage;
-
-        public ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
-    }
+    private Context mContext;
 
     public InventoryAdapter(Context context, ArrayList<ItemInInventory> itemsInv) {
         itemInvList = itemsInv;
@@ -78,5 +69,14 @@ public class InventoryAdapter extends BaseAdapter {
     @Override
     public void notifyDataSetChanged() {
         super.notifyDataSetChanged();
+    }
+
+    public static class ViewHolder {
+        @BindView(R.id.item_inventory)
+        ImageView itemImage;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 }

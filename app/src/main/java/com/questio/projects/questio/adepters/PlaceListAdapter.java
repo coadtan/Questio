@@ -12,40 +12,13 @@ import android.widget.TextView;
 
 import com.questio.projects.questio.R;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
 public class PlaceListAdapter extends CursorAdapter {
     public static final String LOG_TAG = PlaceListAdapter.class.getSimpleName();
     Typeface tf;
-
-    public static class ViewHolder {
-        @Bind(R.id.list_item_icon)
-        ImageView iconView;
-
-        @Bind(R.id.placeId)
-        TextView placeId;
-
-        @Bind(R.id.placeName)
-        TextView placeName;
-
-        @Bind(R.id.place_detail)
-        TextView placeDetail;
-
-        @Bind(R.id.placeLat)
-        TextView placeLat;
-
-        @Bind(R.id.placeLng)
-        TextView placeLng;
-
-        @Bind(R.id.placeRadius)
-        TextView placeRadius;
-
-        public ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
-    }
 
     public PlaceListAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
@@ -84,5 +57,32 @@ public class PlaceListAdapter extends CursorAdapter {
         view.setContentDescription(viewHolder.placeName.getText());
 
 
+    }
+
+    public static class ViewHolder {
+        @BindView(R.id.list_item_icon)
+        ImageView iconView;
+
+        @BindView(R.id.placeId)
+        TextView placeId;
+
+        @BindView(R.id.placeName)
+        TextView placeName;
+
+        @BindView(R.id.place_detail)
+        TextView placeDetail;
+
+        @BindView(R.id.placeLat)
+        TextView placeLat;
+
+        @BindView(R.id.placeLng)
+        TextView placeLng;
+
+        @BindView(R.id.placeRadius)
+        TextView placeRadius;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 }

@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
@@ -46,16 +46,16 @@ public class InventoryActivity extends AppCompatActivity implements AdapterView.
     SharedPreferences.Editor editor;
     View view;
 
-    @Bind(R.id.inventory_toolbar)
+    @BindView(R.id.inventory_toolbar)
     Toolbar toolbar;
 
-    @Bind(R.id.inventory_filter_name2)
+    @BindView(R.id.inventory_filter_name2)
     EditText filterName;
 
-    @Bind(R.id.inventory_filter_button2)
+    @BindView(R.id.inventory_filter_button2)
     ImageButton filterBtn;
 
-    @Bind(R.id.item_inventory)
+    @BindView(R.id.item_inventory)
     GridView inventory;
 
     ArrayList<ItemInInventory> itemsInv;

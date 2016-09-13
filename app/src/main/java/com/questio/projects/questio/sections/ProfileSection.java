@@ -45,8 +45,9 @@ import com.questio.projects.questio.utilities.QuestioConstants;
 import java.io.File;
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -57,14 +58,14 @@ import static com.questio.projects.questio.utilities.QuestioConstants.ADVENTURER
 public class ProfileSection extends Fragment implements AdapterView.OnItemClickListener {
     private static final String LOG_TAG = ProfileSection.class.getSimpleName();
     Context mContext;
-    @Bind(R.id.profile_picture)
+    @BindView(R.id.profile_picture)
     ImageView profilePicture;
-    @Bind(R.id.profile_place_rewards_button)
+    @BindView(R.id.profile_place_rewards_button)
     ImageButton placeRewardsButton;
-    @Bind(R.id.profile_rewards_button)
+    @BindView(R.id.profile_rewards_button)
     ImageButton rewardsButton;
 
-    @Bind(R.id.profile_nickname)
+    @BindView(R.id.profile_nickname)
     TextView profileName;
 
     View view;
@@ -77,6 +78,8 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
     QuestioAPIService api;
     ArrayList<RewardHOF> rewards;
     RewardsAdapter rewardsAdapter;
+    private Unbinder unbinder;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,7 +106,7 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.section_profile, container, false);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         init();
         String nameToShow = adventurerName;
         String[] parts = nameToShow.split(" ");
@@ -148,6 +151,7 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
         return view;
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
@@ -164,7 +168,7 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override
@@ -195,8 +199,6 @@ public class ProfileSection extends Fragment implements AdapterView.OnItemClickL
             dialog.setCancelable(true);
             TextView TVConfirmName = ButterKnife.findById(dialog, R.id.dialog_confirm_name);
             ImageView imageViewConfirmPicture = ButterKnife.findById(dialog, R.id.dialog_confirm_picture);
-
-
             String personName = currentPerson.getDisplayName();
             Glide.with(this)
                     .load(currentPerson.getImage().getUrl())

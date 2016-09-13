@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -24,7 +23,7 @@ import com.questio.projects.questio.utilities.QuestioConstants;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.ColorFilterTransformation;
 import jp.wasabeef.glide.transformations.GrayscaleTransformation;
@@ -48,10 +47,10 @@ public class HOFPlaceActivity extends AppCompatActivity implements AdapterView.O
     ArrayList<RewardHOF> rewards;
     RewardsAdapter rewardsAdapter;
 
-    @Bind(R.id.hof_toolbar)
+    @BindView(R.id.hof_toolbar)
     Toolbar toolbar;
 
-    @Bind(R.id.hof_reward_place)
+    @BindView(R.id.hof_reward_place)
     GridView hallOfFame;
 
     @Override

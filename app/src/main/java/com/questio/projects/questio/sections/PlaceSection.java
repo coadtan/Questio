@@ -56,8 +56,9 @@ import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import retrofit.RestAdapter;
 
 
@@ -72,11 +73,11 @@ public class PlaceSection extends Fragment {
     double currentLng = 0;
     long adventurerId;
 
-    @Bind(R.id.map)
+    @BindView(R.id.map)
     MapView mMapView;
 
 
-    @Bind(R.id.listview_place)
+    @BindView(R.id.listview_place)
     ListView listViewPlace;
 
     View rootView;
@@ -87,9 +88,8 @@ public class PlaceSection extends Fragment {
     QuestioAPIService api;
     RestAdapter adapter;
     BroadcastReceiver mReceiver;
-
     Handler handler;
-
+    private Unbinder unbinder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,7 +111,7 @@ public class PlaceSection extends Fragment {
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.section_place, container, false);
-        ButterKnife.bind(this, rootView);
+        unbinder = ButterKnife.bind(this, rootView);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
         try {
@@ -228,7 +228,7 @@ public class PlaceSection extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
 

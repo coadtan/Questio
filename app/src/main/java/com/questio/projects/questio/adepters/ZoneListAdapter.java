@@ -13,36 +13,12 @@ import com.questio.projects.questio.models.Zone;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
 public class ZoneListAdapter extends ArrayAdapter<Zone> {
     public static final String LOG_TAG = ZoneListAdapter.class.getSimpleName();
-
-    public static class ViewHolder {
-        @Bind(R.id.zone_list_icon)
-        ImageView zoneIcon;
-
-        @Bind(R.id.zone_list_zoneId)
-        TextView zoneId;
-
-        @Bind(R.id.zone_list_zoneName)
-        TextView zoneName;
-
-        @Bind(R.id.zone_list_zoneDetail)
-        TextView zoneDetail;
-
-        @Bind(R.id.zone_list_itemset)
-        TextView zoneItem;
-
-        @Bind(R.id.zone_list_reward)
-        TextView zoneReward;
-
-        public ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
-    }
 
     public ZoneListAdapter(Context context, ArrayList<Zone> zones) {
         super(context, 0, zones);
@@ -63,5 +39,29 @@ public class ZoneListAdapter extends ArrayAdapter<Zone> {
         viewHolder.zoneReward.setText(Integer.toString(items.getRewardId()));
 
         return convertView;
+    }
+
+    public static class ViewHolder {
+        @BindView(R.id.zone_list_icon)
+        ImageView zoneIcon;
+
+        @BindView(R.id.zone_list_zoneId)
+        TextView zoneId;
+
+        @BindView(R.id.zone_list_zoneName)
+        TextView zoneName;
+
+        @BindView(R.id.zone_list_zoneDetail)
+        TextView zoneDetail;
+
+        @BindView(R.id.zone_list_itemset)
+        TextView zoneItem;
+
+        @BindView(R.id.zone_list_reward)
+        TextView zoneReward;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 }

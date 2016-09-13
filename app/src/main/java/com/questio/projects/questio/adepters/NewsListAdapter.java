@@ -12,29 +12,12 @@ import com.questio.projects.questio.models.PlaceNews;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
 public class NewsListAdapter extends ArrayAdapter<PlaceNews> {
     public static final String LOG_TAG = NewsListAdapter.class.getSimpleName();
-
-    public static class ViewHolder {
-        @Bind(R.id.newsId)
-        TextView newsId;
-        @Bind(R.id.news_date)
-        TextView newsDate;
-        @Bind(R.id.news_header)
-        TextView newsHeader;
-        @Bind(R.id.news_content)
-        TextView newsContent;
-
-
-        public ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
-
-    }
 
     public NewsListAdapter(Context context, ArrayList<PlaceNews> feed) {
         super(context, 0, feed);
@@ -53,5 +36,22 @@ public class NewsListAdapter extends ArrayAdapter<PlaceNews> {
         viewHolder.newsContent.setText(items.getNewsDetails());
 
         return convertView;
+    }
+
+    public static class ViewHolder {
+        @BindView(R.id.newsId)
+        TextView newsId;
+        @BindView(R.id.news_date)
+        TextView newsDate;
+        @BindView(R.id.news_header)
+        TextView newsHeader;
+        @BindView(R.id.news_content)
+        TextView newsContent;
+
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+
     }
 }

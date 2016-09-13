@@ -31,7 +31,7 @@ import com.questio.projects.questio.utilities.QuestioHelper;
 
 import net.sourceforge.zbar.Symbol;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.GrayscaleTransformation;
 import jp.wasabeef.glide.transformations.gpu.BrightnessFilterTransformation;
@@ -44,34 +44,34 @@ import retrofit.client.Response;
 public class RiddleAction extends AppCompatActivity implements View.OnClickListener, Callback<Response> {
     private static final String LOG_TAG = RiddleAction.class.getSimpleName();
 
-    @Bind(R.id.app_bar)
+    @BindView(R.id.app_bar)
     Toolbar toolbar;
 
-    @Bind(R.id.riddle_riddle)
+    @BindView(R.id.riddle_riddle)
     FlatTextView riddle;
 
-    @Bind(R.id.riddle_hint1Btn)
+    @BindView(R.id.riddle_hint1Btn)
     FlatButton hint1Btn;
 
-    @Bind(R.id.riddle_hint2Btn)
+    @BindView(R.id.riddle_hint2Btn)
     FlatButton hint2Btn;
 
-    @Bind(R.id.riddle_hint3Btn)
+    @BindView(R.id.riddle_hint3Btn)
     FlatButton hint3Btn;
 
-    @Bind(R.id.riddle_scanHere)
+    @BindView(R.id.riddle_scanHere)
     ImageButton scanHere;
 
-    @Bind(R.id.riddle_hintReveal1)
+    @BindView(R.id.riddle_hintReveal1)
     FlatTextView hintReveal1;
 
-    @Bind(R.id.riddle_hintReveal2)
+    @BindView(R.id.riddle_hintReveal2)
     FlatTextView hintReveal2;
 
-    @Bind(R.id.riddle_hintReveal3)
+    @BindView(R.id.riddle_hintReveal3)
     FlatTextView hintReveal3;
 
-    @Bind(R.id.toolbar_limit)
+    @BindView(R.id.toolbar_limit)
     TextView scanTV;
 
     int points;

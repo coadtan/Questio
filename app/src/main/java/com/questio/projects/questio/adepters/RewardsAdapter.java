@@ -17,27 +17,17 @@ import com.questio.projects.questio.utilities.QuestioHelper;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.ColorFilterTransformation;
 import jp.wasabeef.glide.transformations.GrayscaleTransformation;
-import jp.wasabeef.glide.transformations.gpu.BrightnessFilterTransformation;
 import jp.wasabeef.glide.transformations.gpu.SepiaFilterTransformation;
 
 
 public class RewardsAdapter extends BaseAdapter {
     public static final String LOG_TAG = RewardsAdapter.class.getSimpleName();
-    private Context mContext;
     ArrayList<RewardHOF> rewardHOFsList;
-
-    public static class ViewHolder {
-        @Bind(R.id.reward_hof)
-        ImageView rewardsImage;
-
-        public ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
-    }
+    private Context mContext;
 
     public RewardsAdapter(Context context, ArrayList<RewardHOF> rewards) {
         rewardHOFsList = rewards;
@@ -103,5 +93,14 @@ public class RewardsAdapter extends BaseAdapter {
     @Override
     public void notifyDataSetChanged() {
         super.notifyDataSetChanged();
+    }
+
+    public static class ViewHolder {
+        @BindView(R.id.reward_hof)
+        ImageView rewardsImage;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 }

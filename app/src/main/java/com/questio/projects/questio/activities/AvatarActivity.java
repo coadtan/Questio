@@ -1,15 +1,12 @@
 package com.questio.projects.questio.activities;
 
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -35,14 +32,28 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-import static com.questio.projects.questio.utilities.QuestioConstants.*;
+import static com.questio.projects.questio.utilities.QuestioConstants.ADVENTURER_ID;
+import static com.questio.projects.questio.utilities.QuestioConstants.ADVENTURER_PROFILE;
+import static com.questio.projects.questio.utilities.QuestioConstants.BASE_QUESTIO_MANAGEMENT;
+import static com.questio.projects.questio.utilities.QuestioConstants.ENDPOINT;
+import static com.questio.projects.questio.utilities.QuestioConstants.POSITION_ARMS;
+import static com.questio.projects.questio.utilities.QuestioConstants.POSITION_AURA;
+import static com.questio.projects.questio.utilities.QuestioConstants.POSITION_BACKGROUND;
+import static com.questio.projects.questio.utilities.QuestioConstants.POSITION_BODY;
+import static com.questio.projects.questio.utilities.QuestioConstants.POSITION_FOOT;
+import static com.questio.projects.questio.utilities.QuestioConstants.POSITION_HANDLEFT;
+import static com.questio.projects.questio.utilities.QuestioConstants.POSITION_HANDRIGHT;
+import static com.questio.projects.questio.utilities.QuestioConstants.POSITION_HEAD;
+import static com.questio.projects.questio.utilities.QuestioConstants.POSITION_LEGS;
+import static com.questio.projects.questio.utilities.QuestioConstants.POSITION_NECK;
+import static com.questio.projects.questio.utilities.QuestioConstants.QUESTIO_KEY;
 
 
 public class AvatarActivity extends AppCompatActivity {
@@ -57,67 +68,67 @@ public class AvatarActivity extends AppCompatActivity {
     Avatar avatar;
     long oldItemId;
 
-    @Bind(R.id.avatar_toolbar)
+    @BindView(R.id.avatar_toolbar)
     Toolbar toolbar;
 
-    @Bind(R.id.avatar_head)
+    @BindView(R.id.avatar_head)
     ImageView avatarHead;
 
-    @Bind(R.id.avatar_background)
+    @BindView(R.id.avatar_background)
     ImageView avatarBackground;
 
-    @Bind(R.id.avatar_neck)
+    @BindView(R.id.avatar_neck)
     ImageView avatarNeck;
 
-    @Bind(R.id.avatar_top)
+    @BindView(R.id.avatar_top)
     ImageView avatarBody;
 
-    @Bind(R.id.avatar_handleft)
+    @BindView(R.id.avatar_handleft)
     ImageView avatarHandLeft;
 
-    @Bind(R.id.avatar_handright)
+    @BindView(R.id.avatar_handright)
     ImageView avatarHandRight;
 
-    @Bind(R.id.avatar_arms)
+    @BindView(R.id.avatar_arms)
     ImageView avatarArms;
 
-    @Bind(R.id.avatar_bottom)
+    @BindView(R.id.avatar_bottom)
     ImageView avatarLegs;
 
-    @Bind(R.id.avatar_feet)
+    @BindView(R.id.avatar_feet)
     ImageView avatarFoot;
 
-    @Bind(R.id.avatar_aura)
+    @BindView(R.id.avatar_aura)
     ImageView avatarSpecial;
 
-    @Bind(R.id.button_head)
+    @BindView(R.id.button_head)
     ImageButton buttonHead;
 
-    @Bind(R.id.button_background)
+    @BindView(R.id.button_background)
     ImageButton buttonBackground;
 
-    @Bind(R.id.button_neck)
+    @BindView(R.id.button_neck)
     ImageButton buttonNeck;
 
-    @Bind(R.id.button_top)
+    @BindView(R.id.button_top)
     ImageButton buttonBody;
 
-    @Bind(R.id.button_handleft)
+    @BindView(R.id.button_handleft)
     ImageButton buttonHandLeft;
 
-    @Bind(R.id.button_handright)
+    @BindView(R.id.button_handright)
     ImageButton buttonHandRight;
 
-    @Bind(R.id.button_arms)
+    @BindView(R.id.button_arms)
     ImageButton buttonArms;
 
-    @Bind(R.id.button_bottom)
+    @BindView(R.id.button_bottom)
     ImageButton buttonBottom;
 
-    @Bind(R.id.button_feet)
+    @BindView(R.id.button_feet)
     ImageButton buttonFoot;
 
-    @Bind(R.id.button_save)
+    @BindView(R.id.button_save)
     Button buttonSave;
 
     @Override

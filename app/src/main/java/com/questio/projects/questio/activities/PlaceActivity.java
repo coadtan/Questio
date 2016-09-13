@@ -40,13 +40,11 @@ import com.questio.projects.questio.utilities.QuestioHelper;
 
 import net.sourceforge.zbar.Symbol;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -55,37 +53,25 @@ import retrofit.client.Response;
 
 
 public class PlaceActivity extends AppCompatActivity {
-    @Bind(R.id.app_bar)
-    Toolbar toolbar;
-
-    @Bind(R.id.place_building_spinner)
-    Spinner buildingSpinner;
-
-    @Bind(R.id.place_floor_spinner)
-    Spinner floorSpinner;
-
-    @Bind(R.id.place_zone_spinner)
-    Spinner zoneSpinner;
-
-    @Bind(R.id.place_btn_triger_filter)
-    Button placeBtnTrigerFilter;
-
-    @Bind(R.id.place_btn_triger_map)
-    Button placeBtnTrigerMap;
-
-    @Bind(R.id.quest_browsing_picture)
-    ImageView questBrowsingPicture;
-
-    @Bind(R.id.place_activity_filter)
-    LinearLayout placeActivityFilter;
-
-    @Bind(R.id.quest_browsing_top_frame)
-    FrameLayout questBrowsingTopFrame;
-
-    private Place place;
     private static final String LOG_TAG = PlaceActivity.class.getSimpleName();
-    private ArrayList<Quest> quests;
-    private ArrayList<Quest> questsTemp;
+    @BindView(R.id.app_bar)
+    Toolbar toolbar;
+    @BindView(R.id.place_building_spinner)
+    Spinner buildingSpinner;
+    @BindView(R.id.place_floor_spinner)
+    Spinner floorSpinner;
+    @BindView(R.id.place_zone_spinner)
+    Spinner zoneSpinner;
+    @BindView(R.id.place_btn_triger_filter)
+    Button placeBtnTrigerFilter;
+    @BindView(R.id.place_btn_triger_map)
+    Button placeBtnTrigerMap;
+    @BindView(R.id.quest_browsing_picture)
+    ImageView questBrowsingPicture;
+    @BindView(R.id.place_activity_filter)
+    LinearLayout placeActivityFilter;
+    @BindView(R.id.quest_browsing_top_frame)
+    FrameLayout questBrowsingTopFrame;
     boolean isFilterVisable = false;
     boolean isMapVisable = true;
     String buildingItem = " ";
@@ -96,7 +82,9 @@ public class PlaceActivity extends AppCompatActivity {
     long adventurerId;
     int zoneCount;
     LocationRequest locationRequest;
-
+    private Place place;
+    private ArrayList<Quest> quests;
+    private ArrayList<Quest> questsTemp;
 
     public ArrayList<Quest> getQuestsTemp() {
         return questsTemp;

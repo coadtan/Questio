@@ -13,7 +13,7 @@ import com.questio.projects.questio.models.Ranking;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
@@ -22,21 +22,6 @@ public class RankingAdapter extends BaseAdapter {
     private Context mContext;
     private ArrayList<Ranking> rankingList;
     private Typeface tf;
-
-    public static class ViewHolder {
-        @Bind(R.id.rank_no)
-        TextView rankNumber;
-
-        @Bind(R.id.rank_name)
-        TextView rankName;
-
-        @Bind(R.id.rank_score)
-        TextView rankScore;
-
-        public ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
-    }
 
     public RankingAdapter(Context context, ArrayList<Ranking> rankings) {
         mContext = context;
@@ -76,5 +61,20 @@ public class RankingAdapter extends BaseAdapter {
             viewHolder.rankScore.setTypeface(tf);
         }
         return view;
+    }
+
+    public static class ViewHolder {
+        @BindView(R.id.rank_no)
+        TextView rankNumber;
+
+        @BindView(R.id.rank_name)
+        TextView rankName;
+
+        @BindView(R.id.rank_score)
+        TextView rankScore;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 }

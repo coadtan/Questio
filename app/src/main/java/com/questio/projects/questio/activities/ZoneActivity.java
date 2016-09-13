@@ -1,6 +1,5 @@
 package com.questio.projects.questio.activities;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -36,7 +34,7 @@ import com.questio.projects.questio.utilities.QuestioHelper;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.ColorFilterTransformation;
 import jp.wasabeef.glide.transformations.GrayscaleTransformation;
@@ -50,37 +48,37 @@ import retrofit.client.Response;
 public class ZoneActivity extends ActionBarActivity {
     private static final String LOG_TAG = ZoneActivity.class.getSimpleName();
 
-    @Bind(R.id.app_bar)
+    @BindView(R.id.app_bar)
     Toolbar toolbar;
 
-    @Bind(R.id.quest_action_picture)
+    @BindView(R.id.quest_action_picture)
     ImageView questActionImg;
 
-//    @Bind(R.id.quest_action_minimap)
+//    @BindView(R.id.quest_action_minimap)
 //    ImageView questActionMiniImg;
 
-    @Bind(R.id.quest_action_item_picture)
+    @BindView(R.id.quest_action_item_picture)
     ImageView itemPic;
 
-    @Bind(R.id.quest_action_reward_picture)
+    @BindView(R.id.quest_action_reward_picture)
     ImageView rewardPic;
 
-    @Bind(R.id.quest_action_zonetype_picture)
+    @BindView(R.id.quest_action_zonetype_picture)
     ImageView zonetype;
 
-    @Bind(R.id.icon_quest_finish)
+    @BindView(R.id.icon_quest_finish)
     ImageView iconQuestProgress;
 
-    @Bind(R.id.icon_score_progress)
+    @BindView(R.id.icon_score_progress)
     ImageView iconScoreProgress;
 
-    @Bind(R.id.quest_action_quizfinish_progressbar)
+    @BindView(R.id.quest_action_quizfinish_progressbar)
     ProgressBar questActionQuizfinishProgressbar;
 
-    @Bind(R.id.quest_action_scoregain_progressbar)
+    @BindView(R.id.quest_action_scoregain_progressbar)
     ProgressBar questActionScoreGainProgressbar;
 
-    @Bind(R.id.quest_action_listview)
+    @BindView(R.id.quest_action_listview)
     ListView questListview;
 
     ArrayList<Quest> questsList;

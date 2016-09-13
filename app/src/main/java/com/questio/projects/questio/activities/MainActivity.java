@@ -6,18 +6,14 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
@@ -25,12 +21,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -46,10 +40,9 @@ import com.questio.projects.questio.utilities.QuestioConstants;
 import com.questio.projects.questio.utilities.QuestioHelper;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.GrayscaleTransformation;
 import jp.wasabeef.glide.transformations.gpu.BrightnessFilterTransformation;
@@ -66,24 +59,39 @@ public class MainActivity extends AppCompatActivity
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private static GoogleApiClient googleApiClient;
     public static LocationRequest locationRequest;
-
-    public Location location;
     static SharedPreferences prefs;
     static QuestioAPIService api;
+    static int zoneCount;
+    //    SharedPreferences sharedPreferences;
+    static SharedPreferences.Editor editor;
+    static Context context;
+    private static GoogleApiClient googleApiClient;
+    public Location location;
     RestAdapter adapter;
     Reward reward;
     long adventurerId;
     Place place;
     ArrayList<Place> placeListForDistance;
-    static int zoneCount;
-    //    SharedPreferences sharedPreferences;
-    static SharedPreferences.Editor editor;
-    static Context context;
-
-    @Bind(R.id.app_bar)
+    @BindView(R.id.app_bar)
     Toolbar toolbar;
+
+    public static void getZoneCount(Place p) {
+        api.getCountZoneByPlaceId(p.getPlaceId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                zoneCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("zonecount", response));
+                if (zoneCount > 0) {
+                    locationRequest.setInterval(zoneCount * 5 * 60 * 1000);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -378,24 +386,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
     }
-
-    public static void getZoneCount(Place p) {
-        api.getCountZoneByPlaceId(p.getPlaceId(), QuestioConstants.QUESTIO_KEY, new Callback<Response>() {
-            @Override
-            public void success(Response response, Response response2) {
-                zoneCount = Integer.parseInt(QuestioHelper.getJSONStringValueByTag("zonecount", response));
-                if (zoneCount > 0) {
-                    locationRequest.setInterval(zoneCount * 5 * 60 * 1000);
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
-        });
-    }
-
 
     public static class EnterPlace extends BroadcastReceiver {
         @Override

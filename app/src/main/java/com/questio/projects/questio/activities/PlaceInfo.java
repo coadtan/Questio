@@ -23,7 +23,7 @@ import com.questio.projects.questio.utilities.QuestioHelper;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -33,31 +33,31 @@ import retrofit.client.Response;
 
 public class PlaceInfo extends ActionBarActivity {
     private static final String LOG_TAG = PlaceInfo.class.getSimpleName();
-    @Bind(R.id.app_bar)
+    @BindView(R.id.app_bar)
     Toolbar toolbar;
 
-    @Bind(R.id.place_info_picture)
+    @BindView(R.id.place_info_picture)
     ImageView placeInfoPicture;
 
-    @Bind(R.id.place_detail)
+    @BindView(R.id.place_detail)
     ImageView placeDetail;
 
-    @Bind(R.id.place_name)
+    @BindView(R.id.place_name)
     TextView placeName;
 
-    @Bind(R.id.place_fullname)
+    @BindView(R.id.place_fullname)
     TextView placeFullname;
 
-    @Bind(R.id.place_contact1)
+    @BindView(R.id.place_contact1)
     TextView placeContact1;
 
-    @Bind(R.id.place_contact2)
+    @BindView(R.id.place_contact2)
     TextView placeContact2;
 
-    @Bind(R.id.place_www)
+    @BindView(R.id.place_www)
     TextView placeWww;
 
-    @Bind(R.id.place_email)
+    @BindView(R.id.place_email)
     TextView placeEmail;
 
     Place place;
