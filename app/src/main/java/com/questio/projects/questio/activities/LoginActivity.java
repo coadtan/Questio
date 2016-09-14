@@ -95,6 +95,7 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
                 }
             }
         } catch (NullPointerException nex) {
+            Toast.makeText(this, "Can't login. Network issue, please try to reopen the app.", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "resolveSignInError return null");
         }
     }
